@@ -2,10 +2,10 @@ BasicGame.Preloader = function (game) {};
 
 BasicGame.Preloader.prototype = {
 
+	imgPath:null,
+
 	init: function () {
-		this.sceens = {
-			'Title': this.loadAssetsTitle,
-		};
+		this.imgPath = 'images/';
 	},
 
 	preload: function () {
@@ -15,42 +15,30 @@ BasicGame.Preloader.prototype = {
 
 	create: function () {
 
-		var nextSceen = this.game.global.nextSceen;
-		if (this.sceens[nextSceen]) {
-			this.state.start(nextSceen);
-		} else {
-			// error
-			console.log('error');
-		}
+		this.state.start(this.game.global.nextSceen);
 	
 	},
 
 	loadingAnim: function () {
-		var loading = this.add.sprite(this.world.centerX, this.world.centerY, 'loading');
-		loading.anchor.setTo(.5, .5);
-		loading.scale.x = 1.5;
-		loading.scale.y = 1.5;
+		var loadingSprite = this.add.sprite(this.world.centerX, this.world.centerY, 'loading');
+		loadingSprite.anchor.setTo(.5);
+		loadingSprite.scale.x = 1.5;
+		loadingSprite.scale.y = 1.5;
 
-		var loadingAnim = loading.animations.add('loading');
+		var loadingAnim = loadingSprite.animations.add('loading');
 		loadingAnim.play(18, true);
 	},
 
 	loadAssets: function () {
-		// Load game assets here...
-		// ** Caution: json cannot be loaded using anonymous
-		var imgUrl = 'images/';
-
-		// this.load.image('baseBtn', imgUrl + 'baseBtn.png');
-		// this.load.image('star', imgUrl + 'star.png');
-
 		var nextSceen = this.game.global.nextSceen;
-		if (this.sceens[nextSceen]) {
-			this.sceens[nextSceen]();
+		// TODO edit??? function || assets json list -> load for()
+		if (nextSceen == 'Title') {
+			this.loadAssetsTitle();
 		}
 	},
 
 	loadAssetsTitle: function () {
-		console.log(22222);
+		var imgPath = this.imgPath;
+        this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
 	}
-
 };
