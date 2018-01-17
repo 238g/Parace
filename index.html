@@ -1,9 +1,64 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>hitten</title>
+	<title>10秒当てゲーム</title>
+
+	<link rel="apple-touch-icon" sizes="57x57" href="images/favicons/sunny-side-up-57-293206.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/favicons/sunny-side-up-72-293206.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/favicons/sunny-side-up-114-293206.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="images/favicons/sunny-side-up-120-293206.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="images/favicons/sunny-side-up-144-293206.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="images/favicons/sunny-side-up-152-293206.png">
+
+	<link rel="apple-touch-icon-precomposed" sizes="152x152" href="images/favicons/sunny-side-up-152-293206.png">
+	<link rel="apple-touch-icon-precomposed" sizes="144x144" href="images/favicons/sunny-side-up-144-293206.png">
+	<link rel="apple-touch-icon-precomposed" sizes="120x120" href="images/favicons/sunny-side-up-120-293206.png">
+	<link rel="apple-touch-icon-precomposed" sizes="114x114" href="images/favicons/sunny-side-up-114-293206.png">
+	<link rel="apple-touch-icon-precomposed" sizes="72x72" href="images/favicons/sunny-side-up-72-293206.png">
+	<link rel="apple-touch-icon-precomposed" href="images/favicons/sunny-side-up-57-293206.png">
+
+	<link rel="icon" type="image/png" href="images/favicons/sunny-side-up-32-293206.png" sizes="32x32">
+	<link rel="icon" type="image/png" href="images/favicons/sunny-side-up-16-293206.png" sizes="16x16">
+
+	<link rel="shortcut icon" type="image/x-icon" href="images/favicons/favicon.ico">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser-ce/2.9.4/phaser.js"></script>
+	<script src="https://code.jquery.com/jquery-3.2.1.js" integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE=" crossorigin="anonymous"></script>
+
+	<script src="js/Boot.js"></script>
+	<script src="js/Preloader.js"></script>
+	<script src="js/Title.js"></script>
+
+	<style type="text/css">
+		body {
+			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
+			background: #000;
+		}
+
+		canvas {
+			margin: auto;
+		}
+	</style>
 </head>
 <body>
-index.html hitten
+
+	<div id="gameContainer"></div>
+
+	<script type="text/javascript">
+	
+	window.onload = function() {
+	
+		var game = new Phaser.Game(450, 800, Phaser.AUTO, 'gameContainer');
+	
+		game.state.add('Boot', BasicGame.Boot);
+		game.state.add('Preloader', BasicGame.Preloader);
+		game.state.add('Title', BasicGame.Title);
+	
+		game.state.start('Boot');
+	
+	};
+	
+	</script>
+
 </body>
 </html>
