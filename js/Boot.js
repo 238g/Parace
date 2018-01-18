@@ -30,14 +30,12 @@ BasicGame.Boot.prototype = {
     },
 
     create: function() {
-
-        this.state.start('Preloader');
-
+        nextSceen.bind(this)('Title');
     },
 
     setGlobalVal: function () {
         this.game.global = {
-            nextSceen: 'Title',
+            nextSceen: null,
         };
     },
 

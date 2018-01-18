@@ -28,6 +28,10 @@
 	<script src="js/Boot.js"></script>
 	<script src="js/Preloader.js"></script>
 	<script src="js/Title.js"></script>
+	<script src="js/CharacterSelect.js"></script>
+	<script src="js/Start.js"></script>
+	<script src="js/Play.js"></script>
+	<script src="js/Result.js"></script>
 
 	<style type="text/css">
 		body {
@@ -49,10 +53,10 @@
 	window.onload = function() {
 	
 		var game = new Phaser.Game(450, 800, Phaser.AUTO, 'gameContainer');
-	
-		game.state.add('Boot', BasicGame.Boot);
-		game.state.add('Preloader', BasicGame.Preloader);
-		game.state.add('Title', BasicGame.Title);
+
+		for (var className in BasicGame) {
+			game.state.add(className, BasicGame[className]);
+		}
 	
 		game.state.start('Boot');
 	

@@ -9,14 +9,17 @@ BasicGame.Preloader.prototype = {
 	},
 
 	preload: function () {
+		this.genBackGround();
 		this.loadingAnim();
 		this.loadAssets();
 	},
 
 	create: function () {
-
 		this.state.start(this.game.global.nextSceen);
-	
+	},
+
+	genBackGround: function () {
+        this.stage.backgroundColor = '#424242';
 	},
 
 	loadingAnim: function () {
