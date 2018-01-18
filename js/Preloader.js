@@ -33,15 +33,24 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		var nextSceen = this.game.global.nextSceen;
-		// TODO edit??? function || assets json list -> load for()
-		if (nextSceen == 'Title') {
-			this.loadAssetsTitle();
-		}
+		var nextSceenName = this.game.global.nextSceen;
+		// var className = 'loadAssets_'+nextSceenName;
+		// this[className]();
+		this.loadAssets_All();
 	},
 
-	loadAssetsTitle: function () {
+	loadAssets_All: function () {
+		this.loadAssets_Title();
+		this.loadAssets_CharacterSelect();
+	},
+
+	loadAssets_Title: function () {
 		var imgPath = this.imgPath;
         this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
+	},
+
+	loadAssets_CharacterSelect: function () {
+		var imgPath = this.imgPath;
+        this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
 	}
 };

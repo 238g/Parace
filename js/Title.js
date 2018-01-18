@@ -8,7 +8,6 @@ BasicGame.Title.prototype = {
 		this.genBackGround();
 		this.genTitle();
 		this.genStartBtn();
-		console.log(this);
 	},
 
 	play: function () {
@@ -23,7 +22,7 @@ BasicGame.Title.prototype = {
 		var textStyle = { font: "50px Arial", fill: "#fff", align: "center" };
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, '10秒当てゲーム', textStyle);
 		textSprite.anchor.setTo(.5);
-		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 5);
+		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
 	},
 
 	genStartBtn: function () {
