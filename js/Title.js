@@ -8,10 +8,12 @@ BasicGame.Title.prototype = {
 		this.genBackGround();
 		this.genTitle();
 		this.genStartBtn();
+
+		// TODO setting hamburger menu
 	},
 
-	play: function () {
-		nextSceen.bind(this)('CharacterSelect');
+	goToNextSceen: function () {
+        this.game.global.goToNextSceen('CharacterSelect');
 	},
 
 	genBackGround: function () {
@@ -20,9 +22,11 @@ BasicGame.Title.prototype = {
 
 	genTitle: function () {
 		var textStyle = { font: "50px Arial", fill: "#fff", align: "center" };
-		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, '10秒当てゲーム', textStyle);
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, '秒当てゲーム', textStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
+		textSprite.stroke = '#000000';
+		textSprite.strokeThickness = 3;
 	},
 
 	genStartBtn: function () {
@@ -31,14 +35,16 @@ BasicGame.Title.prototype = {
 
 		var btnSprite = this.add.button(
 			x, y, 'yellowSheet', 
-			this.play, this, 
-			'yellow_button02', 'yellow_button04', 'yellow_button03'
+			this.goToNextSceen, this, 
+			'yellow_button04', 'yellow_button02', 'yellow_button05'
 		);
 		btnSprite.anchor.setTo(.5);
 
 		var textStyle = { fill: "#fff", align: "center" };
 		var textSprite = this.add.text(x, y, '  START  ', textStyle);
 		textSprite.anchor.setTo(.5);
-		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 5);
+		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
+		textSprite.stroke = '#000000';
+		textSprite.strokeThickness = 3;
 	}
 };

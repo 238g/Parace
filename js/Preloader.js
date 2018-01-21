@@ -6,6 +6,10 @@ BasicGame.Preloader.prototype = {
 
 	init: function () {
 		this.imgPath = 'images/';
+
+		var g = this.game.global;
+		this.characterCount = g.characterCount;
+		this.nextSceen = g.nextSceen;
 	},
 
 	preload: function () {
@@ -15,11 +19,11 @@ BasicGame.Preloader.prototype = {
 	},
 
 	create: function () {
-		this.state.start(this.game.global.nextSceen);
+		this.state.start(this.nextSceen);
 	},
 
 	genBackGround: function () {
-        this.stage.backgroundColor = '#424242';
+		this.stage.backgroundColor = '#424242';
 	},
 
 	loadingAnim: function () {
@@ -33,24 +37,36 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		var nextSceenName = this.game.global.nextSceen;
-		// var className = 'loadAssets_'+nextSceenName;
-		// this[className]();
-		this.loadAssets_All();
+		if (this.game.global.loadAll) {
+			this.loadAssets_All();
+		} else {
+			var nextSceenName = this.nextSceen;
+			var className = 'loadAssets_'+nextSceenName;
+			this[className]();
+		}
 	},
 
 	loadAssets_All: function () {
 		this.loadAssets_Title();
 		this.loadAssets_CharacterSelect();
+		this.loadAssets_Play();
 	},
 
 	loadAssets_Title: function () {
 		var imgPath = this.imgPath;
-        this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
+		this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
 	},
 
 	loadAssets_CharacterSelect: function () {
 		var imgPath = this.imgPath;
-        this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
+		this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
+		for (var i=1;i<=this.characterCount;i++) {
+			this.load.image('icon_'+i, imgPath+'/character_imgs/icons/icon_'+i+'.jpg');
+		}
+	},
+
+	loadAssets_Play: function () {
+		var imgPath = this.imgPath;
+		this.load.atlasXML('redSheet', imgPath+'/btns/redSheet.png', imgPath+'/btns/redSheet.xml');
 	}
 };
