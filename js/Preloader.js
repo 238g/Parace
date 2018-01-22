@@ -8,7 +8,7 @@ BasicGame.Preloader.prototype = {
 		this.imgPath = 'images/';
 
 		var g = this.game.global;
-		this.characterCount = g.characterCount;
+		this.charCount = g.charCount;
 		this.nextSceen = g.nextSceen;
 	},
 
@@ -60,8 +60,9 @@ BasicGame.Preloader.prototype = {
 	loadAssets_CharacterSelect: function () {
 		var imgPath = this.imgPath;
 		this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
-		for (var i=1;i<=this.characterCount;i++) {
+		for (var i=1;i<=this.charCount;i++) {
 			this.load.image('icon_'+i, imgPath+'/character_imgs/icons/icon_'+i+'.jpg');
+			this.load.image('smile_1_'+i, imgPath+'/character_imgs/portraits/smile_1_'+i+'.png');
 		}
 	},
 

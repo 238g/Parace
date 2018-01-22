@@ -4,16 +4,21 @@ BasicGame.CharacterSelect.prototype = {
 
 	init: function () {
 		var g = this.game.global;
-		// TODO first kizuna ai -> const // if global current, its because back
-		// this.currentCharacter = g.currentCharacter;
-		this.characterCount = g.characterCount;
+		this.charCount = g.charCount;
+		this.currentCharNum = g.currentCharNum;
+
+		this.charInfo = this.game.conf.charInfo;
+
+		// for visible,invisible
+		this.charSprite;
+		this.charNameSprite;
 	},
 
 	create: function () {
 		this.genBackGround();
-		// TODO gen selected character big image area
+		this.genSelectedCharContainer();
 		this.genPanelContainer();
-		// TODO selected so play btn
+		this.genSelectedBtn();
 	},
 
 	goToNextSceen: function () {
@@ -24,18 +29,61 @@ BasicGame.CharacterSelect.prototype = {
 		this.stage.setBackgroundColor(0xfbf6d5);
 	},
 
+	genSelectedCharContainer: function () {
+		var x = this.world.centerX;
+		// var y = this.world.centerY;
+		var y = 210;
+
+		// TODO frame change color?? conf color
+		this.genCharFrame(x, y);
+		this.charSprite = this.genCharSprite(x, y);
+		this.charNameSprite = this.genCharNameText(x, y);
+	},
+
+	genCharFrame: function (x, y) {
+		var frameSprite = this.add.sprite(x, y, 'greySheet', 'grey_panel');
+		frameSprite.anchor.setTo(.5);
+		frameSprite.scale.setTo(3);
+	},
+
+	genCharSprite: function (x, y) {
+		var charSprite = this.add.sprite(x, y, 'smile_1_'+this.currentCharNum);
+		charSprite.anchor.setTo(.5);
+
+		charSprite.changeImg = function (currentCharNum) {
+			charSprite.loadTexture('smile_1_'+currentCharNum);
+		};
+		return charSprite;
+	},
+
+	genCharNameText: function () {
+		var textStyle = { font: "40px Arial", fill: "#fff", align: "center" };
+		var charInfo = this.charInfo;
+		var name = charInfo[this.currentCharNum].name;
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-100, name, textStyle);
+		textSprite.anchor.setTo(.5);
+		textSprite.stroke = '#000000';
+		textSprite.strokeThickness = 10;
+
+		textSprite.changeText = function (currentCharNum) {
+			name = charInfo[currentCharNum].name;
+			textSprite.setText(name);
+		};
+		return textSprite;
+	},
+
 	genPanelContainer: function () {
 		var margin = 10;
 		var columnMax = 4;
-		var rowMax = Math.ceil(this.characterCount/4);
+		var rowMax = Math.ceil(this.charCount/4);
 		for (var i=0;i<columnMax;i++) { // column
 			var x = i * 100 + i * margin + margin; // | o o o o |
 
 			for (var j=0;j<rowMax;j++) { // row
 				var y = j * 100 + j * margin + this.world.centerY
 
-				var panelNum = i + (j * 4) + 1;
-				if (this.characterCount < panelNum) { break; }
+				var panelNum = i + (j * 4) + 1; // equal const CHAR_[NAME]
+				if (this.charCount < panelNum) { break; }
 				this.genPanel(x, y, panelNum);
 			}
 		}
@@ -44,9 +92,7 @@ BasicGame.CharacterSelect.prototype = {
 	genPanel: function (x, y, panelNum) {
 		var btnSprite = this.add.button(
 			x, y, 'greySheet', 
-			// TODO selected character, goto->lower play btn
-			this.goToNextSceen, this, 
-			// function () {console.log('click'+panelNum);}, this, 
+			this.selectedChar, this, 
 			'grey_panel', 'grey_panel'
 		);
 
@@ -78,5 +124,40 @@ BasicGame.CharacterSelect.prototype = {
 		var y = parentSprite.y + 10;
 		var iconSprite = this.add.sprite(x, y, 'icon_' + panelNum);
 		iconSprite.scale.setTo(.8);
+	},
+
+	selectedChar: function (btnEvent) {
+		var currentCharNum = btnEvent.panelNum;
+		this.currentCharNum = currentCharNum;
+		this.setCurrentChar(currentCharNum);
+		this.changeCharContent(currentCharNum);
+	},
+
+	setCurrentChar: function (currentCharNum) {
+		this.game.global.currentCharNum = currentCharNum;
+	},
+
+	changeCharContent: function (currentCharNum) {
+		this.charSprite.changeImg(currentCharNum);
+		this.charNameSprite.changeText(currentCharNum);
+	},
+
+	genSelectedBtn: function () {
+		var x = this.world.width*3/4;
+		var y = this.world.centerY-60;
+
+		var btnSprite = this.add.button(
+			x, y, 'greySheet', 
+			this.goToNextSceen, this, 
+			'grey_button15', 'grey_button01', 'grey_button04'
+		);
+		btnSprite.anchor.setTo(.5);
+
+		var textStyle = { fill: "#fff", align: "center" };
+		var textSprite = this.add.text(x, y, '  SELECT  ', textStyle);
+		textSprite.anchor.setTo(.5);
+		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
+		textSprite.stroke = '#000000';
+		textSprite.strokeThickness = 3;
 	}
 };

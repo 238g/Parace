@@ -54,10 +54,10 @@ BasicGame.Play.prototype = {
 			} else {
 				console.log('Error: Please set text to arg');
 			}
-		}
+		};
 		textSprite.hide = function () {
 			textSprite.visible = false;
-		}
+		};
 		return textSprite;
 	},
 
@@ -91,7 +91,7 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX;
 		var y = this.world.centerY+300;
 
-		return this.btnTemplate(x, y, this.backToCharacterSelect, '  BACK  ');
+		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
 	},
 
 	btnTemplate: function (x, y, inputFunc, text) {
@@ -112,11 +112,11 @@ BasicGame.Play.prototype = {
 		btnSprite.show = function () {
 			btnSprite.visible = true;
 			textSprite.visible = true;
-		}
+		};
 		btnSprite.hide = function () {
 			btnSprite.visible = false;
 			textSprite.visible = false;
-		}
+		};
 
 		return btnSprite;
 	},
@@ -188,7 +188,7 @@ BasicGame.Play.prototype = {
 		}
 	},
 
-	backToCharacterSelect: function () {
+	backToCharSelect: function () {
 		this.game.global.goToNextSceen('CharacterSelect');
 	}
 };
