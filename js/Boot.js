@@ -24,11 +24,9 @@ BasicGame.Boot.prototype = {
         this.load.crossOrigin = 'Anonymous';
         this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
 
-        this.setConstVal();
-        this.initGlobalVal();
-        this.loadConf();
-
-        this.userDataController();
+        this.defineConst();
+        this.defineGlobal();
+        this.defineConf();
     },
 
     create: function() {
@@ -42,7 +40,7 @@ BasicGame.Boot.prototype = {
         }
     },
 
-    setConstVal: function () {
+    defineConst: function () {
         this.game.const = {
             STORAGE_NAME: 'hitten',
             GAME_RESULT_CONGRATULATIONS: 1,
@@ -61,14 +59,14 @@ BasicGame.Boot.prototype = {
         };
     },
 
-    loadConf: function () {
+    defineConf: function () {
         var c = this.game.const;
         this.game.conf = {
             charInfo: {
-                1: {id:c.CHAR_KIZUNA_AI,   name:'キズナアイ', color: ''},
-                2: {id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: ''},
-                3: {id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: ''},
-                4: {id:c.CHAR_SIRO,        name:'シロ', color: ''},
+                1: {id:c.CHAR_KIZUNA_AI,   name:'キズナアイ', color: '0xffb6c1'},
+                2: {id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa'},
+                3: {id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00'},
+                4: {id:c.CHAR_SIRO,        name:'シロ', color: '0xffffff'},
                 5: {id:c.CHAR_NEK0MASU,    name:'ねこます', color: ''},
                 6: {id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: ''},
                 7: {id:c.CHAR_FUJI_AOI,    name:'富士葵', color: ''},
@@ -76,45 +74,16 @@ BasicGame.Boot.prototype = {
         };
     },
 
-    initGlobalVal: function () {
+    defineGlobal: function () {
         this.game.global = {
-            loadAll: true,
+            loadAll: true, // Load whether all or each sceen
+            loadedOnlyFirst: false, // true:loaded, false:not yet load
             nextSceen: null,
             goToNextSceen: this.goToNextSceen.bind(this),
-            currentCharNum: this.game.const.CHAR_KIZUNA_AI,
+            currentCharNum: this.game.const.CHAR_KIZUNA_AI, // This is default.
             charCount: 7, // default 2? // TODO think... level up??
             targetTime: 1,
         };
-    },
-
-    userDataController: function () {
-        // TODO update userData... date180101->180202 _ each if?
-        if (!this.getUserData()) { this.initUserData(); }
-    },
-
-    getUserData: function () {
-        var storageName = this.game.const.STORAGE_NAME;
-        if (localStorage.getItem(storageName)) {
-            var userDatas = JSON.parse(localStorage.getItem(storageName));
-            // TODO Set each data to global after under TODO separate
-            // TODO each if be?not be? _ data json for(check->function)
-            console.log(userDatas);
-            return true;
-        } else {
-            return false;
-        }
-    },
-
-    initUserData: function () {
-        var g = this.game.global;
-        var c = this.game.const;
-        var storageName = c.STORAGE_NAME;
-        var userDatas = {
-            // TODO more separate...
-            // think,think,think... design...
-            charCount: g.charCount,
-        };
-        localStorage.setItem(storageName, JSON.stringify(userDatas));
     },
 
     goToNextSceen: function (sceenName) {

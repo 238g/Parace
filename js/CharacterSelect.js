@@ -9,7 +9,8 @@ BasicGame.CharacterSelect.prototype = {
 
 		this.charInfo = this.game.conf.charInfo;
 
-		// for visible,invisible
+		// for change char
+		this.charFrameSprite;
 		this.charSprite;
 		this.charNameSprite;
 	},
@@ -35,15 +36,21 @@ BasicGame.CharacterSelect.prototype = {
 		var y = 210;
 
 		// TODO frame change color?? conf color
-		this.genCharFrame(x, y);
+		this.charFrameSprite = this.genCharFrame(x, y);
 		this.charSprite = this.genCharSprite(x, y);
 		this.charNameSprite = this.genCharNameText(x, y);
 	},
 
 	genCharFrame: function (x, y) {
+		var charInfo = this.charInfo;
 		var frameSprite = this.add.sprite(x, y, 'greySheet', 'grey_panel');
 		frameSprite.anchor.setTo(.5);
 		frameSprite.scale.setTo(3);
+		frameSprite.changeColor = function (currentCharNum) {
+			frameSprite.tint = charInfo[currentCharNum].color;
+		};
+		frameSprite.changeColor(this.currentCharNum);
+		return frameSprite;
 	},
 
 	genCharSprite: function (x, y) {
@@ -138,6 +145,7 @@ BasicGame.CharacterSelect.prototype = {
 	},
 
 	changeCharContent: function (currentCharNum) {
+		this.charFrameSprite.changeColor(currentCharNum);
 		this.charSprite.changeImg(currentCharNum);
 		this.charNameSprite.changeText(currentCharNum);
 	},

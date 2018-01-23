@@ -2,8 +2,6 @@ BasicGame.Preloader = function (game) {};
 
 BasicGame.Preloader.prototype = {
 
-	imgPath:null,
-
 	init: function () {
 		this.imgPath = 'images/';
 
@@ -15,6 +13,8 @@ BasicGame.Preloader.prototype = {
 	preload: function () {
 		this.genBackGround();
 		this.loadingAnim();
+
+		this.loadOnlyFirst();
 		this.loadAssets();
 	},
 
@@ -29,12 +29,50 @@ BasicGame.Preloader.prototype = {
 	loadingAnim: function () {
 		var loadingSprite = this.add.sprite(this.world.centerX, this.world.centerY, 'loading');
 		loadingSprite.anchor.setTo(.5);
-		loadingSprite.scale.x = 1.5;
-		loadingSprite.scale.y = 1.5;
+		loadingSprite.scale.setTo(1.5);
 
 		var loadingAnim = loadingSprite.animations.add('loading');
 		loadingAnim.play(18, true);
 	},
+
+	loadOnlyFirst: function () {
+		if (!this.game.global.loadedOnlyFirst) {
+
+        	this.userDataController();
+
+			this.game.global.loadedOnlyFirst = true;
+		}
+	},
+
+    userDataController: function () {
+        // TODO update userData... date180101->180202 _ each if?
+        if (!this.getUserData()) { this.initUserData(); }
+    },
+
+    getUserData: function () {
+        var storageName = this.game.const.STORAGE_NAME;
+        if (localStorage.getItem(storageName)) {
+            var userDatas = JSON.parse(localStorage.getItem(storageName));
+            // TODO Set each data to global after under TODO separate
+            // TODO each if be?not be? _ data json for(check->function)
+            console.log(userDatas);
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    initUserData: function () {
+        var g = this.game.global;
+        var c = this.game.const;
+        var storageName = c.STORAGE_NAME;
+        var userDatas = {
+            // TODO more separate...
+            // think,think,think... design...
+            charCount: g.charCount,
+        };
+        localStorage.setItem(storageName, JSON.stringify(userDatas));
+    },
 
 	loadAssets: function () {
 		if (this.game.global.loadAll) {
