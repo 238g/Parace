@@ -4,6 +4,7 @@ BasicGame.Preloader.prototype = {
 
 	init: function () {
 		this.imgPath = 'images/';
+		this.soundPath = 'sounds/';
 
 		var g = this.game.global;
 		this.charCount = g.charCount;
@@ -19,6 +20,8 @@ BasicGame.Preloader.prototype = {
 	},
 
 	create: function () {
+		this.setSounds(); // TODO load only first ??? or All set at Title
+
 		this.state.start(this.nextSceen);
 	},
 
@@ -92,7 +95,9 @@ BasicGame.Preloader.prototype = {
 
 	loadAssets_Title: function () {
 		var imgPath = this.imgPath;
+		var soundPath = this.soundPath;
 		this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
+		this.load.audio('click', soundPath+'click_1.mp3');
 	},
 
 	loadAssets_CharacterSelect: function () {
@@ -107,5 +112,10 @@ BasicGame.Preloader.prototype = {
 	loadAssets_Play: function () {
 		var imgPath = this.imgPath;
 		this.load.atlasXML('redSheet', imgPath+'/btns/redSheet.png', imgPath+'/btns/redSheet.xml');
+	},
+
+	setSounds: function () {
+		var gs = this.game.global.sounds;
+		gs.click = gs.click || this.add.audio('click'); // TODO correct???
 	}
 };

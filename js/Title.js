@@ -35,7 +35,10 @@ BasicGame.Title.prototype = {
 
 		var btnSprite = this.add.button(
 			x, y, 'yellowSheet', 
-			this.goToNextSceen, this, 
+			function () {
+				this.game.global.sounds.click.play();
+				this.goToNextSceen();
+			}, this, 
 			'yellow_button04', 'yellow_button02', 'yellow_button05'
 		);
 		btnSprite.anchor.setTo(.5);

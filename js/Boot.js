@@ -67,9 +67,9 @@ BasicGame.Boot.prototype = {
                 2: {id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa'},
                 3: {id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00'},
                 4: {id:c.CHAR_SIRO,        name:'シロ', color: '0xffffff'},
-                5: {id:c.CHAR_NEK0MASU,    name:'ねこます', color: ''},
-                6: {id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: ''},
-                7: {id:c.CHAR_FUJI_AOI,    name:'富士葵', color: ''},
+                5: {id:c.CHAR_NEK0MASU,    name:'ねこます', color: '0xF5D0A9'},
+                6: {id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2'},
+                7: {id:c.CHAR_FUJI_AOI,    name:'富士葵', color: '0xBBFCBD'},
             }
         };
     },
@@ -83,6 +83,9 @@ BasicGame.Boot.prototype = {
             currentCharNum: this.game.const.CHAR_KIZUNA_AI, // This is default.
             charCount: 7, // default 2? // TODO think... level up??
             targetTime: 1,
+            sounds: {
+                click: null,
+            },
         };
     },
 
