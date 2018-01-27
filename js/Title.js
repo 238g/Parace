@@ -6,7 +6,8 @@ BasicGame.Title.prototype = {
 
 	create: function () {
 		this.genBackGround();
-		this.genTitle();
+		this.genTitleText();
+		this.genBGM();
 		this.genStartBtn();
 
 		// TODO setting hamburger menu
@@ -20,7 +21,11 @@ BasicGame.Title.prototype = {
 		this.stage.setBackgroundColor(0xfbf6d5);
 	},
 
-	genTitle: function () {
+	genBGM: function () {
+		// TODO
+	},
+
+	genTitleText: function () {
 		var textStyle = { font: "50px Arial", fill: "#fff", align: "center" };
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, '秒当てゲーム', textStyle);
 		textSprite.anchor.setTo(.5);

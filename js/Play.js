@@ -129,6 +129,8 @@ BasicGame.Play.prototype = {
 		this.stopBtn.show();
 		this.currentTimeTextSprite.hide();
 
+		this.game.global.sounds.click.play(); // TODO change sound???
+
 		// TODO *2 upper auto stop!!
 	},
 
@@ -137,12 +139,14 @@ BasicGame.Play.prototype = {
 		var currentTime = elapsedTime.toFixed(2);
 
 		this.stopBtn.hide();
-		this.restartBtn.show();
+		this.restartBtn.show(); // TODO settimeout???
 		this.backBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
+		this.game.global.sounds.click.play(); // TODO change sound???
+
 		var result = this.checkTime(currentTime);
-		this.resultView(result);
+		this.resultView(result); // TODO view???char???
 	},
 
 	checkTime: function (currentTime) {
@@ -189,6 +193,7 @@ BasicGame.Play.prototype = {
 	},
 
 	backToCharSelect: function () {
+		this.game.global.sounds.click.play(); // TODO change sound???
 		this.game.global.goToNextSceen('CharacterSelect');
 	}
 };

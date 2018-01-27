@@ -112,6 +112,7 @@ BasicGame.CharacterSelect.prototype = {
 			} else {
 				tween.start();
 			}
+			// TODO over sound
 		}, this);
 		btnSprite.onInputOut.add(function () {
 			tween.pause();
@@ -138,6 +139,7 @@ BasicGame.CharacterSelect.prototype = {
 		this.currentCharNum = currentCharNum;
 		this.setCurrentChar(currentCharNum);
 		this.changeCharContent(currentCharNum);
+		this.game.global.sounds.click.play(); // TODO char voice
 	},
 
 	setCurrentChar: function (currentCharNum) {
@@ -156,7 +158,10 @@ BasicGame.CharacterSelect.prototype = {
 
 		var btnSprite = this.add.button(
 			x, y, 'greySheet', 
-			this.goToNextSceen, this, 
+			function () {
+				this.game.global.sounds.click.play();
+				this.goToNextSceen();
+			}, this, 
 			'grey_button15', 'grey_button01', 'grey_button04'
 		);
 		btnSprite.anchor.setTo(.5);
