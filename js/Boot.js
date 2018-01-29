@@ -83,9 +83,9 @@ BasicGame.Boot.prototype = {
             currentCharNum: this.game.const.CHAR_KIZUNA_AI, // This is default.
             charCount: 7, // default 2? // TODO think... level up??
             targetTime: 1,
-            sounds: {
-                click: null,
-            },
+            soundManager: null, // set Preloader.js
+            soundVolumes: { se: .5, bgm: .5, voice: .5, master: 1 }, // default volumes
+            setUserDatas: null, // set Preloader.js
         };
     },
 

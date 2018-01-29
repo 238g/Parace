@@ -19,13 +19,19 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.genBackGround();
+		this.manageBGM();
 		this.genTimerContainer();
 		// TODO character
 		this.btnsContainer();
+		this.genPlayCountText();
 	},
 
 	genBackGround: function () {
 		this.stage.setBackgroundColor(0xfbf6d5);
+	},
+
+	manageBGM: function () {
+		this.game.global.soundManager.soundStop('currentBGM');
 	},
 
 	genTimerContainer: function () {
@@ -34,19 +40,15 @@ BasicGame.Play.prototype = {
 	},
 
 	genTargetTimeText: function () {
-		var textStyle = { font: "40px Arial", fill: "#fff", align: "center" };
+		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-100, this.targetTime+'.00 でピッタリ止めろ', textStyle);
 		textSprite.anchor.setTo(.5);
-		textSprite.stroke = '#000000';
-		textSprite.strokeThickness = 10;
 	},
 
 	genCurrentTimeText: function () {
-		var textStyle = { font: "40px Arial", fill: "#fff", align: "center" };
+		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, (this.targetTime*0)+'.00', textStyle);
 		textSprite.anchor.setTo(.5);
-		textSprite.stroke = '#000000';
-		textSprite.strokeThickness = 10;
 		textSprite.show = function (text) {
 			if (text) {
 				textSprite.setText(text);
@@ -88,8 +90,10 @@ BasicGame.Play.prototype = {
 	},
 
 	genBackBtn: function () {
-		var x = this.world.centerX;
-		var y = this.world.centerY+300;
+		var x = 100;
+		var y = 30;
+		// var x = this.world.centerX;
+		// var y = this.world.centerY+300;
 
 		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
 	},
@@ -102,12 +106,10 @@ BasicGame.Play.prototype = {
 		);
 		btnSprite.anchor.setTo(.5);
 
-		var textStyle = { fill: "#fff", align: "center" };
+		var textStyle = { fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 3 };
 		var textSprite = this.add.text(x, y, text, textStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
-		textSprite.stroke = '#000000';
-		textSprite.strokeThickness = 3;
 
 		btnSprite.show = function () {
 			btnSprite.visible = true;
@@ -129,7 +131,7 @@ BasicGame.Play.prototype = {
 		this.stopBtn.show();
 		this.currentTimeTextSprite.hide();
 
-		this.game.global.sounds.click.play(); // TODO change sound???
+		this.game.global.soundManager.soundPlay('stopwatchSE');
 
 		// TODO *2 upper auto stop!!
 	},
@@ -143,7 +145,7 @@ BasicGame.Play.prototype = {
 		this.backBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
-		this.game.global.sounds.click.play(); // TODO change sound???
+		this.game.global.soundManager.soundPlay('stopwatchSE'); // TODO change sound???
 
 		var result = this.checkTime(currentTime);
 		this.resultView(result); // TODO view???char???
@@ -193,7 +195,11 @@ BasicGame.Play.prototype = {
 	},
 
 	backToCharSelect: function () {
-		this.game.global.sounds.click.play(); // TODO change sound???
+		this.game.global.soundManager.soundPlay('cancelSE');
 		this.game.global.goToNextSceen('CharacterSelect');
+	},
+
+	genPlayCountText: function () {
+		// TODO // per char, per seconds, all,
 	}
 };

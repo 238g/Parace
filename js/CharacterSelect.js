@@ -17,17 +17,22 @@ BasicGame.CharacterSelect.prototype = {
 
 	create: function () {
 		this.genBackGround();
+		this.manageBGM();
 		this.genSelectedCharContainer();
 		this.genPanelContainer();
 		this.genSelectedBtn();
-	},
-
-	goToNextSceen: function () {
-        this.game.global.goToNextSceen('Play');
+		this.genBackBtn();
 	},
 
 	genBackGround: function () {
 		this.stage.setBackgroundColor(0xfbf6d5);
+	},
+
+	manageBGM: function () {
+		var bgm = this.game.global.soundManager.getSound('currentBGM');
+		if (!bgm.isPlaying) {
+			this.game.global.soundManager.soundPlay('currentBGM');
+		}
 	},
 
 	genSelectedCharContainer: function () {
@@ -64,13 +69,11 @@ BasicGame.CharacterSelect.prototype = {
 	},
 
 	genCharNameText: function () {
-		var textStyle = { font: "40px Arial", fill: "#fff", align: "center" };
+		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
 		var charInfo = this.charInfo;
 		var name = charInfo[this.currentCharNum].name;
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-100, name, textStyle);
 		textSprite.anchor.setTo(.5);
-		textSprite.stroke = '#000000';
-		textSprite.strokeThickness = 10;
 
 		textSprite.changeText = function (currentCharNum) {
 			name = charInfo[currentCharNum].name;
@@ -139,7 +142,7 @@ BasicGame.CharacterSelect.prototype = {
 		this.currentCharNum = currentCharNum;
 		this.setCurrentChar(currentCharNum);
 		this.changeCharContent(currentCharNum);
-		this.game.global.sounds.click.play(); // TODO char voice
+		this.game.global.soundManager.soundPlay('selectSE'); // TODO char voice
 	},
 
 	setCurrentChar: function (currentCharNum) {
@@ -156,21 +159,32 @@ BasicGame.CharacterSelect.prototype = {
 		var x = this.world.width*3/4;
 		var y = this.world.centerY-60;
 
+		this.btnTemplate(x, y, function () {
+			this.game.global.soundManager.soundPlay('selectSE');
+			this.game.global.goToNextSceen('Play');
+		}, '  SELECT  ');
+	},
+
+	genBackBtn: function () {
+		var x = 100;
+		var y = 30;
+
+		this.btnTemplate(x, y, function () {
+			this.game.global.soundManager.soundPlay('cancelSE');
+			this.game.global.goToNextSceen('Title');
+		}, '  BACK  ');
+	},
+
+	btnTemplate: function (x, y, inputFunc, text) {
 		var btnSprite = this.add.button(
-			x, y, 'greySheet', 
-			function () {
-				this.game.global.sounds.click.play();
-				this.goToNextSceen();
-			}, this, 
+			x, y, 'greySheet', inputFunc, this, 
 			'grey_button15', 'grey_button01', 'grey_button04'
 		);
 		btnSprite.anchor.setTo(.5);
 
-		var textStyle = { fill: "#fff", align: "center" };
-		var textSprite = this.add.text(x, y, '  SELECT  ', textStyle);
+		var textStyle = { fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 3 };
+		var textSprite = this.add.text(x, y, text, textStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
-		textSprite.stroke = '#000000';
-		textSprite.strokeThickness = 3;
 	}
 };
