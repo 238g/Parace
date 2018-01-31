@@ -75,28 +75,28 @@ BasicGame.Title.prototype = {
 
 		this.menuGroup.scale.setTo(0);
 		this.menuGroup.showTween = this.add.tween(this.menuGroup.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out);
-		this.menuGroup.hideTween = this.add.tween(this.menuGroup.scale).to( { x: 0, y: 0 }, 500, Phaser.Easing.Elastic.In);
+		this.menuGroup.hideTween = this.add.tween(this.menuGroup.scale).to( { x: 0, y: 0 }, 300, Phaser.Easing.Elastic.In);
 
 		var baseBtnGroup = this.baseBtnGroup;
 		this.menuGroup.show = function () {
-			// TODO open SE
-			this.visible = true;
 			if ((!this.showTween.isRunning) && this.scale.x === 0) {
+				this.visible = true;
+				this.game.global.soundManager.soundPlay('openWindowSE');
 				this.showTween.start();
+				baseBtnGroup.setAll('inputEnabled', false);
+				baseBtnGroup.setAll('input.useHandCursor', false);
 			}
-			baseBtnGroup.setAll('inputEnabled', false);
-			baseBtnGroup.setAll('input.useHandCursor', false);
 		};
 		this.menuGroup.hide = function () {
-			// TODO close SE
 			if ((!this.hideTween.isRunning) && this.scale.x === 1) {
+				this.hideTween.onComplete.addOnce(function () {
+					this.visible = false;
+				}, this);
+				this.game.global.soundManager.soundPlay('closeWindowSE');
 				this.hideTween.start();
+				baseBtnGroup.setAll('inputEnabled', true);
+				baseBtnGroup.setAll('input.useHandCursor', true);
 			}
-			this.hideTween.onComplete.add(function () {
-				this.visible = false;
-			}, this); // TODO bad???
-			baseBtnGroup.setAll('inputEnabled', true);
-			baseBtnGroup.setAll('input.useHandCursor', true);
 		};
 		this.menuGroup.hide();
 	},
@@ -125,20 +125,40 @@ BasicGame.Title.prototype = {
 	},
 
 	genOptionMenuContents: function () {
-		// TODO volume menu
 		var x = this.world.centerX;
-		var y = this.world.centerY;
+		var y = this.world.centerY-140;
+		
+		var topMarginY = 70;
+		var middleMarginY = 50;
+		var marginY = [topMarginY];
+		for (var i=1;i<=4;i++) {
+			marginY.push(topMarginY+middleMarginY*i);
+		}
 
 		var textStyle = { font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 6 };
-		var volumeTextSprite = this.textSpriteTemplate(x, y-140, 'VOLUME MAX=10', textStyle);
-		var seTextSprite = this.textSpriteTemplate(x, y-60, 'SE : 5', textStyle);
-		var bgmTextSprite = this.textSpriteTemplate(x, y-10, 'BGM : 5', textStyle);
-		var voiceTextSprite = this.textSpriteTemplate(x, y+40, 'VOICE : 5', textStyle);
+		
+		var volumeTextSprite = this.textSpriteTemplate(x, y, 'VOLUME MAX=10', textStyle);
+		var masterTextSprite = this.textSpriteTemplate(x, y+marginY[0], 'MASTER : 5', textStyle);
+		var seTextSprite = this.textSpriteTemplate(x, y+marginY[1], 'SE : 5', textStyle);
+		var bgmTextSprite = this.textSpriteTemplate(x, y+marginY[2], 'BGM : 5', textStyle);
+		var voiceTextSprite = this.textSpriteTemplate(x, y+marginY[3], 'VOICE : 5', textStyle);
+		var muteTextSprite = this.textSpriteTemplate(x, y+marginY[4], 'MUTE', textStyle);
 
 		this.menuGroup.add(volumeTextSprite);
+		this.menuGroup.add(masterTextSprite);
 		this.menuGroup.add(seTextSprite);
 		this.menuGroup.add(bgmTextSprite);
 		this.menuGroup.add(voiceTextSprite);
+		this.menuGroup.add(muteTextSprite);
+
+		this.genVolumeControlBtn(x-120, y+marginY[0], 'master', '-', masterTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[0], 'master', '+', masterTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[1], 'se', '-', seTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[1], 'se', '+', seTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[2], 'bgm', '-', bgmTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[2], 'bgm', '+', bgmTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[3], 'voice', '-', voiceTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[3], 'voice', '+', voiceTextSprite);
 	},
 
 	textSpriteTemplate: function (x, y, text, textStyle) {
@@ -147,6 +167,64 @@ BasicGame.Title.prototype = {
 		if (textStyle.setShadow) {
 			textSprite.setShadow(0, 0, 'rgba(0, 0, 0, 0.5)', 10);
 		}
+		textSprite.changeText = function (text) {
+			textSprite.setText(text);
+		};
 		return textSprite;
+	},
+
+	genVolumeControlBtn: function (x, y, type, text, changeTextSprite) {
+		function changeText () {
+			var originVolume = this.game.global.soundVolumes[type];
+			var viewVolume = originVolume * 10;
+
+			var changeText;
+			if (type == 'master') {
+				changeText = 'MASTER : '+viewVolume;
+			} else if (type == 'se') {
+				changeText = 'SE : '+viewVolume;
+			} else if (type == 'bgm') {
+				changeText = 'BGM : '+viewVolume;
+			} else if (type == 'voice') {
+				changeText = 'VOICE : '+viewVolume;
+			} else {
+				changeText = null;
+			}
+
+			if (changeText) {
+				changeTextSprite.changeText(changeText);
+			}
+		}
+		function btnClick () {
+			if (text == '+') {
+				this.game.global.soundManager.soundPlay('volumeControlBtnSE');
+				this.game.global.soundManager.volumeUp(type);
+			} else if (text == '-') {
+				this.game.global.soundManager.soundPlay('volumeControlBtnSE');
+				this.game.global.soundManager.volumeDown(type);
+			} else {
+				this.game.global.soundManager.volumeMute(type);
+			}
+
+			changeText.bind(this)();
+		}
+
+		var btnSprite = this.add.button(
+			x, y, 'blueSheet',
+			btnClick, this,
+			'blue_circle', 'blue_circle'
+		);
+		btnSprite.anchor.setTo(.5);
+
+		var textStyle = { font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 6 };
+		var textSprite = this.add.text(x, y, text, textStyle);
+		textSprite.anchor.setTo(.5);
+
+		this.menuGroup.add(btnSprite);
+		this.menuGroup.add(textSprite);
+
+		if (text == '-') {
+			changeText.bind(this)();
+		}
 	}
 };
