@@ -31,9 +31,9 @@ BasicGame.Boot.prototype = {
 
     create: function() {
         if (this.game.global.loadAll) {
-            // this.game.global.nextSceen = 'Play'; // TODO del
-            // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.game.global.nextSceen = 'Title';
+            this.game.global.nextSceen = 'Play'; // TODO del
+            // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.goToNextSceen('Preloader');
         } else {
             this.game.global.goToNextSceen('Title');
@@ -70,7 +70,17 @@ BasicGame.Boot.prototype = {
                 5: {id:c.CHAR_NEK0MASU,    name:'ねこます', color: '0xF5D0A9'},
                 6: {id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2'},
                 7: {id:c.CHAR_FUJI_AOI,    name:'富士葵', color: '0xBBFCBD'},
-            }
+            },
+            loadSoundInfo: [
+                ['selectSE', 'mp3', 'se'],
+                ['cancelSE', 'mp3', 'se'],
+                ['stopwatchSE', 'mp3', 'se'],
+                ['stageSelectBGM', 'wav', 'bgm'],
+                ['closeWindowSE', 'mp3', 'se'],
+                ['openWindowSE', 'mp3', 'se'],
+                ['volumeControlBtnSE', 'mp3', 'se'],
+                ['panelOverSE', 'mp3', 'se'],
+            ],
         };
     },
 
@@ -81,10 +91,10 @@ BasicGame.Boot.prototype = {
             nextSceen: null,
             goToNextSceen: this.goToNextSceen.bind(this),
             currentCharNum: this.game.const.CHAR_KIZUNA_AI, // This is default.
-            charCount: 7, // default 2? // TODO think... level up??
+            charCount: 7, // ENHANCE think... level up??-default 2?
             targetTime: 1,
             soundManager: null, // default:null, set Preloader.js
-            soundVolumes: { se: .5, bgm: .5, voice: .5, master: 1 }, // default volumes
+            soundVolumes: { se: .5, bgm: .5, voice: .5, master: .5, mute: 1 }, // default volumes
             setUserDatas: null, // set Preloader.js
         };
     },

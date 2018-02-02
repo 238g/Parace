@@ -32,3 +32,4 @@ worried|汗
 
 @@@@@@@@@@@@
 smile_1_* => within[h:300px,w:300px]
+normal_1_* => within[h:483px,w:667px] <-currentMax

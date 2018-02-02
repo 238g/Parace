@@ -30,7 +30,7 @@ BasicGame.CharacterSelect.prototype = {
 
 	manageBGM: function () {
 		var bgm = this.game.global.soundManager.getSound('currentBGM');
-		if (!bgm.isPlaying) {
+		if (bgm && !bgm.isPlaying) {
 			this.game.global.soundManager.soundPlay('currentBGM');
 		}
 	},
@@ -40,7 +40,6 @@ BasicGame.CharacterSelect.prototype = {
 		// var y = this.world.centerY;
 		var y = 210;
 
-		// TODO frame change color?? conf color
 		this.charFrameSprite = this.genCharFrame(x, y);
 		this.charSprite = this.genCharSprite(x, y);
 		this.charNameSprite = this.genCharNameText(x, y);
@@ -115,7 +114,7 @@ BasicGame.CharacterSelect.prototype = {
 			} else {
 				tween.start();
 			}
-			// TODO over sound
+			this.game.global.soundManager.soundPlay('panelOverSE');
 		}, this);
 		btnSprite.onInputOut.add(function () {
 			tween.pause();

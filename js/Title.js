@@ -27,7 +27,10 @@ BasicGame.Title.prototype = {
 	},
 
 	manageBGM: function () {
-		this.game.global.soundManager.soundPlay('stageSelectBGM');
+		var bgm = this.game.global.soundManager.getSound('currentBGM');
+		if (!bgm) {
+			this.game.global.soundManager.soundPlay('stageSelectBGM');
+		}
 	},
 
 	genTitleText: function () {
@@ -104,7 +107,7 @@ BasicGame.Title.prototype = {
 	genOptionMenuFrame: function () {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
-		// TODO nine-patch // https://phaser.io/news/2015/08/nine-patch-phaser-plugin
+		// ENHANCE nine-patch // https://phaser.io/news/2015/08/nine-patch-phaser-plugin
 		var menuBgSprite = this.add.sprite(x, y, 'greySheet', 'grey_panel');
 		menuBgSprite.anchor.setTo(.5);
 		menuBgSprite.scale.x = 3;
@@ -159,6 +162,7 @@ BasicGame.Title.prototype = {
 		this.genVolumeControlBtn(x+120, y+marginY[2], 'bgm', '+', bgmTextSprite);
 		this.genVolumeControlBtn(x-120, y+marginY[3], 'voice', '-', voiceTextSprite);
 		this.genVolumeControlBtn(x+120, y+marginY[3], 'voice', '+', voiceTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[4], 'mute', 'x', muteTextSprite);
 	},
 
 	textSpriteTemplate: function (x, y, text, textStyle) {
@@ -178,24 +182,18 @@ BasicGame.Title.prototype = {
 			var originVolume = this.game.global.soundVolumes[type];
 			var viewVolume = originVolume * 10;
 
-			var changeText;
-			if (type == 'master') {
-				changeText = 'MASTER : '+viewVolume;
-			} else if (type == 'se') {
-				changeText = 'SE : '+viewVolume;
-			} else if (type == 'bgm') {
-				changeText = 'BGM : '+viewVolume;
-			} else if (type == 'voice') {
-				changeText = 'VOICE : '+viewVolume;
-			} else {
-				changeText = null;
+			var changeText = '';
+			switch (type) {
+				case 'master': changeText = 'MASTER : '+viewVolume; break;
+				case 'se': changeText = 'SE : '+viewVolume; break;
+				case 'bgm': changeText = 'BGM : '+viewVolume; break;
+				case 'voice': changeText = 'VOICE : '+viewVolume; break;
 			}
-
 			if (changeText) {
 				changeTextSprite.changeText(changeText);
 			}
 		}
-		function btnClick () {
+		function btnClick (event) {
 			if (text == '+') {
 				this.game.global.soundManager.soundPlay('volumeControlBtnSE');
 				this.game.global.soundManager.volumeUp(type);
@@ -203,10 +201,19 @@ BasicGame.Title.prototype = {
 				this.game.global.soundManager.soundPlay('volumeControlBtnSE');
 				this.game.global.soundManager.volumeDown(type);
 			} else {
-				this.game.global.soundManager.volumeMute(type);
+				this.game.global.soundManager.volumeMute();
 			}
 
 			changeText.bind(this)();
+
+			if (type == 'mute') {
+				if (text == 'x') {
+					text = 'o';
+				} else {
+					text = 'x';
+				}
+				event.changeText(text);
+			}
 		}
 
 		var btnSprite = this.add.button(
@@ -219,6 +226,10 @@ BasicGame.Title.prototype = {
 		var textStyle = { font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 6 };
 		var textSprite = this.add.text(x, y, text, textStyle);
 		textSprite.anchor.setTo(.5);
+
+		btnSprite.changeText = function (text) {
+			textSprite.setText(text);
+		};
 
 		this.menuGroup.add(btnSprite);
 		this.menuGroup.add(textSprite);

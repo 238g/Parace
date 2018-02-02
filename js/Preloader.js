@@ -20,7 +20,7 @@ BasicGame.Preloader.prototype = {
 	},
 
 	create: function () {
-		this.setSounds(); // TODO load only first ??? or All set at Title
+		this.setSounds();
 
 		this.state.start(this.nextSceen);
 	},
@@ -48,7 +48,7 @@ BasicGame.Preloader.prototype = {
 	},
 
     userDatasController: function () {
-        // TODO update userData... date180101->180202 _ each if?
+        // ENHANCE update userData... date180101->180202 _ each if?
         var userDatas  = this.getUserDatas() || this.initUserDatas();
         var storageName = this.game.const.STORAGE_NAME;
         this.game.global.setUserDatas = function (path, val) {
@@ -70,8 +70,6 @@ BasicGame.Preloader.prototype = {
         var storageName = this.game.const.STORAGE_NAME;
         if (localStorage.getItem(storageName)) {
             var userDatas = JSON.parse(localStorage.getItem(storageName));
-            // TODO Set each data to global after under TODO separate
-            // TODO each if be?not be? _ data json for(check->function)
             g.charCount = userDatas.charCount;
             g.soundVolumes = userDatas.soundVolumes;
             return userDatas;
@@ -84,8 +82,7 @@ BasicGame.Preloader.prototype = {
         var g = this.game.global;
         var storageName = this.game.const.STORAGE_NAME;
         var userDatas = {
-            // TODO more separate...
-            // think,think,think... design...
+            // ENHANCE more separate...
             charCount: g.charCount,
             soundVolumes: g.soundVolumes,
         };
@@ -116,13 +113,11 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
 		this.load.atlasXML('redSheet', imgPath+'/btns/redSheet.png', imgPath+'/btns/redSheet.xml');
 		this.load.atlasXML('blueSheet', imgPath+'/btns/blueSheet.png', imgPath+'/btns/blueSheet.xml');
-		this.load.audio('selectSE', soundPath+'selectSE.mp3');
-		this.load.audio('cancelSE', soundPath+'cancelSE.mp3');
-		this.load.audio('stopwatchSE', soundPath+'stopwatchSE.mp3');
-		this.load.audio('stageSelectBGM', soundPath+'stageSelectBGM.wav');
-		this.load.audio('closeWindowSE', soundPath+'closeWindowSE.mp3');
-		this.load.audio('openWindowSE', soundPath+'openWindowSE.mp3');
-		this.load.audio('volumeControlBtnSE', soundPath+'volumeControlBtnSE.mp3');
+
+		var info = this.game.conf.loadSoundInfo;
+		for (var key in info) {
+			this.load.audio(info[key][0], soundPath+info[key][0]+'.'+info[key][1]);
+		}
 	},
 
 	loadAssets_CharacterSelect: function () {
@@ -135,6 +130,9 @@ BasicGame.Preloader.prototype = {
 
 	loadAssets_Play: function () {
 		var imgPath = this.imgPath;
+		for (var i=1;i<=this.charCount;i++) {
+			this.load.image('normal_1_'+i, imgPath+'/character_imgs/portraits/normal_1_'+i+'.png');
+		}
 	},
 
 	setSounds: function () {
@@ -149,48 +147,41 @@ BasicGame.Preloader.prototype = {
 			getSound: null,
 			volumeUp: null,
 			volumeDown: null,
-			soundMute: null,
+			volumeMute: null,
 		};
 
 		var sounds = {
 			currentBGM: null,
-			selectSE: this.add.audio('selectSE'),
-			cancelSE: this.add.audio('cancelSE'),
-			stopwatchSE: this.add.audio('stopwatchSE'),
-			stageSelectBGM: this.add.audio('stageSelectBGM'),
-			closeWindowSE: this.add.audio('closeWindowSE'),
-			openWindowSE: this.add.audio('openWindowSE'),
-			volumeControlBtnSE: this.add.audio('volumeControlBtnSE'),
 		};
 
-		sounds.selectSE.soundType = 'se';
-		sounds.cancelSE.soundType = 'se';
-		sounds.stopwatchSE.soundType = 'se';
-		sounds.stageSelectBGM.soundType = 'bgm';
-		sounds.closeWindowSE.soundType = 'se';
-		sounds.openWindowSE.soundType = 'se';
-		sounds.volumeControlBtnSE.soundType = 'se';
+		var info = this.game.conf.loadSoundInfo;
+		for (var key in info) {
+			sounds[info[key][0]] = this.add.audio(info[key][0]);
+			sounds[info[key][0]].soundType = info[key][2];
+		}
 
 		g.soundManager.soundPlay = function (key) {
 			var sound = sounds[key];
 			switch (sound.soundType) {
 				case 'se':
-					sound.volume = g.soundVolumes.se * g.soundVolumes.master;
+					sound.volume = g.soundVolumes.se * g.soundVolumes.master * g.soundVolumes.mute;
 					break; 
 				case 'bgm':
-					sound.volume = g.soundVolumes.bgm * g.soundVolumes.master;
+					sound.volume = g.soundVolumes.bgm * g.soundVolumes.master * g.soundVolumes.mute;
 					sound.loop = true;
 					sounds.currentBGM = sound;
 					break;
 				case 'voice':
-					sound.volume = g.soundVolumes.voice * g.soundVolumes.master;
+					sound.volume = g.soundVolumes.voice * g.soundVolumes.master * g.soundVolumes.mute;
 					break;
 			}
 			sound.play();
 		};
 		g.soundManager.soundStop = function (key) {
 			var sound = sounds[key];
-			sound.stop();
+			if (sound) {
+				sound.stop();
+			}
 		};
 		g.soundManager.getSound = function (key) {
 			var sound = sounds[key];
@@ -204,12 +195,9 @@ BasicGame.Preloader.prototype = {
 			currentVolume /= 100;
 			g.soundVolumes[type] = currentVolume;
 			g.setUserDatas('soundVolumes.'+type, currentVolume);
-			
-			// TODO changeSound
-			// bgm only ??? because bgm is playing always, se is click play -> change volume
-			// if (type == 'bgm') {
-				// sounds.currentBGM.volume = g.soundVolumes.bgm * g.soundVolumes.master;
-			// }
+			if (type == 'bgm' || type == 'master') {
+				sounds.currentBGM.volume = g.soundVolumes.bgm * g.soundVolumes.master * g.soundVolumes.mute;
+			}
 		};
 		g.soundManager.volumeDown = function (type) {
 			var currentVolume = g.soundVolumes[type];
@@ -219,16 +207,18 @@ BasicGame.Preloader.prototype = {
 			currentVolume /= 100;
 			g.soundVolumes[type] = currentVolume;
 			g.setUserDatas('soundVolumes.'+type, currentVolume);
-		
-			// TODO changeSound
+			if (type == 'bgm' || type == 'master') {
+				sounds.currentBGM.volume = g.soundVolumes.bgm * g.soundVolumes.master * g.soundVolumes.mute;
+			}
 		};
-		g.soundManager.volumeMute = function (type) {
-			var currentVolume = g.soundVolumes[type];
-			currentVolume = 0;
-			g.soundVolumes[type] = currentVolume;
-			g.setUserDatas('soundVolumes.'+type, currentVolume);
-		
-			// TODO changeSound
+		g.soundManager.volumeMute = function () {
+			if (g.soundVolumes.mute == 0) {
+				g.soundVolumes.mute = 1;
+			} else {
+				g.soundVolumes.mute = 0;
+			}
+			g.setUserDatas('soundVolumes.mute', g.soundVolumes.mute);
+			sounds.currentBGM.volume = g.soundVolumes.bgm * g.soundVolumes.master * g.soundVolumes.mute;
 		};
 	}
 };

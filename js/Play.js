@@ -6,6 +6,7 @@ BasicGame.Play.prototype = {
 		var g = this.game.global;
 		this.targetTime = g.targetTime; // For view
 		this.startTime = 0; // Set Date.now()
+		this.currentCharNum = g.currentCharNum;
 
 		// For visible, invisible
 		this.startBtn;
@@ -20,8 +21,8 @@ BasicGame.Play.prototype = {
 	create: function () {
 		this.genBackGround();
 		this.manageBGM();
+		this.genCharSprite();
 		this.genTimerContainer();
-		// TODO character
 		this.btnsContainer();
 		this.genPlayCountText();
 	},
@@ -47,7 +48,7 @@ BasicGame.Play.prototype = {
 
 	genCurrentTimeText: function () {
 		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
-		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2, (this.targetTime*0)+'.00', textStyle);
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-50, (this.targetTime*0)+'.00', textStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.show = function (text) {
 			if (text) {
@@ -65,7 +66,7 @@ BasicGame.Play.prototype = {
 
 	btnsContainer: function () {
 		var x = this.world.centerX;
-		var y = this.world.centerY+200;
+		var y = this.world.height-100;
 
 		this.startBtn = this.genStartBtn(x, y);
 		this.stopBtn = this.genStopBtn(x, y);
@@ -133,7 +134,7 @@ BasicGame.Play.prototype = {
 
 		this.game.global.soundManager.soundPlay('stopwatchSE');
 
-		// TODO *2 upper auto stop!!
+		// TODO *2 upper auto stop!! timer,arr? or not start,,,
 	},
 
 	timerStop: function () {
@@ -145,7 +146,7 @@ BasicGame.Play.prototype = {
 		this.backBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
-		this.game.global.soundManager.soundPlay('stopwatchSE'); // TODO change sound???
+		this.game.global.soundManager.soundPlay('stopwatchSE');
 
 		var result = this.checkTime(currentTime);
 		this.resultView(result); // TODO view???char???
@@ -179,6 +180,7 @@ BasicGame.Play.prototype = {
 	},
 
 	resultView: function (result) {
+		console.log(result);
 		switch (result) {
 			case this.const.GAME_RESULT_CONGRATULATIONS:
 				break;
@@ -201,5 +203,18 @@ BasicGame.Play.prototype = {
 
 	genPlayCountText: function () {
 		// TODO // per char, per seconds, all,
+	},
+
+	genCharSprite: function () {
+		var x = this.world.centerX;
+		var y = this.world.centerY;
+		var currentCharNum = this.currentCharNum;
+		var charSprite = this.add.sprite(x, y, 'normal_1_'+currentCharNum);
+		charSprite.anchor.setTo(.5);
+
+		charSprite.changeImg = function (emotion) {
+			charSprite.loadTexture(emotion+'_1_'+currentCharNum);
+		};
+		return charSprite;
 	}
 };
