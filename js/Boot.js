@@ -63,6 +63,7 @@ BasicGame.Boot.prototype = {
             EMOTION_SMILE: 'smile',
             EMOTION_FROWN: 'frown',
             EMOTION_ANGRY: 'angry',
+            EMOTION_HAPPY: 'happy',
         };
     },
 
@@ -73,18 +74,29 @@ BasicGame.Boot.prototype = {
                 1: {
                     id:c.CHAR_KIZUNA_AI, name:'キズナアイ', color: '0xffb6c1',
                     resultWords: {
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'111',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
-                        2:{id:c.GAME_RESULT_CLOSE,words:'222',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
-                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'angry',textStyle:null,tween:'none',emotion:c.EMOTION_ANGRY},
-                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:null,tween:'none',emotion:c.EMOTION_FROWN,},
-                        commonTextStyle: { font: '40px Arial', fill: '#d16986', align: 'center', stroke: '#eaebeb', strokeThickness: 10 },
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY},
+                        2:{id:c.GAME_RESULT_CLOSE,words:'おしい！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_SMILE},
+                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,emotion:c.EMOTION_NORMAL},
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'おそいよ！',textStyle:{fontSize:'70px'},emotion:c.EMOTION_ANGRY},
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:{fontSize:'50px'},emotion:c.EMOTION_FROWN,},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#d16986', align: 'center', stroke: '#eaebeb', strokeThickness: 15 },
                         commonTween: 'none',
                         commonX: this.world.centerX, commonY: this.world.centerY+200,
                     },
                 },
                 2: {
                     id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa',
+                    resultWords: {
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px',strokeThickness:15},tween:'none',emotion:c.EMOTION_HAPPY},
+                        2:{id:c.GAME_RESULT_CLOSE,words:'あとちょっと…',textStyle:{fontSize:'55px',strokeThickness:20},emotion:c.EMOTION_SMILE},
+                        // TODO 3~5
+                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,emotion:c.EMOTION_NORMAL},
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'おそいよ！',textStyle:{fontSize:'70px',strokeThickness:20},emotion:c.EMOTION_ANGRY},
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:{fontSize:'50px',strokeThickness:20},emotion:c.EMOTION_FROWN,},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#36acd1', align: 'center', stroke: '#fff3b9', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
                 3: {
                     id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00',

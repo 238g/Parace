@@ -74,6 +74,7 @@ BasicGame.Preloader.prototype = {
         	}
             var userDatas = allUserDatas[currentVersion];
             g.charCount = userDatas.charCount;
+            g.currentCharNum = userDatas.currentCharNum;
             g.soundVolumes = userDatas.soundVolumes;
             return allUserDatas;
         } else {
@@ -87,6 +88,7 @@ BasicGame.Preloader.prototype = {
         var userDatas = {};
         userDatas[currentVersion] = {
             charCount: g.charCount,
+            currentCharNum: g.currentCharNum,
             soundVolumes: g.soundVolumes,
         };
         localStorage.setItem(storageName, JSON.stringify(userDatas));
@@ -138,11 +140,20 @@ BasicGame.Preloader.prototype = {
 			// this.load.image('normal_2_'+i, imgPath+'/character_imgs/portraits/normal_2_'+i+'.png');
 			// this.load.image('frown_1_'+i, imgPath+'/character_imgs/portraits/frown_1_'+i+'.png');
 			// this.load.image('angry_1_'+i, imgPath+'/character_imgs/portraits/angry_1_'+i+'.png');
+			// this.load.image('smile_2_'+i, imgPath+'/character_imgs/portraits/smile_2_'+i+'.png');
+			// this.load.image('happy_1_'+i, imgPath+'/character_imgs/portraits/happy_1_'+i+'.png');
 		}
 
+		// kizuna ai
 		this.load.image('normal_2_1', imgPath+'/character_imgs/portraits/normal_2_1.png');
 		this.load.image('frown_1_1', imgPath+'/character_imgs/portraits/frown_1_1.png');
 		this.load.image('angry_1_1', imgPath+'/character_imgs/portraits/angry_1_1.png');
+		this.load.image('smile_2_1', imgPath+'/character_imgs/portraits/smile_2_1.png');
+		this.load.image('happy_1_1', imgPath+'/character_imgs/portraits/happy_1_1.png');
+
+		// mirai akari
+		this.load.image('happy_1_2', imgPath+'/character_imgs/portraits/happy_1_2.png');
+		this.load.image('smile_2_2', imgPath+'/character_imgs/portraits/smile_2_2.png');
 	},
 
 	setSounds: function () {

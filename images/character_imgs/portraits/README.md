@@ -33,8 +33,12 @@ worried|汗
 @@@@@@@@@@@@
 this.world(w:450,h:800)
 smile_1_* => within[w:300px,h:300px]
-normal_1_* => within[w:free,h:free]
-normal_2_* => within[w:free,h:free]
+
+[w:free,h:free]
+normal_1_*
+normal_2_*
+frown_1_*
+happy_1_*
 
 
 

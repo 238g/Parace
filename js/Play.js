@@ -225,8 +225,9 @@ BasicGame.Play.prototype = {
 		charSprite.changeImg = function (result) {
 			var resultWords = wordsInfo[result];
 			var emotion = resultWords.emotion;
+			var c = this.game.const;
 			var verNum = 1;
-			if (emotion == this.game.const.EMOTION_NORMAL) {
+			if (emotion == c.EMOTION_NORMAL || emotion == c.EMOTION_SMILE) {
 				verNum = 2;
 			}
 			charSprite.loadTexture(emotion+'_'+verNum+'_'+currentCharNum);
@@ -243,18 +244,25 @@ BasicGame.Play.prototype = {
 		textSprite.anchor.setTo(.5);
 		textSprite.show = function (result) {
 			var resultWords = wordsInfo[result];
-			// TODO textstyle update
+			if (resultWords.textStyle) {
+				for (var key in resultWords.textStyle) {
+					var val = resultWords.textStyle[key];
+					textSprite[key] = val;
+				}
+			}
 			textSprite.setText(resultWords.words);
 			textSprite.visible = true;
 		};
 		textSprite.hide = function () {
+			textSprite.setStyle(textStyle);
 			textSprite.visible = false;
 		};
 		return textSprite;
 	},
 
 	test: function () {
-		var result = 1;
+		return;
+		var result = 2;
 		this.charSprite.changeImg(result);
 		this.resultWordsSprite.show(result);
 	}

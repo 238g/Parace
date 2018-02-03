@@ -146,6 +146,7 @@ BasicGame.CharacterSelect.prototype = {
 
 	setCurrentChar: function (currentCharNum) {
 		this.game.global.currentCharNum = currentCharNum;
+		this.game.global.setUserDatas('currentCharNum', currentCharNum);
 	},
 
 	changeCharContent: function (currentCharNum) {
