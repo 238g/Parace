@@ -93,8 +93,6 @@ BasicGame.Play.prototype = {
 	genBackBtn: function () {
 		var x = 100;
 		var y = 30;
-		// var x = this.world.centerX;
-		// var y = this.world.centerY+300;
 
 		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
 	},

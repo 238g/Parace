@@ -32,7 +32,7 @@ BasicGame.Boot.prototype = {
     create: function() {
         if (this.game.global.loadAll) {
             this.game.global.nextSceen = 'Title';
-            this.game.global.nextSceen = 'Play'; // TODO del
+            // this.game.global.nextSceen = 'Play'; // TODO del
             // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.goToNextSceen('Preloader');
         } else {

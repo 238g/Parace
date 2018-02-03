@@ -31,5 +31,5 @@ sleeping|寝顔
 worried|汗
 
 @@@@@@@@@@@@
-smile_1_* => within[h:300px,w:300px]
-normal_1_* => within[h:483px,w:667px] <-currentMax
+smile_1_* => within[w:300px,h:300px]
+normal_1_* => within[w:602px,h:893px] <-currentMax / world(w:450,h:800)
