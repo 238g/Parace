@@ -42,7 +42,9 @@ BasicGame.Boot.prototype = {
 
     defineConst: function () {
         this.game.const = {
+            // local storage name
             STORAGE_NAME: 'hitten',
+            // result status
             GAME_RESULT_CONGRATULATIONS: 1,
             GAME_RESULT_CLOSE: 2,
             GAME_RESULT_NORMAL: 3,
@@ -56,6 +58,11 @@ BasicGame.Boot.prototype = {
             CHAR_NEK0MASU: 5,
             CHAR_TOKINO_SORA: 6,
             CHAR_FUJI_AOI: 7,
+            // equal name of loaded image
+            EMOTION_NORMAL: 'normal',
+            EMOTION_SMILE: 'smile',
+            EMOTION_FROWN: 'frown',
+            EMOTION_ANGRY: 'angry',
         };
     },
 
@@ -63,13 +70,37 @@ BasicGame.Boot.prototype = {
         var c = this.game.const;
         this.game.conf = {
             charInfo: {
-                1: {id:c.CHAR_KIZUNA_AI,   name:'キズナアイ', color: '0xffb6c1'},
-                2: {id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa'},
-                3: {id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00'},
-                4: {id:c.CHAR_SIRO,        name:'シロ', color: '0xffffff'},
-                5: {id:c.CHAR_NEK0MASU,    name:'ねこます', color: '0xF5D0A9'},
-                6: {id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2'},
-                7: {id:c.CHAR_FUJI_AOI,    name:'富士葵', color: '0xBBFCBD'},
+                1: {
+                    id:c.CHAR_KIZUNA_AI, name:'キズナアイ', color: '0xffb6c1',
+                    resultWords: {
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'111',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
+                        2:{id:c.GAME_RESULT_CLOSE,words:'222',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
+                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,tween:'none',emotion:c.EMOTION_NORMAL},
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'angry',textStyle:null,tween:'none',emotion:c.EMOTION_ANGRY},
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:null,tween:'none',emotion:c.EMOTION_FROWN,},
+                        commonTextStyle: { font: '40px Arial', fill: '#d16986', align: 'center', stroke: '#eaebeb', strokeThickness: 10 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
+                },
+                2: {
+                    id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa',
+                },
+                3: {
+                    id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00',
+                },
+                4: {
+                    id:c.CHAR_SIRO, name:'シロ', color: '0xffffff',
+                },
+                5: {
+                    id:c.CHAR_NEK0MASU, name:'ねこます', color: '0xF5D0A9',
+                },
+                6: {
+                    id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',
+                },
+                7: {
+                    id:c.CHAR_FUJI_AOI, name:'富士葵', color: '0xBBFCBD',
+                },
             },
             loadSoundInfo: [
                 ['selectSE', 'mp3', 'se'],

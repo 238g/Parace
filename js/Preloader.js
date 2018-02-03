@@ -48,12 +48,11 @@ BasicGame.Preloader.prototype = {
 	},
 
     userDatasController: function () {
-        // ENHANCE update userData... date180101->180202 _ each if?
         var userDatas  = this.getUserDatas() || this.initUserDatas();
         var storageName = this.game.const.STORAGE_NAME;
         this.game.global.setUserDatas = function (path, val) {
         	var paths = path.split('.');
-        	var digData = userDatas;
+        	var digData = userDatas[currentVersion];
         	for (var i=0;i<paths.length;i++) {
         		if (i == paths.length-1) {
         			digData[paths[i]] = val;
@@ -69,10 +68,14 @@ BasicGame.Preloader.prototype = {
     	var g = this.game.global;
         var storageName = this.game.const.STORAGE_NAME;
         if (localStorage.getItem(storageName)) {
-            var userDatas = JSON.parse(localStorage.getItem(storageName));
+        	var allUserDatas = JSON.parse(localStorage.getItem(storageName));
+        	if (allUserDatas[oldVersion] && !allUserDatas[currentVersion]) {
+        		allUserDatas[currentVersion] = allUserDatas[oldVersion];
+        	}
+            var userDatas = allUserDatas[currentVersion];
             g.charCount = userDatas.charCount;
             g.soundVolumes = userDatas.soundVolumes;
-            return userDatas;
+            return allUserDatas;
         } else {
             return false;
         }
@@ -81,8 +84,8 @@ BasicGame.Preloader.prototype = {
     initUserDatas: function () {
         var g = this.game.global;
         var storageName = this.game.const.STORAGE_NAME;
-        var userDatas = {
-            // ENHANCE more separate...
+        var userDatas = {};
+        userDatas[currentVersion] = {
             charCount: g.charCount,
             soundVolumes: g.soundVolumes,
         };
@@ -132,7 +135,14 @@ BasicGame.Preloader.prototype = {
 		var imgPath = this.imgPath;
 		for (var i=1;i<=this.charCount;i++) {
 			this.load.image('normal_1_'+i, imgPath+'/character_imgs/portraits/normal_1_'+i+'.png');
+			// this.load.image('normal_2_'+i, imgPath+'/character_imgs/portraits/normal_2_'+i+'.png');
+			// this.load.image('frown_1_'+i, imgPath+'/character_imgs/portraits/frown_1_'+i+'.png');
+			// this.load.image('angry_1_'+i, imgPath+'/character_imgs/portraits/angry_1_'+i+'.png');
 		}
+
+		this.load.image('normal_2_1', imgPath+'/character_imgs/portraits/normal_2_1.png');
+		this.load.image('frown_1_1', imgPath+'/character_imgs/portraits/frown_1_1.png');
+		this.load.image('angry_1_1', imgPath+'/character_imgs/portraits/angry_1_1.png');
 	},
 
 	setSounds: function () {

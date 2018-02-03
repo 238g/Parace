@@ -12,19 +12,21 @@ BasicGame.Play.prototype = {
 		this.startBtn;
 		this.stopBtn;
 		this.restartBtn;
+		this.againBtn;
 		this.backBtn;
 		this.currentTimeTextSprite;
-
-		this.const = this.game.const;
+		this.charSprite;
+		this.resultWordsSprite;
 	},
 
 	create: function () {
 		this.genBackGround();
 		this.manageBGM();
-		this.genCharSprite();
+		this.charController();
 		this.genTimerContainer();
 		this.btnsContainer();
 		this.genPlayCountText();
+		this.test();
 	},
 
 	genBackGround: function () {
@@ -47,8 +49,9 @@ BasicGame.Play.prototype = {
 	},
 
 	genCurrentTimeText: function () {
+		var initText = (this.targetTime*0)+'.00';
 		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
-		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-50, (this.targetTime*0)+'.00', textStyle);
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY/2-50, initText, textStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.show = function (text) {
 			if (text) {
@@ -61,6 +64,9 @@ BasicGame.Play.prototype = {
 		textSprite.hide = function () {
 			textSprite.visible = false;
 		};
+		textSprite.initText = function () {
+			textSprite.setText(initText);
+		};
 		return textSprite;
 	},
 
@@ -70,13 +76,12 @@ BasicGame.Play.prototype = {
 
 		this.startBtn = this.genStartBtn(x, y);
 		this.stopBtn = this.genStopBtn(x, y);
-		this.restartBtn = this.genRestartBtn(x, y);
+		this.againBtn = this.genAgainBtn(x, y);
+		// this.restartBtn = this.genRestartBtn(x, y);
 		this.backBtn = this.genBackBtn();
 	},
 
-	genStartBtn: function (x, y) {
-		return this.btnTemplate(x, y, this.timerStart, '  START  ');
-	},
+	genStartBtn: function (x, y) { return this.btnTemplate(x, y, this.timerStart, '  START  '); },
 
 	genStopBtn: function (x, y) {
 		var btnSprite = this.btnTemplate(x, y, this.timerStop, '  STOP  ');
@@ -90,10 +95,15 @@ BasicGame.Play.prototype = {
 		return btnSprite;
 	},
 
+	genAgainBtn: function (x, y) {
+		var btnSprite = this.btnTemplate(x, y, this.ready, '  AGAIN  ');
+		btnSprite.hide();
+		return btnSprite;
+	},
+
 	genBackBtn: function () {
 		var x = 100;
 		var y = 30;
-
 		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
 	},
 
@@ -122,17 +132,24 @@ BasicGame.Play.prototype = {
 		return btnSprite;
 	},
 
+	ready: function () {
+		this.currentTimeTextSprite.initText();
+		this.againBtn.hide();
+		this.startBtn.show();
+		this.charSprite.initImg();
+		this.resultWordsSprite.hide();
+	},
+
 	timerStart: function () {
 		this.startTime = Date.now();
 		this.startBtn.hide();
-		this.restartBtn.hide();
+		this.againBtn.hide();
+		// this.restartBtn.hide();
 		this.backBtn.hide();
 		this.stopBtn.show();
 		this.currentTimeTextSprite.hide();
 
 		this.game.global.soundManager.soundPlay('stopwatchSE');
-
-		// TODO *2 upper auto stop!! timer,arr? or not start,,,
 	},
 
 	timerStop: function () {
@@ -140,14 +157,15 @@ BasicGame.Play.prototype = {
 		var currentTime = elapsedTime.toFixed(2);
 
 		this.stopBtn.hide();
-		this.restartBtn.show(); // TODO settimeout???
+		this.againBtn.show();
+		// this.restartBtn.show(); // ENHANCE settimeout???
 		this.backBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
 		this.game.global.soundManager.soundPlay('stopwatchSE');
 
 		var result = this.checkTime(currentTime);
-		this.resultView(result); // TODO view???char???
+		this.resultView(result);
 	},
 
 	checkTime: function (currentTime) {
@@ -162,36 +180,25 @@ BasicGame.Play.prototype = {
 			return (targetTime-marginTime <= currentTime && currentTime <= targetTime+marginTime);
 		}
 
+		var c = this.game.const;
 		if (targetTime == currentTime) {
-			return this.const.GAME_RESULT_CONGRATULATIONS;
+			return c.GAME_RESULT_CONGRATULATIONS;
 		} else if (between(targetTime, marginTime_1, currentTime)) {
-			return this.const.GAME_RESULT_CLOSE;
+			return c.GAME_RESULT_CLOSE;
 		} else if (between(targetTime, marginTime_2, currentTime)) {
-			return this.const.GAME_RESULT_NORMAL;
+			return c.GAME_RESULT_NORMAL;
 		} else if (between(targetTime, marginTime_3, currentTime)) {
-			return this.const.GAME_RESULT_AWKWARD;
+			return c.GAME_RESULT_AWKWARD;
 		} else if (between(targetTime, marginTime_4, currentTime)) {
-			return this.const.GAME_RESULT_FUCKYOU;
+			return c.GAME_RESULT_FUCKYOU;
 		} else {
-			return this.const.GAME_RESULT_FUCKYOU;
+			return c.GAME_RESULT_FUCKYOU;
 		}
 	},
 
 	resultView: function (result) {
-		console.log(result);
-		switch (result) {
-			case this.const.GAME_RESULT_CONGRATULATIONS:
-				break;
-			case this.const.GAME_RESULT_CLOSE:
-				break;
-			case this.const.GAME_RESULT_NORMAL:
-				break;
-			case this.const.GAME_RESULT_AWKWARD:
-				break;
-			case this.const.GAME_RESULT_FUCKYOU:
-			default:
-				break;
-		}
+		this.charSprite.changeImg(result);
+		this.resultWordsSprite.show(result);
 	},
 
 	backToCharSelect: function () {
@@ -200,19 +207,55 @@ BasicGame.Play.prototype = {
 	},
 
 	genPlayCountText: function () {
-		// TODO // per char, per seconds, all,
+		// ENHANCE // per char, per seconds, all,
 	},
 
-	genCharSprite: function () {
+	charController: function () {
+		var wordsInfo = this.game.conf.charInfo[this.currentCharNum].resultWords;
+		this.charSprite = this.genCharSprite(wordsInfo);
+		this.resultWordsSprite = this.genResultWords(wordsInfo);
+	},
+
+	genCharSprite: function (wordsInfo) {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
 		var currentCharNum = this.currentCharNum;
 		var charSprite = this.add.sprite(x, y, 'normal_1_'+currentCharNum);
 		charSprite.anchor.setTo(.5);
-
-		charSprite.changeImg = function (emotion) {
-			charSprite.loadTexture(emotion+'_1_'+currentCharNum);
+		charSprite.changeImg = function (result) {
+			var resultWords = wordsInfo[result];
+			var emotion = resultWords.emotion;
+			var verNum = 1;
+			if (emotion == this.game.const.EMOTION_NORMAL) {
+				verNum = 2;
+			}
+			charSprite.loadTexture(emotion+'_'+verNum+'_'+currentCharNum);
+		};
+		charSprite.initImg = function () {
+			charSprite.loadTexture('normal_1_'+currentCharNum);
 		};
 		return charSprite;
+	},
+
+	genResultWords: function (wordsInfo) {
+		var textStyle = wordsInfo.commonTextStyle || { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
+		var textSprite = this.add.text(wordsInfo.commonX, wordsInfo.commonY, '', textStyle);
+		textSprite.anchor.setTo(.5);
+		textSprite.show = function (result) {
+			var resultWords = wordsInfo[result];
+			// TODO textstyle update
+			textSprite.setText(resultWords.words);
+			textSprite.visible = true;
+		};
+		textSprite.hide = function () {
+			textSprite.visible = false;
+		};
+		return textSprite;
+	},
+
+	test: function () {
+		var result = 1;
+		this.charSprite.changeImg(result);
+		this.resultWordsSprite.show(result);
 	}
 };

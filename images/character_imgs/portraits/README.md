@@ -2,7 +2,7 @@ Rule
 @@@@@@@@@@@@
 [emotion|expression]_[ver]_[char_num].[extension]
 
-e.g. smile_1_1.png
+e.g smile_1_1.png
 
 @@@@@@@@@@@@
 LIST[emotion,expression]
@@ -31,5 +31,10 @@ sleeping|寝顔
 worried|汗
 
 @@@@@@@@@@@@
+this.world(w:450,h:800)
 smile_1_* => within[w:300px,h:300px]
-normal_1_* => within[w:602px,h:893px] <-currentMax / world(w:450,h:800)
+normal_1_* => within[w:free,h:free]
+normal_2_* => within[w:free,h:free]
+
+
+
