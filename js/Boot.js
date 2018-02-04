@@ -64,6 +64,10 @@ BasicGame.Boot.prototype = {
             EMOTION_FROWN: 'frown',
             EMOTION_ANGRY: 'angry',
             EMOTION_HAPPY: 'happy',
+            EMOTION_SURPRISE: 'surprise',
+            EMOTION_COOL: 'cool',
+            EMOTION_DRUNK: 'drunk',
+            EMOTION_LAUGH: 'laugh',
         };
     },
 
@@ -74,11 +78,16 @@ BasicGame.Boot.prototype = {
                 1: {
                     id:c.CHAR_KIZUNA_AI, name:'キズナアイ', color: '0xffb6c1',
                     resultWords: {
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY},
-                        2:{id:c.GAME_RESULT_CLOSE,words:'おしい！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_SMILE},
-                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,emotion:c.EMOTION_NORMAL},
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'おそいよ！',textStyle:{fontSize:'70px'},emotion:c.EMOTION_ANGRY},
-                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:{fontSize:'50px'},emotion:c.EMOTION_FROWN,},
+                        // none
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        // none
+                        2:{id:c.GAME_RESULT_CLOSE,words:'おしい！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_SMILE,version:2},
+                        // none
+                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,emotion:c.EMOTION_NORMAL,version:2},
+                        // none
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'ちがうよ！',textStyle:{fontSize:'50px'},emotion:c.EMOTION_ANGRY,version:1},
+                        // https://www.youtube.com/watch?v=FyFYH-7Ody0&t=14m59s 【BIOHAZARD 7 resident evil】#19 楽しいビデオ鑑賞会！ パーティ前夜！
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:{fontSize:'50px'},emotion:c.EMOTION_FROWN,version:1,},
                         commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#d16986', align: 'center', stroke: '#eaebeb', strokeThickness: 15 },
                         commonTween: 'none',
                         commonX: this.world.centerX, commonY: this.world.centerY+200,
@@ -87,12 +96,16 @@ BasicGame.Boot.prototype = {
                 2: {
                     id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa',
                     resultWords: {
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px',strokeThickness:15},tween:'none',emotion:c.EMOTION_HAPPY},
-                        2:{id:c.GAME_RESULT_CLOSE,words:'あとちょっと…',textStyle:{fontSize:'55px',strokeThickness:20},emotion:c.EMOTION_SMILE},
-                        // TODO 3~5
-                        3:{id:c.GAME_RESULT_NORMAL,words:'それは普通ですよね！',textStyle:null,emotion:c.EMOTION_NORMAL},
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'おそいよ！',textStyle:{fontSize:'70px',strokeThickness:20},emotion:c.EMOTION_ANGRY},
-                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ふぁっ◯きゅー！',textStyle:{fontSize:'50px',strokeThickness:20},emotion:c.EMOTION_FROWN,},
+                        // https://www.youtube.com/watch?v=qWY_G_VRBAo&t=59m21s 【大晦日生放送】ミライアカリの2.5次元から配信中！
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        // https://www.youtube.com/watch?v=qWY_G_VRBAo&t=58m38s 【大晦日生放送】ミライアカリの2.5次元から配信中！
+                        2:{id:c.GAME_RESULT_CLOSE,words:'あともうちょっとだよ',textStyle:null,emotion:c.EMOTION_SMILE,version:2},
+                        // none
+                        3:{id:c.GAME_RESULT_NORMAL,words:'がんばれ！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_NORMAL,version:2},
+                        // https://www.youtube.com/watch?v=b_SEEnVq_GM&t=4m59s 【欲望全開!!!】ポチポチしてみた結果【MiraiAkariProject#003】
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'人間凄いな',textStyle:{fontSize:'70px'},emotion:c.EMOTION_SURPRISE,version:1},
+                        // https://www.youtube.com/watch?v=92tp_PU_VSg&t=0m53s　【ブラック校則】物申す！ちょっと怒ってます！【MiraiAkariProject#008】
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'はぁ？',textStyle:{fontSize:'110px'},emotion:c.EMOTION_ANGRY,version:1,},
                         commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#36acd1', align: 'center', stroke: '#fff3b9', strokeThickness: 15 },
                         commonTween: 'none',
                         commonX: this.world.centerX, commonY: this.world.centerY+200,
@@ -100,6 +113,21 @@ BasicGame.Boot.prototype = {
                 },
                 3: {
                     id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00',
+                    resultWords: {
+                        // https://www.youtube.com/watch?v=ZJinxt-wui0&t=1s あけおめワッショイ∠ 'ω'／
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'おめでとうございマ！',textStyle:{fontSize:'40px',fill:'#e30002',stroke:'#020001'},tween:'none',emotion:c.EMOTION_COOL,version:1,charY:this.world.centerY+75},
+                        // https://www.youtube.com/watch?v=GG7nBgIHmKw&t=3m57s 【Getting Over It】月ちゃんおこだよ！！！！！おこ
+                        2:{id:c.GAME_RESULT_CLOSE,words:'神ゲー 神ゲー\n神ゲー',textStyle:{fontSize:'60px',y:this.world.centerY+180},emotion:c.EMOTION_SMILE,version:2},
+                        // https://www.youtube.com/watch?v=4i1p0cMebMY&t=1m Twitterが面白くなる方法をみつけたんだがｗｗｗｗｗｗ
+                        3:{id:c.GAME_RESULT_NORMAL,words:'',textStyle:null,emotion:c.EMOTION_LAUGH,version:2},
+                        // https://www.youtube.com/watch?v=e-csTusLwZA&t=9s え・・・・まさかおまえらって・・・・・・
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'うえ～～\nかわいそ～～～',textStyle:{fontSize:'50px'},emotion:c.EMOTION_LAUGH,version:1},
+                        // https://www.youtube.com/watch?v=GG7nBgIHmKw&t=4m 【Getting Over It】月ちゃんおこだよ！！！！！おこ
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'クソゲーーーーー！！！',textStyle:{fontSize:'45px',fill:'#e30002',stroke:'#020001',angle:-30, y: this.world.centerY+100},emotion:c.EMOTION_DRUNK,version:1,charY:this.world.centerY+100},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#e8c528', align: 'center', stroke: '#030001', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
                 4: {
                     id:c.CHAR_SIRO, name:'シロ', color: '0xffffff',

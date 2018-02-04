@@ -70,6 +70,7 @@ BasicGame.Preloader.prototype = {
         if (localStorage.getItem(storageName)) {
         	var allUserDatas = JSON.parse(localStorage.getItem(storageName));
         	if (allUserDatas[oldVersion] && !allUserDatas[currentVersion]) {
+        		// TODO this is false logic. set init data and change diff is correct logic
         		allUserDatas[currentVersion] = allUserDatas[oldVersion];
         	}
             var userDatas = allUserDatas[currentVersion];
@@ -142,6 +143,9 @@ BasicGame.Preloader.prototype = {
 			// this.load.image('angry_1_'+i, imgPath+'/character_imgs/portraits/angry_1_'+i+'.png');
 			// this.load.image('smile_2_'+i, imgPath+'/character_imgs/portraits/smile_2_'+i+'.png');
 			// this.load.image('happy_1_'+i, imgPath+'/character_imgs/portraits/happy_1_'+i+'.png');
+			// this.load.image('surprise_1_'+i, imgPath+'/character_imgs/portraits/surprise_1_'+i+'.png');
+			// this.load.image('cool_1_'+i, imgPath+'/character_imgs/portraits/cool_1_'+i+'.png');
+			// this.load.image('drunk_1_'+i, imgPath+'/character_imgs/portraits/drunk_1_'+i+'.png');
 		}
 
 		// kizuna ai
@@ -154,6 +158,16 @@ BasicGame.Preloader.prototype = {
 		// mirai akari
 		this.load.image('happy_1_2', imgPath+'/character_imgs/portraits/happy_1_2.png');
 		this.load.image('smile_2_2', imgPath+'/character_imgs/portraits/smile_2_2.png');
+		this.load.image('normal_2_2', imgPath+'/character_imgs/portraits/normal_2_2.png');
+		this.load.image('surprise_1_2', imgPath+'/character_imgs/portraits/surprise_1_2.png');
+		this.load.image('angry_1_2', imgPath+'/character_imgs/portraits/angry_1_2.png');
+
+		// kaguya runa
+		this.load.image('cool_1_3', imgPath+'/character_imgs/portraits/cool_1_3.png');
+		this.load.image('smile_2_3', imgPath+'/character_imgs/portraits/smile_2_3.png');
+		this.load.image('laugh_1_3', imgPath+'/character_imgs/portraits/laugh_1_3.png');
+		this.load.image('laugh_2_3', imgPath+'/character_imgs/portraits/laugh_2_3.jpg'); // jpg
+		this.load.image('drunk_1_3', imgPath+'/character_imgs/portraits/drunk_1_3.png');
 	},
 
 	setSounds: function () {

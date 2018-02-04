@@ -107,7 +107,6 @@ BasicGame.Title.prototype = {
 	genOptionMenuFrame: function () {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
-		// ENHANCE nine-patch // https://phaser.io/news/2015/08/nine-patch-phaser-plugin
 		var menuBgSprite = this.add.sprite(x, y, 'greySheet', 'grey_panel');
 		menuBgSprite.anchor.setTo(.5);
 		menuBgSprite.scale.x = 3;

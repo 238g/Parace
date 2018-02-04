@@ -26,7 +26,7 @@ BasicGame.Play.prototype = {
 		this.genTimerContainer();
 		this.btnsContainer();
 		this.genPlayCountText();
-		this.test();
+		// this.test();
 	},
 
 	genBackGround: function () {
@@ -158,7 +158,7 @@ BasicGame.Play.prototype = {
 
 		this.stopBtn.hide();
 		this.againBtn.show();
-		// this.restartBtn.show(); // ENHANCE settimeout???
+		// this.restartBtn.show();
 		this.backBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
@@ -207,7 +207,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genPlayCountText: function () {
-		// ENHANCE // per char, per seconds, all,
+		// TODO for twitter ,today,total /per char, per seconds, all,
 	},
 
 	charController: function () {
@@ -227,12 +227,16 @@ BasicGame.Play.prototype = {
 			var emotion = resultWords.emotion;
 			var c = this.game.const;
 			var verNum = 1;
-			if (emotion == c.EMOTION_NORMAL || emotion == c.EMOTION_SMILE) {
-				verNum = 2;
+			if (resultWords.version) {
+				verNum = resultWords.version;
 			}
+			charSprite.x = resultWords.charX || x;
+			charSprite.y = resultWords.charY || y;
 			charSprite.loadTexture(emotion+'_'+verNum+'_'+currentCharNum);
 		};
 		charSprite.initImg = function () {
+			charSprite.x = x;
+			charSprite.y = y;
 			charSprite.loadTexture('normal_1_'+currentCharNum);
 		};
 		return charSprite;
@@ -254,6 +258,9 @@ BasicGame.Play.prototype = {
 			textSprite.visible = true;
 		};
 		textSprite.hide = function () {
+			textSprite.x = wordsInfo.commonX;
+			textSprite.y = wordsInfo.commonY;
+			textSprite.angle = 0;
 			textSprite.setStyle(textStyle);
 			textSprite.visible = false;
 		};
@@ -261,9 +268,12 @@ BasicGame.Play.prototype = {
 	},
 
 	test: function () {
-		return;
-		var result = 2;
-		this.charSprite.changeImg(result);
-		this.resultWordsSprite.show(result);
+		// return;
+		var str = window.location.href;
+		var result = str.slice(-1);
+		if (result) {
+			this.charSprite.changeImg(result);
+			this.resultWordsSprite.show(result);
+		}
 	}
 };
