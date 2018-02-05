@@ -68,6 +68,7 @@ BasicGame.Boot.prototype = {
             EMOTION_COOL: 'cool',
             EMOTION_DRUNK: 'drunk',
             EMOTION_LAUGH: 'laugh',
+            EMOTION_SAD: 'sad',
         };
     },
 
@@ -131,6 +132,21 @@ BasicGame.Boot.prototype = {
                 },
                 4: {
                     id:c.CHAR_SIRO, name:'シロ', color: '0xffffff',
+                    resultWords: {
+                        // TODO https://www.youtube.com/watch?v=Ur51MzH4dBc&t=3m16s　【驚愕】PUBGでなぜかコンパス駆逐した...【PLAYERUNKNOWN'S BATTLEGROUNDS】
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'やった！',textStyle:{fontSize:'50px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        // https://www.youtube.com/watch?v=Ur51MzH4dBc&t=19m08s 【驚愕】PUBGでなぜかコンパス駆逐した...【PLAYERUNKNOWN'S BATTLEGROUNDS】
+                        2:{id:c.GAME_RESULT_CLOSE,words:'んーくやしぃー!!',textStyle:{fontSize:'50px'},emotion:c.EMOTION_SAD,version:1},
+                        // TODO https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m15s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
+                        3:{id:c.GAME_RESULT_NORMAL,words:'次!!',textStyle:{fontSize:'50px'},emotion:c.EMOTION_NORMAL,version:2},
+                        // TODO https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m50s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'そいつぁひでぇやぁ・・・',textStyle:{fontSize:'35px'},emotion:c.EMOTION_ANGRY,version:1},
+                        // TODO　https://www.youtube.com/watch?v=d5yVgYC-ao4&t=6m03s　【PUBG初実況】シロの初出撃です!!予想外の美味しい結果に‥！【PLAYERUNKNOWN'S BATTLEGROUNDS】
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'聖地と呼びたい',textStyle:{fontSize:'50px'},emotion:c.EMOTION_FROWN,version:1,},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ffffff', align: 'center', stroke: '#0977ff', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
                 5: {
                     id:c.CHAR_NEK0MASU, name:'ねこます', color: '0xF5D0A9',

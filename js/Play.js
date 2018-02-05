@@ -26,7 +26,7 @@ BasicGame.Play.prototype = {
 		this.genTimerContainer();
 		this.btnsContainer();
 		this.genPlayCountText();
-		// this.test();
+		this.test();
 	},
 
 	genBackGround: function () {
@@ -226,13 +226,13 @@ BasicGame.Play.prototype = {
 			var resultWords = wordsInfo[result];
 			var emotion = resultWords.emotion;
 			var c = this.game.const;
-			var verNum = 1;
+			var versionNum = 1;
 			if (resultWords.version) {
-				verNum = resultWords.version;
+				versionNum = resultWords.version;
 			}
 			charSprite.x = resultWords.charX || x;
 			charSprite.y = resultWords.charY || y;
-			charSprite.loadTexture(emotion+'_'+verNum+'_'+currentCharNum);
+			charSprite.loadTexture(emotion+'_'+versionNum+'_'+currentCharNum);
 		};
 		charSprite.initImg = function () {
 			charSprite.x = x;
@@ -271,7 +271,7 @@ BasicGame.Play.prototype = {
 		// return;
 		var str = window.location.href;
 		var result = str.slice(-1);
-		if (result) {
+		if (result != 'l' && result != '?') {
 			this.charSprite.changeImg(result);
 			this.resultWordsSprite.show(result);
 		}

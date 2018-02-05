@@ -168,6 +168,10 @@ BasicGame.Preloader.prototype = {
 		this.load.image('laugh_1_3', imgPath+'/character_imgs/portraits/laugh_1_3.png');
 		this.load.image('laugh_2_3', imgPath+'/character_imgs/portraits/laugh_2_3.jpg'); // jpg
 		this.load.image('drunk_1_3', imgPath+'/character_imgs/portraits/drunk_1_3.png');
+
+		// siro
+		
+		this.load.image('sad_1_4', imgPath+'/character_imgs/portraits/sad_1_4.png');
 	},
 
 	setSounds: function () {
