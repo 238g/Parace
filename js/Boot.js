@@ -58,6 +58,9 @@ BasicGame.Boot.prototype = {
             CHAR_NEK0MASU: 5,
             CHAR_TOKINO_SORA: 6,
             CHAR_FUJI_AOI: 7,
+            // language
+            LANGUAGE_JP: 'jp',
+            LANGUAGE_EN: 'en',
             // equal name of loaded image
             EMOTION_NORMAL: 'normal',
             EMOTION_SMILE: 'smile',
@@ -168,6 +171,31 @@ BasicGame.Boot.prototype = {
                 ['volumeControlBtnSE', 'mp3', 'se'],
                 ['panelOverSE', 'mp3', 'se'],
             ],
+            langTextInfo: {
+                'Title': {
+                    'TitleText': {'jp':'秒当てゲーム','en':'Hitten',},
+                    'OptionBtn': {'jp':'  OPTION  ','en':'  OPTION  ',},
+                    'VolumeText': {'jp':'VOLUME MAX=10','en':'VOLUME MAX=10',},
+                    'MasterText': {'jp':'MASTER : ','en':'MASTER : ',},
+                    'SEText': {'jp':'SE : ','en':'SE : ',},
+                    'BGMText': {'jp':'BGM : ','en':'BGM : ',},
+                    'VoiceText': {'jp':'VOICE : ','en':'VOICE : ',},
+                    'MuteText': {'jp':'MUTE : ','en':'MUTE : ',},
+                },
+                'CharacterSelect': {
+                    'SelectedBtn': {'jp':'  SELECT  ','en':'  SELECT  ',},
+                },
+                'Play': {
+                    'TargetTimeText': {'jp':'.00 でピッタリ止めろ','en':'.00 Stop at the perfect',},
+                    'StopBtn': {'jp':'  STOP  ','en':'  STOP  ',},
+                    'RestartBtn': {'jp':'  RESTART  ','en':'  RESTART  ',},
+                    'AgainBtn': {'jp':'  AGAIN  ','en':'  AGAIN  ',},
+                },
+                'Common': {
+                    'StartBtn': {'jp':'  START  ','en':'  START  ',},
+                    'BackBtn': {'jp':'  BACK  ','en':'  BACK  ',},
+                },
+            },
         };
     },
 
@@ -183,6 +211,7 @@ BasicGame.Boot.prototype = {
             soundManager: null, // default:null, set Preloader.js
             soundVolumes: { se: .5, bgm: .5, voice: .5, master: .5, mute: 1 }, // default volumes
             setUserDatas: null, // set Preloader.js
+            language: this.game.const.LANGUAGE_JP,
         };
     },
 
