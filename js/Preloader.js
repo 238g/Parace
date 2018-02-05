@@ -52,7 +52,7 @@ BasicGame.Preloader.prototype = {
         var storageName = this.game.const.STORAGE_NAME;
         this.game.global.setUserDatas = function (path, val) {
         	var paths = path.split('.');
-        	var digData = userDatas[currentVersion];
+        	var digData = userDatas[__currentVersion];
         	for (var i=0;i<paths.length;i++) {
         		if (i == paths.length-1) {
         			digData[paths[i]] = val;
@@ -69,11 +69,33 @@ BasicGame.Preloader.prototype = {
         var storageName = this.game.const.STORAGE_NAME;
         if (localStorage.getItem(storageName)) {
         	var allUserDatas = JSON.parse(localStorage.getItem(storageName));
-        	if (allUserDatas[oldVersion] && !allUserDatas[currentVersion]) {
-        		// TODO this is false logic. set init data and change diff is correct logic
-        		allUserDatas[currentVersion] = allUserDatas[oldVersion];
+        	if (allUserDatas[__oldVersion] && !allUserDatas[__currentVersion]) {
+        		var oldUserDatas = allUserDatas[__oldVersion];
+        		var initUserDatas = this.initUserDatas()[__currentVersion];
+        		for (var key in initUserDatas) {
+        			if (oldUserDatas[key]) {
+        				if (typeof oldUserDatas[key] == 'object' && typeof initUserDatas[key] == 'object') {
+        					for (var inKey in initUserDatas[key]) {
+        						if (oldUserDatas[key][inKey]) {
+        							initUserDatas[key][inKey] = oldUserDatas[key][inKey];
+        						}
+        					}
+        				} else if (typeof initUserDatas[key] == 'object') {
+        					for (var inKey in initUserDatas[key]) {
+        						if (oldUserDatas[inKey]) {
+        							initUserDatas[key][inKey] = oldUserDatas[inKey];
+        						}
+        					}
+        				} else if (typeof oldUserDatas[key] == 'object') {
+        					continue;
+        				} else {
+        					initUserDatas[key] = oldUserDatas[key];
+        				}
+        			}
+        		}
+        		allUserDatas[__currentVersion] = initUserDatas;
         	}
-            var userDatas = allUserDatas[currentVersion];
+            var userDatas = allUserDatas[__currentVersion];
             g.charCount = userDatas.charCount;
             g.currentCharNum = userDatas.currentCharNum;
             g.soundVolumes = userDatas.soundVolumes;
@@ -87,7 +109,7 @@ BasicGame.Preloader.prototype = {
         var g = this.game.global;
         var storageName = this.game.const.STORAGE_NAME;
         var userDatas = {};
-        userDatas[currentVersion] = {
+        userDatas[__currentVersion] = {
             charCount: g.charCount,
             currentCharNum: g.currentCharNum,
             soundVolumes: g.soundVolumes,
