@@ -99,6 +99,7 @@ BasicGame.Preloader.prototype = {
             g.charCount = userDatas.charCount;
             g.currentCharNum = userDatas.currentCharNum;
             g.soundVolumes = userDatas.soundVolumes;
+            g.language = userDatas.language;
             return allUserDatas;
         } else {
             return false;
@@ -113,6 +114,7 @@ BasicGame.Preloader.prototype = {
             charCount: g.charCount,
             currentCharNum: g.currentCharNum,
             soundVolumes: g.soundVolumes,
+            language: g.language,
         };
         localStorage.setItem(storageName, JSON.stringify(userDatas));
         return userDatas;
