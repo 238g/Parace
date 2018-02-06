@@ -32,7 +32,7 @@ BasicGame.Boot.prototype = {
     create: function() {
         if (this.game.global.loadAll) {
             this.game.global.nextSceen = 'Title';
-            // this.game.global.nextSceen = 'Play'; // TODO del
+            this.game.global.nextSceen = 'Play'; // TODO del
             // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.goToNextSceen('Preloader');
         } else {
@@ -72,6 +72,7 @@ BasicGame.Boot.prototype = {
             EMOTION_DRUNK: 'drunk',
             EMOTION_LAUGH: 'laugh',
             EMOTION_SAD: 'sad',
+            EMOTION_HORROR: 'horror',
         };
     },
 
@@ -136,16 +137,19 @@ BasicGame.Boot.prototype = {
                 4: {
                     id:c.CHAR_SIRO, name:'シロ', color: '0xffffff',
                     resultWords: {
-                        // TODO https://www.youtube.com/watch?v=Ur51MzH4dBc&t=3m16s　【驚愕】PUBGでなぜかコンパス駆逐した...【PLAYERUNKNOWN'S BATTLEGROUNDS】
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'やった！',textStyle:{fontSize:'50px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        // MEMO https://www.youtube.com/watch?v=h0TnhNcWpWE 【Twitterで話題！】簡単に3Dモデルが作れちゃうUnityアセットを発見!!【047】
+                        // MEMO https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m50s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
+                        // MEMO https://www.youtube.com/watch?v=JiPlQvP94Uo&t=6m57s ◯◯縛りで話題のアプリゲーム【どうぶつタワー】に挑戦！連勝の奇跡でシロ壊れる‥!?【099】
+                        // https://www.youtube.com/watch?v=y366RsRdIDc&t=4m12s 【大晦日】セルフ〇〇大会開催するので参加してね【110】
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'こいつはすげえや！',textStyle:{fontSize:'45px'},tween:'none',emotion:c.EMOTION_SMILE,version:4},
                         // https://www.youtube.com/watch?v=Ur51MzH4dBc&t=19m08s 【驚愕】PUBGでなぜかコンパス駆逐した...【PLAYERUNKNOWN'S BATTLEGROUNDS】
                         2:{id:c.GAME_RESULT_CLOSE,words:'んーくやしぃー!!',textStyle:{fontSize:'50px'},emotion:c.EMOTION_SAD,version:1},
-                        // TODO https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m15s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
-                        3:{id:c.GAME_RESULT_NORMAL,words:'次!!',textStyle:{fontSize:'50px'},emotion:c.EMOTION_NORMAL,version:2},
-                        // TODO https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m50s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'そいつぁひでぇやぁ・・・',textStyle:{fontSize:'35px'},emotion:c.EMOTION_ANGRY,version:1},
-                        // TODO　https://www.youtube.com/watch?v=d5yVgYC-ao4&t=6m03s　【PUBG初実況】シロの初出撃です!!予想外の美味しい結果に‥！【PLAYERUNKNOWN'S BATTLEGROUNDS】
-                        5:{id:c.GAME_RESULT_FUCKYOU,words:'聖地と呼びたい',textStyle:{fontSize:'50px'},emotion:c.EMOTION_FROWN,version:1,},
+                        // https://www.youtube.com/watch?v=Dyqporq1mzc&t=3m15s 【一緒に遊ぼ】キャッチコピーで連想ゲーム【130】
+                        3:{id:c.GAME_RESULT_NORMAL,words:'次!!',textStyle:{fontSize:'80px'},emotion:c.EMOTION_SMILE,version:3},
+                        // https://www.youtube.com/watch?v=h0TnhNcWpWE&t=2m52s 【Twitterで話題！】簡単に3Dモデルが作れちゃうUnityアセットを発見!!【047】
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'ﾋｨｲｲ',textStyle:{fontSize:'20px'},emotion:c.EMOTION_HORROR,version:1},
+                        // https://www.youtube.com/watch?v=d5yVgYC-ao4&t=6m03s　【PUBG初実況】シロの初出撃です!!予想外の美味しい結果に‥！【PLAYERUNKNOWN'S BATTLEGROUNDS】
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'聖地と呼びたい',textStyle:{fontSize:'50px'},emotion:c.EMOTION_SMILE,version:2,},
                         commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ffffff', align: 'center', stroke: '#0977ff', strokeThickness: 15 },
                         commonTween: 'none',
                         commonX: this.world.centerX, commonY: this.world.centerY+200,
@@ -153,6 +157,21 @@ BasicGame.Boot.prototype = {
                 },
                 5: {
                     id:c.CHAR_NEK0MASU, name:'ねこます', color: '0xF5D0A9',
+                    resultWords: {
+                        // TODO
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_DRUNK,version:1},
+                        // TODO
+                        2:{id:c.GAME_RESULT_CLOSE,words:'bbbb',textStyle:null,emotion:c.EMOTION_SMILE,version:2},
+                        // https://www.youtube.com/watch?v=DoVh4Fc43Bo&t=1m13s それはとっても世知辛いなって【002】
+                        3:{id:c.GAME_RESULT_NORMAL,words:'世の中、世知辛い\nのじゃーーーー！',textStyle:{fontSize:'50px',fill:'#621d01',y:this.world.centerY+120},emotion:c.EMOTION_SAD,version:1},
+                        // TODO
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'ddd',textStyle:null,emotion:c.EMOTION_LAUGH,version:1},
+                        // https://www.youtube.com/watch?v=0q4CQEw60IM&t=33s 狐娘とポッキーゲームしたい？【003】
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'ポッキーーーッゲェェェエエエエエーーム（音割れ',textStyle:{x:this.world.centerX+200,y:this.world.centerY+100},emotion:c.EMOTION_DRUNK,version:1},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ff6a05', align: 'center', stroke: '#fbffff', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
                 6: {
                     id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',

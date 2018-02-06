@@ -194,8 +194,18 @@ BasicGame.Preloader.prototype = {
 		this.load.image('drunk_1_3', imgPath+'/character_imgs/portraits/drunk_1_3.png');
 
 		// siro
-		
+		this.load.image('smile_4_4', imgPath+'/character_imgs/portraits/smile_4_4.png');
 		this.load.image('sad_1_4', imgPath+'/character_imgs/portraits/sad_1_4.png');
+		this.load.image('smile_3_4', imgPath+'/character_imgs/portraits/smile_3_4.png');
+		this.load.image('horror_1_4', imgPath+'/character_imgs/portraits/horror_1_4.png');
+		this.load.image('smile_2_4', imgPath+'/character_imgs/portraits/smile_2_4.png');
+
+		// nekomasu
+
+
+		this.load.image('sad_1_5', imgPath+'/character_imgs/portraits/sad_1_5.png');
+
+		this.load.image('drunk_1_5', imgPath+'/character_imgs/portraits/drunk_1_5.png');
 	},
 
 	setSounds: function () {
