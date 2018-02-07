@@ -201,11 +201,16 @@ BasicGame.Preloader.prototype = {
 		this.load.image('smile_2_4', imgPath+'/character_imgs/portraits/smile_2_4.png');
 
 		// nekomasu
-
-
+		this.load.image('happy_1_5', imgPath+'/character_imgs/portraits/happy_1_5.png');
+		this.load.image('smile_2_5', imgPath+'/character_imgs/portraits/smile_2_5.png');
 		this.load.image('sad_1_5', imgPath+'/character_imgs/portraits/sad_1_5.png');
-
+		this.load.image('sad_2_5', imgPath+'/character_imgs/portraits/sad_2_5.png');
 		this.load.image('drunk_1_5', imgPath+'/character_imgs/portraits/drunk_1_5.png');
+
+		// tokinosora
+		this.load.image('blushing_1_6', imgPath+'/character_imgs/portraits/blushing_1_6.png');
+		this.load.image('cool_1_6', imgPath+'/character_imgs/portraits/cool_1_6.png');
+
 	},
 
 	setSounds: function () {

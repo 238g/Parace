@@ -232,6 +232,7 @@ BasicGame.Play.prototype = {
 			}
 			charSprite.x = resultWords.charX || x;
 			charSprite.y = resultWords.charY || y;
+			charSprite.scale.setTo(resultWords.scale || 1);
 			charSprite.loadTexture(emotion+'_'+versionNum+'_'+currentCharNum);
 		};
 		charSprite.initImg = function () {

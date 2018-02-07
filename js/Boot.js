@@ -73,6 +73,7 @@ BasicGame.Boot.prototype = {
             EMOTION_LAUGH: 'laugh',
             EMOTION_SAD: 'sad',
             EMOTION_HORROR: 'horror',
+            EMOTION_BLUSHING: 'blushing',
         };
     },
 
@@ -158,14 +159,14 @@ BasicGame.Boot.prototype = {
                 5: {
                     id:c.CHAR_NEK0MASU, name:'ねこます', color: '0xF5D0A9',
                     resultWords: {
-                        // TODO
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_DRUNK,version:1},
-                        // TODO
-                        2:{id:c.GAME_RESULT_CLOSE,words:'bbbb',textStyle:null,emotion:c.EMOTION_SMILE,version:2},
+                        // https://www.youtube.com/watch?v=QDWKOzum6F8&t=2m02s 狐娘のワキ握り【005】
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'でぇ～～～～～ん',textStyle:{fontSize:'55px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,charX:this.world.centerX+130,scale:.6},
+                        // https://www.youtube.com/watch?v=QDWKOzum6F8&t=1m13s 狐娘のワキ握り【005】
+                        2:{id:c.GAME_RESULT_CLOSE,words:'にぎにぎ・・・\n  にぎにぎ・・・\n    にぎにぎ・・・',textStyle:{y:this.world.centerY+150},emotion:c.EMOTION_SMILE,version:2,charY:this.world.centerY+100},
                         // https://www.youtube.com/watch?v=DoVh4Fc43Bo&t=1m13s それはとっても世知辛いなって【002】
                         3:{id:c.GAME_RESULT_NORMAL,words:'世の中、世知辛い\nのじゃーーーー！',textStyle:{fontSize:'50px',fill:'#621d01',y:this.world.centerY+120},emotion:c.EMOTION_SAD,version:1},
-                        // TODO
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'ddd',textStyle:null,emotion:c.EMOTION_LAUGH,version:1},
+                        // SERCH MOVIE
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'',textStyle:null,emotion:c.EMOTION_SAD,version:2,charY:this.world.centerY+25},
                         // https://www.youtube.com/watch?v=0q4CQEw60IM&t=33s 狐娘とポッキーゲームしたい？【003】
                         5:{id:c.GAME_RESULT_FUCKYOU,words:'ポッキーーーッゲェェェエエエエエーーム（音割れ',textStyle:{x:this.world.centerX+200,y:this.world.centerY+100},emotion:c.EMOTION_DRUNK,version:1},
                         commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ff6a05', align: 'center', stroke: '#fbffff', strokeThickness: 15 },
@@ -175,6 +176,25 @@ BasicGame.Boot.prototype = {
                 },
                 6: {
                     id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',
+                    resultWords: {
+                        // https://www.youtube.com/watch?v=Xi2wxXsi3EU&t=32s 【Twitter】センター試験の受験生先輩を応援するのそら【Short】
+                        // がんばれー！！ // color....
+                        // https://www.youtube.com/watch?v=5qM0yOkZA-o&t=21s 【新年】振り袖で書き初めしてみたのそら
+                        // やったー！！
+                        // TODO 
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        // TODO https://www.youtube.com/watch?v=CPlx3uCF3yU&t=55s 【検証？】ときのそらの、珍プレー謎プレー
+                        2:{id:c.GAME_RESULT_CLOSE,words:'ん～・・・みなさん・・・\n結構・・・\nほしがりですなぁ！',textStyle:null,emotion:c.EMOTION_SMILE,version:2},
+                        // TODO 
+                        3:{id:c.GAME_RESULT_NORMAL,words:'ssss',textStyle:null,emotion:c.EMOTION_NORMAL,version:2},
+                        // https://www.youtube.com/watch?v=cee8QH0H_1I&t=23s 【検証】ときのそらはママなのか？お姉ちゃんなのか？
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'ダメな子が                  \n        多いんだから♡',textStyle:{fill:'#8400ea',stroke:'#0a030c',y:this.world.centerY+210},emotion:c.EMOTION_COOL,version:1,scale:.85},
+                        // https://www.youtube.com/watch?v=CPlx3uCF3yU&t=1m37s 【検証？】ときのそらの、珍プレー謎プレー
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'えへっ♡',textStyle:{fontSize:'100px',fill:'#2b1300',stroke:'#fdb1af'},emotion:c.EMOTION_BLUSHING,version:1,},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ffffff', align: 'center', stroke: '#3366ff', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
                 7: {
                     id:c.CHAR_FUJI_AOI, name:'富士葵', color: '0xBBFCBD',
