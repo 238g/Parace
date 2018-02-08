@@ -105,9 +105,8 @@ BasicGame.CharacterSelect.prototype = {
 			'grey_panel', 'grey_panel'
 		);
 
-		var tween = this.add.tween(btnSprite);
-		tween.to({ alpha: .2 }, 300, "Linear", false, 0, -1, true);
-		
+		var tween = this.game.global.tweenManager.genTween(this, 'TransparentYOYO', btnSprite);
+
 		btnSprite.onInputOver.add(function () {
 			if (tween.isPaused) {
 				tween.resume();

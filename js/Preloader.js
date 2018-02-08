@@ -21,6 +21,7 @@ BasicGame.Preloader.prototype = {
 
 	create: function () {
 		this.setSounds();
+		this.genTweenManager();
 
 		this.state.start(this.nextSceen);
 	},
@@ -298,5 +299,32 @@ BasicGame.Preloader.prototype = {
 			g.setUserDatas('soundVolumes.mute', g.soundVolumes.mute);
 			sounds.currentBGM.volume = g.soundVolumes.bgm * g.soundVolumes.master * g.soundVolumes.mute;
 		};
+	},
+
+	genTweenManager: function () {
+		var g = this.game.global;
+		if (g.tweenManager) { return; }
+
+		g.tweenManager = {
+			world: {},
+			tweens: {},
+			addTween: null,
+			startTween: null,
+		};
+		g.tweenManager.init = function (self) {
+			this.world.centerX = self.world.centerX;
+			this.world.centerY = self.world.centerY;
+			this.world.width = self.world.width;
+			this.world.height = self.world.height;
+		};
+		g.tweenManager.genTween = function (self, targetName, targetSprite) {
+			var tween = self.add.tween(targetSprite);
+			switch (targetName) {
+				// to(properties [, duration] [, ease] [, autoStart] [, delay] [, repeat] [, yoyo])
+				case 'TransparentYOYO': tween.to({alpha: .2}, 300, "Linear", false, 0, -1, true); break;
+			}
+			return tween;
+		};
+		g.tweenManager.init(this);
 	}
 };

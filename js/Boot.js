@@ -32,7 +32,7 @@ BasicGame.Boot.prototype = {
     create: function() {
         if (this.game.global.loadAll) {
             this.game.global.nextSceen = 'Title';
-            this.game.global.nextSceen = 'Play'; // TODO del
+            // this.game.global.nextSceen = 'Play'; // TODO del
             // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.goToNextSceen('Preloader');
         } else {
@@ -198,6 +198,28 @@ BasicGame.Boot.prototype = {
                 },
                 7: {
                     id:c.CHAR_FUJI_AOI, name:'富士葵', color: '0xBBFCBD',
+                    resultWords: {
+                        /*
+                        https://www.youtube.com/watch?v=gS5zJURTCTI&t=1m15s
+                        いえーい
+                        https://www.youtube.com/watch?v=tLZqjICvkAo&t=5s
+                        ぴろっぽー
+
+                        */
+                        // TODO
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_SMILE,version:1},
+                        // TODO
+                        2:{id:c.GAME_RESULT_CLOSE,words:'bbb',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
+                        // TODO
+                        3:{id:c.GAME_RESULT_NORMAL,words:'ccc',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
+                        // TODO
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'ddd',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
+                        // TODO
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'eee',textStyle:null,emotion:c.EMOTION_SMILE,version:1,},
+                        commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#0d6cb6', align: 'center', stroke: '#fffeff', strokeThickness: 15 },
+                        commonTween: 'none',
+                        commonX: this.world.centerX, commonY: this.world.centerY+200,
+                    },
                 },
             },
             loadSoundInfo: [
@@ -251,6 +273,7 @@ BasicGame.Boot.prototype = {
             soundVolumes: { se: .5, bgm: .5, voice: .5, master: .5, mute: 1 }, // default volumes
             setUserDatas: null, // set Preloader.js
             language: this.game.const.LANGUAGE_JP,
+            tweenManager: null, // default:null, gen Preloader.js
         };
     },
 
