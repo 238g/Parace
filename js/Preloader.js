@@ -163,14 +163,6 @@ BasicGame.Preloader.prototype = {
 		var imgPath = this.imgPath;
 		for (var i=1;i<=this.charCount;i++) {
 			this.load.image('normal_1_'+i, imgPath+'/character_imgs/portraits/normal_1_'+i+'.png');
-			// this.load.image('normal_2_'+i, imgPath+'/character_imgs/portraits/normal_2_'+i+'.png');
-			// this.load.image('frown_1_'+i, imgPath+'/character_imgs/portraits/frown_1_'+i+'.png');
-			// this.load.image('angry_1_'+i, imgPath+'/character_imgs/portraits/angry_1_'+i+'.png');
-			// this.load.image('smile_2_'+i, imgPath+'/character_imgs/portraits/smile_2_'+i+'.png');
-			// this.load.image('happy_1_'+i, imgPath+'/character_imgs/portraits/happy_1_'+i+'.png');
-			// this.load.image('surprise_1_'+i, imgPath+'/character_imgs/portraits/surprise_1_'+i+'.png');
-			// this.load.image('cool_1_'+i, imgPath+'/character_imgs/portraits/cool_1_'+i+'.png');
-			// this.load.image('drunk_1_'+i, imgPath+'/character_imgs/portraits/drunk_1_'+i+'.png');
 		}
 
 		// kizuna ai
@@ -209,9 +201,16 @@ BasicGame.Preloader.prototype = {
 		this.load.image('drunk_1_5', imgPath+'/character_imgs/portraits/drunk_1_5.png');
 
 		// tokinosora
-		this.load.image('blushing_1_6', imgPath+'/character_imgs/portraits/blushing_1_6.png');
+		this.load.image('happy_1_6', imgPath+'/character_imgs/portraits/happy_1_6.png');
+		this.load.image('cool_2_6', imgPath+'/character_imgs/portraits/cool_2_6.png');
+		this.load.image('smile_2_6', imgPath+'/character_imgs/portraits/smile_2_6.png');
 		this.load.image('cool_1_6', imgPath+'/character_imgs/portraits/cool_1_6.png');
+		this.load.image('blushing_1_6', imgPath+'/character_imgs/portraits/blushing_1_6.png');
 
+		// fujiaoi
+		this.load.image('smile_2_7', imgPath+'/character_imgs/portraits/smile_2_7.png');
+		this.load.image('smile_3_7', imgPath+'/character_imgs/portraits/smile_3_7.png');
+		this.load.image('laugh_1_7', imgPath+'/character_imgs/portraits/laugh_1_7.png');
 	},
 
 	setSounds: function () {

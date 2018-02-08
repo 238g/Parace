@@ -32,7 +32,7 @@ BasicGame.Boot.prototype = {
     create: function() {
         if (this.game.global.loadAll) {
             this.game.global.nextSceen = 'Title';
-            // this.game.global.nextSceen = 'Play'; // TODO del
+            this.game.global.nextSceen = 'Play'; // TODO del
             // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
             this.goToNextSceen('Preloader');
         } else {
@@ -177,16 +177,12 @@ BasicGame.Boot.prototype = {
                 6: {
                     id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',
                     resultWords: {
-                        // https://www.youtube.com/watch?v=Xi2wxXsi3EU&t=32s 【Twitter】センター試験の受験生先輩を応援するのそら【Short】
-                        // がんばれー！！ // color....
                         // https://www.youtube.com/watch?v=5qM0yOkZA-o&t=21s 【新年】振り袖で書き初めしてみたのそら
-                        // やったー！！
-                        // TODO 
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_HAPPY,version:1},
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'やったー！！',textStyle:{fontSize:'65px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,charY:this.world.centerY+100},
                         // TODO https://www.youtube.com/watch?v=CPlx3uCF3yU&t=55s 【検証？】ときのそらの、珍プレー謎プレー
-                        2:{id:c.GAME_RESULT_CLOSE,words:'ん～・・・みなさん・・・\n結構・・・\nほしがりですなぁ！',textStyle:null,emotion:c.EMOTION_SMILE,version:2},
-                        // TODO 
-                        3:{id:c.GAME_RESULT_NORMAL,words:'ssss',textStyle:null,emotion:c.EMOTION_NORMAL,version:2},
+                        2:{id:c.GAME_RESULT_CLOSE,words:'ん～･･･ みなさん･･･\n結構･･･\nほしがりですなぁ！',textStyle:{fontSize:'45px',y:this.world.centerY+170},emotion:c.EMOTION_SMILE,version:2,charY:this.world.centerY+50},
+                        // https://www.youtube.com/watch?v=Xi2wxXsi3EU&t=32s 【Twitter】センター試験の受験生先輩を応援するのそら【Short】
+                        3:{id:c.GAME_RESULT_NORMAL,words:'がんばれー！！',textStyle:{fontSize:'60px',fill:'#fc6dad',stroke:'#ffffff'},emotion:c.EMOTION_COOL,version:2},
                         // https://www.youtube.com/watch?v=cee8QH0H_1I&t=23s 【検証】ときのそらはママなのか？お姉ちゃんなのか？
                         4:{id:c.GAME_RESULT_AWKWARD,words:'ダメな子が                  \n        多いんだから♡',textStyle:{fill:'#8400ea',stroke:'#0a030c',y:this.world.centerY+210},emotion:c.EMOTION_COOL,version:1,scale:.85},
                         // https://www.youtube.com/watch?v=CPlx3uCF3yU&t=1m37s 【検証？】ときのそらの、珍プレー謎プレー
@@ -200,22 +196,19 @@ BasicGame.Boot.prototype = {
                     id:c.CHAR_FUJI_AOI, name:'富士葵', color: '0xBBFCBD',
                     resultWords: {
                         /*
-                        https://www.youtube.com/watch?v=gS5zJURTCTI&t=1m15s
-                        いえーい
-                        https://www.youtube.com/watch?v=tLZqjICvkAo&t=5s
-                        ぴろっぽー
-
+                        
+                        
                         */
-                        // TODO
-                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'aaaa',textStyle:null,tween:'none',emotion:c.EMOTION_SMILE,version:1},
-                        // TODO
-                        2:{id:c.GAME_RESULT_CLOSE,words:'bbb',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
-                        // TODO
-                        3:{id:c.GAME_RESULT_NORMAL,words:'ccc',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
-                        // TODO
-                        4:{id:c.GAME_RESULT_AWKWARD,words:'ddd',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
-                        // TODO
-                        5:{id:c.GAME_RESULT_FUCKYOU,words:'eee',textStyle:null,emotion:c.EMOTION_SMILE,version:1,},
+                        // https://www.youtube.com/watch?v=gS5zJURTCTI&t=1m15s 【NGもあるよ】1月はこーんなことやあーんなことをしていました！
+                        1:{id:c.GAME_RESULT_CONGRATULATIONS,words:'Yaaaay！',textStyle:{fontSize:'80px'},tween:'none',emotion:c.EMOTION_SMILE,version:2,scale:1.1},
+                        // https://www.youtube.com/watch?v=UP6LzYeA0DQ&t=1m8s 富士葵、いざ！！ここに表明する！！聞いてー！！
+                        2:{id:c.GAME_RESULT_CLOSE,words:'D☆N\nP☆F',textStyle:{fontSize:'100px',fill:'#ff0005',stroke:'#f2dd73',y:this.world.centerY+150,x:this.world.centerX+80},emotion:c.EMOTION_SMILE,version:3,charY:this.world.centerY+30,charX:this.world.centerX-60},
+                        // TODO https://www.youtube.com/watch?v=tLZqjICvkAo&t=5s 新年のご挨拶と2018年の抱負を伝えさせてください！
+                        3:{id:c.GAME_RESULT_NORMAL,words:'ぴろっぽー',textStyle:null,emotion:c.EMOTION_SMILE,version:1},
+                        // https://www.youtube.com/watch?v=gS5zJURTCTI&t=5m11s 【NGもあるよ】1月はこーんなことやあーんなことをしていました！
+                        4:{id:c.GAME_RESULT_AWKWARD,words:'うううぅぅぅぅ↑↑↑',textStyle:{fontSize:'50px'},emotion:c.EMOTION_LAUGH,version:1},
+                        // TODO https://www.youtube.com/watch?v=o0_6SnmW1gQ　【利きシリーズ】第一回は利き”緑茶”　Japanese Green Tea Tasting╭( ･ㅂ･)و
+                        5:{id:c.GAME_RESULT_FUCKYOU,words:'はぁあぁあぁあぁあっ！',textStyle:null,emotion:c.EMOTION_SMILE,version:1,},
                         commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#0d6cb6', align: 'center', stroke: '#fffeff', strokeThickness: 15 },
                         commonTween: 'none',
                         commonX: this.world.centerX, commonY: this.world.centerY+200,
