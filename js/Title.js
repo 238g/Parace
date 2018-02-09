@@ -208,12 +208,7 @@ BasicGame.Title.prototype = {
 			changeText.bind(this)();
 
 			if (type == 'mute') {
-				// text = (text == 'x') ? 'o' : 'x'; // TODO test
-				if (text == 'x') {
-					text = 'o';
-				} else {
-					text = 'x';
-				}
+				text = (text == 'x') ? 'o' : 'x';
 				event.changeText(text);
 			}
 		}

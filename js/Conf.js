@@ -7,7 +7,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                 resultWords: {
                     // none
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,
+                    	words:'おめでとうー！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_HAPPY,version:1,
                     },
                     // none
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -28,13 +28,15 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#d16986', align: 'center', stroke: '#eaebeb', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['KizunaAI','YouTube','キズナアイ'],
             },
             2: {
                 id:c.CHAR_MIRAI_AKARI, name:'ミライアカリ', color: '0x87cefa',
                 resultWords: {
                     // https://www.youtube.com/watch?v=qWY_G_VRBAo&t=59m21s 【大晦日生放送】ミライアカリの2.5次元から配信中！
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'おめでとうー！',textStyle:{fontSize:'60px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,
+                    	words:'おめでとうー！',textStyle:{fontSize:'60px'},emotion:c.EMOTION_HAPPY,version:1,
                     },
                     // https://www.youtube.com/watch?v=qWY_G_VRBAo&t=58m38s 【大晦日生放送】ミライアカリの2.5次元から配信中！
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -55,13 +57,15 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#36acd1', align: 'center', stroke: '#fff3b9', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['ミライアカリ','バーチャルYouTuber'],
             },
             3: {
                 id:c.CHAR_KAGUYA_LUNA, name:'輝夜月', color: '0xFFFF00',
                 resultWords: {
                     // https://www.youtube.com/watch?v=ZJinxt-wui0&t=1s あけおめワッショイ∠ 'ω'／
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'おめでとうございマ！',textStyle:{fontSize:'40px',fill:'#e30002',stroke:'#020001'},tween:'none',emotion:c.EMOTION_COOL,version:1,charY:this.world.centerY+75,
+                    	words:'おめでとうございマ！',textStyle:{fontSize:'40px',fill:'#e30002',stroke:'#020001'},emotion:c.EMOTION_COOL,version:1,charY:this.world.centerY+75,
                     },
                     // https://www.youtube.com/watch?v=GG7nBgIHmKw&t=3m57s 【Getting Over It】月ちゃんおこだよ！！！！！おこ
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -82,6 +86,8 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#e8c528', align: 'center', stroke: '#030001', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['輝夜月','バーチャルYouTuber'],
             },
             4: {
                 id:c.CHAR_SIRO, name:'シロ', color: '0xffffff',
@@ -91,7 +97,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     // MEMO https://www.youtube.com/watch?v=JiPlQvP94Uo&t=6m57s ◯◯縛りで話題のアプリゲーム【どうぶつタワー】に挑戦！連勝の奇跡でシロ壊れる‥!?【099】
                     // https://www.youtube.com/watch?v=y366RsRdIDc&t=4m12s 【大晦日】セルフ〇〇大会開催するので参加してね【110】
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'こいつはすげえや！',textStyle:{fontSize:'45px'},tween:'none',emotion:c.EMOTION_SMILE,version:4,
+                    	words:'こいつはすげえや！',textStyle:{fontSize:'45px'},emotion:c.EMOTION_SMILE,version:4,
                     },
                     // https://www.youtube.com/watch?v=Ur51MzH4dBc&t=19m08s 【驚愕】PUBGでなぜかコンパス駆逐した...【PLAYERUNKNOWN'S BATTLEGROUNDS】
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -112,13 +118,15 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ffffff', align: 'center', stroke: '#0977ff', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['シロ','バーチャルYouTuber'],
             },
             5: {
                 id:c.CHAR_NEK0MASU, name:'ねこます', color: '0xF5D0A9',
                 resultWords: {
                     // https://www.youtube.com/watch?v=QDWKOzum6F8&t=2m02s 狐娘のワキ握り【005】
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'でぇ～～～～～ん',textStyle:{fontSize:'55px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,charX:this.world.centerX+130,scale:.6,
+                    	words:'でぇ～～～～～ん',textStyle:{fontSize:'55px'},emotion:c.EMOTION_HAPPY,version:1,charX:this.world.centerX+130,scale:.6,
                     },
                     // https://www.youtube.com/watch?v=QDWKOzum6F8&t=1m13s 狐娘のワキ握り【005】
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -139,13 +147,15 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ff6a05', align: 'center', stroke: '#fbffff', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['バーチャルのじゃろり狐娘Youtuberおじさん','のじゃろり'],
             },
             6: {
                 id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',
                 resultWords: {
                     // https://www.youtube.com/watch?v=5qM0yOkZA-o&t=21s 【新年】振り袖で書き初めしてみたのそら
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'やったー！！',textStyle:{fontSize:'65px'},tween:'none',emotion:c.EMOTION_HAPPY,version:1,charY:this.world.centerY+100,
+                    	words:'やったー！！',textStyle:{fontSize:'65px'},emotion:c.EMOTION_HAPPY,version:1,charY:this.world.centerY+100,
                     },
                     // TODO https://www.youtube.com/watch?v=CPlx3uCF3yU&t=55s 【検証？】ときのそらの、珍プレー謎プレー
                     2:{id:c.GAME_RESULT_CLOSE,
@@ -166,21 +176,23 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#ffffff', align: 'center', stroke: '#3366ff', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['ときのそら','そらとも'],
             },
             7: {
                 id:c.CHAR_FUJI_AOI, name:'富士葵', color: '0xBBFCBD',
                 resultWords: {
                     // https://www.youtube.com/watch?v=gS5zJURTCTI&t=1m15s 【NGもあるよ】1月はこーんなことやあーんなことをしていました！
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
-                    	words:'Yaaaay！',textStyle:{fontSize:'80px'},tween:'none',emotion:c.EMOTION_SMILE,version:2,scale:1.1,
+                    	words:'Yaaaay！',textStyle:{fontSize:'80px'},emotion:c.EMOTION_SMILE,version:2,scale:1.1,
                     },
                     // https://www.youtube.com/watch?v=UP6LzYeA0DQ&t=1m8s 富士葵、いざ！！ここに表明する！！聞いてー！！
                     2:{id:c.GAME_RESULT_CLOSE,
                     	words:'D☆N\nP☆F',textStyle:{fontSize:'100px',fill:'#ff0005',stroke:'#f2dd73',y:this.world.centerY+150,x:this.world.centerX+80},emotion:c.EMOTION_SMILE,version:3,charY:this.world.centerY+30,charX:this.world.centerX-60,
                     },
-                    // TODO https://www.youtube.com/watch?v=tLZqjICvkAo&t=5s 新年のご挨拶と2018年の抱負を伝えさせてください！
+                    // https://www.youtube.com/watch?v=tLZqjICvkAo&t=5s 新年のご挨拶と2018年の抱負を伝えさせてください！
                     3:{id:c.GAME_RESULT_NORMAL,
-                    	words:'ぴろっぽー',textStyle:null,emotion:c.EMOTION_SMILE,version:1,
+                    	words:'ぴろっぽー！',textStyle:{fontSize:'50px',fill:'#fff',stroke:'#ffe900',x:this.world.centerX+50},emotion:c.EMOTION_SMILE,version:4,charY:this.world.centerY+100,
                     },
                     // https://www.youtube.com/watch?v=gS5zJURTCTI&t=5m11s 【NGもあるよ】1月はこーんなことやあーんなことをしていました！
                     4:{id:c.GAME_RESULT_AWKWARD,
@@ -188,11 +200,13 @@ BasicGame.Boot.prototype.defineConf = function () {
                     },
                     // TODO https://www.youtube.com/watch?v=o0_6SnmW1gQ　【利きシリーズ】第一回は利き”緑茶”　Japanese Green Tea Tasting╭( ･ㅂ･)و
                     5:{id:c.GAME_RESULT_FUCKYOU,
-                    	words:'はぁあぁあぁあぁあっ！',textStyle:null,emotion:c.EMOTION_SMILE,version:1,
+                    	words:'はぁあぁあぁあぁあっ！',textStyle:{fontSize:'38px',y:this.world.centerY+230},emotion:c.EMOTION_SURPRISE,version:1,charY:this.world.centerY+30
                     },
                     commonTextStyle: { font: '40px Arial', fontWeight: 'bold', fill: '#0d6cb6', align: 'center', stroke: '#fffeff', strokeThickness: 15 },
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
+                tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetHashtags: ['富士葵','バーチャルYouTuber'],
             },
         },
         loadSoundInfo: [

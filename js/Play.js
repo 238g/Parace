@@ -11,9 +11,9 @@ BasicGame.Play.prototype = {
 		// For visible, invisible
 		this.startBtn;
 		this.stopBtn;
-		this.restartBtn;
 		this.againBtn;
 		this.backBtn;
+		this.tweetBtn;
 		this.currentTimeTextSprite;
 		this.charSprite;
 		this.resultWordsSprite;
@@ -25,7 +25,7 @@ BasicGame.Play.prototype = {
 		this.charController();
 		this.genTimerContainer();
 		this.btnsContainer();
-		this.genPlayCountText();
+		this.playCountContainser();
 		this.test();
 	},
 
@@ -77,22 +77,14 @@ BasicGame.Play.prototype = {
 		this.startBtn = this.genStartBtn(x, y);
 		this.stopBtn = this.genStopBtn(x, y);
 		this.againBtn = this.genAgainBtn(x, y);
-		// this.restartBtn = this.genRestartBtn(x, y);
 		this.backBtn = this.genBackBtn();
-
-		this.genTwitterBtn();
+		this.tweetBtn = this.genTwitterBtn();
 	},
 
 	genStartBtn: function (x, y) { return this.btnTemplate(x, y, this.timerStart, '  START  '); },
 
 	genStopBtn: function (x, y) {
 		var btnSprite = this.btnTemplate(x, y, this.timerStop, '  STOP  ');
-		btnSprite.hide();
-		return btnSprite;
-	},
-
-	genRestartBtn: function (x, y) {
-		var btnSprite = this.btnTemplate(x, y, this.timerStart, '  RESTART  ');
 		btnSprite.hide();
 		return btnSprite;
 	},
@@ -109,19 +101,33 @@ BasicGame.Play.prototype = {
 		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
 	},
 
-	// TODO
 	genTwitterBtn: function () {
-		var tweetText = encodeURIComponent(this.game.conf.charInfo[1].name);
-		var tweetUrl = location.href;
-		var tweetHashtags = ''; // array
-
-		// function tweet () {
-			// window.open('https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags=', "share window", 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+		var x = this.world.centerX-120;
+		var y = this.world.height-40;
+		var charInfo = this.game.conf.charInfo[this.currentCharNum];
+		console.log(charInfo);
+		var btnSprite = this.btnTemplate(x, y, function () {
+			// TODO rand text // ツイート専用セリフ、日時の記録：秒、プレイ回数目の挑戦！、ハッシュタグ、URL 
+			var text = charInfo.tweetTexts[0];
+			var tweetText = encodeURIComponent(text);
+			var tweetUrl = location.href;
+			var tweetHashtags = '';
+			var arr = charInfo.tweetHashtags;
+			for (var key in arr) {
+				tweetHashtags += arr[key]+',';
+			}
+			window.open(
+				'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
+				'share window', 
+				'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+			);
 			return false;
-		// }
-
-		// btn -> img? text none?
-		tweet();
+		}, 'Tweet');
+		btnSprite.setResult = function () {
+			// TODO
+		};
+		btnSprite.hide();
+		return btnSprite;
 	},
 
 	btnTemplate: function (x, y, inputFunc, text) {
@@ -152,6 +158,7 @@ BasicGame.Play.prototype = {
 	ready: function () {
 		this.currentTimeTextSprite.initText();
 		this.againBtn.hide();
+		this.tweetBtn.hide();
 		this.startBtn.show();
 		this.charSprite.initImg();
 		this.resultWordsSprite.hide();
@@ -161,7 +168,7 @@ BasicGame.Play.prototype = {
 		this.startTime = Date.now();
 		this.startBtn.hide();
 		this.againBtn.hide();
-		// this.restartBtn.hide();
+		this.tweetBtn.hide();
 		this.backBtn.hide();
 		this.stopBtn.show();
 		this.currentTimeTextSprite.hide();
@@ -175,8 +182,8 @@ BasicGame.Play.prototype = {
 
 		this.stopBtn.hide();
 		this.againBtn.show();
-		// this.restartBtn.show();
 		this.backBtn.show();
+		this.tweetBtn.show();
 		this.currentTimeTextSprite.show(currentTime);
 
 		this.game.global.soundManager.soundPlay('stopwatchSE');
@@ -216,6 +223,7 @@ BasicGame.Play.prototype = {
 	resultView: function (result) {
 		this.charSprite.changeImg(result);
 		this.resultWordsSprite.show(result);
+		// TODO change playCount
 	},
 
 	backToCharSelect: function () {
@@ -223,8 +231,34 @@ BasicGame.Play.prototype = {
 		this.game.global.goToNextSceen('CharacterSelect');
 	},
 
+	playCountContainser: function () {
+		this.initPlayCount();
+		this.genPlayCountText();
+	},
+
+	initPlayCount: function () {
+		var g = this.game.global;
+		var Y = new Date().getFullYear();
+		var m = ('0'+(new Date().getMonth()+1)).slice(-2);
+		var d = ('0'+new Date().getDate()).slice(-2);
+		var todayString = Y+'-'+m+'-'+d;
+		var keys = [
+			'total',
+			todayString, // e.g 2018-01-01
+			this.currentCharNum+'_total', // e.g 1_total
+			this.currentCharNum+'_'+todayString, // e.g 1_2018-01-01
+		];
+		for (var i in keys) {
+			var key = keys[i];
+			if (!g.playCount[key]) {
+				g.genUserDatas['playCount', key];
+				g.setUserDatas('playCount.'+key, 0);
+			}
+		}
+	},
+
 	genPlayCountText: function () {
-		// TODO for twitter ,today,total /per char, per seconds, all,
+		// TODO text
 	},
 
 	charController: function () {

@@ -51,6 +51,18 @@ BasicGame.Preloader.prototype = {
     userDatasController: function () {
         var userDatas  = this.getUserDatas() || this.initUserDatas();
         var storageName = this.game.const.STORAGE_NAME;
+        this.game.global.genUserDatas = function (path, key) {
+        	var paths = path.split('.');
+        	var digData = userDatas[__currentVersion];
+        	for (var i=0;i<paths.length;i++) {
+        		if (i == paths.length-1) {
+        			digData[paths[i]][key] = null;
+        			break;
+        		}
+        		digData = digData[paths[i]];
+        	}
+        	localStorage.setItem(storageName, JSON.stringify(userDatas));
+        };
         this.game.global.setUserDatas = function (path, val) {
         	var paths = path.split('.');
         	var digData = userDatas[__currentVersion];
@@ -101,6 +113,7 @@ BasicGame.Preloader.prototype = {
             g.currentCharNum = userDatas.currentCharNum;
             g.soundVolumes = userDatas.soundVolumes;
             g.language = userDatas.language;
+            g.playCount = userDatas.playCount;
             return allUserDatas;
         } else {
             return false;
@@ -116,6 +129,7 @@ BasicGame.Preloader.prototype = {
             currentCharNum: g.currentCharNum,
             soundVolumes: g.soundVolumes,
             language: g.language,
+            playCount: g.playCount,
         };
         localStorage.setItem(storageName, JSON.stringify(userDatas));
         return userDatas;
@@ -210,7 +224,9 @@ BasicGame.Preloader.prototype = {
 		// fujiaoi
 		this.load.image('smile_2_7', imgPath+'/character_imgs/portraits/smile_2_7.png');
 		this.load.image('smile_3_7', imgPath+'/character_imgs/portraits/smile_3_7.png');
+		this.load.image('smile_4_7', imgPath+'/character_imgs/portraits/smile_4_7.png');
 		this.load.image('laugh_1_7', imgPath+'/character_imgs/portraits/laugh_1_7.png');
+		this.load.image('surprise_1_7', imgPath+'/character_imgs/portraits/surprise_1_7.png');
 	},
 
 	genSoundManager: function () {
@@ -319,7 +335,7 @@ BasicGame.Preloader.prototype = {
 		g.tweenManager.genTween = function (self, targetName, targetSprite) {
 			var tween = self.add.tween(targetSprite);
 			switch (targetName) {
-				// to(properties [, duration] [, ease] [, autoStart] [, delay] [, repeat] [, yoyo])
+				// .to(properties [, duration] [, ease] [, autoStart] [, delay] [, repeat] [, yoyo])
 				case 'ShowMenu': tween.to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out); break;
 				case 'HideMenu': tween.to( { x: 0, y: 0 }, 300, Phaser.Easing.Elastic.In); break;
 				case 'TransparentYOYO': tween.to({alpha: .2}, 300, "Linear", false, 0, -1, true); break;
