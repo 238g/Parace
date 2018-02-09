@@ -20,7 +20,7 @@ BasicGame.Preloader.prototype = {
 	},
 
 	create: function () {
-		this.setSounds();
+		this.genSoundManager();
 		this.genTweenManager();
 
 		this.state.start(this.nextSceen);
@@ -213,7 +213,7 @@ BasicGame.Preloader.prototype = {
 		this.load.image('laugh_1_7', imgPath+'/character_imgs/portraits/laugh_1_7.png');
 	},
 
-	setSounds: function () {
+	genSoundManager: function () {
 		var g = this.game.global;
 
 		if (g.soundManager) { return; }
@@ -320,7 +320,10 @@ BasicGame.Preloader.prototype = {
 			var tween = self.add.tween(targetSprite);
 			switch (targetName) {
 				// to(properties [, duration] [, ease] [, autoStart] [, delay] [, repeat] [, yoyo])
+				case 'ShowMenu': tween.to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out); break;
+				case 'HideMenu': tween.to( { x: 0, y: 0 }, 300, Phaser.Easing.Elastic.In); break;
 				case 'TransparentYOYO': tween.to({alpha: .2}, 300, "Linear", false, 0, -1, true); break;
+				case 'PockyGame': tween.to({x: -this.world.width-50}, 2300, "Linear", true, 200, 0, false); break;
 			}
 			return tween;
 		};

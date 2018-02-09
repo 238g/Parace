@@ -79,6 +79,8 @@ BasicGame.Play.prototype = {
 		this.againBtn = this.genAgainBtn(x, y);
 		// this.restartBtn = this.genRestartBtn(x, y);
 		this.backBtn = this.genBackBtn();
+
+		this.genTwitterBtn();
 	},
 
 	genStartBtn: function (x, y) { return this.btnTemplate(x, y, this.timerStart, '  START  '); },
@@ -105,6 +107,21 @@ BasicGame.Play.prototype = {
 		var x = 100;
 		var y = 30;
 		return this.btnTemplate(x, y, this.backToCharSelect, '  BACK  ');
+	},
+
+	// TODO
+	genTwitterBtn: function () {
+		var tweetText = encodeURIComponent(this.game.conf.charInfo[1].name);
+		var tweetUrl = location.href;
+		var tweetHashtags = ''; // array
+
+		// function tweet () {
+			// window.open('https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags=', "share window", 'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=600,width=600');
+			return false;
+		// }
+
+		// btn -> img? text none?
+		tweet();
 	},
 
 	btnTemplate: function (x, y, inputFunc, text) {
@@ -247,6 +264,7 @@ BasicGame.Play.prototype = {
 		var textStyle = wordsInfo.commonTextStyle || { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
 		var textSprite = this.add.text(wordsInfo.commonX, wordsInfo.commonY, '', textStyle);
 		textSprite.anchor.setTo(.5);
+		var self = this;
 		textSprite.show = function (result) {
 			var resultWords = wordsInfo[result];
 			if (resultWords.textStyle) {
@@ -254,6 +272,9 @@ BasicGame.Play.prototype = {
 					var val = resultWords.textStyle[key];
 					textSprite[key] = val;
 				}
+			}
+			if (resultWords.tween && resultWords.tween != 'none') {
+				self.game.global.tweenManager.genTween(self, resultWords.tween, textSprite);
 			}
 			textSprite.setText(resultWords.words);
 			textSprite.visible = true;

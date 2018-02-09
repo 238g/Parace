@@ -76,15 +76,17 @@ BasicGame.Title.prototype = {
 		this.genOptionMenuFrame();
 		this.genOptionMenuContents();
 
+		var g = this.game.global;
+
 		this.menuGroup.scale.setTo(0);
-		this.menuGroup.showTween = this.add.tween(this.menuGroup.scale).to( { x: 1, y: 1 }, 1000, Phaser.Easing.Elastic.Out);
-		this.menuGroup.hideTween = this.add.tween(this.menuGroup.scale).to( { x: 0, y: 0 }, 300, Phaser.Easing.Elastic.In);
+		this.menuGroup.showTween = g.tweenManager.genTween(this, 'ShowMenu', this.menuGroup.scale);
+		this.menuGroup.hideTween = g.tweenManager.genTween(this, 'HideMenu', this.menuGroup.scale);
 
 		var baseBtnGroup = this.baseBtnGroup;
 		this.menuGroup.show = function () {
 			if ((!this.showTween.isRunning) && this.scale.x === 0) {
 				this.visible = true;
-				this.game.global.soundManager.soundPlay('openWindowSE');
+				g.soundManager.soundPlay('openWindowSE');
 				this.showTween.start();
 				baseBtnGroup.setAll('inputEnabled', false);
 				baseBtnGroup.setAll('input.useHandCursor', false);
@@ -95,7 +97,7 @@ BasicGame.Title.prototype = {
 				this.hideTween.onComplete.addOnce(function () {
 					this.visible = false;
 				}, this);
-				this.game.global.soundManager.soundPlay('closeWindowSE');
+				g.soundManager.soundPlay('closeWindowSE');
 				this.hideTween.start();
 				baseBtnGroup.setAll('inputEnabled', true);
 				baseBtnGroup.setAll('input.useHandCursor', true);
@@ -155,13 +157,13 @@ BasicGame.Title.prototype = {
 
 		this.genVolumeControlBtn(x-120, y+marginY[0], 'master', '-', masterTextSprite);
 		this.genVolumeControlBtn(x+120, y+marginY[0], 'master', '+', masterTextSprite);
-		this.genVolumeControlBtn(x-120, y+marginY[1], 'se', '-', seTextSprite);
-		this.genVolumeControlBtn(x+120, y+marginY[1], 'se', '+', seTextSprite);
-		this.genVolumeControlBtn(x-120, y+marginY[2], 'bgm', '-', bgmTextSprite);
-		this.genVolumeControlBtn(x+120, y+marginY[2], 'bgm', '+', bgmTextSprite);
-		this.genVolumeControlBtn(x-120, y+marginY[3], 'voice', '-', voiceTextSprite);
-		this.genVolumeControlBtn(x+120, y+marginY[3], 'voice', '+', voiceTextSprite);
-		this.genVolumeControlBtn(x+120, y+marginY[4], 'mute', 'x', muteTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[1], 'se',     '-', seTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[1], 'se',     '+', seTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[2], 'bgm',    '-', bgmTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[2], 'bgm',    '+', bgmTextSprite);
+		this.genVolumeControlBtn(x-120, y+marginY[3], 'voice',  '-', voiceTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[3], 'voice',  '+', voiceTextSprite);
+		this.genVolumeControlBtn(x+120, y+marginY[4], 'mute',   'x', muteTextSprite);
 	},
 
 	textSpriteTemplate: function (x, y, text, textStyle) {
@@ -206,6 +208,7 @@ BasicGame.Title.prototype = {
 			changeText.bind(this)();
 
 			if (type == 'mute') {
+				// text = (text == 'x') ? 'o' : 'x'; // TODO test
 				if (text == 'x') {
 					text = 'o';
 				} else {
