@@ -29,6 +29,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321391809802241/photo/1',
                 tweetHashtags: ['KizunaAI','YouTube','キズナアイ'],
             },
             2: {
@@ -58,6 +59,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321446381867008/photo/1',
                 tweetHashtags: ['ミライアカリ','バーチャルYouTuber'],
             },
             3: {
@@ -87,6 +89,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321473514844162/photo/1',
                 tweetHashtags: ['輝夜月','バーチャルYouTuber'],
             },
             4: {
@@ -119,6 +122,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321516644872192/photo/1',
                 tweetHashtags: ['シロ','バーチャルYouTuber'],
             },
             5: {
@@ -148,6 +152,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321550882914304/photo/1',
                 tweetHashtags: ['バーチャルのじゃろり狐娘Youtuberおじさん','のじゃろり'],
             },
             6: {
@@ -178,6 +183,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321587943882753/photo/1',
                 tweetHashtags: ['ときのそら','そらとも'],
             },
             7: {
@@ -207,6 +213,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     commonX: this.world.centerX, commonY: this.world.centerY+200,
                 },
                 tweetTexts: ['秒当てゲームで遊んだよ♪',],
+                tweetImg: 'https://twitter.com/238games/status/962321608282062848/photo/1',
                 tweetHashtags: ['富士葵','バーチャルYouTuber'],
             },
         },
