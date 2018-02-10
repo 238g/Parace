@@ -20,7 +20,6 @@ BasicGame.Boot.prototype = {
     },
 
     preload: function() {
-
         this.load.crossOrigin = 'Anonymous';
         this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
 

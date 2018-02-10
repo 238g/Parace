@@ -9,17 +9,16 @@ BasicGame.Preloader.prototype = {
 		var g = this.game.global;
 		this.charCount = g.charCount;
 		this.nextSceen = g.nextSceen;
-	},
-
-	preload: function () {
+	
 		this.genBackGround();
 		this.loadingAnim();
-
-		this.loadOnlyFirst();
-		this.loadAssets();
 	},
 
 	create: function () {
+		this.loadManager();
+	},
+
+	loadComplete: function () {
 		this.genSoundManager();
 		this.genTweenManager();
 
@@ -344,5 +343,22 @@ BasicGame.Preloader.prototype = {
 			return tween;
 		};
 		g.tweenManager.init(this);
+	},
+
+	loadManager: function () {
+		var textStyle = { font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY+120, '0%', textStyle);
+		textSprite.anchor.setTo(.5);
+
+		this.load.onFileComplete.add(function (progress/*, cacheKey, success, totalLoaded, totalFiles*/) {
+			textSprite.setText(progress+'%');
+		}, this);
+
+		this.load.onLoadComplete.add(this.loadComplete, this);
+
+		this.loadOnlyFirst();
+		this.loadAssets();
+
+		this.load.start();
 	}
 };
