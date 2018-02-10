@@ -153,6 +153,7 @@ BasicGame.Boot.prototype.defineConf = function () {
             6: {
                 id:c.CHAR_TOKINO_SORA, name:'ときのそら', color: '0xA9F5F2',
                 resultWords: {
+                    // MEMO https://www.youtube.com/watch?v=gcmMsbkb9QA 【よるのクマ】あん肝、ゲーム選定ダイジェストです！
                     // https://www.youtube.com/watch?v=5qM0yOkZA-o&t=21s 【新年】振り袖で書き初めしてみたのそら
                     1:{id:c.GAME_RESULT_CONGRATULATIONS,
                     	words:'やったー！！',textStyle:{fontSize:'65px'},emotion:c.EMOTION_HAPPY,version:1,charY:this.world.centerY+100,
@@ -198,7 +199,7 @@ BasicGame.Boot.prototype.defineConf = function () {
                     4:{id:c.GAME_RESULT_AWKWARD,
                     	words:'うううぅぅぅぅ↑↑↑',textStyle:{fontSize:'50px'},emotion:c.EMOTION_LAUGH,version:1,
                     },
-                    // TODO https://www.youtube.com/watch?v=o0_6SnmW1gQ　【利きシリーズ】第一回は利き”緑茶”　Japanese Green Tea Tasting╭( ･ㅂ･)و
+                    // https://www.youtube.com/watch?v=o0_6SnmW1gQ　【利きシリーズ】第一回は利き”緑茶”　Japanese Green Tea Tasting╭( ･ㅂ･)و
                     5:{id:c.GAME_RESULT_FUCKYOU,
                     	words:'はぁあぁあぁあぁあっ！',textStyle:{fontSize:'38px',y:this.world.centerY+230},emotion:c.EMOTION_SURPRISE,version:1,charY:this.world.centerY+30
                     },

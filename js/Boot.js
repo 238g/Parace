@@ -30,13 +30,12 @@ BasicGame.Boot.prototype = {
     },
 
     create: function() {
+        var nextSceenName = (__ENV!='prod') ? this.getQuery('s') || 'Title' : 'Title';
         if (this.game.global.loadAll) {
-            this.game.global.nextSceen = 'Title';
-            // this.game.global.nextSceen = 'Play'; // TODO del
-            // this.game.global.nextSceen = 'CharacterSelect'; // TODO del
+            this.game.global.nextSceen = nextSceenName;
             this.goToNextSceen('Preloader');
         } else {
-            this.game.global.goToNextSceen('Title');
+            this.game.global.goToNextSceen(nextSceenName);
         }
     },
 
@@ -55,6 +54,8 @@ BasicGame.Boot.prototype = {
             language: this.game.const.LANGUAGE_JP,
             tweenManager: null, // default:null, gen Preloader.js
             playCount: {},
+            getQuery: this.getQuery,
+            getYmd: this.getYmd,
         };
     },
 
@@ -65,6 +66,27 @@ BasicGame.Boot.prototype = {
             this.game.global.nextSceen = sceenName;
             this.state.start('Preloader');
         }
+    },
+
+    getQuery: function (key) {
+        var querys = window.location.search.slice(1).split('&');
+        for (var i in querys) {
+            var arr = querys[i].split('=');
+            var queryKey = arr[0];
+            var queryVal = arr[1];
+
+            if (key == queryKey) {
+                return queryVal;
+            }
+        }
+        return false;
+    },
+
+    getYmd: function () {
+        var Y = new Date().getFullYear();
+        var m = ('0'+(new Date().getMonth()+1)).slice(-2);
+        var d = ('0'+new Date().getDate()).slice(-2);
+        return Y+'-'+m+'-'+d;
     }
 
 };

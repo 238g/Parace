@@ -7,16 +7,18 @@ BasicGame.Play.prototype = {
 		this.targetTime = g.targetTime; // For view
 		this.startTime = 0; // Set Date.now()
 		this.currentCharNum = g.currentCharNum;
+		this.todayInfo;
 
-		// For visible, invisible
+		// For visible, invisible, change
 		this.startBtn;
 		this.stopBtn;
 		this.againBtn;
 		this.backBtn;
 		this.tweetBtn;
-		this.currentTimeTextSprite;
 		this.charSprite;
+		this.currentTimeTextSprite;
 		this.resultWordsSprite;
+		this.playCountTextSprite;
 	},
 
 	create: function () {
@@ -26,7 +28,8 @@ BasicGame.Play.prototype = {
 		this.genTimerContainer();
 		this.btnsContainer();
 		this.playCountContainser();
-		this.test();
+
+		this.emotionTest();
 	},
 
 	genBackGround: function () {
@@ -105,10 +108,10 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX-120;
 		var y = this.world.height-40;
 		var charInfo = this.game.conf.charInfo[this.currentCharNum];
-		console.log(charInfo);
+		var timeText = 0;
+		var playCount = 0;
 		var btnSprite = this.btnTemplate(x, y, function () {
-			// TODO rand text // ツイート専用セリフ、日時の記録：秒、プレイ回数目の挑戦！、ハッシュタグ、URL 
-			var text = charInfo.tweetTexts[0];
+			var text = charInfo.tweetTexts[0]+' 記録は'+timeText+'秒！'+' '+playCount+'回目の挑戦！';
 			var tweetText = encodeURIComponent(text);
 			var tweetUrl = location.href;
 			var tweetHashtags = '';
@@ -123,8 +126,10 @@ BasicGame.Play.prototype = {
 			);
 			return false;
 		}, 'Tweet');
-		btnSprite.setResult = function () {
-			// TODO
+		var playCounts = this.game.global.playCount;
+		btnSprite.setResult = function (currentTime) {
+			timeText = currentTime;
+			playCount = playCounts.total;
 		};
 		btnSprite.hide();
 		return btnSprite;
@@ -189,7 +194,7 @@ BasicGame.Play.prototype = {
 		this.game.global.soundManager.soundPlay('stopwatchSE');
 
 		var result = this.checkTime(currentTime);
-		this.resultView(result);
+		this.resultView(result, currentTime);
 	},
 
 	checkTime: function (currentTime) {
@@ -220,10 +225,12 @@ BasicGame.Play.prototype = {
 		}
 	},
 
-	resultView: function (result) {
+	resultView: function (result, currentTime) {
 		this.charSprite.changeImg(result);
 		this.resultWordsSprite.show(result);
-		// TODO change playCount
+		this.increasePlayCount();
+		this.playCountTextSprite.changeText();
+		this.tweetBtn.setResult(currentTime);
 	},
 
 	backToCharSelect: function () {
@@ -233,23 +240,20 @@ BasicGame.Play.prototype = {
 
 	playCountContainser: function () {
 		this.initPlayCount();
-		this.genPlayCountText();
+		this.playCountTextSprite = this.genPlayCountText();
 	},
 
 	initPlayCount: function () {
 		var g = this.game.global;
-		var Y = new Date().getFullYear();
-		var m = ('0'+(new Date().getMonth()+1)).slice(-2);
-		var d = ('0'+new Date().getDate()).slice(-2);
-		var todayString = Y+'-'+m+'-'+d;
-		var keys = [
+		var Ymd = g.getYmd();
+		this.todayInfo = [
 			'total',
-			todayString, // e.g 2018-01-01
+			Ymd , // e.g 2018-01-01
 			this.currentCharNum+'_total', // e.g 1_total
-			this.currentCharNum+'_'+todayString, // e.g 1_2018-01-01
+			this.currentCharNum+'_'+Ymd , // e.g 1_2018-01-01
 		];
-		for (var i in keys) {
-			var key = keys[i];
+		for (var i in this.todayInfo) {
+			var key = this.todayInfo[i];
 			if (!g.playCount[key]) {
 				g.genUserDatas['playCount', key];
 				g.setUserDatas('playCount.'+key, 0);
@@ -257,8 +261,25 @@ BasicGame.Play.prototype = {
 		}
 	},
 
+	increasePlayCount: function () {
+		var g = this.game.global;
+		for (var i in this.todayInfo) {
+			var key = this.todayInfo[i];
+			g.playCount[key] += 1;
+			g.setUserDatas('playCount.'+key, g.playCount[key]);
+		}
+	},
+
 	genPlayCountText: function () {
-		// TODO text
+		var playCounts = this.game.global.playCount;
+		var baseText = 'PlayCount : ';
+		var textStyle = { fontSize: '20px' ,fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 5 };
+		var textSprite = this.add.text(this.world.width-10, this.world.height, baseText+playCounts.total, textStyle);
+		textSprite.anchor.setTo(1);
+		textSprite.changeText = function () {
+			textSprite.setText(baseText+playCounts.total);
+		};
+		return textSprite;
 	},
 
 	charController: function () {
@@ -323,13 +344,13 @@ BasicGame.Play.prototype = {
 		return textSprite;
 	},
 
-	test: function () {
-		// return;
-		var str = window.location.href;
-		var result = str.slice(-1);
-		if (result != 'l' && result != '?') {
-			this.charSprite.changeImg(result);
-			this.resultWordsSprite.show(result);
+	emotionTest: function () {
+		if (__ENV!='prod') {
+			var result = this.game.global.getQuery('e');
+			if (result) {
+				this.charSprite.changeImg(result);
+				this.resultWordsSprite.show(result);
+			}
 		}
-	}
+	}	
 };
