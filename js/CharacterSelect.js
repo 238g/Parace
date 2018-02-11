@@ -157,7 +157,7 @@ BasicGame.CharacterSelect.prototype = {
 
 	changeThemeColor: function (currentCharNum) {
 		var colorHex = this.charInfo[currentCharNum].color;
-		document.getElementsByName('theme-color')[0].setAttribute('content', colorHex);
+		document.getElementsByName('theme-color')[0].setAttribute('content', '#'+colorHex.slice(-6));
 	},
 
 	genSelectedBtn: function () {
