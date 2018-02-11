@@ -32,6 +32,8 @@ BasicGame.Title.prototype = {
 			setTimeout(function (self) {
 				self.game.input.scale.set(scaleX, scaleY);
 			}, 1000, this);
+			var textStyle = { font: '20px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 5};
+			this.textSpriteTemplate(this.world.centerX, this.world.centerY/2+60, '※Chromeは非推奨です', textStyle);
 		}
 	},
 
