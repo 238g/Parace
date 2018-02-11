@@ -1,6 +1,6 @@
 BasicGame = {};
 
-BasicGame.Boot = function(game) {};
+BasicGame.Boot = function() {};
 
 BasicGame.Boot.prototype = {
 	init: function () {
@@ -9,6 +9,8 @@ BasicGame.Boot.prototype = {
 
 		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+
+        this.scale.parentIsWindow = true ;
 
 		this.scale.refresh();
 	},
@@ -23,17 +25,21 @@ BasicGame.Boot.prototype = {
 		this.defineGlobal();
 		this.defineConf(); // Conf.js
 
-        // var nextSceenName = (__ENV!='prod') ? getQuery('s') || 'Title' : 'Title';
+		var nextSceenName = (__ENV!='prod') ? getQuery('s') || 'Title' : 'Title';
+		this.game.global.nextSceen = nextSceenName;
+		this.goToNextSceen('Preloader');
 	},
 
-    defineGlobal: function () {
-        this.game.global = {
-            nextSceen: null,
-        };
-    },
+	defineGlobal: function () {
+		this.game.global = {
+			nextSceen: null,
+            goToNextSceen: this.goToNextSceen.bind(this),
+            loadedOnlyFirst: false,
+		};
+	},
 
-    goToNextSceen: function (sceenName) {
-        this.state.start(sceenName);
-    }
+	goToNextSceen: function (sceenName) {
+		this.state.start(sceenName);
+	}
 
 };

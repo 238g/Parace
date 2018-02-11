@@ -1,3 +1,5 @@
 BasicGame.Boot.prototype.defineConf = function () {
-	console.log('conf');
+	this.game.conf = {
+
+	};
 };

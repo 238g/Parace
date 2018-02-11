@@ -14,6 +14,8 @@
 	<script src="js/ankimo_drrrr/Boot.js?0.0.0"></script>
 	<script src="js/ankimo_drrrr/Const.js?0.0.0"></script>
 	<script src="js/ankimo_drrrr/Conf.js?0.0.0"></script>
+	<script src="js/ankimo_drrrr/Preloader.js?0.0.0"></script>
+	<script src="js/ankimo_drrrr/Title.js?0.0.0"></script>
 
 	<style type="text/css">
 		body {
@@ -28,11 +30,9 @@
 </head>
 <body>
 
-	<div id="gameContainer"></div>
-
 	<script type="text/javascript">
 		window.onload = function() {
-			var game = new Phaser.Game(450, 800, Phaser.AUTO, 'gameContainer');
+			var game = new Phaser.Game(450, 800, Phaser.AUTO);
 			for (var className in BasicGame) {
 				game.state.add(className, BasicGame[className]);
 			}
