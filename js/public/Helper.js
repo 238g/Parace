@@ -1,0 +1,21 @@
+function getQuery (key) {
+	var querys = window.location.search.slice(1).split('&');
+	for (var i in querys) {
+		var arr = querys[i].split('=');
+		var queryKey = arr[0];
+		var queryVal = arr[1];
+
+		if (key == queryKey) {
+			return queryVal;
+		}
+	}
+
+	return false;
+}
+
+function getYmd () {
+	var Y = new Date().getFullYear();
+	var m = ('0'+(new Date().getMonth()+1)).slice(-2);
+	var d = ('0'+(new Date().getDate())).slice(-2);
+	return Y+'-'+m+'-'+d;
+}

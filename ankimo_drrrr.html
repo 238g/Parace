@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>あん肝 三(卍^o^)卍ﾄﾞｩﾙﾙﾙﾙ</title>
+
+	<meta name="theme-color" content="#000000">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/phaser-ce/2.9.4/phaser.js"></script>
+
+	<script src="js/public/Helper.js?0.0.0"></script>
+
+	<script src="js/public/Env.js"></script>
+	<!-- <script src="js/ankimo_drrrr/Version.js?0.0.0"></script> -->
+	<script src="js/ankimo_drrrr/Boot.js?0.0.0"></script>
+	<script src="js/ankimo_drrrr/Const.js?0.0.0"></script>
+	<script src="js/ankimo_drrrr/Conf.js?0.0.0"></script>
+
+	<style type="text/css">
+		body {
+			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
+			background: #000;
+		}
+
+		canvas {
+			margin: auto;
+		}
+	</style>
+</head>
+<body>
+
+	<div id="gameContainer"></div>
+
+	<script type="text/javascript">
+		window.onload = function() {
+			var game = new Phaser.Game(450, 800, Phaser.AUTO, 'gameContainer');
+			for (var className in BasicGame) {
+				game.state.add(className, BasicGame[className]);
+			}
+			game.state.start('Boot');
+		};
+	</script>
+
+	<div style="display: none;">
+		<!-- Global site tag (gtag.js) - Google Analytics -->
+		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106767228-2"></script>
+		<script>
+			window.dataLayer = window.dataLayer || [];
+			function gtag(){dataLayer.push(arguments);}
+			gtag('js', new Date());
+		
+			gtag('config', 'UA-106767228-2');
+		</script>
+	</div>
+
+</body>
+</html>
