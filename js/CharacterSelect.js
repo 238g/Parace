@@ -140,6 +140,7 @@ BasicGame.CharacterSelect.prototype = {
 		this.currentCharNum = currentCharNum;
 		this.setCurrentChar(currentCharNum);
 		this.changeCharContent(currentCharNum);
+		this.changeThemeColor(currentCharNum);
 		this.game.global.soundManager.soundPlay('selectSE'); // TODO char voice
 	},
 
@@ -152,6 +153,11 @@ BasicGame.CharacterSelect.prototype = {
 		this.charFrameSprite.changeColor(currentCharNum);
 		this.charSprite.changeImg(currentCharNum);
 		this.charNameSprite.changeText(currentCharNum);
+	},
+
+	changeThemeColor: function (currentCharNum) {
+		var colorHex = this.charInfo[currentCharNum].color;
+		document.getElementsByName('theme-color')[0].setAttribute('content', colorHex);
 	},
 
 	genSelectedBtn: function () {
