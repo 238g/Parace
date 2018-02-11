@@ -16,7 +16,6 @@ BasicGame.Boot.prototype = {
         this.scale.parentIsWindow = true ;
 
         this.scale.refresh();
-
     },
 
     preload: function() {

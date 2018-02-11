@@ -10,12 +10,29 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
+		this.compatible();
 		this.genBackGround();
 		this.manageBGM();
 		this.genTitleText();
 		this.genStartBtn();
 		this.genOptionBtn();
 		this.genOptionMenuContainer();
+	},
+
+	compatible: function () {
+		var d = this.game.device;
+		// console.log(d);
+		if ((d.chrome || d.iOS) && d.touch) {
+			var scaleX = 1.2;
+			var scaleY = 1.2;
+			if (d.iPad) {
+				scaleX = .8;
+				scaleY = .8;
+			}
+			setTimeout(function (self) {
+				self.game.input.scale.set(scaleX, scaleY);
+			}, 1000, this);
+		}
 	},
 
 	goToNextSceen: function () {
