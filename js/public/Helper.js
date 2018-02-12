@@ -20,23 +20,23 @@ function getYmd () {
 	return Y+'-'+m+'-'+d;
 }
 
-userDatasController = function (storageName) {
-	this.init(storageName);
-};
+userDatasController = function (storageName) { this.constructor(storageName); };
 userDatasController.prototype = {
-	init: function (storageName) {
+	storageName: null,
+	userDatas: null,
+	constructor: function (storageName) {
 		this.storageName = storageName;
 		this.userDatas = JSON.parse(localStorage.getItem(this.storageName)) || {};
 	},
-	initUserDatas: function (path, val, checkPath) {
-		this.userDatas[path] = val;
-		if (checkPath) {
-			this.copyUserDatas(checkPath, path);
+	init: function (newPath, val, oldPath) {
+		this.userDatas[newPath] = val;
+		if (oldPath) {
+			this.copyUserDatas(oldPath, newPath);
 		}
 		localStorage.setItem(this.storageName, JSON.stringify(this.userDatas));
 		return this.userDatas;
 	},
-	genUserDatas: function (path, key) {
+	gen: function (path, key) {
 		var paths = path.split('/');
 		var digData = this.userDatas;
 		for (var i=0;i<paths.length;i++) {
@@ -51,7 +51,7 @@ userDatasController.prototype = {
 		}
 		localStorage.setItem(this.storageName, JSON.stringify(this.userDatas));
 	},
-	setUserDatas: function (path, val) {
+	set: function (path, val) {
 		var paths = path.split('/');
 		var digData = this.userDatas;
 		for (var i=0;i<paths.length;i++) {
@@ -63,7 +63,7 @@ userDatasController.prototype = {
 		}
 		localStorage.setItem(this.storageName, JSON.stringify(this.userDatas));
 	},
-	getUserDatas: function (path) {
+	get: function (path) {
 		if (path) {
 			var paths = path.split('/');
 			var digData = this.userDatas;
@@ -82,4 +82,78 @@ userDatasController.prototype = {
 	copyUserDatas: function (oldPath, newPath) {
 		// TODO
 	}
+};
+
+SpriteManager = function (self) { this.constructor(self); };
+SpriteManager.prototype = {
+	self: null,
+	constructor: function (self) {
+		this.self = self;
+	},
+	genText: function (x, y, text, textStyle) {
+		var commonTextStyle = { 
+			fontSize: '40px', 
+			fill: '#FFFFFF', 
+			align: 'center', 
+			stroke: '#000000', 
+			strokeThickness: 10, 
+			multipleStroke: null,
+			multipleStrokeThickness: 10,
+		};
+		for (var key in textStyle) {
+			commonTextStyle[key] = textStyle[key];
+		}
+		var multipleTextSprite = null;
+		if (commonTextStyle.multipleStroke) {
+			var multipleTextStyle = {
+				fontSize: commonTextStyle.fontSize,
+				fill: commonTextStyle.multipleStroke,
+				align: 'center',
+				stroke: commonTextStyle.multipleStroke,
+				strokeThickness: commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness,
+			};
+			multipleTextSprite = this.self.add.text(x, y, text, multipleTextStyle);
+			multipleTextSprite.anchor.setTo(.5);
+		}
+		var textSprite = this.self.add.text(x, y, text, commonTextStyle);
+		textSprite.anchor.setTo(.5);
+		textSprite.changeText = function (text) {
+			textSprite.setText(text);
+			if (multipleTextSprite) {
+				multipleTextSprite.setText(text);
+			}
+		};
+		return textSprite;
+	}
+};
+
+// TODO Need????
+SoundManager = function (self) { this.constructor(self); };
+SoundManager.prototype = {
+	self: null,
+	sounds: null,
+	constructor: function (self) {
+		this.self = self;
+		var sounds = {
+			currentBGM: null,
+		};
+		var arr = self.cache._cache.sound;
+		for (var key in arr) {
+			sounds[key] = self.add.audio(key);
+		}
+		this.sounds = sounds;
+	},
+	play: function (key) {
+		var sound = this.sounds[key];
+		sound.play();
+	},
+	stop: function (key) {
+		var sound = this.sounds[key];
+		if (sound) {
+			sound.stop();
+		}
+	},
+	//this.sound.onMute
+	//this.sound.onUnMute
+	//this.sound.volume / onVolumeChange
 };

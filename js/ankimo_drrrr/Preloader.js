@@ -40,7 +40,13 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		// TODO load assets
+		var ip = './images/'
+		var sp = './sounds/';
+		this.load.audio('Male_1', sp+'Male/1.ogg');
+		this.load.audio('Male_2', sp+'Male/2.ogg');
+		this.load.audio('Male_3', sp+'Male/3.ogg');
+		this.load.audio('game_over', sp+'Male/game_over.ogg');
+		this.load.audio('go', sp+'Male/go.ogg');
 	},
 
 	loadOnlyFirst: function () {
@@ -52,9 +58,9 @@ BasicGame.Preloader.prototype = {
 
 	userDatasController: function () {
 		var udc = new userDatasController(this.game.const.STORAGE_NAME);
-		var d = udc.getUserDatas('0.0.0') || udc.initUserDatas('0.0.0', {test:33333}/*, '0.0.0'*/);
-		console.log(d);
+		var datas = udc.get('0.0.0') || udc.init('0.0.0', {test:33333}/*, '0.0.0'*/);
 
-		// TODO set global
+		this.game.global.userDatasController = udc;
+		this.game.global.userDatas = datas;
 	}
 };

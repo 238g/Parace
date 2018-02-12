@@ -6,6 +6,7 @@ BasicGame.Boot.prototype = {
 	init: function () {
 		this.input.maxPointers = 1;
 		this.stage.backgroundColor = '#424242';
+		this.stage.disableVisibilityChange = true;
 
 		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
@@ -27,19 +28,17 @@ BasicGame.Boot.prototype = {
 
 		var nextSceenName = (__ENV!='prod') ? getQuery('s') || 'Title' : 'Title';
 		this.game.global.nextSceen = nextSceenName;
-		this.goToNextSceen('Preloader');
+		this.state.start('Preloader');
 	},
 
 	defineGlobal: function () {
 		this.game.global = {
 			nextSceen: null,
-            goToNextSceen: this.goToNextSceen.bind(this),
             loadedOnlyFirst: false,
+            userDatasController: null,
+            userDatas: null,
+            spriteManager: new SpriteManager(this),
 		};
-	},
-
-	goToNextSceen: function (sceenName) {
-		this.state.start(sceenName);
 	}
 
 };
