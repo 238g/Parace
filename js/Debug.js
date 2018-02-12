@@ -4,7 +4,7 @@ if (__ENV!='prod') { /////////////////////////
 BasicGame.Debug.prototype = {
 
 	create: function () {
-		this.compatible();
+		// this.compatible();
 	},
 
 	compatible: function () {

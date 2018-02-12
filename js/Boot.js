@@ -13,7 +13,7 @@ BasicGame.Boot.prototype = {
         this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
         this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
 
-        this.scale.parentIsWindow = true ;
+        this.scale.parentIsWindow = true;
 
         this.scale.refresh();
     },

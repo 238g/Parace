@@ -10,32 +10,12 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
-		this.compatible();
 		this.genBackGround();
 		this.manageBGM();
 		this.genTitleText();
 		this.genStartBtn();
 		this.genOptionBtn();
 		this.genOptionMenuContainer();
-	},
-
-	compatible: function () {
-		var d = this.game.device;
-		// console.log(d);
-		if ((d.chrome || d.iOS) && d.touch) {
-			var scaleX = 1.2;
-			var scaleY = 1.2;
-			if (d.iPad) {
-				scaleX = .8;
-				scaleY = .8;
-			}
-			setTimeout(function (self) {
-				self.game.input.scale.set(scaleX, scaleY);
-			}, 1000, this);
-			var textStyle = { font: '20px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 5};
-			var textSprite = this.textSpriteTemplate(this.world.centerX, this.world.centerY/2+60, '※Chromeは非推奨です', textStyle);
-			this.baseGroup.add(textSprite);
-		}
 	},
 
 	goToNextSceen: function () {
