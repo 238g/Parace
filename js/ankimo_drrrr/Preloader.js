@@ -40,8 +40,9 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		var ip = './images/'
+		var ip = './images/ankimo_drrrr/'
 		var sp = './sounds/';
+		this.load.image('player', ip+'player.png');
 		this.load.audio('Male_1', sp+'Male/1.ogg');
 		this.load.audio('Male_2', sp+'Male/2.ogg');
 		this.load.audio('Male_3', sp+'Male/3.ogg');

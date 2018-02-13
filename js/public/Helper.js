@@ -92,7 +92,7 @@ SpriteManager.prototype = {
 	},
 	genText: function (x, y, text, textStyle) {
 		var commonTextStyle = { 
-			fontSize: '40px', 
+			fontSize: '50px', 
 			fill: '#FFFFFF', 
 			align: 'center', 
 			stroke: '#000000', 

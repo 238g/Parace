@@ -11,15 +11,31 @@ BasicGame.Play.prototype = {
 		this.test();
 	},
 
-	// TODO
-	// update: function () {
-
-	// },
+	update: function () {
+		if (this.player.x < 0) {
+			this.player.x = this.world.width;
+		} else if (this.player.x > this.world.width) {
+			this.player.x = 0;
+		}
+		if (this.player.y < 0) {
+			console.log('upper game over');
+		} else if (this.player.y > this.world.height) {
+			console.log('lower game over');
+		}
+	},
 
 	inputController: function () {
 		this.game.input.onDown.add(function (pointer/*, event*/) {
 			// TODO
-
+			this.player.body.velocity.x = (this.player.x-pointer.x)*2;
+			this.player.body.velocity.y = (this.player.y-pointer.y)*2;
+			this.player.body.angularVelocity = 200;
+			console.log(
+				'this.player.x,',this.player.x,
+				'this.player.y,',this.player.y,
+				'pointer.x,',pointer.x,
+				'pointer.y,',pointer.y,
+			);
 
 		}, this);
 	},
@@ -31,8 +47,13 @@ BasicGame.Play.prototype = {
 
 	// TODO
 	playerContainer: function () {
-		var sprite = this.add.sprite(100, 100, '');
-		// sprite.body.gravity.y = 600;
+		var sprite = this.add.sprite(this.world.centerX, this.world.centerY, 'player');
+		sprite.anchor.setTo(.5);
+		this.physics.arcade.enable(sprite);
+		// sprite.body.bounce.y = 0.5;
+		sprite.body.gravity.y = 600;
+		// sprite.body.collideWorldBounds = true;
+		console.log(sprite);
 		return sprite;
 	},
 

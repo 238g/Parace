@@ -6,8 +6,7 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
-		this.genTitleTextSprite();
-		this.genStartTextSprite();
+		this.genTextContainer();
 		this.inputController();
 	},
 
@@ -18,15 +17,26 @@ BasicGame.Title.prototype = {
 		}, this);
 	},
 
-	genTitleTextSprite: function () {
-		var textStyle = {fill: '#00FF00',stroke:'#FFFF00',multipleStroke:'#000000'};
+	genTextContainer: function () {
+		var textStyle = {
+			fontSize:'100px',
+			fill: '#00FF00',
+			stroke:'#FFFF00',
+			strokeThickness: 20,
+			multipleStroke:'#000000',
+			multipleStrokeThickness: 20,
+		};
+		this.genTitleTextSprite(textStyle);
+		this.genStartTextSprite(textStyle);
+	},
+
+	genTitleTextSprite: function (textStyle) {
 		this.game.global.spriteManager.genText(
 			this.world.centerX, this.world.centerY-100, 'レッツ・あん肝！', textStyle
 		);
 	},
 
-	genStartTextSprite: function () {
-		var textStyle = {fill: '#00FF00',stroke:'#FFFF00',multipleStroke:'#000000'};
+	genStartTextSprite: function (textStyle) {
 		this.game.global.spriteManager.genText(
 			this.world.centerX, this.world.centerY+100, 'スタート', textStyle
 		);
