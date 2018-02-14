@@ -20,8 +20,8 @@ BasicGame.Title.prototype = {
 	genTextContainer: function () {
 		var textStyle = {
 			fontSize:'100px',
-			fill: '#00FF00',
-			stroke:'#FFFF00',
+			fill: '#000000',
+			stroke:'#FFFFFF',
 			strokeThickness: 20,
 			multipleStroke:'#000000',
 			multipleStrokeThickness: 20,
