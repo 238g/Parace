@@ -2,8 +2,8 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>レッツ・あん肝！</title>
-	<meta name="apple-mobile-web-app-title" content="レッツ・あん肝！">
+	<title>シロ走族</title>
+	<meta name="apple-mobile-web-app-title" content="シロ走族">
 
 	<meta name="theme-color" content="#000000">
 
@@ -17,6 +17,7 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 	<!-- Icons -->
+	<!-- TODO -->
 	<link rel="apple-touch-icon" sizes="57x57" href="images/ankimo_drrrr/favicons/apple-icon-57x57.png">
 	<link rel="apple-touch-icon" sizes="60x60" href="images/ankimo_drrrr/favicons/apple-icon-60x60.png">
 	<link rel="apple-touch-icon" sizes="72x72" href="images/ankimo_drrrr/favicons/apple-icon-72x72.png">
@@ -40,16 +41,14 @@
 	<script src="js/public/Helper.js"></script>
 	<script src="js/public/SpriteManager.js"></script>
 	<script src="js/public/SoundManager.js"></script>
-	<script src="js/public/UserDatasController.js"></script>
 	<script src="js/public/Env.js"></script>
 
-	<!-- <script src="js/ankimo_drrrr/Version.js?0.0.0"></script> -->
-	<script src="js/ankimo_drrrr/Boot.js"></script>
-	<script src="js/ankimo_drrrr/Const.js"></script>
-	<script src="js/ankimo_drrrr/Conf.js"></script>
-	<script src="js/ankimo_drrrr/Preloader.js?180218"></script>
-	<script src="js/ankimo_drrrr/Title.js"></script>
-	<script src="js/ankimo_drrrr/Play.js?180218"></script>
+	<script src="js/sirosouzoku/Boot.js"></script>
+	<script src="js/sirosouzoku/Const.js"></script>
+	<script src="js/sirosouzoku/Conf.js"></script>
+	<script src="js/sirosouzoku/Preloader.js"></script>
+	<script src="js/sirosouzoku/Title.js"></script>
+	<script src="js/sirosouzoku/Play.js"></script>
 
 	<style type="text/css">
 		body {
@@ -60,13 +59,32 @@
 		canvas {
 			margin: auto;
 		}
+
+		#orientation {
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url('https://raw.githubusercontent.com/ycatch/games-phaser-jumping-dude-Responsive/master/assets/ui/orientation.jpg'); 
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color: rgb(0, 0, 0);
+			z-index: 999;
+			display: none;
+		}
 	</style>
 </head>
 <body>
 
+	<div id="gameContainer">
+		<div id="orientation"></div> 
+	</div>
+
 	<script type="text/javascript">
 		window.onload = function() {
-			var game = new Phaser.Game(900, 1600, Phaser.AUTO);
+			var game = new Phaser.Game(1600, 900, Phaser.AUTO, 'gameContainer');
 			for (var className in BasicGame) {
 				game.state.add(className, BasicGame[className]);
 			}

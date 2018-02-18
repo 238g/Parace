@@ -54,13 +54,13 @@ BasicGame.Preloader.prototype = {
 	},
 
 	userDatasController: function () {
-		var udc = new userDatasController(this.game.const.STORAGE_NAME);
+		var udc = new UserDatasController(this.game.const.STORAGE_NAME);
 		var datas = udc.get('0.0.0') || udc.init('0.0.0', {
 			total_score: 0,
 			best_score: 0,
 		}/*, '0.0.0'*/);
 
-		this.game.global.userDatasController = udc;
+		this.game.global.UserDatasController = udc;
 		// ENHANCE set totalscore,bestscore to global
 	}
 };
