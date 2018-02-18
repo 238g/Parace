@@ -103,7 +103,7 @@ SpriteManager.prototype = {
 		for (var key in textStyle) {
 			commonTextStyle[key] = textStyle[key];
 		}
-		var multipleTextSprite = null;
+		var multipleTextSprite = {};
 		if (commonTextStyle.multipleStroke) {
 			var multipleTextStyle = {
 				fontSize: commonTextStyle.fontSize,
@@ -117,17 +117,40 @@ SpriteManager.prototype = {
 		}
 		var textSprite = this.self.add.text(x, y, text, commonTextStyle);
 		textSprite.anchor.setTo(.5);
+		textSprite.show = function () {
+			textSprite.visible = true;
+			multipleTextSprite.visible = true;
+		};
+		textSprite.hide = function () {
+			textSprite.visible = false;
+			multipleTextSprite.visible = false;
+		};
 		textSprite.changeText = function (text) {
 			textSprite.setText(text);
 			if (multipleTextSprite) {
 				multipleTextSprite.setText(text);
 			}
 		};
+		textSprite.move = function (x, y) {
+			textSprite.x = x;
+			textSprite.y = y;
+			multipleTextSprite.x = x;
+			multipleTextSprite.y = y;
+		};
+		textSprite.setTextStyle = function (newTextStyle) {
+			for (var key in newTextStyle) {
+				if (textSprite[key]) {
+					textSprite[key] = newTextStyle[key];
+				}
+				if (multipleTextSprite && multipleTextSprite[key]) {
+					multipleTextSprite[key] = newTextStyle[key]
+				}
+			}
+		};
 		return textSprite;
 	}
 };
 
-// TODO Need????
 SoundManager = function (self) { this.constructor(self); };
 SoundManager.prototype = {
 	self: null,
@@ -140,18 +163,37 @@ SoundManager.prototype = {
 		var arr = self.cache._cache.sound;
 		for (var key in arr) {
 			sounds[key] = self.add.audio(key);
+			sounds[key].onComplete = false;
 		}
 		this.sounds = sounds;
 	},
-	play: function (key) {
+	play: function (keyOrKeys) {
+		if (typeof keyOrKeys == "object") {
+			var key = keyOrKeys.key;
+			if (keyOrKeys.isBGM) { this.sounds.currentBGM = this.sounds[key]; }
+			if (keyOrKeys.loop) { this.sounds[key].loop = true; }
+		} else {
+			var key = keyOrKeys;
+		}
 		var sound = this.sounds[key];
 		sound.play();
 	},
 	stop: function (key) {
 		var sound = this.sounds[key];
-		if (sound) {
+		if (sound && sound.isPlaying) {
 			sound.stop();
 		}
+	},
+	onComplete: function (key, func, self) {
+		var sound = this.sounds[key];
+		if (sound.onComplete == false) {
+			sound.onComplete = true;
+			sound.onStop.add(func, self);
+		}
+	},
+	setVolume: function (key, val) {
+		var sound = this.sounds[key];
+		sound.volume = val;
 	},
 	//this.sound.onMute
 	//this.sound.onUnMute

@@ -36,8 +36,8 @@ BasicGame.Boot.prototype = {
 			nextSceen: null,
             loadedOnlyFirst: false,
             userDatasController: null,
-            userDatas: null,
-            spriteManager: new SpriteManager(this),
+            SpriteManager: new SpriteManager(this),
+            SoundManager: null,
 		};
 	}
 
