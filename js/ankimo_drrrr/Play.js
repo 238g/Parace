@@ -36,18 +36,21 @@ BasicGame.Play.prototype = {
 			s.stop('currentBGM');
 			s.play({key:key,isBGM:true,loop:true});
 			s.setVolume(key, .7);
+			this.HUD.countDown('hide');
 			this.play();
 		} else {
 			s.play(key);
 			s.onComplete(key, function () {
+				var text = '2';
 				switch (this.currentSound) {
 					case 'Male_3': this.currentSound = 'Male_2'; break;
-					case 'Male_2': this.currentSound = 'Male_1'; break;
-					case 'Male_1': this.currentSound = 'Go'; break;
+					case 'Male_2': this.currentSound = 'Male_1'; text = '1'; break;
+					case 'Male_1': this.currentSound = 'Go'; text = 'Go!!'; break;
 					case 'Go': this.currentSound = 'HappyArcadeTune'; break;
 					default: return;
 				}
 				this.countDown(this.currentSound);
+				this.HUD.countDown(text);
 			}, this);
 		}
 	},
@@ -199,6 +202,14 @@ BasicGame.Play.prototype = {
 		var scoreTextSprite = this.genScoreTextSprite(textStyle);
 		var gameOverTextSprite = this.genGameOverTextSprite(textStyle);
 		var backToTopTextSprite = this.genBackToTopTextSprite(textStyle);
+		var countDownTextSprite = this.genCountDownTextSprite(textStyle);
+		HUDController.countDown = function (text) {
+			if (text == 'hide') {
+				countDownTextSprite.hide();
+				return;
+			}
+			countDownTextSprite.changeText(text);
+		};
 		HUDController.changeScore = scoreTextSprite.changeText;
 		HUDController.resultView = function () {
 			scoreTextSprite.scale.setTo(0);
@@ -213,6 +224,15 @@ BasicGame.Play.prototype = {
 			}, this.finishDuration);
 		}.bind(this);
 		return HUDController;
+	},
+
+	genCountDownTextSprite: function (textStyle) {
+		textStyle.fontSize = '150px';
+		textStyle.fill = '#FF0000';
+		var textSprite = this.game.global.SpriteManager.genText(
+			this.world.centerX, this.world.centerY, '3', textStyle
+		);
+		return textSprite;
 	},
 
 	genScoreTextSprite: function (textStyle) {
