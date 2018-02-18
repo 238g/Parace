@@ -46,7 +46,7 @@ BasicGame.Preloader.prototype = {
 
 	loadOnlyFirst: function () {
 		if (!this.game.global.loadedOnlyFirst) {
-			// document.body.style.cursor = 'pointer';
+			if (this.game.device.desktop) { document.body.style.cursor = 'pointer'; }
 			this.game.global.SoundManager = new SoundManager(this);
 			// this.userDatasController();
 			this.game.global.loadedOnlyFirst = true;
