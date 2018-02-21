@@ -61,9 +61,5 @@ BasicGame.Title.prototype = {
 		var scaleY = sprite.scale.y+.1;
 		this.add.tween(sprite.scale).to({x: scaleX, y: scaleY}, 220, Phaser.Easing.Sinusoidal.Out, true, 0, -1, true);
 	},
-	
-	render: function () {
-		this.game.debug.pointer(this.game.input.activePointer);
-	},
 
 };

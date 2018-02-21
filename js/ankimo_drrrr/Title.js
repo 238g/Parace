@@ -72,6 +72,7 @@ BasicGame.Title.prototype = {
 			this.world.centerX, this.world.centerY-100, 'レッツ・あん肝！', textStyle
 		);
 		this.tween(textSprite);
+		this.tween(textSprite.multipleTextSprite);
 	},
 
 	genStartTextSprite: function (textStyle) {
@@ -79,6 +80,7 @@ BasicGame.Title.prototype = {
 			this.world.centerX, this.world.centerY+100, 'スタート', textStyle
 		);
 		this.tween(textSprite);
+		this.tween(textSprite.multipleTextSprite);
 	},
 
 	tween: function (sprite) {
