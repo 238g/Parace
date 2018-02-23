@@ -33,7 +33,9 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
+		// MEMO this.load.baseURL = 'https://238g.github.io/Parace/';
 		var ip = './images/sirosouzoku/';
+		this.load.image('player', './images/ankimo_drrrr/player.png'); // TODO fix
 		for (var key in this.game.conf.soundAssets) {
 			this.load.audio(key, this.game.conf.soundAssets[key]);
 		}
