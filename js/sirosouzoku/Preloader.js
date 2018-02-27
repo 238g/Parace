@@ -35,10 +35,19 @@ BasicGame.Preloader.prototype = {
 	loadAssets: function () {
 		// MEMO this.load.baseURL = 'https://238g.github.io/Parace/';
 		var ip = './images/sirosouzoku/';
-		this.load.image('player', './images/ankimo_drrrr/player.png'); // TODO fix
+		this.load.atlasJSONHash('player', ip+'/siro_running.png', ip+'/siro_running.json');
 		for (var key in this.game.conf.soundAssets) {
 			this.load.audio(key, this.game.conf.soundAssets[key]);
 		}
+		this.load.image('obstacle_1', ip+'/virtual_1.png');
+		this.load.image('obstacle_2', ip+'/virtual_2.png');
+		this.load.image('sky', ip+'/sky.png');
+		this.load.image('mountain', ip+'/mountain.png');
+		this.load.image('ground', ip+'/ground.png');
+		this.load.image('siro_res', ip+'/siro_res.png');
+		this.load.image('siro_title_1', ip+'/siro_title_1.png');
+		this.load.image('siro_title_2', ip+'/siro_title_2.png');
+		this.load.image('siro_title_3', ip+'/siro_title_3.png');
 	},
 
 	loadOnlyFirst: function () {

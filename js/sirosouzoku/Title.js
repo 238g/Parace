@@ -6,17 +6,19 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
+		this.genBgSprite();
 		this.genTextContainer();
 		this.soundController();
-		setTimeout(function () { this.inputController(); }.bind(this), 500);
+		setTimeout(function () { this.inputController(); }.bind(this), 600);
 	},
 
 	soundController: function () {
-		/*
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
-		s.play({key:'TowerDefenseTheme',isBGM:true,loop:true});
-		*/
+		setTimeout(function () {
+			s.play({key:'HappyArcadeTune',isBGM:true,loop:true});
+			s.setVolume('HappyArcadeTune', .7);
+		}, 500);
 	},
 
 	inputController: function () {
@@ -42,7 +44,7 @@ BasicGame.Title.prototype = {
 
 	genTitleTextSprite: function (textStyle) {
 		var textSprite = this.game.global.SpriteManager.genText(
-			this.world.centerX, this.world.centerY-100, '🏍　シロ走族　🏍', textStyle
+			this.world.centerX-200, this.world.centerY-100, '🏃　シロラン　🏃', textStyle
 		);
 		this.tween(textSprite);
 		this.tween(textSprite.multipleTextSprite);
@@ -50,7 +52,7 @@ BasicGame.Title.prototype = {
 
 	genStartTextSprite: function (textStyle) {
 		var textSprite = this.game.global.SpriteManager.genText(
-			this.world.centerX, this.world.centerY+100, '🐬　スタート　🐬', textStyle
+			this.world.centerX-200, this.world.centerY+100, '🐬　スタート　🐬', textStyle
 		);
 		this.tween(textSprite);
 		this.tween(textSprite.multipleTextSprite);
@@ -60,6 +62,12 @@ BasicGame.Title.prototype = {
 		var scaleX = sprite.scale.x+.1;
 		var scaleY = sprite.scale.y+.1;
 		this.add.tween(sprite.scale).to({x: scaleX, y: scaleY}, 220, Phaser.Easing.Sinusoidal.Out, true, 0, -1, true);
+	},
+
+	genBgSprite: function () {
+		var key = 'siro_title_' + this.rnd.integerInRange(1, 3);
+		var sprite = this.add.sprite(this.world.width, this.world.height, key);
+		sprite.anchor.setTo(1);
 	},
 
 };
