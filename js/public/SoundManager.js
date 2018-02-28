@@ -42,6 +42,23 @@ SoundManager.prototype = {
 		var sound = this.sounds[key];
 		sound.volume = val;
 	},
+	fadeIn: function (keyOrKeys, duration) {
+		if (typeof keyOrKeys == "object") {
+			var key = keyOrKeys.key;
+			if (keyOrKeys.isBGM) { this.sounds.currentBGM = this.sounds[key]; }
+			if (keyOrKeys.loop) { this.sounds[key].loop = true; }
+		} else {
+			var key = keyOrKeys;
+		}
+		var sound = this.sounds[key];
+		sound.fadeIn(duration);
+	},
+	fadeOut: function (key, duration) {
+		var sound = this.sounds[key];
+		if (sound && sound.isPlaying) {
+			sound.fadeOut(duration);
+		}
+	},
 	//this.sound.onMute
 	//this.sound.onUnMute
 	//this.sound.volume / onVolumeChange

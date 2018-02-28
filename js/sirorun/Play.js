@@ -24,13 +24,16 @@ BasicGame.Play.prototype = {
 	},
 
 	update: function () {
-		this.collisionObstacle();
-		this.collisionGround();
+		this.collisionManager();
 		this.killToDestroyObstacle();
 		this.bg.tileMove(this.GAME.speed);
 	},
-	collisionObstacle: function () { this.physics.arcade.collide(this.player, this.obstacles, this.GAME.gameOver, null, this); },
-	collisionGround: function () { this.physics.arcade.collide(this.player, this.bg.ground); },
+
+	collisionManager:function () {
+		this.physics.arcade.collide(this.player, this.obstacles, this.GAME.gameOver, null, this);
+		this.physics.arcade.collide(this.player, this.bg.ground);
+	},
+
 	killToDestroyObstacle: function () {
 		if (this.obstacles.children[0] && this.obstacles.children[0].alive === false && this.GAME.isPlaying) {
 			this.obstacles.children[0].destroy();
@@ -49,23 +52,24 @@ BasicGame.Play.prototype = {
 		var score = 0;
 		controller.currentStage = c.STAGE_1;
 		controller.speed = 1;
-		// var highScore = 0;
 		controller.isPlaying = true;
 		controller.okToTop = false;
 		controller.scoreCountToGoToStage2 = 30;
 		controller.scoreCountToGoToStage3 = 60;
+		controller.scoreCountToGoToStage4 = 90;
+		controller.scoreCountToGoToStage5 = 120;
 		controller.plusScore = function () {
 			score += 1;
 			self.HUD.changeScore('スコア: ' + score);
 		};
 		controller.setObstacleTimer = function () {
 			if (timer) { self.time.events.remove(timer); }
-			if (this.currentStage == c.STAGE_2) {
-				timer = self.time.events.loop(self.rnd.integerInRange(1200, 1500), self.genObstacleSprite, self);
-			} else if (this.currentStage == c.STAGE_3) {
-				timer = self.time.events.loop(self.rnd.integerInRange(1000, 1500), self.genObstacleSprite, self);
-			} else {
-				timer = self.time.events.loop(1500, self.genObstacleSprite, self);
+			switch (this.currentStage) {
+				case c.STAGE_2: timer = self.time.events.loop(self.rnd.integerInRange(1400, 1500), self.genObstacleSprite, self); break;
+				case c.STAGE_3: timer = self.time.events.loop(self.rnd.integerInRange(1300, 1500), self.genObstacleSprite, self); break;
+				case c.STAGE_4: timer = self.time.events.loop(self.rnd.integerInRange(1200, 1500), self.genObstacleSprite, self); break;
+				case c.STAGE_5: timer = self.time.events.loop(self.rnd.integerInRange(1000, 1500), self.genObstacleSprite, self); break;
+				default: timer = self.time.events.loop(1500, self.genObstacleSprite, self); break;
 			}
 		};
 		controller.gameOver = function (player,obstacle) {
@@ -73,17 +77,23 @@ BasicGame.Play.prototype = {
 			this.time.events.remove(timer);
 			player.kill();
 			obstacle.kill();
+			this.game.global.SoundManager.play('GameOver');
 			setTimeout(function () {
 				controller.okToTop = true;
 			}, 1000);
 			this.Result.show();
-			this.HUD.resultView();
+			this.HUD.showGameOver();
 		}; // <- bind(this)
 		controller.checkStageLevel = function () {
-			if (score >= this.scoreCountToGoToStage3 && this.currentStage == c.STAGE_2) {
+			if (score >= this.scoreCountToGoToStage5 && this.currentStage == c.STAGE_4) {
+				this.setStageLevel(c.STAGE_5);
+			} else if (score >= this.scoreCountToGoToStage4 && this.currentStage == c.STAGE_3) {
+				this.setStageLevel(c.STAGE_4);
+			} else if (score >= this.scoreCountToGoToStage3 && this.currentStage == c.STAGE_2) {
 				this.setStageLevel(c.STAGE_3);
 			} else if (score >= this.scoreCountToGoToStage2 && this.currentStage == c.STAGE_1) {
 				this.setStageLevel(c.STAGE_2);
+				self.bg.evening();
 			}
 		};
 		controller.bgColor = function () {
@@ -97,34 +107,33 @@ BasicGame.Play.prototype = {
 			}
 		};
 		controller.setStageLevel = function (level) {
-			if (level == c.STAGE_2) {
-				this.currentStage = c.STAGE_2;
-				this.speed = 2;
-				this.setObstacleTimer();
-				self.player.speedUp(this.speed);
-				if (__ENV!='prod') { console.log('stage2'); }
-			} else if (level == c.STAGE_3) {
-				this.currentStage = c.STAGE_3;
-				this.speed = 3;
-				this.setObstacleTimer();
-				self.player.speedUp(this.speed);
-				if (__ENV!='prod') { console.log('stage3'); }
+			this.currentStage = level;
+			switch (level) {
+				case c.STAGE_2: this.speed = 1; break;
+				case c.STAGE_3: this.speed = 2; break;
+				case c.STAGE_4: this.speed = 2; break;
+				case c.STAGE_5: this.speed = 3; break;
 			}
+			this.setObstacleTimer();
+			self.player.speedUp(this.speed);
+			// TODO level up se // self.game.global.SoundManager.play('LevelUp');
+			if (__ENV!='prod') { console.log('stage'+this.currentStage); }
 		};
 		controller.getObstacleSpeed = function () {
-			if (this.currentStage == c.STAGE_2) {
-				return self.rnd.integerInRange(1000, 1500);
-			} else if (this.currentStage == c.STAGE_3) {
-				return self.rnd.integerInRange(1200, 2000);
+			switch (this.currentStage) {
+				case c.STAGE_2: return self.rnd.integerInRange(1000, 1500);
+				case c.STAGE_3: return self.rnd.integerInRange(1000, 1600);
+				case c.STAGE_4: return self.rnd.integerInRange(1000, 1800);
+				case c.STAGE_5: return self.rnd.integerInRange(1200, 2200);
+				default: return 1000;
 			}
-			return 1000;
 		};
 		controller.nuisance = function () {
-			if (this.currentStage == c.STAGE_2) {
+			if (this.currentStage == c.STAGE_4) {
 				if (self.rnd.integerInRange(1, 20) == 1) {
 					// TODO nuisance
 				}
-			} else if (this.currentStage == c.STAGE_3) {
+			} else if (this.currentStage == c.STAGE_5) {
 				if (self.rnd.integerInRange(1, 10) == 1) {
 					// TODO nuisance
 				}
@@ -144,6 +153,8 @@ BasicGame.Play.prototype = {
 
 	genBGContainer: function () {
 		var controller = {};
+		var self = this;
+		var s = this.game.global.SoundManager;
 		var skyTileSprite = this.genSkyTileSprite();
 		var mountainTileSprite = this.genMountainTileSprite();
 		var groundTileSprite = this.genGroundTileSprite();
@@ -156,16 +167,30 @@ BasicGame.Play.prototype = {
 			skyTileSprite.daytimeTween.start();
 			mountainTileSprite.daytimeTween.start();
 			groundTileSprite.daytimeTween.start();
+			s.fadeOut('currentBGM', 1000);
+			s.onComplete('currentBGM', function () {
+				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+			}, self);
 		};
 		controller.evening = function () {
 			skyTileSprite.eveningTween.start();
 			mountainTileSprite.eveningTween.start();
 			groundTileSprite.eveningTween.start();
+			s.fadeOut('currentBGM', 1000);
+			s.onComplete('currentBGM', function () {
+				// TODO evening bgm
+				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+			}, self);
 		};
 		controller.night = function () {
 			skyTileSprite.nightTween.start();
 			mountainTileSprite.nightTween.start();
 			groundTileSprite.nightTween.start();
+			s.fadeOut('currentBGM', 1000);
+			s.onComplete('currentBGM', function () {
+				// TODO evening bgm
+				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+			}, self);
 		};
 		controller.ground = groundTileSprite;
 		return controller;
@@ -204,10 +229,8 @@ BasicGame.Play.prototype = {
 		var colorBlend = {step: 0};
 		var colorTween = this.add.tween(colorBlend).to({step: 100}, time);
 		colorTween.onUpdateCallback(function() {
-			console.log(obj.tint, toColor);
 			obj.tint = Phaser.Color.interpolateColor(obj.tint, toColor, 100, colorBlend.step);
 		});
-		// colorTween.start();
 		return colorTween;
 	},
 
@@ -262,17 +285,12 @@ BasicGame.Play.prototype = {
 	},
 
 	genObstacleSprite: function () {
-		var sprite = null;
 		var y = this.world.height-120;
-		switch (this.rnd.integerInRange(1, 2)) {
-			case 1:
-				sprite = this.add.sprite(0, y, 'obstacle_1');
-				sprite.scale.setTo(.5);
-				break;
-			case 2:
-				sprite = this.add.sprite(0, y, 'obstacle_2');
-				sprite.scale.setTo(.6);
-				break;
+		var rndNum = this.rnd.integerInRange(1, 2);
+		var sprite = this.add.sprite(0, y, 'obstacle_'+rndNum);
+		switch (rndNum) {
+			case 1: sprite.scale.setTo(.5); break;
+			case 2: sprite.scale.setTo(.6); break;
 		}
 		sprite.anchor.setTo(.5,1);
 		this.obstacles.add(sprite);
@@ -295,10 +313,8 @@ BasicGame.Play.prototype = {
 			multipleStrokeThickness: 20,
 		};
 		var scoreTextSprite = this.genScoreTextSprite(textStyle);
-		// var highScoreTextSprite = this.genHighScoreTextSprite(textStyle);
 		controller.changeScore = scoreTextSprite.changeText;
-		// controller.changeHighScore = highScoreTextSprite.changeText;
-		controller.resultView = function () {
+		controller.showGameOver = function () {
 			scoreTextSprite.scale.setTo(0);
 			scoreTextSprite.multipleTextSprite.scale.setTo(0);
 			scoreTextSprite.move(self.world.centerX, self.world.centerY);
@@ -317,12 +333,6 @@ BasicGame.Play.prototype = {
 		return textSprite;
 	},
 
-	genHighScoreTextSprite: function (textStyle) {
-		var textSprite = this.game.global.SpriteManager.genText(
-			this.world.centerX/2*3, 50, 'ハイスコア: 0', textStyle
-		);
-	},
-
 	genResultContainer: function () {
 		var sprite = this.add.sprite(this.world.width,this.world.height,'siro_res');
 		sprite.anchor.setTo(1);
@@ -338,15 +348,11 @@ BasicGame.Play.prototype = {
 
 	test: function () {
 		if (__ENV!='prod') {
-			if (getQuery('sl')) {
-				this.GAME.setStageLevel(getQuery('sl'));
-			}
-			if (getQuery('sc2')) {
-				this.GAME.scoreCountToGoToStage2 = getQuery('sc2');
-			}
-			if (getQuery('sc3')) {
-				this.GAME.scoreCountToGoToStage3 = getQuery('sc3');
-			}
+			var sl = getQuery('sl'); if (sl) { this.GAME.setStageLevel(this.game.const['STAGE_'+sl]); }
+			this.GAME.scoreCountToGoToStage2 = getQuery('sc2') || this.GAME.scoreCountToGoToStage2;
+			this.GAME.scoreCountToGoToStage3 = getQuery('sc3') || this.GAME.scoreCountToGoToStage3;
+			this.GAME.scoreCountToGoToStage4 = getQuery('sc4') || this.GAME.scoreCountToGoToStage4;
+			this.GAME.scoreCountToGoToStage5 = getQuery('sc5') || this.GAME.scoreCountToGoToStage5;
 		}
 	},
 	

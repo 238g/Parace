@@ -34,20 +34,28 @@ BasicGame.Preloader.prototype = {
 
 	loadAssets: function () {
 		// MEMO this.load.baseURL = 'https://238g.github.io/Parace/';
-		var ip = './images/sirosouzoku/';
-		this.load.atlasJSONHash('player', ip+'/siro_running.png', ip+'/siro_running.json');
-		for (var key in this.game.conf.soundAssets) {
-			this.load.audio(key, this.game.conf.soundAssets[key]);
-		}
-		this.load.image('obstacle_1', ip+'/virtual_1.png');
-		this.load.image('obstacle_2', ip+'/virtual_2.png');
-		this.load.image('sky', ip+'/sky.png');
-		this.load.image('mountain', ip+'/mountain.png');
-		this.load.image('ground', ip+'/ground.png');
-		this.load.image('siro_res', ip+'/siro_res.png');
-		this.load.image('siro_title_1', ip+'/siro_title_1.png');
-		this.load.image('siro_title_2', ip+'/siro_title_2.png');
-		this.load.image('siro_title_3', ip+'/siro_title_3.png');
+		this.load.atlasJSONHash('player', './images/sirorun/siro_running.png', './images/sirorun/siro_running.json');
+		var imageAssets = {
+			'obstacle_1':   './images/sirorun/virtual_1.png',
+			'obstacle_2':   './images/sirorun/virtual_2.png',
+			'sky':          './images/sirorun/sky.png',
+			'mountain':     './images/sirorun/mountain.png',
+			'ground':       './images/sirorun/ground.png',
+			'siro_res':     './images/sirorun/siro_res.png',
+			'siro_title_1': './images/sirorun/siro_title_1.png',
+			'siro_title_2': './images/sirorun/siro_title_2.png',
+			'siro_title_3': './images/sirorun/siro_title_3.png',
+		};
+		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
+		var soundAssets = {
+			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', 
+			'Jump':            './sounds/SE/phaseJump5.mp3', 
+			'GameOver':        './sounds/VOICE/Female/game_over.ogg', 
+			'HappyArcadeTune': './sounds/BGM/HappyArcadeTune.mp3', 
+			'DaytimeBGM':      './sounds/BGM/ChiptuneAdventuresStage2.wav', 
+			// TODO level up se
+		};
+		for (var key in soundAssets) { this.load.audio(key, soundAssets[key]); }
 	},
 
 	loadOnlyFirst: function () {

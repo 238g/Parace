@@ -6,6 +6,8 @@ BasicGame.Boot.prototype.defineConst = function () {
 		STAGE_1: 1,
 		STAGE_2: 2,
 		STAGE_3: 3,
+		STAGE_4: 4,
+		STAGE_5: 5,
 		DAYTIME_COLOR: 0xffffff,
 		EVENING_COLOR: 0xff7f50,
 		NIGHT_COLOR: 0x483d8b,
