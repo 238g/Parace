@@ -38,6 +38,7 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'obstacle_1':   './images/sirorun/virtual_1.png',
 			'obstacle_2':   './images/sirorun/virtual_2.png',
+			'obstacle_3':   './images/sirorun/virtual_3.png',
 			'sky':          './images/sirorun/sky.png',
 			'mountain':     './images/sirorun/mountain.png',
 			'ground':       './images/sirorun/ground.png',
@@ -51,9 +52,12 @@ BasicGame.Preloader.prototype = {
 			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', 
 			'Jump':            './sounds/SE/phaseJump5.mp3', 
 			'GameOver':        './sounds/VOICE/Female/game_over.ogg', 
+			'LevelUp':         './sounds/VOICE/Female/level_up.ogg', 
 			'HappyArcadeTune': './sounds/BGM/HappyArcadeTune.mp3', 
 			'DaytimeBGM':      './sounds/BGM/ChiptuneAdventuresStage2.wav', 
-			// TODO level up se
+			'EveningBGM':      './sounds/BGM/Awake.mp3', 
+			'NightBGM':        './sounds/BGM/RailJet.mp3', 
+
 		};
 		for (var key in soundAssets) { this.load.audio(key, soundAssets[key]); }
 	},

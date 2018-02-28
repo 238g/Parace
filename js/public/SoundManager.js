@@ -19,6 +19,7 @@ SoundManager.prototype = {
 			var key = keyOrKeys.key;
 			if (keyOrKeys.isBGM) { this.sounds.currentBGM = this.sounds[key]; }
 			if (keyOrKeys.loop) { this.sounds[key].loop = true; }
+			if (keyOrKeys.volume) { this.sounds[key].volume = keyOrKeys.volume; }
 		} else {
 			var key = keyOrKeys;
 		}
@@ -42,16 +43,18 @@ SoundManager.prototype = {
 		var sound = this.sounds[key];
 		sound.volume = val;
 	},
+	// fadeIn volume 0->1
 	fadeIn: function (keyOrKeys, duration) {
+		var loop = false;
 		if (typeof keyOrKeys == "object") {
 			var key = keyOrKeys.key;
 			if (keyOrKeys.isBGM) { this.sounds.currentBGM = this.sounds[key]; }
-			if (keyOrKeys.loop) { this.sounds[key].loop = true; }
+			if (keyOrKeys.loop) { loop = true; }
 		} else {
 			var key = keyOrKeys;
 		}
 		var sound = this.sounds[key];
-		sound.fadeIn(duration);
+		sound.fadeIn(duration, loop);
 	},
 	fadeOut: function (key, duration) {
 		var sound = this.sounds[key];

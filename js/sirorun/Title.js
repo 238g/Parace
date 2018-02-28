@@ -16,8 +16,7 @@ BasicGame.Title.prototype = {
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		setTimeout(function () {
-			s.play({key:'HappyArcadeTune',isBGM:true,loop:true});
-			s.setVolume('HappyArcadeTune', .7);
+			s.play({key:'HappyArcadeTune',isBGM:true,loop:true,volume:.6});
 		}, 500);
 	},
 

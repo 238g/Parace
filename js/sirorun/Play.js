@@ -87,13 +87,16 @@ BasicGame.Play.prototype = {
 		controller.checkStageLevel = function () {
 			if (score >= this.scoreCountToGoToStage5 && this.currentStage == c.STAGE_4) {
 				this.setStageLevel(c.STAGE_5);
+				if (__ENV!='prod') { self.bg.evening(); }
 			} else if (score >= this.scoreCountToGoToStage4 && this.currentStage == c.STAGE_3) {
 				this.setStageLevel(c.STAGE_4);
+				if (__ENV!='prod') { self.bg.daytime(); }
 			} else if (score >= this.scoreCountToGoToStage3 && this.currentStage == c.STAGE_2) {
 				this.setStageLevel(c.STAGE_3);
+				if (__ENV!='prod') { self.bg.night(); }
 			} else if (score >= this.scoreCountToGoToStage2 && this.currentStage == c.STAGE_1) {
 				this.setStageLevel(c.STAGE_2);
-				self.bg.evening();
+				if (__ENV!='prod') { self.bg.evening(); }
 			}
 		};
 		controller.bgColor = function () {
@@ -116,7 +119,7 @@ BasicGame.Play.prototype = {
 			}
 			this.setObstacleTimer();
 			self.player.speedUp(this.speed);
-			// TODO level up se // self.game.global.SoundManager.play('LevelUp');
+			self.game.global.SoundManager.play('LevelUp');
 			if (__ENV!='prod') { console.log('stage'+this.currentStage); }
 		};
 		controller.getObstacleSpeed = function () {
@@ -146,8 +149,7 @@ BasicGame.Play.prototype = {
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		setTimeout(function () {
-			s.play({key:'DaytimeBGM',isBGM:true,loop:true});
-			s.setVolume('DaytimeBGM', .6);
+			s.play({key:'DaytimeBGM',isBGM:true,loop:true,volume:.4});
 		}, 500);
 	},
 
@@ -164,32 +166,36 @@ BasicGame.Play.prototype = {
 			groundTileSprite.tilePosition.x += (speed * 5 + 5);
 		};
 		controller.daytime = function () {
-			skyTileSprite.daytimeTween.start();
-			mountainTileSprite.daytimeTween.start();
-			groundTileSprite.daytimeTween.start();
+			skyTileSprite.daytimeTween.START();
+			mountainTileSprite.daytimeTween.START();
+			groundTileSprite.daytimeTween.START();
 			s.fadeOut('currentBGM', 1000);
 			s.onComplete('currentBGM', function () {
-				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+				if (this.GAME.isPlaying) {
+					s.play({key:'DaytimeBGM',isBGM:true,loop:true,volume:.4});
+				}
 			}, self);
 		};
 		controller.evening = function () {
-			skyTileSprite.eveningTween.start();
-			mountainTileSprite.eveningTween.start();
-			groundTileSprite.eveningTween.start();
+			skyTileSprite.eveningTween.START();
+			mountainTileSprite.eveningTween.START();
+			groundTileSprite.eveningTween.START();
 			s.fadeOut('currentBGM', 1000);
 			s.onComplete('currentBGM', function () {
-				// TODO evening bgm
-				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+				if (this.GAME.isPlaying) {
+					s.play({key:'EveningBGM',isBGM:true,loop:true,volume:.6});
+				}
 			}, self);
 		};
 		controller.night = function () {
-			skyTileSprite.nightTween.start();
-			mountainTileSprite.nightTween.start();
-			groundTileSprite.nightTween.start();
+			skyTileSprite.nightTween.START();
+			mountainTileSprite.nightTween.START();
+			groundTileSprite.nightTween.START();
 			s.fadeOut('currentBGM', 1000);
 			s.onComplete('currentBGM', function () {
-				// TODO evening bgm
-				s.fadeIn({key:'DaytimeBGM',isBGM:true,loop:true}, 1000);
+				if (this.GAME.isPlaying) {
+					s.play({key:'NightBGM',isBGM:true,loop:true,volume:.6});
+				}
 			}, self);
 		};
 		controller.ground = groundTileSprite;
@@ -199,38 +205,42 @@ BasicGame.Play.prototype = {
 	genSkyTileSprite: function () {
 		var c = this.game.const;
 		var tileSprite = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'sky');
-		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, 3000);
-		tileSprite.eveningTween = this.tweenTint(tileSprite, c.EVENING_COLOR, 3000);
-		tileSprite.nightTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, 3000);
+		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, c.DAYTIME_COLOR, 3000);
+		tileSprite.eveningTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, c.EVENING_COLOR, 3000);
+		tileSprite.nightTween = this.tweenTint(tileSprite, c.EVENING_COLOR, c.NIGHT_COLOR, 3000);
 		return tileSprite;
 	},
 
 	genMountainTileSprite: function () {
 		var c = this.game.const;
 		var tileSprite = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'mountain');
-		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, 3000);
-		tileSprite.eveningTween = this.tweenTint(tileSprite, c.EVENING_COLOR, 3000);
-		tileSprite.nightTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, 3000);
+		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, c.DAYTIME_COLOR, 3000);
+		tileSprite.eveningTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, c.EVENING_COLOR, 3000);
+		tileSprite.nightTween = this.tweenTint(tileSprite, c.EVENING_COLOR, c.NIGHT_COLOR, 3000);
 		return tileSprite;
 	},
 
 	genGroundTileSprite: function () {
 		var c = this.game.const;
 		var tileSprite = this.add.tileSprite(0, this.world.height-120, this.world.width, 120, 'ground');
-		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, 3000);
-		tileSprite.eveningTween = this.tweenTint(tileSprite, c.EVENING_COLOR, 3000);
-		tileSprite.nightTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, 3000);
+		tileSprite.daytimeTween = this.tweenTint(tileSprite, c.NIGHT_COLOR, c.DAYTIME_COLOR, 3000);
+		tileSprite.eveningTween = this.tweenTint(tileSprite, c.DAYTIME_COLOR, c.EVENING_COLOR, 3000);
+		tileSprite.nightTween = this.tweenTint(tileSprite, c.EVENING_COLOR, c.NIGHT_COLOR, 3000);
 		this.physics.arcade.enable(tileSprite);
 		tileSprite.body.immovable = true;
 		return tileSprite;
 	},
 
-	tweenTint: function (obj, toColor, time) {
+	tweenTint: function (obj, startColor, endColor, time) {
 		var colorBlend = {step: 0};
 		var colorTween = this.add.tween(colorBlend).to({step: 100}, time);
 		colorTween.onUpdateCallback(function() {
-			obj.tint = Phaser.Color.interpolateColor(obj.tint, toColor, 100, colorBlend.step);
+			obj.tint = Phaser.Color.interpolateColor(startColor, endColor, 100, colorBlend.step);
 		});
+		colorTween.START = function () {
+			colorBlend.step = 0;
+			colorTween.start();
+		};
 		return colorTween;
 	},
 
@@ -286,19 +296,28 @@ BasicGame.Play.prototype = {
 
 	genObstacleSprite: function () {
 		var y = this.world.height-120;
-		var rndNum = this.rnd.integerInRange(1, 2);
+		var rndNum = this.rnd.integerInRange(1, 3);
 		var sprite = this.add.sprite(0, y, 'obstacle_'+rndNum);
-		switch (rndNum) {
-			case 1: sprite.scale.setTo(.5); break;
-			case 2: sprite.scale.setTo(.6); break;
-		}
 		sprite.anchor.setTo(.5,1);
 		this.obstacles.add(sprite);
 		this.physics.arcade.enable(sprite);
-		sprite.body.setCircle(200);
 		sprite.body.velocity.x = this.GAME.getObstacleSpeed();
 		sprite.checkWorldBounds = true;
 		sprite.outOfBoundsKill = true;
+		switch (rndNum) {
+			case 1: 
+				sprite.scale.setTo(.5); 
+				sprite.body.setCircle(200);
+				break;
+			case 2: 
+				sprite.scale.setTo(.6); 
+				sprite.body.setCircle(200);
+				break;
+			case 3: 
+				sprite.scale.setTo(.9); 
+				sprite.body.setCircle(200);
+				break;
+		}
 		return sprite;
 	},
 
