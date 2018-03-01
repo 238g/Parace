@@ -250,9 +250,8 @@ BasicGame.Play.prototype = {
 	},
 
 	genNuisanceSprite: function () {
-		// TODO change img
 		var y = this.world.height-120;
-		var sprite = this.game.global.SpriteManager.genSprite(0, y, 'obstacle_1');
+		var sprite = this.game.global.SpriteManager.genSprite(0, y, 'nuisance');
 		sprite.anchor.setTo(1);
 		sprite.scale.setTo(.5);
 		var toX = this.world.centerX;
@@ -288,7 +287,7 @@ BasicGame.Play.prototype = {
 		sprite.anchor.setTo(.5);
 		this.physics.arcade.enable(sprite);
 		sprite.body.enable = true;
-		sprite.body.setCircle(120, 70, 60);
+		sprite.body.setCircle(100, 90, 90);
 		sprite.body.gravity.y = 5000; // init stage 1
 		sprite.body.collideWorldBounds = true;
 		sprite.animations.add('running');
@@ -316,7 +315,7 @@ BasicGame.Play.prototype = {
 
 	genObstacleSprite: function () {
 		var y = this.world.height-120;
-		var rndNum = this.rnd.integerInRange(1, 3);
+		var rndNum = this.rnd.integerInRange(1, 4);
 		var sprite = this.add.sprite(0, y, 'obstacle_'+rndNum);
 		sprite.anchor.setTo(.5,1);
 		this.obstacles.add(sprite);
@@ -327,18 +326,19 @@ BasicGame.Play.prototype = {
 		switch (rndNum) {
 			case 1: // ->
 				sprite.scale.setTo(.5); 
-				sprite.body.setCircle(200, 35);
+				sprite.body.setCircle(190, 60);
 				break;
 			case 2: // ○
 				sprite.scale.setTo(.6); 
-				sprite.body.setCircle(200);
+				sprite.body.setCircle(150, 50);
 				break;
 			case 3: // ＿|￣|○
 				sprite.scale.setTo(.9); 
 				sprite.body.setCircle(130, 60, -20);
 				break;
 			case 4: // ＼(^o^)／
-				// TODO
+				sprite.scale.setTo(.7); 
+				sprite.body.setCircle(190, 0, -20);
 				break;
 		}
 		return sprite;
@@ -398,10 +398,12 @@ BasicGame.Play.prototype = {
 		}
 	},
 	
+	/*
 	render: function () {
 		this.game.debug.body(this.player);
 		for (var key in this.obstacles.children) { this.game.debug.body(this.obstacles.children[key]); }
 		this.game.debug.pointer(this.game.input.activePointer);
 	},
+	*/
 
 };

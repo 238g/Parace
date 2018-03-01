@@ -39,6 +39,8 @@ BasicGame.Preloader.prototype = {
 			'obstacle_1':   './images/sirorun/virtual_1.png',
 			'obstacle_2':   './images/sirorun/virtual_2.png',
 			'obstacle_3':   './images/sirorun/virtual_3.png',
+			'obstacle_4':   './images/sirorun/virtual_4.png',
+			'nuisance':     './images/sirorun/virtual_5.png',
 			'sky':          './images/sirorun/sky.png',
 			'mountain':     './images/sirorun/mountain.png',
 			'ground':       './images/sirorun/ground.png',
