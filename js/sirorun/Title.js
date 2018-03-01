@@ -9,7 +9,7 @@ BasicGame.Title.prototype = {
 		this.genBgSprite();
 		this.genTextContainer();
 		this.soundController();
-		setTimeout(function () { this.inputController(); }.bind(this), 600);
+		setTimeout(function () { this.inputController(); }.bind(this), 800);
 	},
 
 	soundController: function () {
@@ -58,9 +58,7 @@ BasicGame.Title.prototype = {
 	},
 
 	tween: function (sprite) {
-		var scaleX = sprite.scale.x+.1;
-		var scaleY = sprite.scale.y+.1;
-		this.add.tween(sprite.scale).to({x: scaleX, y: scaleY}, 220, Phaser.Easing.Sinusoidal.Out, true, 0, -1, true);
+		this.add.tween(sprite.scale).to({x: '+.1', y: '+.1'}, 220, Phaser.Easing.Sinusoidal.Out, true, 0, -1, true);
 	},
 
 	genBgSprite: function () {

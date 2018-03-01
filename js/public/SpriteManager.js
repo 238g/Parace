@@ -4,6 +4,12 @@ SpriteManager.prototype = {
 	constructor: function (self) {
 		this.self = self;
 	},
+	genSprite: function (x, y, key) {
+		var sprite = this.self.add.sprite(x, y, key);
+		sprite.show = function () { sprite.visible = true; };
+		sprite.hide = function () { sprite.visible = false; };
+		return sprite;
+	},
 	genText: function (x, y, text, textStyle) {
 		var commonTextStyle = { 
 			fontSize: '50px', 
@@ -63,5 +69,5 @@ SpriteManager.prototype = {
 			}
 		};
 		return textSprite;
-	}
+	},
 };

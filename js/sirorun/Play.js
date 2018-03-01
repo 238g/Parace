@@ -40,7 +40,7 @@ BasicGame.Play.prototype = {
 			this.GAME.plusScore();
 			this.GAME.checkStageLevel();
 			this.GAME.bgColor();
-			this.GAME.nuisance();
+			this.GAME.checkNuisance();
 		}
 	},
 
@@ -131,15 +131,14 @@ BasicGame.Play.prototype = {
 				default: return 1000;
 			}
 		};
-		controller.nuisance = function () {
-			if (this.currentStage == c.STAGE_4) {
-				if (self.rnd.integerInRange(1, 20) == 1) {
-					// TODO nuisance
-				}
-			} else if (this.currentStage == c.STAGE_5) {
-				if (self.rnd.integerInRange(1, 10) == 1) {
-					// TODO nuisance
-				}
+		controller.checkNuisance = function () {
+			var rndNum = self.rnd.integerInRange(0,100);
+			switch (this.currentStage) {
+				case c.STAGE_2: if (rndNum < 3) {self.bg.actNuisance();} break;
+				case c.STAGE_3: if (rndNum < 5) {self.bg.actNuisance();} break;
+				case c.STAGE_4: if (rndNum < 10) {self.bg.actNuisance();} break;
+				case c.STAGE_5: if (rndNum < 15) {self.bg.actNuisance();} break;
+				default: if (rndNum === 0) {self.bg.actNuisance();} break;
 			}
 		};
 		return controller;
@@ -160,6 +159,7 @@ BasicGame.Play.prototype = {
 		var skyTileSprite = this.genSkyTileSprite();
 		var mountainTileSprite = this.genMountainTileSprite();
 		var groundTileSprite = this.genGroundTileSprite();
+		var nuisanceSprite = this.genNuisanceSprite();
 		controller.tileMove = function (speed) {
 			skyTileSprite.tilePosition.x += (speed * .5);
 			mountainTileSprite.tilePosition.x += (speed * 3);
@@ -197,6 +197,11 @@ BasicGame.Play.prototype = {
 					s.play({key:'NightBGM',isBGM:true,loop:true,volume:.6});
 				}
 			}, self);
+		};
+		controller.actNuisance = function () {
+			if (!nuisanceSprite.tween.isRunning && !nuisanceSprite.tweenBack.isRunning) {
+				nuisanceSprite.tween.start();
+			}
 		};
 		controller.ground = groundTileSprite;
 		return controller;
@@ -242,6 +247,21 @@ BasicGame.Play.prototype = {
 			colorTween.start();
 		};
 		return colorTween;
+	},
+
+	genNuisanceSprite: function () {
+		// TODO change img
+		var y = this.world.height-120;
+		var sprite = this.game.global.SpriteManager.genSprite(0, y, 'obstacle_1');
+		sprite.anchor.setTo(1);
+		sprite.scale.setTo(.5);
+		var toX = this.world.centerX;
+		sprite.tween = this.add.tween(sprite).to({x:'+'+toX}, 1800, Phaser.Easing.Elastic.Out);
+		sprite.tweenBack = this.add.tween(sprite).to({x:0}, 3000, Phaser.Easing.Linear.None);
+		sprite.tween.onComplete.add(function () {
+			sprite.tweenBack.start();
+		}, this);
+		return sprite;
 	},
 
 	inputController: function () {
@@ -305,17 +325,20 @@ BasicGame.Play.prototype = {
 		sprite.checkWorldBounds = true;
 		sprite.outOfBoundsKill = true;
 		switch (rndNum) {
-			case 1: 
+			case 1: // ->
 				sprite.scale.setTo(.5); 
-				sprite.body.setCircle(200);
+				sprite.body.setCircle(200, 35);
 				break;
-			case 2: 
+			case 2: // ○
 				sprite.scale.setTo(.6); 
 				sprite.body.setCircle(200);
 				break;
-			case 3: 
+			case 3: // ＿|￣|○
 				sprite.scale.setTo(.9); 
-				sprite.body.setCircle(200);
+				sprite.body.setCircle(130, 60, -20);
+				break;
+			case 4: // ＼(^o^)／
+				// TODO
 				break;
 		}
 		return sprite;
