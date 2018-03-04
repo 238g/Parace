@@ -10,6 +10,10 @@ SpriteManager.prototype = {
 		sprite.hide = function () { sprite.visible = false; };
 		return sprite;
 	},
+	genButtonSprite: function (x, y, key, func) {
+		var buttonSprite = this.self.add.button(x, y, key, func, this.self);
+		return buttonSprite;
+	},
 	genText: function (x, y, text, textStyle) {
 		var commonTextStyle = { 
 			fontSize: '50px', 
