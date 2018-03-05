@@ -5,14 +5,14 @@ BasicGame.Play.prototype = {
 		this.stage.backgroundColor = '#5beea0';
 		this.GC = {};
 		this.HUD = {};
-		this.currentTreeCount = 0;
+		this.Panel = {};
 		this.treeGroup = null;
 	},
 
 	create: function () {
 		this.GC = this.gameController();
-		this.genTreeContainer();
 		this.HUD = this.genHUDContainer();
+		this.Panel = this.genPanelContainer();
 	},
 
 	update: function () {
@@ -25,9 +25,17 @@ BasicGame.Play.prototype = {
 		var controller = {};
 		controller.timeCounter = 0;
 		controller.leftTime = 10;
+		controller.currentTreeCount = 0;
+		controller.score = 0;
 		controller.isPlaying = false;
-		controller.isPlaying = true; // TODO del
+		// controller.isPlaying = true; // TODO del
 		return controller;
+	},
+
+	play: function () {
+		// TODO countdonw???
+		this.GC.isPlaying = true;
+		this.genTreeContainer();
 	},
 
 	gameOver: function () {
@@ -58,7 +66,7 @@ BasicGame.Play.prototype = {
 			multipleStroke:'#dd5a52',
 			multipleStrokeThickness: 30,
 		};
-		this.currentTreeCount = 1;
+		this.GC.currentTreeCount = 1;
 		var horizontal = 1; // TODO del
 		// var horizontal = 6;
 		var vertical = 3;
@@ -85,10 +93,12 @@ BasicGame.Play.prototype = {
 	genTreeSprite: function (x, y) {
 		var treeSprite = this.add.button(x, y, 'Tree', function (pointer) {
 			console.log(pointer.count); // TODO del
-			if (pointer.count == this.currentTreeCount) {
-				this.fireTree(pointer);
-			} else {
-				this.missTouch();
+			if (this.GC.isPlaying) {
+				if (pointer.count == this.GC.currentTreeCount) {
+					this.fireTree(pointer);
+				} else {
+					this.missTouch();
+				}
 			}
 		}, this);
 		treeSprite.anchor.setTo(.5);
@@ -100,17 +110,17 @@ BasicGame.Play.prototype = {
 		pointer.loadTexture('DeadTree');
 		pointer.fireSprite.show();
 		pointer.treeNumberTSprite.hide();
-		this.currentTreeCount += 1;
+		this.GC.currentTreeCount += 1;
+		this.GC.score += 1;
+		this.HUD.changeScoreText(this.GC.score);
 		if (pointer.count == pointer.maxTreeCount) {
 			this.clearField();
 		}
 	},
 
 	missTouch: function () {
-		if (this.GC.isPlaying) {
-			this.GC.leftTime -= 2;
-			this.HUD.changeTimerText(this.GC.leftTime);
-		}
+		this.GC.leftTime -= 2;
+		this.HUD.changeTimerText(this.GC.leftTime);
 	},
 
 	clearField: function () {
@@ -118,7 +128,7 @@ BasicGame.Play.prototype = {
 		// TODO fixed
 		setTimeout(function () {
 			self.treeGroup.destroy();
-			self.currentTreeCount = 1;
+			self.GC.currentTreeCount = 1;
 			setTimeout(function() {
 				self.genTreeContainer();
 			}, 500);
@@ -143,16 +153,83 @@ BasicGame.Play.prototype = {
 	genHUDContainer: function () {
 		var s = this.game.global.SpriteManager;
 		var container = {};
-		var textStyle = {};
-		var timerTextSprite = s.genText(this.world.centerX/4, 50, 'タイム: 0', textStyle);
+		var timerTextSprite = s.genText(this.world.centerX/4, 50, 'タイム: 0');
 		container.changeTimerText = function (time) {
 			timerTextSprite.changeText('タイム: '+time);
 		};
-		var scoreTextSprite = s.genText(this.world.centerX, 50, '燃やし度: 0', textStyle);
-		container.changeScoreText = function () {
+		var scoreTextSprite = s.genText(this.world.centerX, 50, '燃やし度: 0');
+		container.changeScoreText = function (score) {
 			scoreTextSprite.changeText('燃やし度: '+score);
 		};
 		return container;
+	},
+
+	genPanelContainer: function () {
+		var container = {};
+		var s = this.game.global.SpriteManager;
+		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
+		panelSprite.scale.setTo(12, 7);
+		panelSprite.anchor.setTo(.5);
+		var howtoTextSprite = this.genHowtoTextSprite();
+		var charSprites = this.genCharSprite(panelSprite);
+		container.hide = function () {
+			for (var key in charSprites) { 
+				charSprites[key].hide(); 
+				charSprites[key].words.hide(); 
+			}
+			panelSprite.hide();
+			howtoTextSprite.hide();
+		};
+		return container;
+	},
+
+	genHowtoTextSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var textStyle = {
+			fill: '#48984b',
+			stroke:'#FFFFFF',
+			multipleStroke:'#48984b',
+		};
+		var text = 'aaaaaaaaaa';
+		// TODO range paragraph
+		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
+		return textSprite;
+	},
+
+	genCharSprite: function (ps) {
+		var s = this.game.global.SpriteManager;
+		var textStyle = {
+			fill: '#dd5a52',
+			stroke:'#FFFFFF',
+			multipleStroke:'#dd5a52',
+		};
+		var spriteConf = [
+			{key:'Mito_1',x:ps.left+20,ax:0,text:'わたくしではじめる'},
+			{key:'Kaede_1',x:ps.right-20,ax:1,text:'燃やせ！エルフの森を燃やせ！'},
+		];
+		var res = [];
+		for (var i=0;i<2;i++) {
+			var c = spriteConf[i];
+			var btnSprite = s.genButton(c.x,ps.bottom-10,c.key,function () {
+				this.Panel.hide();
+				this.play();
+			}, this);
+			btnSprite.anchor.setTo(c.ax,1);
+			btnSprite.alpha = .5;
+			var words = s.genText(btnSprite.centerX,btnSprite.bottom-10,c.text,textStyle);
+			words.hide();
+			btnSprite.words = words;
+			btnSprite.over(function (p) {
+				p.alpha = 1;
+				p.words.show();
+			}, this);
+			btnSprite.out(function (p) {
+				p.alpha = .5;
+				p.words.hide();
+			}, this);
+			res.push(btnSprite);
+		}
+		return res;
 	},
 
 	rand: function (min, max) {

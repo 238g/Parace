@@ -4,18 +4,33 @@ SpriteManager.prototype = {
 	constructor: function (self) {
 		this.self = self;
 	},
-	genSprite: function (x, y, key) {
-		var sprite = this.self.add.sprite(x, y, key);
+	genSprite: function (x, y, key, frame) {
+		var sprite = this.self.add.sprite(x, y, key, (frame||null));
 		sprite.show = function () { sprite.visible = true; };
 		sprite.hide = function () { sprite.visible = false; };
 		return sprite;
 	},
-	genButton: function (x, y, key, func) {
-		var btnSprite = this.self.add.button(x, y, key, func, this.self);
+	genButton: function (x, y, key, func, _self) {
+		_self = _self || this.self;
+		var btnSprite = _self.add.button(x, y, key, func, _self);
+		btnSprite.show = function () { btnSprite.visible = true; };
+		btnSprite.hide = function () { btnSprite.visible = false; };
+		btnSprite.over = function (func, self) {
+			self = self || _self;
+			btnSprite.onInputOver.add(func, self);
+		};
+		btnSprite.out = function (func, self) {
+			self = self || _self;
+			btnSprite.onInputOut.add(func, self);
+		};
+		btnSprite.up = function (func, self) {
+			self = self || _self;
+			btnSprite.onInputUp.add(func, self);
+		};
 		return btnSprite;
 	},
 	genText: function (x, y, text, textStyle) {
-		var self = this.self;
+		var _self = this.self;
 		var commonTextStyle = { 
 			fontSize: '50px', 
 			fill: '#FFFFFF', 
@@ -77,21 +92,21 @@ SpriteManager.prototype = {
 			group.add(multipleTextSprite);
 			group.add(textSprite);
 		};
-		textSprite.onInputOver = function (func) {
+		textSprite.onInputOver = function (func, self) {
 			textSprite.inputEnabled = true;
-			textSprite.events.onInputOver.add(func, self);
+			textSprite.events.onInputOver.add(func, (self || _self));
 		};
-		textSprite.onInputOut = function (func) {
+		textSprite.onInputOut = function (func, self) {
 			textSprite.inputEnabled = true;
-			textSprite.events.onInputOut.add(func, self);
+			textSprite.events.onInputOut.add(func, (self || _self));
 		};
-		textSprite.onInputDown = function (func) {
+		textSprite.onInputDown = function (func, self) {
 			textSprite.inputEnabled = true;
-			textSprite.events.onInputDown.add(func, self);
+			textSprite.events.onInputDown.add(func, (self || _self));
 		};
-		textSprite.onInputUp = function (func) {
+		textSprite.onInputUp = function (func, self) {
 			textSprite.inputEnabled = true;
-			textSprite.events.onInputUp.add(func, self);
+			textSprite.events.onInputUp.add(func, (self || _self));
 		};
 		return textSprite;
 	},

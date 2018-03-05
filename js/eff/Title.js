@@ -47,6 +47,8 @@ BasicGame.Title.prototype = {
 			this.world.centerX, 450, '🌲🌲🌲　エルフの森　🌲🌲🌲', textStyle);
 		this.tweenBeatA(textSprite2);
 		this.tweenBeatA(textSprite2.multipleTextSprite);
+		textSprite.onInputDown(this.play, this);
+		textSprite2.onInputDown(this.play, this);
 	},
 
 	genStartTextSprite: function (textStyle) {
@@ -59,13 +61,7 @@ BasicGame.Title.prototype = {
 		setTimeout(function () { 
 			self.inputEnabled = true; 
 		}, 800);
-		textSprite.onInputDown(function () {
-			if (self.inputEnabled) {
-				this.game.global.SoundManager.play('MenuClick');
-				this.game.global.nextSceen = 'Play';
-				this.state.start(this.game.global.nextSceen);
-			}
-		});
+		textSprite.onInputDown(this.play, this);
 	},
 
 	genFullScreenTextSprite: function (textStyle) {
@@ -73,7 +69,11 @@ BasicGame.Title.prototype = {
 		var x = this.world.width-200;
 		var y = this.world.height-100;
 		var textSprite = s.genText(x, y-50, 'フルスクリーン', textStyle);
-		var textSprite2 = s.genText(x, y+50, 'モードON', textStyle);
+		if (this.scale.isFullScreen) {
+			var textSprite2 = s.genText(x, y+50, 'モードOFF', textStyle);
+		} else {
+			var textSprite2 = s.genText(x, y+50, 'モードON', textStyle);
+		}
 		var toggleFullscreen = function () {
 			if (this.scale.isFullScreen) {
 				textSprite2.changeText('モードON');
@@ -88,8 +88,13 @@ BasicGame.Title.prototype = {
 	},
 
 	genMuteTextSprite: function (textStyle) {
-		var textSprite = this.game.global.SpriteManager.genText(
-			200,this.world.height-100, 'ミュートON', textStyle);
+		if (this.sound.mute) {
+			var textSprite = this.game.global.SpriteManager.genText(
+				200,this.world.height-100, 'ミュートOFF', textStyle);
+		} else {
+			var textSprite = this.game.global.SpriteManager.genText(
+				200,this.world.height-100, 'ミュートON', textStyle);
+		}
 		textSprite.onInputDown(function () {
 			if (this.sound.mute) {
 				textSprite.changeText('ミュートON');
@@ -103,6 +108,14 @@ BasicGame.Title.prototype = {
 
 	tweenBeatA: function (sprite) {
 		this.game.global.TweenManager.beatA(sprite, 220).start();
+	},
+
+	play: function () {
+		if (this.inputEnabled) {
+			this.game.global.SoundManager.play('MenuClick');
+			this.game.global.nextSceen = 'Play';
+			this.state.start(this.game.global.nextSceen);
+		}
 	},
 
 	genBgSprite: function () {

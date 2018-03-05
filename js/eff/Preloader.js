@@ -33,7 +33,8 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		// this.load.atlasJSONHash('player', './images/sirorun/siro_running.png', './images/sirorun/siro_running.json');
+		this.load.atlasXML('greySheet', 
+			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
 			'Elu_1':     './images/eff/elu_1.png',
 			'Tree':      './images/eff/Tree.png',
@@ -41,6 +42,8 @@ BasicGame.Preloader.prototype = {
 			'DeadTree':  './images/eff/DeadTree.png',
 			'Fire_1':    './images/eff/Fire_1.png',
 			'Fire_2':    './images/eff/Fire_2.png',
+			'Mito_1':    './images/eff/mito_1.png',
+			'Kaede_1':   './images/eff/kaede_1.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		var soundAssets = {
