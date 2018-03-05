@@ -10,11 +10,12 @@ SpriteManager.prototype = {
 		sprite.hide = function () { sprite.visible = false; };
 		return sprite;
 	},
-	genButtonSprite: function (x, y, key, func) {
-		var buttonSprite = this.self.add.button(x, y, key, func, this.self);
-		return buttonSprite;
+	genButton: function (x, y, key, func) {
+		var btnSprite = this.self.add.button(x, y, key, func, this.self);
+		return btnSprite;
 	},
 	genText: function (x, y, text, textStyle) {
+		var self = this.self;
 		var commonTextStyle = { 
 			fontSize: '50px', 
 			fill: '#FFFFFF', 
@@ -52,7 +53,7 @@ SpriteManager.prototype = {
 		};
 		textSprite.changeText = function (text) {
 			textSprite.setText(text);
-			if (multipleTextSprite) {
+			if (multipleTextSprite.text || multipleTextSprite.text === '') {
 				multipleTextSprite.setText(text);
 			}
 		};
@@ -67,10 +68,30 @@ SpriteManager.prototype = {
 				if (textSprite[key]) {
 					textSprite[key] = newTextStyle[key];
 				}
-				if (multipleTextSprite && multipleTextSprite[key]) {
+				if (multipleTextSprite[key]) {
 					multipleTextSprite[key] = newTextStyle[key]
 				}
 			}
+		};
+		textSprite.addGroup = function (group) {
+			group.add(multipleTextSprite);
+			group.add(textSprite);
+		};
+		textSprite.onInputOver = function (func) {
+			textSprite.inputEnabled = true;
+			textSprite.events.onInputOver.add(func, self);
+		};
+		textSprite.onInputOut = function (func) {
+			textSprite.inputEnabled = true;
+			textSprite.events.onInputOut.add(func, self);
+		};
+		textSprite.onInputDown = function (func) {
+			textSprite.inputEnabled = true;
+			textSprite.events.onInputDown.add(func, self);
+		};
+		textSprite.onInputUp = function (func) {
+			textSprite.inputEnabled = true;
+			textSprite.events.onInputUp.add(func, self);
 		};
 		return textSprite;
 	},
