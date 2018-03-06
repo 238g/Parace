@@ -51,6 +51,7 @@ BasicGame.Preloader.prototype = {
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		var soundAssets = {
 			'MenuStart':       './sounds/SE/GUI_Sound_Effects/load.wav',
+			'GetPmang':        './sounds/SE/GUI_Sound_Effects/positive.wav',
 			'GameOver':        './sounds/SE/GUI_Sound_Effects/save.wav',
 			'Miss':            './sounds/SE/GUI_Sound_Effects/negative.wav', 
 			'Fire':            './sounds/SE/FireImpact_1.wav', 

@@ -326,6 +326,7 @@ BasicGame.Play.prototype = {
 				this.GC.showPmang = false;
 				this.GC.bonusScore = bonusScore;
 				pmangBtn.hide();
+				this.game.global.SoundManager.play('GetPmang');
 				bonusTextSprite.hide();
 				var self = this;
 				setTimeout(function () {
