@@ -9,14 +9,14 @@ BasicGame.Title.prototype = {
 	create: function () {
 		this.genBgSprite();
 		this.genTextContainer();
-		// this.soundController();
+		this.soundController();
 	},
 
 	soundController: function () {
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		setTimeout(function () {
-			s.play({key:'HappyArcadeTune',isBGM:true,loop:true,volume:.6});
+			s.play({key:'MushroomDance',isBGM:true,loop:true,volume:1,});
 		}, 500);
 	},
 
@@ -68,23 +68,20 @@ BasicGame.Title.prototype = {
 		var s = this.game.global.SpriteManager;
 		var x = this.world.width-200;
 		var y = this.world.height-100;
-		var textSprite = s.genText(x, y-50, 'フルスクリーン', textStyle);
 		if (this.scale.isFullScreen) {
-			var textSprite2 = s.genText(x, y+50, 'モードOFF', textStyle);
+			var textSprite = s.genText(x, y, 'フルスクリーン\nモードOFF', textStyle);
 		} else {
-			var textSprite2 = s.genText(x, y+50, 'モードON', textStyle);
+			var textSprite = s.genText(x, y, 'フルスクリーン\nモードON', textStyle);
 		}
-		var toggleFullscreen = function () {
+		textSprite.onInputDown(function () {
 			if (this.scale.isFullScreen) {
-				textSprite2.changeText('モードON');
+				textSprite.changeText('フルスクリーン\nモードON');
 				this.scale.stopFullScreen(false);
 			} else {
-				textSprite2.changeText('モードOFF');
+				textSprite.changeText('フルスクリーン\nモードOFF');
 				this.scale.startFullScreen(false);
 			}
-		};
-		textSprite.onInputDown(toggleFullscreen);
-		textSprite2.onInputDown(toggleFullscreen);
+		});
 	},
 
 	genMuteTextSprite: function (textStyle) {

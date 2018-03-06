@@ -36,18 +36,25 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Elu_1':     './images/eff/elu_1.png',
-			'Tree':      './images/eff/Tree.png',
-			'TestTree':  './images/eff/TestTree.png',
-			'DeadTree':  './images/eff/DeadTree.png',
-			'Fire_1':    './images/eff/Fire_1.png',
-			'Fire_2':    './images/eff/Fire_2.png',
-			'Mito_1':    './images/eff/mito_1.png',
-			'Kaede_1':   './images/eff/kaede_1.png',
+			'Elu_1':       './images/eff/elu_1.png',
+			'Tree':        './images/eff/Tree.png',
+			// 'TestTree':    './images/eff/TestTree.png',
+			'DeadTree':    './images/eff/DeadTree.png',
+			'Fire_1':      './images/eff/Fire_1.png',
+			'Fire_2':      './images/eff/Fire_2.png',
+			'Mito_1':      './images/eff/mito_1.png',
+			'Kaede_1':     './images/eff/kaede_1.png',
+			'WarotaPmang': './images/eff/TestTree.png', // TODO change
+			'IkaPonPmang': './images/eff/TestTree.png', // TODO change
+			'Flame':       './images/eff/TestTree.png', // TODO change
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		var soundAssets = {
-			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', 
+			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', // TODO change
+			'Fire':            './sounds/SE/FireImpact_1.wav', 
+			'Flame':           './sounds/SE/Fantasy/Spell_02.mp3', 
+			'MushroomDance':   './sounds/BGM/MushroomDance.ogg', 
+			'MushroomsForest': './sounds/BGM/MushroomsForest.ogg', 
 		};
 		for (var key in soundAssets) { this.load.audio(key, soundAssets[key]); }
 	},

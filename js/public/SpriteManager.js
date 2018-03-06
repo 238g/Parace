@@ -15,15 +15,19 @@ SpriteManager.prototype = {
 		var btnSprite = _self.add.button(x, y, key, func, _self);
 		btnSprite.show = function () { btnSprite.visible = true; };
 		btnSprite.hide = function () { btnSprite.visible = false; };
-		btnSprite.over = function (func, self) {
+		btnSprite.UonInputDown = function (func, self) {
+			self = self || _self;
+			btnSprite.onInputDown.add(func, self);
+		};
+		btnSprite.UonInputOver = function (func, self) {
 			self = self || _self;
 			btnSprite.onInputOver.add(func, self);
 		};
-		btnSprite.out = function (func, self) {
+		btnSprite.UonInputOut = function (func, self) {
 			self = self || _self;
 			btnSprite.onInputOut.add(func, self);
 		};
-		btnSprite.up = function (func, self) {
+		btnSprite.UonInputUp = function (func, self) {
 			self = self || _self;
 			btnSprite.onInputUp.add(func, self);
 		};
@@ -40,20 +44,25 @@ SpriteManager.prototype = {
 			multipleStroke: null,
 			multipleStrokeThickness: 10,
 		};
+		var multipleTextStyle = {
+			fontSize: '50px', 
+			fill: '#FFFFFF', 
+			align: 'center', 
+			stroke: '#000000', 
+			strokeThickness: 10, 
+		};
 		for (var key in textStyle) {
 			commonTextStyle[key] = textStyle[key];
+			multipleTextStyle[key] = textStyle[key];
 		}
 		var multipleTextSprite = {};
 		if (commonTextStyle.multipleStroke) {
-			var multipleTextStyle = {
-				fontSize: commonTextStyle.fontSize,
-				fill: commonTextStyle.multipleStroke,
-				align: 'center',
-				stroke: commonTextStyle.multipleStroke,
-				strokeThickness: commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness,
-			};
+			multipleTextStyle.fill = commonTextStyle.multipleStroke;
+			multipleTextStyle.stroke = commonTextStyle.multipleStroke;
+			multipleTextStyle.strokeThickness = commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness;
 			multipleTextSprite = this.self.add.text(x, y, text, multipleTextStyle);
 			multipleTextSprite.anchor.setTo(.5);
+			multipleTextSprite.lineSpacing = -commonTextStyle.multipleStrokeThickness;
 		}
 		var textSprite = this.self.add.text(x, y, text, commonTextStyle);
 		textSprite.anchor.setTo(.5);
