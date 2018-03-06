@@ -6,4 +6,7 @@ https://238g.github.io/Parace/
 
 シロラン (https://238g.github.io/Parace/sirorun.html)
 
+燃やせ！エルフの森！ (https://238g.github.io/Parace/eff.html)
+
+
 https://github.com/238g/Parace

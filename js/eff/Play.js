@@ -22,7 +22,7 @@ BasicGame.Play.prototype = {
 		s.stop('currentBGM');
 		setTimeout(function () {
 			s.stop('currentBGM');
-			s.play({key:'MushroomsForest',isBGM:true,loop:true,volume:1,});
+			s.play({key:'MushroomsForest',isBGM:true,loop:true,volume:.8,});
 		}, 500);
 	},
 
@@ -77,6 +77,7 @@ BasicGame.Play.prototype = {
 	gameOver: function () {
 		this.GC.isPlaying = false;
 		this.HUD.changeTimerText(0);
+		this.game.global.SoundManager.play('GameOver');
 		this.panelGroup = this.add.group();
 		var panelSprite = this.genPanelSprite();
 		var t = this.game.global.TweenManager;
@@ -103,6 +104,7 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX-300;
 		var y = this.world.centerY+200;
 		var btn = s.genButton(x,y,'greySheet',function () {
+			this.game.global.SoundManager.play('MenuStart');
 			this.state.start(this.game.global.nextSceen);
 		},this);
 		btn.frame = 'grey_button00';
@@ -117,6 +119,7 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX+300;
 		var y = this.world.centerY+200;
 		var btn = s.genButton(x,y,'greySheet',function () {
+			this.game.global.SoundManager.play('MenuStart');
 			var text = 'あなたが燃やした森は、燃やし度: '+this.GC.score+' です！\n🔥🔥🌲🌲🔥🔥\n『燃やせ！エルフの森！』';
 			if (this.GC.score == 0) {
 				text = 'あなたが燃やした森は、燃やし度: 0 です！\nあなたはエルフです。人間ではありません。\n🌲🌲🌲🌲🌲🌲\n『燃やせ！エルフの森！』'
@@ -205,7 +208,7 @@ BasicGame.Play.prototype = {
 		pointer.treeNumberTSprite.hide();
 		this.GC.currentTreeCount += 1;
 		this.plusScore();
-		this.game.global.SoundManager.play('Fire');
+		this.game.global.SoundManager.play({key:'Fire',volume:.6,});
 		this.HUD.changeScoreText(this.GC.score);
 		if (pointer.count == pointer.maxTreeCount) {
 			return this.clearField();
@@ -231,13 +234,13 @@ BasicGame.Play.prototype = {
 	missTouch: function () {
 		this.GC.leftTime -= 2;
 		this.genPlusMinusLeftTimeTextSprite(this.HUD.timerTextSprite,'-2');
-		// TODO se
+		this.game.global.SoundManager.play('Miss');
 		this.HUD.changeTimerText(this.GC.leftTime);
 	},
 
 	clearField: function () {
 		var self = this;
-		this.game.global.SoundManager.play('Flame');
+		this.game.global.SoundManager.play({key:'Flame',volume:.8,});
 		setTimeout(function () {
 			self.treeGroup.destroy();
 			self.genFlameSprite();
@@ -257,7 +260,7 @@ BasicGame.Play.prototype = {
 		var t = this.game.global.TweenManager;
 		var s = this.game.global.SpriteManager;
 		var flameSprite = s.genSprite(0, this.world.height, 'Flame');
-		flameSprite.scale.setTo(7,5); // TODO change???
+		flameSprite.scale.setTo(3);
 		var tween = t.moveB(flameSprite, {y:-flameSprite.height},500);
 		t.onComplete(tween, function () { flameSprite.destroy(); }, this);
 		tween.start();
@@ -310,7 +313,7 @@ BasicGame.Play.prototype = {
 			var s = this.game.global.SpriteManager;
 			var pmangBtn = s.genButton(this.world.width-200,80,pmangName);
 			pmangBtn.anchor.setTo(.5);
-			pmangBtn.scale.setTo(.5); // TODO del
+			pmangBtn.scale.setTo(.5);
 			if (pmangName == 'IkaPonPmang') {
 				var text = 'x5';
 				var bonusScore = 5;
@@ -405,14 +408,14 @@ BasicGame.Play.prototype = {
 		var s = this.game.global.SpriteManager;
 		var textStyle = { fill: '#dd5a52', stroke:'#FFFFFF', multipleStroke:'#dd5a52', };
 		var spriteConf = [
-			{key:'Mito_1',x:ps.left+20,ax:0,text:'わたくしではじめる',leftTime:2}, // TODO del
-			// {key:'Mito_1',x:ps.left+20,ax:0,text:'わたくしではじめる',leftTime:30},
-			{key:'Kaede_1',x:ps.right-20,ax:1,text:'燃やせ！エルフの森を燃やせ！',leftTime:60},
+			{key:'Mito_1',x:ps.left+20,ax:0,text:'わたくしではじめる',leftTime:this.GC.leftTime},
+			{key:'Kaede_1',x:ps.right-20,ax:1,text:'燃やせ！エルフの森を燃やせ！',leftTime:this.GC.leftTime*2},
 		];
 		var res = [];
 		for (var i=0;i<2;i++) {
 			var c = spriteConf[i];
 			var btnSprite = s.genButton(c.x,ps.bottom-10,c.key,function (pointer) {
+				this.game.global.SoundManager.play('MenuStart');
 				this.Panel.hide();
 				this.ready(pointer.leftTime);
 			}, this);

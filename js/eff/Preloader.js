@@ -44,13 +44,15 @@ BasicGame.Preloader.prototype = {
 			'Fire_2':      './images/eff/Fire_2.png',
 			'Mito_1':      './images/eff/mito_1.png',
 			'Kaede_1':     './images/eff/kaede_1.png',
-			'WarotaPmang': './images/eff/TestTree.png', // TODO change
-			'IkaPonPmang': './images/eff/TestTree.png', // TODO change
-			'Flame':       './images/eff/TestTree.png', // TODO change
+			'WarotaPmang': './images/eff/Pmang_1.png',
+			'IkaPonPmang': './images/eff/Pmang_2.png',
+			'Flame':       './images/eff/Flame.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		var soundAssets = {
-			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', // TODO change
+			'MenuStart':       './sounds/SE/GUI_Sound_Effects/load.wav',
+			'GameOver':        './sounds/SE/GUI_Sound_Effects/save.wav',
+			'Miss':            './sounds/SE/GUI_Sound_Effects/negative.wav', 
 			'Fire':            './sounds/SE/FireImpact_1.wav', 
 			'Flame':           './sounds/SE/Fantasy/Spell_02.mp3', 
 			'MushroomDance':   './sounds/BGM/MushroomDance.ogg', 

@@ -16,7 +16,7 @@ BasicGame.Title.prototype = {
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		setTimeout(function () {
-			s.play({key:'MushroomDance',isBGM:true,loop:true,volume:1,});
+			s.play({key:'MushroomDance',isBGM:true,loop:true,volume:3,});
 		}, 500);
 	},
 
@@ -109,7 +109,7 @@ BasicGame.Title.prototype = {
 
 	play: function () {
 		if (this.inputEnabled) {
-			this.game.global.SoundManager.play('MenuClick');
+			this.game.global.SoundManager.play('MenuStart');
 			this.game.global.nextSceen = 'Play';
 			this.state.start(this.game.global.nextSceen);
 		}
