@@ -4,7 +4,7 @@ BasicGame.Preloader.prototype = {
 
 	init: function () {
 		this.imgPath = 'images/';
-		this.soundPath = 'sounds/';
+		// this.soundPath = 'sounds/';
 
 		var g = this.game.global;
 		this.charCount = g.charCount;
@@ -152,7 +152,7 @@ BasicGame.Preloader.prototype = {
 
 	loadAssets_Title: function () {
 		var imgPath = this.imgPath;
-		var soundPath = this.soundPath;
+		// var soundPath = this.soundPath;
 		this.load.atlasXML('yellowSheet', imgPath+'/btns/yellowSheet.png', imgPath+'/btns/yellowSheet.xml');
 		this.load.atlasXML('greySheet', imgPath+'/btns/greySheet.png', imgPath+'/btns/greySheet.xml');
 		this.load.atlasXML('redSheet', imgPath+'/btns/redSheet.png', imgPath+'/btns/redSheet.xml');
@@ -160,7 +160,8 @@ BasicGame.Preloader.prototype = {
 
 		var info = this.game.conf.loadSoundInfo;
 		for (var key in info) {
-			this.load.audio(info[key][0], soundPath+info[key][0]+'.'+info[key][1]);
+			// this.load.audio(info[key][0], soundPath+info[key][0]+'.'+info[key][1]);
+			this.load.audio(info[key][0], info[key][1]);
 		}
 	},
 

@@ -218,14 +218,14 @@ BasicGame.Boot.prototype.defineConf = function () {
             },
         },
         loadSoundInfo: [
-            ['selectSE', 'mp3', 'se'],
-            ['cancelSE', 'mp3', 'se'],
-            ['stopwatchSE', 'mp3', 'se'],
-            ['stageSelectBGM', 'wav', 'bgm'],
-            ['closeWindowSE', 'mp3', 'se'],
-            ['openWindowSE', 'mp3', 'se'],
-            ['volumeControlBtnSE', 'mp3', 'se'],
-            ['panelOverSE', 'mp3', 'se'],
+            ['selectSE', ['sounds/selectSE.mp3','sounds/selectSE.wav'], 'se'],
+            ['cancelSE', ['sounds/cancelSE.mp3','sounds/cancelSE.wav'], 'se'],
+            ['stopwatchSE', ['sounds/stopwatchSE.mp3','sounds/stopwatchSE.wav'], 'se'],
+            ['stageSelectBGM', ['sounds/stageSelectBGM.mp3','sounds/stageSelectBGM.wav'], 'bgm'],
+            ['closeWindowSE', ['sounds/closeWindowSE.mp3','sounds/closeWindowSE.wav'], 'se'],
+            ['openWindowSE', ['sounds/openWindowSE.mp3','sounds/openWindowSE.wav'], 'se'],
+            ['volumeControlBtnSE', ['sounds/volumeControlBtnSE.mp3','sounds/volumeControlBtnSE.wav'], 'se'],
+            ['panelOverSE', ['sounds/panelOverSE.mp3','sounds/panelOverSE.wav'], 'se'],
         ],
         langTextInfo: {
             'Title': {
