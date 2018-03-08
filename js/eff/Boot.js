@@ -26,9 +26,9 @@ BasicGame.Boot.prototype = {
 	},
 
 	create: function () {
-		this.defineConst();  // Const.js
+		// this.defineConst();  // Const.js
 		this.defineGlobal(); // Boot.js
-		this.defineConf();   // Conf.js
+		// this.defineConf();   // Conf.js
 
 		var nextSceenName = (__ENV!='prod') ? getQuery('s') || 'Title' : 'Title';
 		this.game.global.nextSceen = nextSceenName;

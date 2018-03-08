@@ -51,14 +51,40 @@ BasicGame.Preloader.prototype = {
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		var soundAssets = {
-			'MenuClick':       './sounds/SE/Menu_Select_00.mp3', 
-			'Jump':            './sounds/SE/phaseJump5.mp3', 
-			'GameOver':        './sounds/VOICE/Female/game_over.ogg', 
-			'LevelUp':         './sounds/VOICE/Female/level_up.ogg', 
-			'HappyArcadeTune': './sounds/BGM/HappyArcadeTune.mp3', 
-			'DaytimeBGM':      './sounds/BGM/ChiptuneAdventuresStage2.wav', 
-			'EveningBGM':      './sounds/BGM/Awake.mp3', 
-			'NightBGM':        './sounds/BGM/RailJet.mp3', 
+			'MenuClick':       [
+				'./sounds/SE/Menu_Select_00.mp3',
+				'./sounds/SE/Menu_Select_00.wav',
+			], 
+			'Jump':            [
+				'./sounds/SE/phaseJump5.mp3',
+				'./sounds/SE/phaseJump5.wav',
+			], 
+			'GameOver':        [
+				'./sounds/VOICE/Female/game_over.mp3',
+				'./sounds/VOICE/Female/game_over.wav',
+				'./sounds/VOICE/Female/game_over.ogg',
+			], 
+			'LevelUp':         [
+				'./sounds/VOICE/Female/level_up.mp3',
+				'./sounds/VOICE/Female/level_up.wav',
+				'./sounds/VOICE/Female/level_up.ogg',
+			], 
+			'HappyArcadeTune': [
+				'./sounds/BGM/HappyArcadeTune.mp3',
+				'./sounds/BGM/HappyArcadeTune.wav',
+			], 
+			'DaytimeBGM':      [
+				'./sounds/BGM/ChiptuneAdventuresStage2.mp3',
+				'./sounds/BGM/ChiptuneAdventuresStage2.wav',
+			], 
+			'EveningBGM':      [
+				'./sounds/BGM/Awake.mp3',
+				'./sounds/BGM/Awake.wav',
+			], 
+			'NightBGM':        [
+				'./sounds/BGM/RailJet.mp3',
+				'./sounds/BGM/RailJet.wav',
+			], 
 
 		};
 		for (var key in soundAssets) { this.load.audio(key, soundAssets[key]); }

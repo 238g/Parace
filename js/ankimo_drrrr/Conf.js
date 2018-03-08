@@ -7,16 +7,48 @@ BasicGame.Boot.prototype.defineConf = function () {
 			'walrus','whale','zebra',
 		],
 		soundAssets: {
-			// key: src
-			'Male_1': './sounds/VOICE/Male/1.ogg', 
-			'Male_2': './sounds/VOICE/Male/2.ogg', 
-			'Male_3': './sounds/VOICE/Male/3.ogg', 
-			'GameOver': './sounds/VOICE/Male/game_over.ogg', 
-			'Go': './sounds/VOICE/Male/go.ogg', 
-			'MenuClick': './sounds/SE/Menu_Select_00.mp3', 
-			'Jump': './sounds/SE/phaseJump3.mp3', 
-			'HappyArcadeTune': './sounds/BGM/HappyArcadeTune.mp3',
-			'TowerDefenseTheme': './sounds/BGM/TowerDefenseTheme.mp3',
+			// key: srcs
+			'Male_1': [
+				'./sounds/VOICE/Male/1.mp3',
+				'./sounds/VOICE/Male/1.wav',
+				'./sounds/VOICE/Male/1.ogg',
+			], 
+			'Male_2': [
+				'./sounds/VOICE/Male/2.mp3',
+				'./sounds/VOICE/Male/2.wav',
+				'./sounds/VOICE/Male/2.ogg',
+			], 
+			'Male_3': [
+				'./sounds/VOICE/Male/3.mp3',
+				'./sounds/VOICE/Male/3.wav',
+				'./sounds/VOICE/Male/3.ogg',
+			], 
+			'GameOver': [
+				'./sounds/VOICE/Male/game_over.mp3',
+				'./sounds/VOICE/Male/game_over.wav',
+				'./sounds/VOICE/Male/game_over.ogg',
+			], 
+			'Go': [
+				'./sounds/VOICE/Male/go.mp3',
+				'./sounds/VOICE/Male/go.wav',
+				'./sounds/VOICE/Male/go.ogg',
+			], 
+			'MenuClick': [
+				'./sounds/SE/Menu_Select_00.mp3',
+				'./sounds/SE/Menu_Select_00.wav',
+			], 
+			'Jump': [
+				'./sounds/SE/phaseJump3.mp3',
+				'./sounds/SE/phaseJump3.wav',
+			], 
+			'HappyArcadeTune': [
+				'./sounds/BGM/HappyArcadeTune.mp3',
+				'./sounds/BGM/HappyArcadeTune.wav',
+			],
+			'TowerDefenseTheme': [
+				'./sounds/BGM/TowerDefenseTheme.mp3',
+				'./sounds/BGM/TowerDefenseTheme.wav',
+			],
 		},
 	};
 };

@@ -49,17 +49,45 @@ BasicGame.Preloader.prototype = {
 			'Flame':       './images/eff/Flame.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
-		var soundAssets = {
-			'MenuStart':       './sounds/SE/GUI_Sound_Effects/load.wav',
-			'GetPmang':        './sounds/SE/GUI_Sound_Effects/positive.wav',
-			'GameOver':        './sounds/SE/GUI_Sound_Effects/save.wav',
-			'Miss':            './sounds/SE/GUI_Sound_Effects/negative.wav', 
-			'Fire':            './sounds/SE/FireImpact_1.wav', 
-			'Flame':           './sounds/SE/Fantasy/Spell_02.mp3', 
-			'MushroomDance':   './sounds/BGM/MushroomDance.ogg', 
-			'MushroomsForest': './sounds/BGM/MushroomsForest.ogg', 
-		};
-		for (var key in soundAssets) { this.load.audio(key, soundAssets[key]); }
+
+		this.loadAudio();
+	},
+
+	loadAudio: function () {
+		this.load.audio('MenuStart', [
+			'./sounds/SE/GUI_Sound_Effects/load.mp3',
+			'./sounds/SE/GUI_Sound_Effects/load.wav',
+		]); 
+		this.load.audio('GetPmang', [
+			'./sounds/SE/GUI_Sound_Effects/positive.mp3',
+			'./sounds/SE/GUI_Sound_Effects/positive.wav',
+		]); 
+		this.load.audio('GameOver', [
+			'./sounds/SE/GUI_Sound_Effects/save.mp3',
+			'./sounds/SE/GUI_Sound_Effects/save.wav',
+		]); 
+		this.load.audio('Miss', [
+			'./sounds/SE/GUI_Sound_Effects/negative.mp3',
+			'./sounds/SE/GUI_Sound_Effects/negative.wav',
+		]); 
+		this.load.audio('Fire', [
+			'./sounds/SE/Fire/FireImpact_1.mp3',
+			'./sounds/SE/Fire/FireImpact_1.wav',
+		]); 
+		this.load.audio('Flame', [
+			'./sounds/SE/Fantasy/Spell_02.mp3',
+			'./sounds/SE/Fantasy/Spell_02.wav',
+		]); 
+		this.load.audio('MushroomDance', [
+			'./sounds/BGM/MushroomDance.mp3',
+			'./sounds/BGM/MushroomDance.wav',
+			'./sounds/BGM/MushroomDance.ogg',
+		]); 
+		this.load.audio('MushroomsForest', [
+			'./sounds/BGM/MushroomsForest.mp3',
+			'./sounds/BGM/MushroomsForest.wav',
+			'./sounds/BGM/MushroomsForest.ogg',
+		]);
 	},
 
 	loadOnlyFirst: function () {
