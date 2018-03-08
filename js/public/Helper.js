@@ -19,3 +19,7 @@ function getYmd () {
 	var d = ('0'+(new Date().getDate())).slice(-2);
 	return Y+'-'+m+'-'+d;
 }
+
+function getTime () {
+	return new Date().getTime();
+}
