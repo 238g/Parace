@@ -28,6 +28,10 @@ BasicGame.Boot.prototype = {
     },
 
     create: function() {
+        if (this.game.device.safari) {
+            return this.add.text(this.world.centerX,this.world.centerY,'safariではプレイできません。',{fill:'#ffffff'}).anchor.setTo(.5);
+        }
+
         var nextSceenName = (__ENV!='prod') ? this.getQuery('s') || 'Title' : 'Title';
         if (this.game.global.loadAll) {
             this.game.global.nextSceen = nextSceenName;
