@@ -81,6 +81,12 @@ SpriteManager.prototype = {
 				multipleTextSprite.setText(text);
 			}
 		};
+		textSprite.setScale = function (x, y) {
+			textSprite.scale.setTo(x, y);
+			if (multipleTextSprite.scale) {
+				multipleTextSprite.scale.setTo(x, y);
+			}
+		};
 		textSprite.move = function (x, y) {
 			textSprite.x = x;
 			textSprite.y = y;

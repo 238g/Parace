@@ -36,7 +36,9 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Elu_1':       './images/eff/elu_1.png',
+			'MiniZombie':       './images/ankimo_drrrr/player.png', // TODO fix
+			'Takashi':       './images/eff/kaede_1.png', // TODO fix
+			'Particle':       './images/eff/fire_1.png', // TODO fix
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 
@@ -44,14 +46,14 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAudio: function () {
-		this.load.audio('MenuStart', [
-			'./sounds/SE/GUI_Sound_Effects/load.mp3',
-			'./sounds/SE/GUI_Sound_Effects/load.wav',
+		this.load.audio('Gunfire', [ // TODO change se!!
+			'./sounds/SE/Gun/mono_shot_weak.mp3',
+			'./sounds/SE/Gun/mono_shot_weak.wav',
 		]);
-		this.load.audio('MushroomsForest', [
-			'./sounds/BGM/MushroomsForest.mp3',
-			'./sounds/BGM/MushroomsForest.wav',
-			'./sounds/BGM/MushroomsForest.ogg',
+		this.load.audio('MushroomDance', [ // TODO fix
+			'./sounds/BGM/MushroomDance.mp3',
+			'./sounds/BGM/MushroomDance.wav',
+			'./sounds/BGM/MushroomDance.ogg',
 		]);
 	},
 
