@@ -8,5 +8,7 @@ https://238g.github.io/Parace/
 
 燃やせ！エルフの森！ (https://238g.github.io/Parace/eff.html)
 
+テンちょう🚫バスたーず (https://238g.github.io/Parace/cafenozombiko.html)
+
 
 https://github.com/238g/Parace
