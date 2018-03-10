@@ -1,17 +1,20 @@
 BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
-		this.stage.backgroundColor = '#5beea0';
 		this.inputEnabled = false;
 		this.Panel = null;
 	},
 
 	create: function () {
-		this.GOP = this.GameOption();
+		this.TOP = this.TextOption();
+		this.genBgSprite();
 		this.btnContainer();
 		this.Panel = this.genPanelContainer();
-		// this.soundController();
+		this.soundController();
+		this.inputController();
+	},
 
+	inputController: function () {
 		this.time.events.add(800, function () {
 			this.inputEnabled = true; 
 		}, this);
@@ -21,8 +24,24 @@ BasicGame.Title.prototype = {
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		setTimeout(function () {
-			s.play({key:'MushroomDance',isBGM:true,loop:true,volume:1,});
+			s.play({key:'HappyBGM_1',isBGM:true,loop:true,volume:1,});
 		}, 500);
+	},
+
+	genBgSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var t = this.game.global.TweenManager;
+		var bgSprite = s.genSprite(-300,this.world.height,'Bg_1');
+		bgSprite.anchor.setTo(0,1);
+		bgSprite.scale.setTo(2);
+		var charSprite = s.genSprite(this.world.centerX,this.world.height,'Zombiko_1');
+		charSprite.anchor.setTo(.5,1);
+		charSprite.scale.setTo(1.5);
+		var duration = 280;
+		t.beatA(charSprite, duration).start();
+		var titleTextSprite = s.genText(this.world.centerX,300,this.game.global.GAME_TITLE,this.TOP.textStyle_T);
+		t.beatA(titleTextSprite, duration).start();
+		t.beatA(titleTextSprite.multipleTextSprite, duration).start();
 	},
 
 	btnContainer: function () {
@@ -37,82 +56,103 @@ BasicGame.Title.prototype = {
 	},
 
 	genStartBtn: function (x,y) {
-		// var startBtnSprite = 
 		this.genBtnTpl(x,y,function () {
-			// TODO popup panel mode select
 			this.play();
-		},'スタート',this.GOP.textStyle_B);
+		},'スターと');
 	},
 
 	genHowtoBtn: function (x,y) {
 		this.genBtnTpl(x,y,function () {
-			this.Panel.show();
-			this.Panel.howto.show();
-		},'遊び方',this.GOP.textStyle_B);
+			this.Panel.howtoShow();
+		},'あそびカタ');
 	},
 
 	genFullScreenBtn: function (x,y) {
-		var text = this.scale.isFullScreen ? 'フルスクリーンOFF' : 'フルスクリーンON';
+		var offText = 'ふルすクり～ンOFF';
+		var onText = 'ふるスクりーンON';
+		var text = this.scale.isFullScreen ? offText : onText;
 		this.genBtnTpl(x,y,function (pointer) {
 			if (this.scale.isFullScreen) {
-				pointer.textSprite.changeText('フルスクリーンON');
+				pointer.textSprite.changeText(onText);
 				this.scale.stopFullScreen(false);
 			} else {
-				pointer.textSprite.changeText('フルスクリーンOFF');
+				pointer.textSprite.changeText(offText);
 				this.scale.startFullScreen(false);
 			}
-		},text,this.GOP.textStyle_B);
+		},text);
 	},
 
 	genMuteBtn: function (x,y) {
-		var text = this.sound.mute ? 'ミュートOFF' : 'ミュートON';
+		var offText = 'みゅートOfF';
+		var onText = 'ミュうと0N';
+		var text = this.sound.mute ? offText : onText;
 		this.genBtnTpl(x,y,function (pointer) {
 			if (this.sound.mute) {
-				pointer.textSprite.changeText('ミュートON');
+				pointer.textSprite.changeText(onText);
 				this.sound.mute = false;
 			} else {
-				pointer.textSprite.changeText('ミュートOFF');
+				pointer.textSprite.changeText(offText);
 				this.sound.mute = true;
 			}
-		},text,this.GOP.textStyle_B);
+		},text);
 	},
 
 	genPanelContainer: function () {
+		var t = this.game.global.TweenManager;
 		var s = this.game.global.SpriteManager;
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
-		panelSprite.scale.setTo(7, 12);
+		panelSprite.scale.setTo(0);
 		panelSprite.anchor.setTo(.5);
+		panelSprite.tint = 0xfaebd7;
 		panelSprite.hide();
-		panelSprite.howto = this.genHowtoText();
+		var howtoTextSprite = this.genHowtoTextSprite();
+		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
+		t.onComplete(tween, function () {
+			if (panelSprite.visible) {
+				howtoTextSprite.show();
+			}
+		}, this);
 		this.game.input.onDown.add(function () {
 			if (panelSprite.visible) {
 				panelSprite.hide();
-				panelSprite.howto.hide();
+				howtoTextSprite.hide();
+				panelSprite.scale.setTo(0);
 			}
 		}, this);
+		panelSprite.howtoShow = function () {
+			panelSprite.show();
+			tween.start();
+		};
 		return panelSprite;
 	},
 
-	genHowtoText: function () {
+	genHowtoTextSprite: function () {
 		var s = this.game.global.SpriteManager;
 		var text = 
-			// TODO fix
-			'木に表示された番号を '
-			+'小さい順にタッチして森を燃やせ！ '
+			'ゾンビ子が生前働いていたカフェの '
+			+'店長（ミニゾンビ）を '
+			+'銃で撃って（タッチして）倒そう！！ '
+			+'小さい店長ほどスコアが高いぞ！ '
 			+' '
-			+'素早く連続タッチで '
-			+'燃やし度アップ！ '
-			+'『ワロタピーマン』と '
-			+'『イカレポンチピーマン』を '
-			+'拾うと秒間 '
-			+'さらに燃やし度アップ！ '
-			+'【キャラタッチでスタート】';
-		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, this.GOP.textStyle_H);
+			+'銃を撃つ度にスコアは減るので '
+			+'無駄撃ちに注意！ '
+			+'人間を倒すと3秒間スコア5倍！ '
+			+'ゾンビ子やタカシを倒すと '
+			+'スコアが減るよ！ '
+			+' '
+			+'高得点を目指して頑張ろう！ '
+			+' '
+			+'※PCでのプレイは '
+			+'スコアが常時1.2倍です。 '
+			+' '
+			+'お問い合わせはこちら '
+			+__DEVELOPER_TWITTER;
+		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, this.TOP.textStyle_H);
 		textSprite.hide();
 		return textSprite;
 	},
 
-	genBtnTpl: function (x,y,func,text,textStyle) {
+	genBtnTpl: function (x,y,func,text) {
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
 		btnSprite.setFrames(
@@ -120,33 +160,44 @@ BasicGame.Title.prototype = {
 			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(2.3);
-		btnSprite.textSprite = s.genText(x,y,text,textStyle);
+		btnSprite.tint = 0xf5deb3;
+		btnSprite.textSprite = s.genText(x,y,text,this.TOP.textStyle_B);
+		btnSprite.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'Click',volume:1,});
+		}, this);
 		return btnSprite;
 	},
 
 	play: function () {
 		if (this.inputEnabled) {
-			// this.game.global.SoundManager.play('MenuStart'); // TODO change
 			this.game.global.nextSceen = 'Play';
 			this.state.start(this.game.global.nextSceen);
 		}
 	},
 
-	GameOption: function () {
+	TextOption: function () {
 		return {
+			textStyle_T: {
+				fontSize:'70px',
+				fill: '#b8860b',
+				stroke:'#f8f8ff',
+				strokeThickness: 10,
+				multipleStroke:'#b8860b',
+				multipleStrokeThickness: 10,
+			},
 			textStyle_B: {
 				fontSize:'45px',
-				fill: '#000000',
+				fill: '#b8860b',
 				stroke:'#FFFFFF',
 				strokeThickness: 10,
-				multipleStroke:'#000000',
+				multipleStroke:'#b8860b',
 				multipleStrokeThickness: 10,
 			},
 			textStyle_H: {
 				fontSize: '40px',
-				fill: '#48984b',
+				fill: '#a0522d',
 				stroke:'#FFFFFF',
-				multipleStroke:'#48984b',
+				multipleStroke:'#a0522d',
 				wordWrap: true,
 				wordWrapWidth: 300,
 			},

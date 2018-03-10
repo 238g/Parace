@@ -9,9 +9,14 @@ BasicGame.Boot.prototype = {
 		this.stage.disableVisibilityChange = true;
 
 		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+		
+		if (this.game.device.desktop) {
+			this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		} else {
+			this.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+		}
 
-		this.scale.parentIsWindow = true ;
+		this.scale.parentIsWindow = true;
 
 		this.scale.refresh();
 	},
@@ -33,6 +38,7 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.game.global = {
+			GAME_TITLE: 'テンちょう🚫バスたーず',
 			nextSceen: null,
 			loadedOnlyFirst: false,
 			SpriteManager: new SpriteManager(this),
