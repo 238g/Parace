@@ -42,6 +42,8 @@ BasicGame.Preloader.prototype = {
 		}
 		this.load.atlasXML('roundAnimals', ip+'/roundAnimals.png', ip+'/roundAnimals.xml');
 		this.load.atlasXML('squareAnimals', ip+'/squareAnimals.png', ip+'/squareAnimals.xml');
+		this.load.atlasXML('greySheet', 
+			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 	},
 
 	loadOnlyFirst: function () {

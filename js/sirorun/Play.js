@@ -49,7 +49,7 @@ BasicGame.Play.prototype = {
 		var self = this;
 		var c = this.game.const;
 		var timer = null;
-		var score = 0;
+		controller.score = 0;
 		controller.currentStage = c.STAGE_1;
 		controller.speed = 1;
 		controller.isPlaying = true;
@@ -59,8 +59,8 @@ BasicGame.Play.prototype = {
 		controller.scoreCountToGoToStage4 = 90;
 		controller.scoreCountToGoToStage5 = 120;
 		controller.plusScore = function () {
-			score += 1;
-			self.HUD.changeScore('スコア: ' + score);
+			controller.score += 1;
+			self.HUD.changeScore('スコア: ' + controller.score);
 		};
 		controller.setObstacleTimer = function () {
 			if (timer) { self.time.events.remove(timer); }
@@ -82,25 +82,26 @@ BasicGame.Play.prototype = {
 				controller.okToTop = true;
 			}, 1000);
 			this.Result.show();
+			this.Result.tweetBtn.allShow();
 			this.HUD.showGameOver();
 		}; // <- bind(this)
 		controller.checkStageLevel = function () {
-			if (score >= this.scoreCountToGoToStage5 && this.currentStage == c.STAGE_4) {
+			if (controller.score >= this.scoreCountToGoToStage5 && this.currentStage == c.STAGE_4) {
 				this.setStageLevel(c.STAGE_5);
 				if (__ENV!='prod') { self.bg.evening(); }
-			} else if (score >= this.scoreCountToGoToStage4 && this.currentStage == c.STAGE_3) {
+			} else if (controller.score >= this.scoreCountToGoToStage4 && this.currentStage == c.STAGE_3) {
 				this.setStageLevel(c.STAGE_4);
 				if (__ENV!='prod') { self.bg.daytime(); }
-			} else if (score >= this.scoreCountToGoToStage3 && this.currentStage == c.STAGE_2) {
+			} else if (controller.score >= this.scoreCountToGoToStage3 && this.currentStage == c.STAGE_2) {
 				this.setStageLevel(c.STAGE_3);
 				if (__ENV!='prod') { self.bg.night(); }
-			} else if (score >= this.scoreCountToGoToStage2 && this.currentStage == c.STAGE_1) {
+			} else if (controller.score >= this.scoreCountToGoToStage2 && this.currentStage == c.STAGE_1) {
 				this.setStageLevel(c.STAGE_2);
 				if (__ENV!='prod') { self.bg.evening(); }
 			}
 		};
 		controller.bgColor = function () {
-			var remainder = score % 90;
+			var remainder = controller.score % 90;
 			if (remainder == 0) {
 				self.bg.daytime();
 			} else if (remainder == 30) {
@@ -264,11 +265,11 @@ BasicGame.Play.prototype = {
 	},
 
 	inputController: function () {
-		this.game.input.onDown.add(function (/*pointer, event*/) {
+		this.game.input.onDown.add(function (pointer) {
 			if (this.GAME.isPlaying) {
 				this.player.jump();
 			} else {
-				if (this.GAME.okToTop) {
+				if (this.GAME.okToTop && !pointer.targetObject) {
 					this.game.global.nextSceen = 'Title';
 					this.state.start(this.game.global.nextSceen);
 				}
@@ -385,7 +386,61 @@ BasicGame.Play.prototype = {
 		};
 		// .to(properties [, duration] [, ease] [, autoStart] [, delay] [, repeat] [, yoyo])
 		sprite.tween = this.add.tween(sprite).to({x: this.world.width-10}, 100, Phaser.Easing.Bounce.InOut, false, 0, -1, true);
+		sprite.tweetBtn = this.genTweetBtnSprite();
 		return sprite;
+	},
+
+	genTweetBtnSprite: function () {
+		var btnSprite = this.genBtnTpl(250,80,this.tweet,'結果をツイート');
+		btnSprite.hide();
+		btnSprite.textSprite.hide();
+		var self = this;
+		btnSprite.allShow = function () {
+			btnSprite.show();
+			btnSprite.textSprite.show();
+		};
+		return btnSprite;
+	},
+
+	genBtnTpl: function (x,y,func,text) {
+		var textStyle = {
+			fontSize:'40px',
+		};
+		var s = this.game.global.SpriteManager;
+		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
+		btnSprite.setFrames(
+			// overFrame, outFrame, downFrame, upFrame
+			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.anchor.setTo(.5);
+		btnSprite.scale.setTo(2);
+		btnSprite.tint = 0x5fa0dc;
+		btnSprite.textSprite = s.genText(x,y,text,textStyle);
+		btnSprite.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'MenuClick',volume:1,});
+		}, this);
+		return btnSprite;
+	},
+
+	tweet: function () {
+		var addText = '';
+		for (var i=0;i<6;i++) {
+			var rndNum = this.rnd.integerInRange(1,10);
+			if (rndNum == 1) {
+				addText += '🐴';
+			} else {
+				addText += '🐬';		
+			}
+		}
+		var text = 'あなたのスコアは '+this.GAME.score+' です！\n'+addText+'\n『シロラン』';
+		var tweetText = encodeURIComponent(text);
+		var tweetUrl = location.href;
+		var tweetHashtags = 'シロゲーム,シロラン'; // 'A,B,C'
+		window.open(
+			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
+			'share window', 
+			'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+		);
+		return false;
 	},
 
 	test: function () {

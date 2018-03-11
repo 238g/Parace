@@ -5,9 +5,26 @@ SpriteManager.prototype = {
 		this.self = self;
 	},
 	genSprite: function (x, y, key, frame) {
+		_self = this.self;
 		var sprite = this.self.add.sprite(x, y, key, (frame||null));
 		sprite.show = function () { sprite.visible = true; };
 		sprite.hide = function () { sprite.visible = false; };
+		sprite.UonInputOver = function (func, self) {
+			sprite.inputEnabled = true;
+			sprite.events.onInputOver.add(func, (self || _self));
+		};
+		sprite.UonInputOut = function (func, self) {
+			sprite.inputEnabled = true;
+			sprite.events.onInputOut.add(func, (self || _self));
+		};
+		sprite.UonInputDown = function (func, self) {
+			sprite.inputEnabled = true;
+			sprite.events.onInputDown.add(func, (self || _self));
+		};
+		sprite.UonInputUp = function (func, self) {
+			sprite.inputEnabled = true;
+			sprite.events.onInputUp.add(func, (self || _self));
+		};
 		return sprite;
 	},
 	genButton: function (x, y, key, func, _self) {

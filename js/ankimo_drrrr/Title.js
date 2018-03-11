@@ -8,6 +8,7 @@ BasicGame.Title.prototype = {
 	create: function () {
 		this.genBG();
 		this.genTextContainer();
+		this.genBtnContainer();
 		this.soundController();
 		setTimeout(function () { this.inputController(); }.bind(this), 500);
 	},
@@ -47,10 +48,12 @@ BasicGame.Title.prototype = {
 	},
 
 	inputController: function () {
-		this.game.input.onDown.add(function (/*pointer, event*/) {
-			this.game.global.SoundManager.play('MenuClick');
-			this.game.global.nextSceen = 'Play';
-			this.state.start(this.game.global.nextSceen);
+		this.game.input.onDown.add(function (pointer) {
+			if (!pointer.targetObject) {
+				this.game.global.SoundManager.play('MenuClick');
+				this.game.global.nextSceen = 'Play';
+				this.state.start(this.game.global.nextSceen);
+			}
 		}, this);
 	},
 
@@ -81,6 +84,57 @@ BasicGame.Title.prototype = {
 		);
 		this.tween(textSprite);
 		this.tween(textSprite.multipleTextSprite);
+	},
+
+	genBtnContainer: function () {
+		var textStyle = {
+			fontSize:'40px',
+		};
+		this.genFullScreenBtnSprite(220,80,textStyle);
+		this.genMuteBtnSprite(this.world.width-220,this.world.height-80,textStyle);
+	},
+
+	genFullScreenBtnSprite: function (x,y,textStyle) {
+		var offText = 'フルスクリーンOFF';
+		var onText = 'フルスクリーンON';
+		var text = this.scale.isFullScreen ? offText : onText;
+		this.genBtnTpl(x,y,function (pointer) {
+			if (this.scale.isFullScreen) {
+				pointer.textSprite.changeText(onText);
+				this.scale.stopFullScreen(false);
+			} else {
+				pointer.textSprite.changeText(offText);
+				this.scale.startFullScreen(false);
+			}
+		},text,textStyle);
+	},
+
+	genMuteBtnSprite: function (x,y,textStyle) {
+		var offText = 'ミュートOFF';
+		var onText = 'ミュートON';
+		var text = this.sound.mute ? offText : onText;
+		this.genBtnTpl(x,y,function (pointer) {
+			if (this.sound.mute) {
+				pointer.textSprite.changeText(onText);
+				this.sound.mute = false;
+			} else {
+				pointer.textSprite.changeText(offText);
+				this.sound.mute = true;
+			}
+		},text,textStyle);
+	},
+
+	genBtnTpl: function (x,y,func,text,textStyle) {
+		var s = this.game.global.SpriteManager;
+		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
+		btnSprite.setFrames(
+			// overFrame, outFrame, downFrame, upFrame
+			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.anchor.setTo(.5);
+		btnSprite.scale.setTo(2);
+		btnSprite.tint = 0xe68946;
+		btnSprite.textSprite = s.genText(x,y,text,textStyle);
+		return btnSprite;
 	},
 
 	tween: function (sprite) {

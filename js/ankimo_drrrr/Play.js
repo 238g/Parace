@@ -97,9 +97,11 @@ BasicGame.Play.prototype = {
 			}, this);
 		} else {
 			this.game.input.onDown.removeAll();
-			this.game.input.onDown.add(function (/*pointer, event*/) {
-				this.game.global.nextSceen = 'Title';
-				this.state.start(this.game.global.nextSceen);
+			this.game.input.onDown.add(function (pointer) {
+				if (!pointer.targetObject) {
+					this.game.global.nextSceen = 'Title';
+					this.state.start(this.game.global.nextSceen);
+				}
 			}, this);
 		}
 	},
@@ -213,15 +215,20 @@ BasicGame.Play.prototype = {
 		HUDController.changeScore = scoreTextSprite.changeText;
 		HUDController.resultView = function () {
 			scoreTextSprite.scale.setTo(0);
+			scoreTextSprite.multipleTextSprite.scale.setTo(0);
 			scoreTextSprite.move(this.world.centerX, this.world.centerY);
 			scoreTextSprite.setTextStyle({fontSize: '100px'});
 			scoreTextSprite.tween.start();
+			scoreTextSprite.tween2.start();
 			gameOverTextSprite.show();
 			gameOverTextSprite.tween.start();
+			gameOverTextSprite.tween2.start();
 			setTimeout(function () {
 				backToTopTextSprite.show();
 				backToTopTextSprite.tween.start();
+				backToTopTextSprite.tween2.start();
 			}, this.finishDuration);
+			this.genTweetBtnSprite();
 		}.bind(this);
 		return HUDController;
 	},
@@ -240,6 +247,7 @@ BasicGame.Play.prototype = {
 			this.world.centerX, 50, 'スコア: ' + this.score, textStyle
 		);
 		textSprite.tween = this.add.tween(textSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
+		textSprite.tween2 = this.add.tween(textSprite.multipleTextSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
 		return textSprite;
 	},
 
@@ -250,7 +258,9 @@ BasicGame.Play.prototype = {
 		);
 		textSprite.hide();
 		textSprite.scale.setTo(0);
+		textSprite.multipleTextSprite.scale.setTo(0);
 		textSprite.tween = this.add.tween(textSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
+		textSprite.tween2 = this.add.tween(textSprite.multipleTextSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
 		return textSprite;
 	},
 
@@ -261,7 +271,9 @@ BasicGame.Play.prototype = {
 		);
 		textSprite.hide();
 		textSprite.scale.setTo(0);
+		textSprite.multipleTextSprite.scale.setTo(0);
 		textSprite.tween = this.add.tween(textSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
+		textSprite.tween2 = this.add.tween(textSprite.multipleTextSprite.scale).to({x: 1, y: 1}, 1000, Phaser.Easing.Elastic.Out);
 		return textSprite;
 	},
 
@@ -288,6 +300,34 @@ BasicGame.Play.prototype = {
 			this.inputController();
 		}.bind(this), this.finishDuration);
 		this.HUD.resultView();
+	},
+
+	genTweetBtnSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var x = this.world.centerX;
+		var y = this.world.centerY+320;
+		var btnSprite = s.genButton(x,y,'greySheet',this.tweet,this);
+		btnSprite.setFrames(
+			// overFrame, outFrame, downFrame, upFrame
+			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.anchor.setTo(.5);
+		btnSprite.scale.setTo(2);
+		btnSprite.tint = 0xe68946;
+		btnSprite.textSprite = s.genText(x,y,'結果をツイート',{ fontSize:'40px', });
+		return btnSprite;
+	},
+
+	tweet: function () {
+		var text = 'あなたのスコアは '+this.score+' です！\n🐻🐻🐻🐻🐻🐻\n『レッツ・あん肝！』';
+		var tweetText = encodeURIComponent(text);
+		var tweetUrl = location.href;
+		var tweetHashtags = 'そらゲーム,あん肝ゲーム'; // 'A,B,C'
+		window.open(
+			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
+			'share window', 
+			'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+		);
+		return false;
 	},
 
 	/*	

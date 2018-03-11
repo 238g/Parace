@@ -9,7 +9,12 @@ BasicGame.Boot.prototype = {
 		this.stage.disableVisibilityChange = true;
 
 		this.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
-		this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		
+		if (this.game.device.desktop) {
+			this.scale.fullScreenScaleMode = Phaser.ScaleManager.SHOW_ALL;
+		} else {
+			this.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
+		}
 
         this.scale.parentIsWindow = true ;
 

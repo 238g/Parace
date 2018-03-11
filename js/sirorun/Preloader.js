@@ -35,6 +35,8 @@ BasicGame.Preloader.prototype = {
 	loadAssets: function () {
 		// MEMO this.load.baseURL = 'https://238g.github.io/Parace/';
 		this.load.atlasJSONHash('player', './images/sirorun/siro_running.png', './images/sirorun/siro_running.json');
+		this.load.atlasXML('greySheet', 
+			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
 			'obstacle_1':   './images/sirorun/virtual_1.png',
 			'obstacle_2':   './images/sirorun/virtual_2.png',
