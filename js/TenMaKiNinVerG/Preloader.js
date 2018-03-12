@@ -32,13 +32,20 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Bg_1':         './images/cafenozombiko/Bg_1.jpg',
+			'Char_T': './images/cafenozombiko/Human.png',
+			'Char_M': './images/cafenozombiko/Human.png',
+			'Char_K': './images/cafenozombiko/Human.png',
+			'Char_N': './images/cafenozombiko/Human.png',
+			'Char_G': './images/cafenozombiko/Human.png',
+			// 'STONES':         '../../test/STONES.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
+		this.load.spritesheet('STONES', '../../test/STONES.png', 64, 64); // TODO fix
 		this.loadAudio();
 	},
 
 	loadAudio: function () {
+		/*
 		this.load.audio('HumanVoice', [
 			'./sounds/VOICE/VSEL/Human/Human_Good_06.mp3',
 			'./sounds/VOICE/VSEL/Human/Human_Good_06.wav',
@@ -52,6 +59,7 @@ BasicGame.Preloader.prototype = {
 			'./sounds/BGM/HappyBGM_2.mp3',
 			'./sounds/BGM/HappyBGM_2.wav',
 		]);
+		*/
 	},
 
 	loadOnlyFirst: function () {

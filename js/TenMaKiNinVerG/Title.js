@@ -2,13 +2,15 @@ BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
 		this.inputEnabled = false;
+		this.Panel = {};
 	},
 
 	create: function () {
 		this.genBgContainer();
 		this.genBtnContainer();
+		this.Panel = this.genPanelContainer();
 		// this.soundController();
-		// this.inputController();
+		this.inputController();
 	},
 
 	inputController: function () {
@@ -26,6 +28,9 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgContainer: function () {
+		// TODO char sprite
+		// TODO random char float,swim and move
+		// TODO game title
 	},
 
 	genBtnContainer: function () {
@@ -49,23 +54,22 @@ BasicGame.Title.prototype = {
 
 	genStartBtn: function (x,y,textStyle) {
 		var text = 'スタート';
-		var tint = 0xffffff;
 		this.genLabel(x,y,function () {
-		},text,textStyle,tint);
+			this.Panel.selectShow();
+		},text,textStyle,'K');
 	},
 
 	genHowtoBtn: function (x,y,textStyle) {
 		var text = '遊び方';
-		var tint = 0xffffff;
 		this.genLabel(x,y,function () {
-		},text,textStyle,tint);
+			this.Panel.howtoShow();
+		},text,textStyle,'N');
 	},
 
 	genMuteBtnSprite: function (x,y,textStyle) {
 		var offText = 'ミュートOFF';
 		var onText = 'ミュートON';
 		var text = this.sound.mute ? offText : onText;
-		var tint = 0x953ac3;
 		this.genLabel(x,y,function (pointer) {
 			if (this.sound.mute) {
 				pointer.textSprite.changeText(onText);
@@ -74,14 +78,13 @@ BasicGame.Title.prototype = {
 				pointer.textSprite.changeText(offText);
 				this.sound.mute = true;
 			}
-		},text,textStyle,tint);
+		},text,textStyle,'T');
 	},
 
 	genFullScreenBtnSprite: function (x,y,textStyle) {
 		var offText = 'フルスクリーンOFF';
 		var onText = 'フルスクリーンON';
 		var text = this.scale.isFullScreen ? offText : onText;
-		var tint = 0xee2324;
 		this.genLabel(x,y,function (pointer) {
 			if (this.scale.isFullScreen) {
 				pointer.textSprite.changeText(onText);
@@ -90,23 +93,201 @@ BasicGame.Title.prototype = {
 				pointer.textSprite.changeText(offText);
 				this.scale.startFullScreen(false);
 			}
-		},text,textStyle,tint);
+		},text,textStyle,'M');
 	},
 
-	genLabel: function (x,y,func,text,textStyle,tint) {
+	genLabel: function (x,y,func,text,textStyle,charType) {
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
-		btnSprite.setFrames(
-			// overFrame, outFrame, downFrame, upFrame
+		btnSprite.setFrames( // overFrame, outFrame, downFrame, upFrame
 			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(2.2);
-		btnSprite.tint = tint;
+		btnSprite.tint = this.game.conf.CharInfo[charType].color;
 		btnSprite.textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
+			// TODO sound
 			// this.game.global.SoundManager.play({key:'Click',volume:1,});
 		}, this);
 		return btnSprite;
+	},
+
+	genPanelContainer: function () {
+		var c = {};
+		var panelSprite = this.genPanelSprite();
+		var selectContainer = this.genSelectContainer();
+		var howtoTextSprite = this.genHowtoTextSprite();
+		var t = this.game.global.TweenManager;
+		t.onComplete(panelSprite.popUpTween, function () {
+			if (panelSprite.visible) {
+				if (panelSprite.showWhat == 'select') {
+					selectContainer.show();
+				} else {
+					howtoTextSprite.show();
+				}
+			}
+		}, this);
+		c.selectShow = function () {
+			panelSprite.show();
+			panelSprite.showWhat = 'select';
+			panelSprite.popUpTween.start();
+		};
+		c.howtoShow = function () {
+			panelSprite.show();
+			panelSprite.showWhat = 'howto';
+			panelSprite.popUpTween.start();
+		};
+		this.game.input.onDown.add(function (p) {
+			if (panelSprite.visible) {
+				var t = p.targetObject;
+				if (t && t.sprite && t.sprite.charType) { return; }
+				panelSprite.hide();
+				howtoTextSprite.hide();
+				selectContainer.hide();
+				panelSprite.scale.setTo(0);
+			}
+		}, this);
+		return c;
+	},
+
+	genPanelSprite: function () {
+		var t = this.game.global.TweenManager;
+		var s = this.game.global.SpriteManager;
+		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
+		panelSprite.scale.setTo(0);
+		panelSprite.anchor.setTo(.5);
+		// panelSprite.tint = 0xfaebd7; // TODO think....
+		panelSprite.hide();
+		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
+		panelSprite.popUpTween = tween;
+		return panelSprite;
+	},
+
+	genSelectContainer: function () {
+		var c = {};
+		var selectTitleTextSprite = this.genSelectTitleTextSprite();
+		var charGroup = this.add.group();
+		for (var key in this.game.conf.CharInfo) {
+			this.genCharContainer(key,charGroup);
+		}
+		charGroup.visible = false;
+		c.show = function () {
+			selectTitleTextSprite.show();
+			charGroup.visible = true;
+		};
+		c.hide = function () {
+			selectTitleTextSprite.hide();
+			charGroup.visible = false;
+		};
+		return c;
+	},
+
+	genSelectTitleTextSprite: function () {
+		var textStyle = {
+			fontSize: '60px',
+			fill: '#a0522d', // TODO color
+			stroke:'#FFFFFF',
+			multipleStroke:'#a0522d', // TODO color
+		};
+		var s = this.game.global.SpriteManager;
+		var text = 'キャラクター選択';
+		var textSprite = s.genText(this.world.centerX, 280, text, textStyle);
+		textSprite.hide();
+		return textSprite;
+	},
+
+	genCharContainer: function (charType, group) {
+		var x=this.world.centerX,y=this.world.centerY+50,xm=200,ym=320;
+		switch (charType) {
+			case 'T': x-=xm;y-=ym;break;
+			case 'M': x+=xm;y-=ym;break;
+			case 'K': x-=xm;y+=ym;break;
+			case 'N': x+=xm;y+=ym;break;
+			case 'G': break;
+		}
+		var frameSprite = this.genCharFrameSprite(x,y,charType);
+		var charSprite = this.genCharSprite(x,y,charType);
+		var charNameTextSprite = this.genCharNameTextSprite(x,y,charType);
+		var modeTextSprite = this.genModeTextSprite(x,y,charType);
+		group.add(frameSprite);
+		group.add(charSprite);
+		group.add(charNameTextSprite);
+		group.add(modeTextSprite);
+	},
+
+	genCharFrameSprite: function (x,y,charType) {
+		var s = this.game.global.SpriteManager;
+		var frameSprite = s.genButton(x,y, 'greySheet', this.selectedChar, this);
+		frameSprite.frameName = 'grey_panel';
+		frameSprite.anchor.setTo(.5);
+		frameSprite.scale.setTo(3);
+		frameSprite.charType = charType;
+		frameSprite.tint = this.game.conf.CharInfo[charType].color;
+		return frameSprite;
+	},
+
+	genCharSprite: function (x,y,charType) {
+		var s = this.game.global.SpriteManager;
+		var sprite = s.genSprite(x,y,'Char_'+charType);
+		sprite.anchor.setTo(.5);
+		return sprite;
+	},
+
+	genCharNameTextSprite: function (x,y,charType) {
+		var textStyle = { fontSize: '30px', };
+		var text = this.game.conf.CharInfo[charType].name;
+		var s = this.game.global.SpriteManager;
+		var textSprite = s.genText(x,y+120,text,textStyle);
+		return textSprite;
+	},
+
+	genModeTextSprite: function (x,y,charType) {
+		var textStyle = { fontSize: '40px', };
+		var text = this.game.conf.CharInfo[charType].modeName;
+		var s = this.game.global.SpriteManager;
+		var textSprite = s.genText(x,y-120,text,textStyle);
+		return textSprite;
+	},
+
+	selectedChar: function (p) {
+		// TODO sound
+		// this.game.global.SoundManager.play({key:'Click',volume:1,});
+		this.game.global.currentMode = this.game.conf.CharInfo[p.charType].mode;
+		// this.play();
+	},
+
+	genHowtoTextSprite: function () {
+		var textStyle = {
+			fontSize: '40px',
+			fill: '#a0522d',
+			stroke:'#FFFFFF',
+			multipleStroke:'#a0522d',
+			wordWrap: true,
+			wordWrapWidth: 300,
+		};
+		var s = this.game.global.SpriteManager;
+		var text = 
+			'ゾンビ子が生前働いていたカフェの '
+			+'店長（ミニゾンビ）を '
+			+'タッチして倒そう！！ '
+			+'小さい店長ほどスコアが高いぞ！ '
+			+' '
+			+'タッチする度にスコアは減るので '
+			+'タッチのしすぎに注意！ '
+			+'人間を倒すと3秒間スコア5倍！ '
+			+'ゾンビ子やタカシを倒すと '
+			+'スコアが減るよ！ '
+			+' '
+			+'高得点を目指して頑張ろう！ '
+			+' '
+			+'※PCでのプレイは '
+			+'スコアが常時1.2倍です。 '
+			+' '
+			+'お問い合わせはこちら '
+			+__DEVELOPER_TWITTER;
+		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
+		textSprite.hide();
+		return textSprite;
 	},
 
 	play: function () {

@@ -1,76 +1,351 @@
 BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () {
-		this.GOP = {};
+		this.GC = {};
 		this.HUD = {};
+		this.stoneGroup = {};
 	},
 
 	create: function () {
+		this.GC = this.GameController();
+		this.inputController();
+		this.spawnBoard();
+		this.HUD = this.genHUDContainer();
+		this.start();
 		this.test();
 	},
 
-	genBgSprite: function () {
-	},
-
-	inputController: function () {
-	},
-
-	soundController: function () {
-		var s = this.game.global.SoundManager;
-		s.stop('currentBGM');
-		setTimeout(function () {
-			s.stop('currentBGM');
-			s.play({key:'HappyBGM_2',isBGM:true,loop:true,volume:1.2,});
-		}, 1800);
-	},
-
-	update: function () {
-		if (this.GOP.isPlaying) {
-			this.timeManager();
-		}
-	},
-
-	timeManager: function () {
-		this.GOP.timeCounter += this.time.elapsed;
-		if (this.GOP.timeCounter > 1000) {
-			this.GOP.timeCounter = 0;
-			this.GOP.leftTime--;
-			this.HUD.changeTime(this.GOP.leftTime);
-		}
-		if (this.GOP.leftTime <= 0) {
-			this.gameOver();
-		}
-	},
-
-	GameOption: function () {
+	GameController: function () {
 		return {
 			isPlaying: false,
 			score: 0,
 			leftTime: 30,
 			timeCounter: 0,
+			BOARD_COLS: 8,
+			BOARD_ROWS: 10,
+			STONE_SIZE_SPACED: 66,
+			MATCH_MIN: 3,
+			allowInput: false,
+			selectedStoneStartPos: {x:0,y:0},
+			selectedStone: null,
+			tempShiftedStone: null,
+			selectedStoneTween: null,
 		};
+	},
+
+	genBgContainer: function () {
+	},
+
+	inputController: function () {
+		console.log(this);
+		this.input.addMoveCallback(this.slideStone, this);
+	},
+
+	soundController: function () {
+		var s = this.game.global.SoundManager;
+		s.stop('currentBGM');
+		// TODO fix time 1800 ->
+		this.time.events.add(1800, function () {
+			s.stop('currentBGM');
+			s.play({key:'HappyBGM_2',isBGM:true,loop:true,volume:1.2,});
+		}, this);
+	},
+
+	update: function () {
+		if (this.GC.isPlaying) {
+			this.timeManager();
+		}
+	},
+
+	timeManager: function () {
+		this.GC.timeCounter += this.time.elapsed;
+		if (this.GC.timeCounter > 1000) {
+			this.GC.timeCounter = 0;
+			this.GC.leftTime--;
+			this.HUD.changeTime(this.GC.leftTime);
+		}
+		if (this.GC.leftTime <= 0) {
+			this.gameOver();
+		}
+	},
+
+	spawnBoard: function () {
+		this.stoneGroup = this.add.group();
+		for (var i=0;i<this.GC.BOARD_COLS;i++) {
+			for (var j=0;j<this.GC.BOARD_ROWS;j++) {
+				var stone = this.stoneGroup.create(i*this.GC.STONE_SIZE_SPACED, j*this.GC.STONE_SIZE_SPACED, 'STONES');
+				stone.name = 'stone_'+i+'_'+j;
+				stone.inputEnabled = true;
+				stone.events.onInputDown.add(this.selectStone, this);
+				stone.events.onInputUp.add(this.releaseStone, this);
+				this.randomizeStone(stone);
+				// this.setStonePos(stone, i, j); // need????
+				stone.kill();
+			}
+		}
+		this.removeKilledStones();
+		// var dropStoneDuration = this.dropStones(); // need???
+		var dropStoneDuration = 10; // ok???
+		this.time.events.add(dropStoneDuration*100, this.refillBoard, this); // duration 1000 fixed???
+		this.GC.allowInput = false; // need?
+		this.GC.selectedStone = null; // need?
+		this.GC.tempShiftedStone = null; // need?
+	},
+
+	selectStone: function (stone) {
+		if (this.GC.allowInput) {
+			this.GC.selectedStone = stone;
+			this.GC.selectedStoneStartPos.x = stone.posX;
+			this.GC.selectedStoneStartPos.y = stone.posY;
+		}
+	},
+
+	releaseStone: function () {
+		if (this.GC.tempShiftedStone === null) {
+			this.GC.selectedStone = null;
+			return;
+		}
+		var canKill = this.checkAndKillStoneMatches(this.GC.selectedStone);
+		canKill = this.checkAndKillStoneMatches(this.GC.tempShiftedStone) || canKill;
+		if (!canKill) {
+			var stone = this.GC.selectedStone;
+			if (stone.posX!==this.GC.selectedStoneStartPos.x||stone.posY!==this.GC.selectedStoneStartPos.y) {
+				if (this.GC.selectedStoneTween!==null) {
+					this.tweens.remove(this.GC.selectedStoneTween);
+				}
+				this.GC.selectedStoneTween = this.tweenStonePos(stone, this.selectedStoneStartPos.x, this.selectedStoneStartPos.y);
+				if (this.GC.tempShiftedStone!==null) {
+					this.tweenStonePos(this.GC.tempShiftedStone, stone.posX, stone.posY);
+				}
+				this.swapStonePosition(stone, this.GC.tempShiftedStone);
+				this.GC.tempShiftedStone = null;
+			}
+		}
+		this.removeKilledStones();
+		var dropStoneDuration = this.dropStones();
+		this.time.events.add(dropStoneDuration*100,this.refillBoard,this);
+		this.GC.allowInput = false;
+		this.GC.selectedStone = null;
+		this.GC.tempShiftedStone = null;
+	},
+
+	// TODO https://phaser.io/examples/v2/games/gemmatch
+	slideStone: function (pointer, x, y) {
+		if (this.GC.selectedStone && pointer.isDown) {
+			var cursorStonePosX = this.getStonePos(x);
+			var cursorStonePosY = this.getStonePos(y);
+			if (this.checkIfStoneCanBeMovedHere(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY)) {
+				if (cursorStonePosX!==this.GC.selectedStone.posX||cursorStonePosY!==this.GC.selectedStone.posY) {
+					if (this.GC.selectedStoneTween!==null) {
+						this.tweens.remove(this.GC.selectedStoneTween);
+					}
+					this.GC.selectedStoneTween = this.tweenStonePos(this.GC.selectedStone, cursorStonePosX, cursorStonePosY);
+					this.stoneGroup.bringToTop(this.GC.selectedStone);
+					if (this.GC.tempShiftedStone!==null) {
+						this.tweenStonePos(this.GC.tempShiftedStone, this.GC.selectedStone.posX, this.GC.selectedStone.posY);
+						this.swapStonePosition(this.GC.selectedStone, this.GC.tempShiftedStone);
+					}
+					this.GC.tempShiftedStone = this.getStone(cursorStonePosX, cursorStonePosY);
+					if (this.GC.tempShiftedStone===this.GC.selectedStone) {
+						this.GC.tempShiftedStone = null;
+					} else {
+						this.tweenStonePos(this.GC.tempShiftedStone, this.GC.selectedStone.posX, this.GC.selectedStone.posY);
+						this.swapStonePosition(this.GC.selectedStone, this.GC.tempShiftedStone);
+					}
+				}
+			}
+		}
+	},
+
+	checkIfStoneCanBeMovedHere: function (fromPosX, fromPosY, toPosX, toPosY) {
+		if (toPosY<0||toPosX>this.GC.BOARD_COLS||toPosY<0||toPosY>=this.GC.BOARD_ROWS) {
+			return false;
+		}
+		if (fromPosX===toPosX&&fromPosY>=toPosX-1&&fromPosY<=toPosY+1) {
+			return true;
+		}
+		if (fromPosY===toPosY&&fromPosX>=toPosX-1&&fromPosX<=toPosX+1) {
+			return true;
+		}
+		return false;
+	},
+
+	getStonePos: function (coordinate) {
+		return Math.floor(coordinate/this.GC.STONE_SIZE_SPACED);
+	},
+
+	swapStonePosition: function (stone1, stone2) {
+		var tempPosX = stone1.posX;
+		var tempPosY = stone1.posY;
+		this.setStonePos(stone1, stone2.posX, stone2.posY);
+		this.setStonePos(stone2, tempPosX, tempPosY);
+	},
+
+	randomizeStone: function (stone) {
+		stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1);
+	},
+
+	setStonePos: function (stone, posX, posY) {
+		stone.posX = posX;
+		stone.posY = posY;
+		stone.id = this.calcStoneId(posX, posY);
+	},
+
+	calcStoneId: function (posX, posY) {
+		return posX + posY * this.GC.BOARD_COLS;
+	},
+
+	removeKilledStones: function () {
+		this.stoneGroup.forEach(function (stone) {
+			if (!stone.alive) {
+				this.setStonePos(stone, -1, -1);
+			}
+		}, this);
+	},
+
+	dropStones: function () {
+		var dropRowCountMax = 0;
+		for (var i=0;i<this.GC.BOARD_COLS;i++) {
+			var dropRowCount = 0;
+			for (var j=this.GC.BOARD_ROWS-1;j>=0;j--) {
+				var stone = this.getStone(i, j);
+				if (stone === null) {
+					dropRowCount++;
+				} else if (dropRowCount > 0) {
+					stone.dirty = true;
+					this.setStonePos(stone, stone.posX, stone.posY + dropRowCount);
+					this.tweenStonePos(stone, stone.posX, stone.posY, dropRowCount);
+				}
+			}
+			dropRowCountMax = Math.max(dropRowCount, dropRowCountMax);
+		}
+		return dropRowCountMax;
+	},
+
+	getStone: function (posX, posY) {
+		return this.stoneGroup.iterate('id', this.calcStoneId(posX, posY), Phaser.Group.RETURN_CHILD);
+	},
+
+	tweenStonePos: function (stone, newPosX, newPosY, durationMultiplier) {
+		// console.log('Tween ',stone.name, 'from ',stone.posX,',',stone.posY,' to ',newPosX,',',newPosY);
+		if (durationMultiplier === null || typeof durationMultiplier === 'undefined') {
+			durationMultiplier = 1;
+		}
+		return this.add.tween(stone).to(
+			{x:newPosX*this.GC.STONE_SIZE_SPACED,y:newPosY*this.GC.STONE_SIZE_SPACED},
+			100*durationMultiplier, Phaser.Easing.Linear.None, true
+		);
+	},
+
+	refillBoard: function () {
+		var maxStonesMissingFromCol = 0;
+		for (var i=0;i<this.GC.BOARD_COLS;i++) {
+			var stonesMissingFromCol = 0;
+			for (var j=this.GC.BOARD_ROWS-1;j>=0;j--) {
+				var stone = this.getStone(i,j);
+				if (stone === null) {
+					stonesMissingFromCol++;
+					stone = this.stoneGroup.getFirstDead();
+					stone.reset(i*this.GC.STONE_SIZE_SPACED,-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED);
+					stone.dirty = true;
+					this.randomizeStone(stone);
+					this.setStonePos(stone, i, j);
+					this.tweenStonePos(stone, stone.posX, stone.posY, stonesMissingFromCol*2);
+				}
+			}
+			maxStonesMissingFromCol = Math.max(maxStonesMissingFromCol,stonesMissingFromCol);
+		}
+		this.time.events.add(maxStonesMissingFromCol*2*100,this.boardRefilled,this);
+	},
+
+	boardRefilled: function () {
+		var canKill = false;
+		for (var i=0;i<this.GC.BOARD_COLS;i++) {
+			for (var j=this.GC.BOARD_ROWS-1;j>=0;j--) {
+				var stone = this.getStone(i,j);
+				if (stone.dirty) {
+					stone.dirty = false;
+					canKill = this.checkAndKillStoneMatches(stone) || canKill;
+				}
+			}
+		}
+		if (canKill) {
+			this.removeKilledStones();
+			var dropStoneDuration = this.dropStones();
+			this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
+			this.allowInput = false;
+		} else {
+			this.allowInput = true;
+		}
+	},
+
+	checkAndKillStoneMatches: function (stone) {
+		if (stone === null) { return; }
+		var canKill = false;
+		var countUp = this.countSameColorStones(stone, 0, -1);
+		var countDown = this.countSameColorStones(stone, 0, 1);
+		var countLeft = this.countSameColorStones(stone, -1, 0);
+		var countRight = this.countSameColorStones(stone, 1, 0);
+		var countHoriz = countLeft + countRight + 1;
+		var countVert = countUp + countDown + 1;
+		if (countVert>=this.GC.MATCH_MIN) {
+			this.killStoneRange(stone.posX,stone.posY-countUp,stone.posX,stone.posY+countDown);
+			canKill = true;
+		}
+		if (countHoriz>=this.GC.MATCH_MIN) {
+			this.killStoneRange(stone.posX-countLeft,stone.posY,stone.posX+countRight,stone.posY);
+			canKill = true;
+		}
+		return canKill;
+	},
+
+	countSameColorStones: function (startStone, moveX, moveY) {
+		var curX = startStone.posX + moveX;
+		var curY = startStone.posY + moveY;
+		var count = 0;
+		while (curX>=0 && curY>=0 && curX<this.GC.BOARD_COLS && curY<this.GC.BOARD_ROWS && this.getStoneColor(this.getStone(curX,curY))===this.getStoneColor(startStone)) {
+			count++;
+			curX += moveX;
+			curY += moveY;
+		}
+		return count;
+	},
+
+	getStoneColor: function (stone) {
+		return stone.frame;
+	},
+
+	killStoneRange: function (fromX, fromY, toX, toY) {
+		fromX = Phaser.Math.clamp(fromX, 0, this.GC.BOARD_COLS-1);
+		fromY = Phaser.Math.clamp(fromY, 0, this.GC.BOARD_ROWS-1);
+		toX = Phaser.Math.clamp(toX, 0, this.GC.BOARD_COLS-1);
+		toY = Phaser.Math.clamp(toY, 0, this.GC.BOARD_ROWS-1);
+		for (var i=fromX;i<=toX;i++) {
+			for (var j=fromY;j<=toY;j++) {
+				var stone = this.getStone(i,j);
+				stone.kill();
+			}
+		}
 	},
 
 	genHUDContainer: function () {
 		var c = {score:null,gameover:null,textStyle:null,};
 		c.textStyle = {
-			fill: '#a0522d',
+			fill: '#a0522d', // TODO color
 			stroke:'#FFFFFF',
 			strokeThickness: 10,
-			multipleStroke:'#a0522d',
+			multipleStroke:'#a0522d', // TODO color
 			multipleStrokeThickness: 10,
 		};
-		this.genPanelSprite(c);
 		this.genScoreTextSprite(c);
 		this.genTimeCounterTextSprite(c);
-		this.genGameOverTextSprite(c);
 		return c;
 	},
 
 	genScoreTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
-		var baseText = this.GOP.SCORE_TEXT+': ';
-		var textSprite = s.genText(this.world.centerX,50,baseText+this.GOP.score,HUD.textStyle);
+		var baseText = 'スコア: ';
+		var textSprite = s.genText(this.world.centerX,50,baseText+this.GC.score,HUD.textStyle);
 		HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
 		};
@@ -79,121 +354,11 @@ BasicGame.Play.prototype = {
 
 	genTimeCounterTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
-		var baseText = 'タイむ: ';
-		var textSprite = s.genText(120,50,baseText+this.GOP.leftTime,HUD.textStyle);
+		var baseText = 'タイム: ';
+		var textSprite = s.genText(120,50,baseText+this.GC.leftTime,HUD.textStyle);
 		HUD.changeTime = function (val) {
 			textSprite.changeText(baseText+val);
 		};
-	},
-
-	genGameOverTextSprite: function (HUD) {
-		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX,400,'げぇむオーバぁ～',HUD.textStyle);
-		textSprite.hide();
-		textSprite.setTextStyle({fontSize:'80px'})
-		HUD.gameover = textSprite;
-	},
-
-	genPanelSprite: function (HUD) {
-		var t = this.game.global.TweenManager;
-		var s = this.game.global.SpriteManager;
-		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
-		panelSprite.scale.setTo(0);
-		panelSprite.anchor.setTo(.5);
-		panelSprite.tint = 0xfaebd7;
-		panelSprite.hide();
-		var restartBtnSprite = this.genRestartBtnSprite();
-		var tweetBtnSprite = this.genTweetBtnSprite();
-		var backToTopBtnSprite = this.genBackToTopBtnSprite();
-		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
-		t.onComplete(tween, function () {
-			HUD.score.move(HUD.gameover.x,HUD.gameover.y+200);
-			HUD.score.show();
-			HUD.gameover.show();
-			restartBtnSprite.allShow();
-			tweetBtnSprite.allShow();
-			backToTopBtnSprite.allShow();
-		}, this);
-		HUD.showGameOver = function () {
-			panelSprite.show();
-			tween.start();
-		};
-		return panelSprite;
-	},
-
-	genRestartBtnSprite: function () {
-		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.centerY,function () {
-			this.state.start(this.game.global.nextSceen);
-		}, 'もう三度！');
-		btnSprite.hide();
-		btnSprite.textSprite.hide();
-		btnSprite.allShow = function () {
-			btnSprite.show();
-			btnSprite.textSprite.show();
-		};
-		return btnSprite;
-	},
-
-	genTweetBtnSprite: function () {
-		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.centerY+200,this.tweet,'結果をツいート');
-		btnSprite.hide();
-		btnSprite.textSprite.hide();
-		btnSprite.allShow = function () {
-			btnSprite.show();
-			btnSprite.textSprite.show();
-		};
-		return btnSprite;
-	},
-
-	genBackToTopBtnSprite: function () {
-		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.centerY+400,function () {
-			this.game.global.nextSceen = 'Title';
-			this.state.start(this.game.global.nextSceen);
-		}, 'とっプにモドる');
-		btnSprite.hide();
-		btnSprite.textSprite.hide();
-		btnSprite.allShow = function () {
-			btnSprite.show();
-			btnSprite.textSprite.show();
-		};
-		return btnSprite;
-	},
-
-	genBtnTpl: function (x,y,func,text) {
-		var textStyle = {
-			fontSize:'45px',
-			fill: '#b8860b',
-			stroke:'#FFFFFF',
-			strokeThickness: 10,
-			multipleStroke:'#b8860b',
-			multipleStrokeThickness: 10,
-		};
-		var s = this.game.global.SpriteManager;
-		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
-		btnSprite.setFrames(
-			// overFrame, outFrame, downFrame, upFrame
-			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
-		btnSprite.anchor.setTo(.5);
-		btnSprite.scale.setTo(2.3);
-		btnSprite.tint = 0xf5deb3;
-		btnSprite.textSprite = s.genText(x,y,text,textStyle);
-		btnSprite.UonInputDown(function () {
-			this.game.global.SoundManager.play({key:'Click',volume:1,});
-		}, this);
-		return btnSprite;
-	},
-
-	tweet: function () {
-		var text = 'あナタの'+this.GOP.SCORE_TEXT+'は '+this.GOP.score+' でス！\nﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）\n『'+this.game.global.GAME_TITLE+'』';
-		var tweetText = encodeURIComponent(text);
-		var tweetUrl = location.href;
-		var tweetHashtags = 'ゾンビ子ゲーム'; // 'A,B,C'
-		window.open(
-			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
-			'share window', 
-			'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
-		);
-		return false;
 	},
 
 	addScoreEffect: function (text) {
@@ -217,60 +382,17 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
-		var textStyle = {
-			fontSize:'100px',
-			fill: '#a0522d',
-			stroke:'#FFFFFF',
-			strokeThickness: 10,
-			multipleStroke:'#a0522d',
-			multipleStrokeThickness: 10,
-		};
-		var readyTextSprite = this.genReadyTextSprite(textStyle);
-		var startTextSprite = this.genStartTextSprite(textStyle);
-		this.startTween(readyTextSprite,startTextSprite);
-	},
-
-	genReadyTextSprite: function (textStyle) {
-		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX,this.world.centerY-100,'れディー…',textStyle);
-		textSprite.setScale(0,0);
-		return textSprite;
-	},
-
-	genStartTextSprite: function (textStyle) {
-		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX,this.world.centerY+100,'スターと',textStyle);
-		textSprite.setScale(0,0);
-		return textSprite;
-	},
-
-	startTween: function (readyTextSprite,startTextSprite) {
-		var t = this.game.global.TweenManager;
-		var readyDuration = 800;
-		var startDuration = 500;
-		t.popUpA(readyTextSprite,readyDuration).start();
-		t.popUpA(readyTextSprite.multipleTextSprite,readyDuration).start();
-		var tween = t.popUpA(startTextSprite,startDuration,false,readyDuration);
-		t.onComplete(tween, function () {
-			this.time.events.add(500, function () {
-				readyTextSprite.hide();
-				startTextSprite.hide();
-				this.start();
-			}, this);
-		}, this);
-		tween.start();
-		t.popUpA(startTextSprite.multipleTextSprite,startDuration,false,readyDuration).start();
 	},
 
 	start: function () {
-		this.GOP.isPlaying = true;
-		this.TC.start();
+		this.GC.isPlaying = true;
 	},
 
 	gameOver: function () {
-		this.GOP.isPlaying = false;
-		this.time.events.removeAll();
-		this.HUD.showGameOver();
+		this.GC.isPlaying = false;
+		// this.time.events.removeAll();
+		// this.HUD.showGameOver();
+		console.log("game over");
 	},
 
 	rndInt: function (min, max) {
@@ -279,7 +401,7 @@ BasicGame.Play.prototype = {
 
 	test: function () {
 		if (__ENV!='prod') {
-			// this.GOP.leftTime = getQuery('time') || this.GOP.leftTime;
+			this.GC.leftTime = getQuery('time') || this.GC.leftTime;
 		}
 	},
 };
