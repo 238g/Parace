@@ -113,7 +113,7 @@ BasicGame.Play.prototype = {
 				if (this.GC.selectedStoneTween!==null) {
 					this.tweens.remove(this.GC.selectedStoneTween);
 				}
-				this.GC.selectedStoneTween = this.tweenStonePos(stone, this.selectedStoneStartPos.x, this.selectedStoneStartPos.y);
+				this.GC.selectedStoneTween = this.tweenStonePos(stone, this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y);
 				if (this.GC.tempShiftedStone!==null) {
 					this.tweenStonePos(this.GC.tempShiftedStone, stone.posX, stone.posY);
 				}
