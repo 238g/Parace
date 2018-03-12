@@ -37,10 +37,11 @@ BasicGame.Preloader.prototype = {
 			'Char_K': './images/cafenozombiko/Human.png',
 			'Char_N': './images/cafenozombiko/Human.png',
 			'Char_G': './images/cafenozombiko/Human.png',
-			// 'STONES':         '../../test/STONES.png',
+			'Logo': './images/TenMaKiNinVerG/Logo.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		this.load.spritesheet('STONES', '../../test/STONES.png', 64, 64); // TODO fix
+		// this.load.spritesheet('STONES', './images/TenMaKiNinVerG/コミットしないこと.jpg', 64, 64); // TODO fix
 		this.loadAudio();
 	},
 

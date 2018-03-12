@@ -31,6 +31,10 @@ BasicGame.Title.prototype = {
 		// TODO char sprite
 		// TODO random char float,swim and move
 		// TODO game title
+		var s = this.game.global.SpriteManager;
+		var logoSprite = s.genSprite(this.world.centerX, this.world.height/4, 'Logo');
+		logoSprite.anchor.setTo(.5);
+		logoSprite.scale.setTo(1.2);
 	},
 
 	genBtnContainer: function () {
@@ -197,7 +201,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genCharContainer: function (charType, group) {
-		var x=this.world.centerX,y=this.world.centerY+50,xm=200,ym=320;
+		var x=this.world.centerX,y=this.world.centerY+50,xm=200,ym=340;
 		switch (charType) {
 			case 'T': x-=xm;y-=ym;break;
 			case 'M': x+=xm;y-=ym;break;
@@ -220,7 +224,7 @@ BasicGame.Title.prototype = {
 		var frameSprite = s.genButton(x,y, 'greySheet', this.selectedChar, this);
 		frameSprite.frameName = 'grey_panel';
 		frameSprite.anchor.setTo(.5);
-		frameSprite.scale.setTo(3);
+		frameSprite.scale.setTo(3, 3.2);
 		frameSprite.charType = charType;
 		frameSprite.tint = this.game.conf.CharInfo[charType].color;
 		return frameSprite;

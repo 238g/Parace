@@ -23,6 +23,7 @@ BasicGame.Play.prototype = {
 			timeCounter: 0,
 			BOARD_COLS: 8,
 			BOARD_ROWS: 10,
+			GAME_FRAME: {x:200,y:300},
 			STONE_SIZE_SPACED: 66,
 			MATCH_MIN: 3,
 			allowInput: false,
@@ -37,7 +38,6 @@ BasicGame.Play.prototype = {
 	},
 
 	inputController: function () {
-		console.log(this);
 		this.input.addMoveCallback(this.slideStone, this);
 	},
 
@@ -73,23 +73,31 @@ BasicGame.Play.prototype = {
 		this.stoneGroup = this.add.group();
 		for (var i=0;i<this.GC.BOARD_COLS;i++) {
 			for (var j=0;j<this.GC.BOARD_ROWS;j++) {
-				var stone = this.stoneGroup.create(i*this.GC.STONE_SIZE_SPACED, j*this.GC.STONE_SIZE_SPACED, 'STONES');
-				stone.name = 'stone_'+i+'_'+j;
+				var coord = this.getGameFrameCoordinate(i,j);
+				var stone = this.stoneGroup.create(coord.x, coord.y, 'STONES');
+				// stone.name = 'stone_'+i+'_'+j;
 				stone.inputEnabled = true;
 				stone.events.onInputDown.add(this.selectStone, this);
 				stone.events.onInputUp.add(this.releaseStone, this);
 				this.randomizeStone(stone);
-				// this.setStonePos(stone, i, j); // need????
+				// this.setStonePos(stone, i, j);
 				stone.kill();
 			}
 		}
 		this.removeKilledStones();
-		// var dropStoneDuration = this.dropStones(); // need???
-		var dropStoneDuration = 10; // ok???
-		this.time.events.add(dropStoneDuration*100, this.refillBoard, this); // duration 1000 fixed???
-		this.GC.allowInput = false; // need?
-		this.GC.selectedStone = null; // need?
-		this.GC.tempShiftedStone = null; // need?
+		var dropStoneDuration = 10;
+		// var dropStoneDuration = this.dropStones();
+		this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
+		// this.GC.allowInput = false;
+		// this.GC.selectedStone = null;
+		// this.GC.tempShiftedStone = null;
+	},
+
+	getGameFrameCoordinate: function (x,y) {
+		return {
+			x:x*this.GC.STONE_SIZE_SPACED+this.GC.GAME_FRAME.x,
+			y:y*this.GC.STONE_SIZE_SPACED+this.GC.GAME_FRAME.y,
+		};
 	},
 
 	selectStone: function (stone) {
@@ -97,6 +105,7 @@ BasicGame.Play.prototype = {
 			this.GC.selectedStone = stone;
 			this.GC.selectedStoneStartPos.x = stone.posX;
 			this.GC.selectedStoneStartPos.y = stone.posY;
+			console.log(stone);
 		}
 	},
 
@@ -129,11 +138,13 @@ BasicGame.Play.prototype = {
 		this.GC.tempShiftedStone = null;
 	},
 
-	// TODO https://phaser.io/examples/v2/games/gemmatch
 	slideStone: function (pointer, x, y) {
 		if (this.GC.selectedStone && pointer.isDown) {
-			var cursorStonePosX = this.getStonePos(x);
-			var cursorStonePosY = this.getStonePos(y);
+			var coord = this.getStonePos(x,y);
+			var cursorStonePosX = coord.x;
+			var cursorStonePosY = coord.y;
+			console.log(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY);
+			console.log(this.checkIfStoneCanBeMovedHere(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY));
 			if (this.checkIfStoneCanBeMovedHere(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY)) {
 				if (cursorStonePosX!==this.GC.selectedStone.posX||cursorStonePosY!==this.GC.selectedStone.posY) {
 					if (this.GC.selectedStoneTween!==null) {
@@ -161,7 +172,7 @@ BasicGame.Play.prototype = {
 		if (toPosY<0||toPosX>this.GC.BOARD_COLS||toPosY<0||toPosY>=this.GC.BOARD_ROWS) {
 			return false;
 		}
-		if (fromPosX===toPosX&&fromPosY>=toPosX-1&&fromPosY<=toPosY+1) {
+		if (fromPosX===toPosX&&fromPosY>=toPosY-1&&fromPosY<=toPosY+1) {
 			return true;
 		}
 		if (fromPosY===toPosY&&fromPosX>=toPosX-1&&fromPosX<=toPosX+1) {
@@ -170,8 +181,11 @@ BasicGame.Play.prototype = {
 		return false;
 	},
 
-	getStonePos: function (coordinate) {
-		return Math.floor(coordinate/this.GC.STONE_SIZE_SPACED);
+	getStonePos: function (x,y) {
+		return {
+			x:Math.floor((x-this.GC.GAME_FRAME.x)/this.GC.STONE_SIZE_SPACED),
+			y:Math.floor((y-this.GC.GAME_FRAME.y)/this.GC.STONE_SIZE_SPACED),
+		};
 	},
 
 	swapStonePosition: function (stone1, stone2) {
@@ -182,7 +196,9 @@ BasicGame.Play.prototype = {
 	},
 
 	randomizeStone: function (stone) {
-		stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1);
+		var TotalFrame = this.game.conf.ModeInfo[this.game.global.currentMode].TotalFrame;
+		stone.frame = +this.rndInt(0,TotalFrame);
+		// stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1);
 	},
 
 	setStonePos: function (stone, posX, posY) {
@@ -227,12 +243,12 @@ BasicGame.Play.prototype = {
 	},
 
 	tweenStonePos: function (stone, newPosX, newPosY, durationMultiplier) {
-		// console.log('Tween ',stone.name, 'from ',stone.posX,',',stone.posY,' to ',newPosX,',',newPosY);
 		if (durationMultiplier === null || typeof durationMultiplier === 'undefined') {
 			durationMultiplier = 1;
 		}
+		var coord = this.getGameFrameCoordinate(newPosX, newPosY);
 		return this.add.tween(stone).to(
-			{x:newPosX*this.GC.STONE_SIZE_SPACED,y:newPosY*this.GC.STONE_SIZE_SPACED},
+			{x:coord.x,y:coord.y},
 			100*durationMultiplier, Phaser.Easing.Linear.None, true
 		);
 	},
@@ -246,7 +262,8 @@ BasicGame.Play.prototype = {
 				if (stone === null) {
 					stonesMissingFromCol++;
 					stone = this.stoneGroup.getFirstDead();
-					stone.reset(i*this.GC.STONE_SIZE_SPACED,-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED);
+					var coord = this.getGameFrameCoordinate(i,j);
+					stone.reset(coord.x+this.rndInt(-300,300),-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED+this.world.randomY);
 					stone.dirty = true;
 					this.randomizeStone(stone);
 					this.setStonePos(stone, i, j);

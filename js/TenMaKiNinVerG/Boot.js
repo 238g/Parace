@@ -43,7 +43,7 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.game.global = {
-			currentMode: 1,
+			currentMode: 3,
 			nextSceen: null,
 			loadedOnlyFirst: false,
 			SpriteManager: new SpriteManager(this),
@@ -87,6 +87,16 @@ BasicGame.Boot.prototype = {
 					modeName: 'HARD',
 				},
 			},
+			ModeInfo: {},
+		};
+		this.game.conf.ModeInfo[c.EASY_MODE] = {
+			TotalFrame: 2, // 0~4
+		};
+		this.game.conf.ModeInfo[c.NORMAL_MODE] = {
+			TotalFrame: 3, // 0~4
+		};
+		this.game.conf.ModeInfo[c.HARD_MODE] = {
+			TotalFrame: 4, // 0~4
 		};
 	},
 };
