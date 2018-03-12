@@ -273,9 +273,9 @@ BasicGame.Play.prototype = {
 			this.removeKilledStones();
 			var dropStoneDuration = this.dropStones();
 			this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
-			this.allowInput = false;
+			this.GC.allowInput = false;
 		} else {
-			this.allowInput = true;
+			this.GC.allowInput = true;
 		}
 	},
 
