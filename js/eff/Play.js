@@ -276,9 +276,7 @@ BasicGame.Play.prototype = {
 		var textSprite = s.genText(target.right, target.y, text,textStyle);
 		var tween = t.moveA(textSprite, {y:'+50'});
 		t.onComplete(tween,function () {
-			setTimeout(function () {
-				textSprite.destroy();
-			},this);
+			textSprite.destroy();
 		},this);
 		tween.start();
 	},

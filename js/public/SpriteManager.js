@@ -104,6 +104,12 @@ SpriteManager.prototype = {
 				multipleTextSprite.scale.setTo(x, y);
 			}
 		};
+		textSprite.setAnchor = function (x, y) {
+			textSprite.anchor.setTo(x, y);
+			if (multipleTextSprite.anchor) {
+				multipleTextSprite.anchor.setTo(x, y);
+			}
+		};
 		textSprite.move = function (x, y) {
 			textSprite.x = x;
 			textSprite.y = y;

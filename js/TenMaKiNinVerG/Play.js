@@ -1,26 +1,31 @@
 BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () {
-		this.GC = {};
-		this.HUD = {};
-		this.stoneGroup = {};
+		this.GC = null;
+		this.HUD = null;
+		this.stoneGroup = null;
+		this.ModeInfo = null;
 	},
 
 	create: function () {
 		this.GC = this.GameController();
+		this.time.reset();
+		this.genBgContainer();
+		// TODO skill btn
 		this.inputController();
 		this.spawnBoard();
 		this.HUD = this.genHUDContainer();
-		this.start();
+		this.ready();
 		this.test();
 	},
 
 	GameController: function () {
+		this.ModeInfo = this.game.conf.ModeInfo[this.game.global.currentMode];
 		return {
 			isPlaying: false,
 			score: 0,
-			leftTime: 30,
-			timeCounter: 0,
+			TimeLimit: this.ModeInfo.TimeLimit,
+			CountLimit: 20,
 			BOARD_COLS: 8,
 			BOARD_ROWS: 10,
 			GAME_FRAME: {x:200,y:300},
@@ -31,10 +36,22 @@ BasicGame.Play.prototype = {
 			selectedStone: null,
 			tempShiftedStone: null,
 			selectedStoneTween: null,
+			stoneFrames: this.makeStoneFrames(),
+			isMovingStone: false,
 		};
 	},
 
+	makeStoneFrames: function () {
+		var baseFrames = [0,1,2,3,4];
+		if (this.ModeInfo.TotalFrame < 5) {
+			Phaser.ArrayUtils.removeRandomItem(baseFrames);
+		}
+		return baseFrames;
+	},
+
 	genBgContainer: function () {
+		// TODO
+		// per char bg
 	},
 
 	inputController: function () {
@@ -54,18 +71,17 @@ BasicGame.Play.prototype = {
 	update: function () {
 		if (this.GC.isPlaying) {
 			this.timeManager();
+		} else if (this.GC.isMovingStone === false) {
+			this.GC.isMovingStone = 'END';
+			this.time.events.add(800,this.genResultPanelContainer,this);
 		}
 	},
 
 	timeManager: function () {
-		this.GC.timeCounter += this.time.elapsed;
-		if (this.GC.timeCounter > 1000) {
-			this.GC.timeCounter = 0;
-			this.GC.leftTime--;
-			this.HUD.changeTime(this.GC.leftTime);
-		}
-		if (this.GC.leftTime <= 0) {
-			this.gameOver();
+		var leftTime = this.GC.TimeLimit - this.time.totalElapsedSeconds();
+		this.HUD.changeTime(leftTime);
+		if (leftTime <= 0) {
+			this.gameOverTime();
 		}
 	},
 
@@ -74,8 +90,7 @@ BasicGame.Play.prototype = {
 		for (var i=0;i<this.GC.BOARD_COLS;i++) {
 			for (var j=0;j<this.GC.BOARD_ROWS;j++) {
 				var coord = this.getGameFrameCoordinate(i,j);
-				var stone = this.stoneGroup.create(coord.x, coord.y, 'STONES');
-				// stone.name = 'stone_'+i+'_'+j;
+				var stone = this.stoneGroup.create(coord.x, coord.y, 'CharStones');
 				stone.inputEnabled = true;
 				stone.events.onInputDown.add(this.selectStone, this);
 				stone.events.onInputUp.add(this.releaseStone, this);
@@ -85,7 +100,7 @@ BasicGame.Play.prototype = {
 			}
 		}
 		this.removeKilledStones();
-		var dropStoneDuration = 10;
+		var dropStoneDuration = 10; // TODO ready total time (*100)
 		// var dropStoneDuration = this.dropStones();
 		this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
 		// this.GC.allowInput = false;
@@ -101,16 +116,19 @@ BasicGame.Play.prototype = {
 	},
 
 	selectStone: function (stone) {
-		if (this.GC.allowInput) {
+		if (this.GC.allowInput && this.GC.isPlaying) {
 			this.GC.selectedStone = stone;
 			this.GC.selectedStoneStartPos.x = stone.posX;
 			this.GC.selectedStoneStartPos.y = stone.posY;
-			console.log(stone);
+			stone.scale.setTo(1.4);
 		}
 	},
 
 	releaseStone: function () {
-		if (this.GC.tempShiftedStone === null) {
+		if (this.GC.selectedStone) {
+			this.GC.selectedStone.scale.setTo(1);
+		}
+		if (this.GC.tempShiftedStone === null || this.GC.isPlaying === false) {
 			this.GC.selectedStone = null;
 			return;
 		}
@@ -136,15 +154,18 @@ BasicGame.Play.prototype = {
 		this.GC.allowInput = false;
 		this.GC.selectedStone = null;
 		this.GC.tempShiftedStone = null;
+		this.GC.CountLimit--;
+		this.HUD.changeCountLimit(this.GC.CountLimit);
+		if (this.GC.CountLimit<=0) {
+			this.gameOverCount();
+		}
 	},
 
 	slideStone: function (pointer, x, y) {
-		if (this.GC.selectedStone && pointer.isDown) {
+		if (this.GC.selectedStone && pointer.isDown && this.GC.isPlaying) {
 			var coord = this.getStonePos(x,y);
 			var cursorStonePosX = coord.x;
 			var cursorStonePosY = coord.y;
-			console.log(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY);
-			console.log(this.checkIfStoneCanBeMovedHere(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY));
 			if (this.checkIfStoneCanBeMovedHere(this.GC.selectedStoneStartPos.x, this.GC.selectedStoneStartPos.y, cursorStonePosX, cursorStonePosY)) {
 				if (cursorStonePosX!==this.GC.selectedStone.posX||cursorStonePosY!==this.GC.selectedStone.posY) {
 					if (this.GC.selectedStoneTween!==null) {
@@ -196,9 +217,9 @@ BasicGame.Play.prototype = {
 	},
 
 	randomizeStone: function (stone) {
-		var TotalFrame = this.game.conf.ModeInfo[this.game.global.currentMode].TotalFrame;
-		stone.frame = +this.rndInt(0,TotalFrame);
-		// stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1);
+		var TotalFrame = this.ModeInfo.TotalFrame;
+		stone.frame = this.GC.stoneFrames[this.rndInt(0,TotalFrame-1)];
+		// stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1); // ORIGIN
 	},
 
 	setStonePos: function (stone, posX, posY) {
@@ -254,6 +275,7 @@ BasicGame.Play.prototype = {
 	},
 
 	refillBoard: function () {
+		this.GC.isMovingStone = true;
 		var maxStonesMissingFromCol = 0;
 		for (var i=0;i<this.GC.BOARD_COLS;i++) {
 			var stonesMissingFromCol = 0;
@@ -263,7 +285,8 @@ BasicGame.Play.prototype = {
 					stonesMissingFromCol++;
 					stone = this.stoneGroup.getFirstDead();
 					var coord = this.getGameFrameCoordinate(i,j);
-					stone.reset(coord.x+this.rndInt(-300,300),-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED+this.world.randomY);
+					stone.reset(this.rnd.pick([0,this.world.width]),this.world.randomY);
+					// stone.reset(coord.x,-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED); //ORIGIN
 					stone.dirty = true;
 					this.randomizeStone(stone);
 					this.setStonePos(stone, i, j);
@@ -293,6 +316,7 @@ BasicGame.Play.prototype = {
 			this.GC.allowInput = false;
 		} else {
 			this.GC.allowInput = true;
+			this.GC.isMovingStone = false;
 		}
 	},
 
@@ -307,10 +331,12 @@ BasicGame.Play.prototype = {
 		var countVert = countUp + countDown + 1;
 		if (countVert>=this.GC.MATCH_MIN) {
 			this.killStoneRange(stone.posX,stone.posY-countUp,stone.posX,stone.posY+countDown);
+			this.addScore(countVert);
 			canKill = true;
 		}
 		if (countHoriz>=this.GC.MATCH_MIN) {
 			this.killStoneRange(stone.posX-countLeft,stone.posY,stone.posX+countRight,stone.posY);
+			this.addScore(countHoriz);
 			canKill = true;
 		}
 		return canKill;
@@ -345,24 +371,35 @@ BasicGame.Play.prototype = {
 		}
 	},
 
+	addScore: function (stoneCount) {
+		var bonusScore = this.ModeInfo.BonusScore;
+		var addScore = 1234 * stoneCount * stoneCount * bonusScore;
+		this.GC.score += addScore;
+		this.HUD.changeScore(this.GC.score);
+		this.addScoreEffect(this.GC.score);
+	},
+
 	genHUDContainer: function () {
-		var c = {score:null,gameover:null,textStyle:null,};
-		c.textStyle = {
-			fill: '#a0522d', // TODO color
-			stroke:'#FFFFFF',
-			strokeThickness: 10,
-			multipleStroke:'#a0522d', // TODO color
-			multipleStrokeThickness: 10,
+		var c = {
+			score:null,
+			textStyle:{
+				fill: '#a0522d', // TODO color
+				stroke:'#FFFFFF',
+				strokeThickness: 10,
+				multipleStroke:'#a0522d', // TODO color
+				multipleStrokeThickness: 10,
+			},
 		};
 		this.genScoreTextSprite(c);
 		this.genTimeCounterTextSprite(c);
+		this.genCountLimitTextSprite(c);
 		return c;
 	},
 
 	genScoreTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
 		var baseText = 'スコア: ';
-		var textSprite = s.genText(this.world.centerX,50,baseText+this.GC.score,HUD.textStyle);
+		var textSprite = s.genText(this.world.centerX,this.world.height-50,baseText+this.GC.score,HUD.textStyle);
 		HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
 		};
@@ -371,11 +408,24 @@ BasicGame.Play.prototype = {
 
 	genTimeCounterTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
-		var baseText = 'タイム: ';
-		var textSprite = s.genText(120,50,baseText+this.GC.leftTime,HUD.textStyle);
+		var baseText = '制限時間: ';
+		var textSprite = s.genText(10,10,'',HUD.textStyle);
+		textSprite.setAnchor(0,0);
 		HUD.changeTime = function (val) {
+			textSprite.changeText(baseText+val.toFixed(2));
+		};
+		HUD.changeTime(this.GC.TimeLimit);
+	},
+
+	genCountLimitTextSprite: function (HUD) {
+		var s = this.game.global.SpriteManager;
+		var baseText = '残り移動回数: ';
+		var textSprite = s.genText(this.world.width-10,10,'',HUD.textStyle);
+		textSprite.setAnchor(1,0);
+		HUD.changeCountLimit = function (val) {
 			textSprite.changeText(baseText+val);
 		};
+		HUD.changeCountLimit(this.GC.CountLimit);
 	},
 
 	addScoreEffect: function (text) {
@@ -386,30 +436,180 @@ BasicGame.Play.prototype = {
 		var x = this.HUD.score.right;
 		if (text[0]=='-') {
 			textStyle.stroke = '#dd5a52';
-			x += 150;
+			x = this.HUD.score.right;
+		} else if (text[0]=='+') {
+		} else {
+			text = '+'+text;
 		}
 		var textSprite = s.genText(x, this.HUD.score.y, text,textStyle);
-		var tween = t.moveA(textSprite, {y:'+50'});
+		var tween = t.moveA(textSprite, {y:'-50'});
 		t.onComplete(tween,function () {
-			setTimeout(function () {
-				textSprite.destroy();
-			},this);
+			textSprite.destroy();
 		},this);
 		tween.start();
 	},
 
 	ready: function () {
+		this.start();
 	},
 
 	start: function () {
 		this.GC.isPlaying = true;
 	},
 
+	gameOverTime: function () {
+		this.gameOver();
+		this.HUD.changeTime(0);
+		this.genResultTextSprite('タイムアップ！');
+	},
+
+	gameOverCount: function () {
+		this.gameOver();
+		this.genResultTextSprite('チャレンジ終了！');
+	},
+
 	gameOver: function () {
 		this.GC.isPlaying = false;
-		// this.time.events.removeAll();
-		// this.HUD.showGameOver();
-		console.log("game over");
+		this.GC.allowInput = false;
+	},
+
+	genResultTextSprite: function (text) {
+		var s = this.game.global.SpriteManager;
+		var textStyle = {
+			fontSize: '100px',
+			// TODO color etc...
+		};
+		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
+		textSprite.setScale(0,0);
+		this.game.global.TweenManager.popUpB(textSprite, 800).start();
+	},
+
+	genResultPanelContainer: function () {
+		this.time.events.removeAll();
+		var panelSprite = this.genPanelSprite();
+		var panelTextSprite = this.genPanelTextSprite();
+		var restartLabel = this.genRestartLabel();
+		var tweetLabel = this.genTweetLabel();
+		var backLabel = this.genBackLabel();
+		var t = this.game.global.TweenManager;
+		var tween = t.popUpB(panelSprite, 500, {x:8,y:13});
+		t.onComplete(tween, function () {
+			panelTextSprite.show();
+			this.genPanelScoreTextSprite(0,400);
+			this.genPanelScoreTextSprite(1,400);
+			restartLabel.allShow(600);
+			tweetLabel.allShow(800);
+			backLabel.allShow(1000);
+		}, this);
+		tween.start();
+		return panelSprite;
+	},
+
+	genPanelSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
+		// panelSprite.tint = 0xfaebd7; // TODO color
+		panelSprite.scale.setTo(0);
+		panelSprite.anchor.setTo(.5);
+		return panelSprite;
+	},
+
+	genPanelTextSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var textStyle = {
+			fontSize: '100px',
+			// TODO color etc...
+		};
+		var textSprite = s.genText(this.world.centerX, 300, '結果発表', textStyle);
+		textSprite.setScale(0,0);
+		var t = this.game.global.TweenManager;
+		textSprite.show = function () {
+			t.popUpB(textSprite, 800).start();
+			// t.popUpB(textSprite.multipleTextSprite, 800).start();　// need?
+		};
+		return textSprite;
+	},
+
+	genPanelScoreTextSprite: function (num,delay) {
+		var s = this.game.global.SpriteManager;
+		var textStyle = {
+			fontSize: '80px',
+			// TODO color etc...
+		};
+		var text = this.HUD.score.text;
+		text = text.split(': ')[num];
+		var textSprite = s.genText(this.world.centerX, 500+(num*150), text, textStyle);
+		textSprite.setScale(0,0);
+		this.game.global.TweenManager.popUpB(textSprite, 800, null, delay).start();
+		// this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();　// need?
+	},
+
+	genRestartLabel: function () {
+		return this.genLabelTpl(this.world.centerX,this.world.centerY+100,function () {
+			this.state.start(this.game.global.nextSceen);
+		}, 'もう一度挑戦');
+	},
+
+	genTweetLabel: function () {
+		return this.genLabelTpl(this.world.centerX,this.world.centerY+300,this.tweet, '結果をツイート');
+	},
+
+	genBackLabel: function () {
+		return this.genLabelTpl(this.world.centerX,this.world.centerY+500,function () {
+			this.game.global.nextSceen = 'Title';
+			this.state.start(this.game.global.nextSceen);
+		}, 'タイトルにもどる');
+	},
+
+	genLabelTpl: function (x,y,func,text) {
+		var textStyle = {
+			fontSize:'45px',
+			fill: '#b8860b',
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:'#b8860b',
+			multipleStrokeThickness: 10,
+		};
+		var s = this.game.global.SpriteManager;
+		var btnSprite = s.genButton(x,y,'greySheet',func,this);
+		btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.anchor.setTo(.5);
+		btnSprite.scale.setTo(0);
+		btnSprite.tint = 0xf5deb3;
+		var textSprite = s.genText(x,y,text,textStyle);
+		btnSprite.UonInputDown(function () {
+			// this.game.global.SoundManager.play({key:'Click',volume:1,});
+		}, this);
+		textSprite.setScale(0,0);
+		var t = this.game.global.TweenManager;
+		btnSprite.allShow = function (delay) {
+			delay = delay || 0;
+			t.popUpB(btnSprite, 800, {x:2.3,y:2.3}, delay).start();
+			t.popUpB(textSprite, 800, null, delay).start();
+			t.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();
+		};
+		return btnSprite;
+	},
+
+	tweet: function () {
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		console.log(this.game.conf.CharInfo,this.game.global.currentChar);
+		// this.game.global.SoundManager.play('MenuStart'); // TODO
+		// TODO per char??? emoji
+		var text = '叩き出したスコアは '+this.GC.score+' です！\n'
+		+'・選んだVtuber: '+c.name+'\n'
+		+'・挑戦した難易度: '+c.modeName+'\n'
+		+'👼👿🤖🐱‍👤🦍\n'
+		+'『'+this.game.const.GAME_TITLE+'』';
+		var tweetText = encodeURIComponent(text);
+		var tweetUrl = location.href;
+		var tweetHashtags = '天魔機忍verGゲーム'; // 'A,B,C'
+		window.open(
+			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
+			'share window', 
+			'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+		);
+		return false;
 	},
 
 	rndInt: function (min, max) {
@@ -418,7 +618,8 @@ BasicGame.Play.prototype = {
 
 	test: function () {
 		if (__ENV!='prod') {
-			this.GC.leftTime = getQuery('time') || this.GC.leftTime;
+			this.GC.TimeLimit = getQuery('time') || this.GC.TimeLimit;
+			this.GC.CountLimit = getQuery('count') || this.GC.CountLimit;
 		}
 	},
 };

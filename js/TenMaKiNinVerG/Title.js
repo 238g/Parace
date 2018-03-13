@@ -28,13 +28,31 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgContainer: function () {
-		// TODO char sprite
-		// TODO random char float,swim and move
-		// TODO game title
+		this.genBgEffect();
+		this.genTitleSprite();
+	},
+
+	genBgEffect: function () {
+		var emitter = this.add.emitter(this.world.centerX, 0, 200);
+		emitter.makeParticles('CharStones', [0,1,2,3,4]);
+		emitter.setYSpeed(80, 500);
+		emitter.gravity = 0;
+		emitter.width = this.world.width;
+		emitter.start(false, 14000, 100);
+		var emitter2 = this.add.emitter(this.world.centerX, this.world.height, 200);
+		emitter2.makeParticles('CharStones', [0,1,2,3,4]);
+		emitter2.setYSpeed(-80, -500);
+		emitter2.gravity = 0;
+		emitter2.width = this.world.width;
+		emitter2.start(false, 14000, 100);
+	},
+
+	genTitleSprite: function () {
 		var s = this.game.global.SpriteManager;
 		var logoSprite = s.genSprite(this.world.centerX, this.world.height/4, 'Logo');
 		logoSprite.anchor.setTo(.5);
 		logoSprite.scale.setTo(1.2);
+		this.game.global.TweenManager.stressA(logoSprite,null,3000).start();
 	},
 
 	genBtnContainer: function () {
@@ -113,6 +131,9 @@ BasicGame.Title.prototype = {
 			// TODO sound
 			// this.game.global.SoundManager.play({key:'Click',volume:1,});
 		}, this);
+		var delay = this.rnd.integerInRange(1000, 3000);
+		this.game.global.TweenManager.stressA(btnSprite,null,delay).start();
+		this.game.global.TweenManager.stressA(btnSprite.textSprite,null,delay).start();
 		return btnSprite;
 	},
 
@@ -257,7 +278,8 @@ BasicGame.Title.prototype = {
 		// TODO sound
 		// this.game.global.SoundManager.play({key:'Click',volume:1,});
 		this.game.global.currentMode = this.game.conf.CharInfo[p.charType].mode;
-		// this.play();
+		this.game.global.currentChar = p.charType;
+		this.play();
 	},
 
 	genHowtoTextSprite: function () {
@@ -270,6 +292,7 @@ BasicGame.Title.prototype = {
 			wordWrapWidth: 300,
 		};
 		var s = this.game.global.SpriteManager;
+		// TODO
 		var text = 
 			'ゾンビ子が生前働いていたカフェの '
 			+'店長（ミニゾンビ）を '

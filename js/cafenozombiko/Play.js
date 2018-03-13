@@ -372,13 +372,14 @@ BasicGame.Play.prototype = {
 		if (text[0]=='-') {
 			textStyle.stroke = '#dd5a52';
 			x += 150;
+		} else if (text[0]=='+') {
+		} else {
+			text = '+'+text;
 		}
 		var textSprite = s.genText(x, this.HUD.score.y, text,textStyle);
 		var tween = t.moveA(textSprite, {y:'+50'});
 		t.onComplete(tween,function () {
-			setTimeout(function () {
-				textSprite.destroy();
-			},this);
+			textSprite.destroy();
 		},this);
 		tween.start();
 	},

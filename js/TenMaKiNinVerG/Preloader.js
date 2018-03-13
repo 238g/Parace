@@ -40,8 +40,8 @@ BasicGame.Preloader.prototype = {
 			'Logo': './images/TenMaKiNinVerG/Logo.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
-		this.load.spritesheet('STONES', '../../test/STONES.png', 64, 64); // TODO fix
-		// this.load.spritesheet('STONES', './images/TenMaKiNinVerG/コミットしないこと.jpg', 64, 64); // TODO fix
+		this.load.spritesheet('CharStones', '../../test/STONES.png', 64, 64); // TODO fix
+		// this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/コミットしないこと.jpg', 64, 64); // TODO fix
 		this.loadAudio();
 	},
 
