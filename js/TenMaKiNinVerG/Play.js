@@ -23,13 +23,15 @@ BasicGame.Play.prototype = {
 		this.ModeInfo = this.game.conf.ModeInfo[this.game.global.currentMode];
 		return {
 			isPlaying: false,
+			touched: false,
 			score: 0,
+			mashScore: 0,
 			TimeLimit: this.ModeInfo.TimeLimit,
 			CountLimit: 20,
 			BOARD_COLS: 8,
 			BOARD_ROWS: 10,
-			GAME_FRAME: {x:200,y:300},
-			STONE_SIZE_SPACED: 66,
+			GAME_FRAME: {x:30,y:300},
+			STONE_SIZE_SPACED: 105,
 			MATCH_MIN: 3,
 			allowInput: false,
 			selectedStoneStartPos: {x:0,y:0},
@@ -73,7 +75,7 @@ BasicGame.Play.prototype = {
 			this.timeManager();
 		} else if (this.GC.isMovingStone === false) {
 			this.GC.isMovingStone = 'END';
-			this.time.events.add(800,this.genResultPanelContainer,this);
+			this.time.events.add(1500,this.genResultPanelContainer,this);
 		}
 	},
 
@@ -117,6 +119,7 @@ BasicGame.Play.prototype = {
 
 	selectStone: function (stone) {
 		if (this.GC.allowInput && this.GC.isPlaying) {
+			this.GC.touched = true;
 			this.GC.selectedStone = stone;
 			this.GC.selectedStoneStartPos.x = stone.posX;
 			this.GC.selectedStoneStartPos.y = stone.posY;
@@ -275,6 +278,10 @@ BasicGame.Play.prototype = {
 	},
 
 	refillBoard: function () {
+		this.GC.mashScore += 1;
+		if (this.GC.mashScore>1) {
+			// TODO combo tween
+		}
 		this.GC.isMovingStone = true;
 		var maxStonesMissingFromCol = 0;
 		for (var i=0;i<this.GC.BOARD_COLS;i++) {
@@ -285,8 +292,13 @@ BasicGame.Play.prototype = {
 					stonesMissingFromCol++;
 					stone = this.stoneGroup.getFirstDead();
 					var coord = this.getGameFrameCoordinate(i,j);
-					stone.reset(this.rnd.pick([0,this.world.width]),this.world.randomY);
-					// stone.reset(coord.x,-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED); //ORIGIN
+					if (this.game.global.currentMode == this.game.const.HARD_MODE) {
+						stone.reset(this.rnd.pick([0,this.world.width]),this.world.randomY);
+					} else if (this.game.global.currentMode == this.game.const.NORMAL_MODE) {
+						stone.reset(this.rnd.pick([0,this.world.width]),-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED);
+					} else {
+						stone.reset(coord.x,-stonesMissingFromCol*this.GC.STONE_SIZE_SPACED);
+					}
 					stone.dirty = true;
 					this.randomizeStone(stone);
 					this.setStonePos(stone, i, j);
@@ -317,6 +329,7 @@ BasicGame.Play.prototype = {
 		} else {
 			this.GC.allowInput = true;
 			this.GC.isMovingStone = false;
+			this.GC.mashScore = 1;
 		}
 	},
 
@@ -373,20 +386,29 @@ BasicGame.Play.prototype = {
 
 	addScore: function (stoneCount) {
 		var bonusScore = this.ModeInfo.BonusScore;
-		var addScore = 1234 * stoneCount * stoneCount * bonusScore;
+		if (this.GC.touched) {
+			var addScore = 73
+				*stoneCount*stoneCount*stoneCount*stoneCount*stoneCount
+				*bonusScore
+				*this.GC.mashScore*this.GC.mashScore;
+		} else {
+			var addScore = 73
+				*stoneCount
+				*bonusScore;
+		}
 		this.GC.score += addScore;
 		this.HUD.changeScore(this.GC.score);
-		this.addScoreEffect(this.GC.score);
+		this.addScoreEffect(addScore);
 	},
 
 	genHUDContainer: function () {
 		var c = {
 			score:null,
 			textStyle:{
-				fill: '#a0522d', // TODO color
+				fill: '#800000',
 				stroke:'#FFFFFF',
 				strokeThickness: 10,
-				multipleStroke:'#a0522d', // TODO color
+				multipleStroke:'#800000',
 				multipleStrokeThickness: 10,
 			},
 		};
@@ -442,7 +464,7 @@ BasicGame.Play.prototype = {
 			text = '+'+text;
 		}
 		var textSprite = s.genText(x, this.HUD.score.y, text,textStyle);
-		var tween = t.moveA(textSprite, {y:'-50'});
+		var tween = t.moveA(textSprite, {y:'-50'}, this.rndInt(800,1200));
 		t.onComplete(tween,function () {
 			textSprite.destroy();
 		},this);
@@ -477,17 +499,31 @@ BasicGame.Play.prototype = {
 		var s = this.game.global.SpriteManager;
 		var textStyle = {
 			fontSize: '100px',
-			// TODO color etc...
+			fill: '#800000',
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:'#800000',
+			multipleStrokeThickness: 10,
 		};
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
 		textSprite.setScale(0,0);
 		this.game.global.TweenManager.popUpB(textSprite, 800).start();
+		this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800).start();
 	},
 
 	genResultPanelContainer: function () {
 		this.time.events.removeAll();
+		var textStyle = {
+			fontSize: '100px',
+			fill: '#800000',
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:'#800000',
+			multipleStrokeThickness: 10,
+		};
 		var panelSprite = this.genPanelSprite();
-		var panelTextSprite = this.genPanelTextSprite();
+		var panelTextSprite = this.genPanelTextSprite(textStyle);
+		var modeTextSprite = this.genModeTextSprite(textStyle);
 		var restartLabel = this.genRestartLabel();
 		var tweetLabel = this.genTweetLabel();
 		var backLabel = this.genBackLabel();
@@ -495,8 +531,9 @@ BasicGame.Play.prototype = {
 		var tween = t.popUpB(panelSprite, 500, {x:8,y:13});
 		t.onComplete(tween, function () {
 			panelTextSprite.show();
-			this.genPanelScoreTextSprite(0,400);
-			this.genPanelScoreTextSprite(1,400);
+			modeTextSprite.show();
+			this.genPanelScoreTextSprite(0,400,textStyle);
+			this.genPanelScoreTextSprite(1,400,textStyle);
 			restartLabel.allShow(600);
 			tweetLabel.allShow(800);
 			backLabel.allShow(1000);
@@ -508,40 +545,46 @@ BasicGame.Play.prototype = {
 	genPanelSprite: function () {
 		var s = this.game.global.SpriteManager;
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
-		// panelSprite.tint = 0xfaebd7; // TODO color
+		panelSprite.tint = 0xffe4b5;
 		panelSprite.scale.setTo(0);
 		panelSprite.anchor.setTo(.5);
 		return panelSprite;
 	},
 
-	genPanelTextSprite: function () {
+	genPanelTextSprite: function (textStyle) {
 		var s = this.game.global.SpriteManager;
-		var textStyle = {
-			fontSize: '100px',
-			// TODO color etc...
-		};
 		var textSprite = s.genText(this.world.centerX, 300, '結果発表', textStyle);
 		textSprite.setScale(0,0);
 		var t = this.game.global.TweenManager;
 		textSprite.show = function () {
 			t.popUpB(textSprite, 800).start();
-			// t.popUpB(textSprite.multipleTextSprite, 800).start();　// need?
+			t.popUpB(textSprite.multipleTextSprite, 800).start();
 		};
 		return textSprite;
 	},
 
-	genPanelScoreTextSprite: function (num,delay) {
+	genModeTextSprite: function (textStyle) {
 		var s = this.game.global.SpriteManager;
-		var textStyle = {
-			fontSize: '80px',
-			// TODO color etc...
+		textStyle.fontSize = '80px';
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		var textSprite = s.genText(this.world.centerX, 450, '難易度: '+c.modeName, textStyle);
+		textSprite.setScale(0,0);
+		var t = this.game.global.TweenManager;
+		textSprite.show = function () {
+			t.popUpB(textSprite, 800).start();
+			t.popUpB(textSprite.multipleTextSprite, 800).start();
 		};
+		return textSprite;
+	},
+
+	genPanelScoreTextSprite: function (num,delay,textStyle) {
+		var s = this.game.global.SpriteManager;
 		var text = this.HUD.score.text;
 		text = text.split(': ')[num];
-		var textSprite = s.genText(this.world.centerX, 500+(num*150), text, textStyle);
+		var textSprite = s.genText(this.world.centerX, 600+(num*150), text, textStyle);
 		textSprite.setScale(0,0);
 		this.game.global.TweenManager.popUpB(textSprite, 800, null, delay).start();
-		// this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();　// need?
+		this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();
 	},
 
 	genRestartLabel: function () {
@@ -564,6 +607,7 @@ BasicGame.Play.prototype = {
 	genLabelTpl: function (x,y,func,text) {
 		var textStyle = {
 			fontSize:'45px',
+			// TODO current char color
 			fill: '#b8860b',
 			stroke:'#FFFFFF',
 			strokeThickness: 10,
@@ -575,7 +619,7 @@ BasicGame.Play.prototype = {
 		btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(0);
-		btnSprite.tint = 0xf5deb3;
+		btnSprite.tint = 0xf5deb3; // TODO current char color
 		var textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
 			// this.game.global.SoundManager.play({key:'Click',volume:1,});
@@ -593,13 +637,12 @@ BasicGame.Play.prototype = {
 
 	tweet: function () {
 		var c = this.game.conf.CharInfo[this.game.global.currentChar];
-		console.log(this.game.conf.CharInfo,this.game.global.currentChar);
 		// this.game.global.SoundManager.play('MenuStart'); // TODO
-		// TODO per char??? emoji
 		var text = '叩き出したスコアは '+this.GC.score+' です！\n'
+		+c.emoji+'\n'
 		+'・選んだVtuber: '+c.name+'\n'
 		+'・挑戦した難易度: '+c.modeName+'\n'
-		+'👼👿🤖🐱‍👤🦍\n'
+		+'👼👿🤖🐱‍💻🦍\n'
 		+'『'+this.game.const.GAME_TITLE+'』';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;

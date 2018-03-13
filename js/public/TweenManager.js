@@ -32,10 +32,11 @@ TweenManager.prototype = {
 		return tween;
 	},
 	// Easing.Back.Out
-	moveA: function (target, xy, duration) {
+	moveA: function (target, xy, duration, delay) {
 		duration = duration || 1000;
+		delay = delay || 0;
 		var tween = this.self.add.tween(target).to(
-			xy, duration, Phaser.Easing.Back.Out);
+			xy, duration, Phaser.Easing.Back.Out, false, delay);
 		this.tweens[target.key] = tween;
 		return tween;
 	},

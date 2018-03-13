@@ -43,9 +43,10 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.game.global = {
-			// currentMode: 3,
+			// currentMode: 3, // TODO del
 			currentMode: 1,
-			currentChar: null,
+			currentChar: 'T', // TODO del
+			// currentChar: null,
 			nextSceen: null,
 			loadedOnlyFirst: false,
 			SpriteManager: new SpriteManager(this),
@@ -61,32 +62,42 @@ BasicGame.Boot.prototype = {
 				T: {
 					name: 'ぜったい天使くるみちゃん ',
 					color: 0xee2324,
+					colorS: '#ee2324',
 					mode: c.EASY_MODE,
 					modeName: 'EASY',
+					emoji: '👼👼👼👼👼👼',
 				},
 				M:{
 					name: 'あっくん大魔王',
 					color: 0x953ac3,
+					colorS: '#953ac3',
 					mode: c.EASY_MODE,
 					modeName: 'EASY',
+					emoji: '👿👿👿👿👿👿',
 				},
 				K:{
 					name: 'ニーツ ',
 					color: 0x0834ff,
+					colorS: '#0834ff',
 					mode: c.NORMAL_MODE,
 					modeName: 'NORMAL',
+					emoji: '🤖🤖🤖🤖🤖🤖',
 				},
 				N:{
 					name: '乾伸一郎 ',
 					color: 0x775746,
+					colorS: '#775746',
 					mode: c.NORMAL_MODE,
 					modeName: 'NORMAL',
+					emoji: '🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻',
 				},
 				G:{
 					name: 'バーチャルゴリラ',
 					color: 0x333333,
+					colorS: '#333333',
 					mode: c.HARD_MODE,
 					modeName: 'HARD',
+					emoji: '🦍🦍🦍🦍🦍🦍',
 				},
 			},
 			ModeInfo: {},
@@ -98,12 +109,12 @@ BasicGame.Boot.prototype = {
 		};
 		this.game.conf.ModeInfo[c.NORMAL_MODE] = {
 			TotalFrame: 5,
-			BonusScore: 3,
+			BonusScore: 5,
 			TimeLimit: 120, // seconds
 		};
 		this.game.conf.ModeInfo[c.HARD_MODE] = {
 			TotalFrame: 5,
-			BonusScore: 6,
+			BonusScore: 10,
 			TimeLimit: 90, // seconds
 		};
 	},

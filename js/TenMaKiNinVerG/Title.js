@@ -56,13 +56,14 @@ BasicGame.Title.prototype = {
 	},
 
 	genBtnContainer: function () {
+		// TODO label func textstyle set
 		var textStyle = {
 			fontSize: '43px',
-			// fill: '#a0522d',
-			// stroke:'#FFFFFF',
-			// strokeThickness: 10,
-			// multipleStroke:'#a0522d',
-			// multipleStrokeThickness: 10,
+			fill: '#000000',
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:'#000000',
+			multipleStrokeThickness: 10,
 		};
 		var margin = 150;
 		var x = this.world.centerX;
@@ -75,6 +76,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genStartBtn: function (x,y,textStyle) {
+		textStyle.fill = '#1e90ff'; // TODO set char / label func textstyle set
+		textStyle.multipleStroke = '#1e90ff';
 		var text = 'スタート';
 		this.genLabel(x,y,function () {
 			this.Panel.selectShow();
@@ -82,6 +85,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genHowtoBtn: function (x,y,textStyle) {
+		textStyle.fill = '#d2691e'; // TODO set char / label func textstyle set
+		textStyle.multipleStroke = '#d2691e';
 		var text = '遊び方';
 		this.genLabel(x,y,function () {
 			this.Panel.howtoShow();
@@ -89,6 +94,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genMuteBtnSprite: function (x,y,textStyle) {
+		textStyle.fill = '#ff6347'; // TODO set char / label func textstyle set
+		textStyle.multipleStroke = '#ff6347';
 		var offText = 'ミュートOFF';
 		var onText = 'ミュートON';
 		var text = this.sound.mute ? offText : onText;
@@ -104,6 +111,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genFullScreenBtnSprite: function (x,y,textStyle) {
+		textStyle.fill = '#9932cc'; // TODO set char / label func textstyle set
+		textStyle.multipleStroke = '#9932cc';
 		var offText = 'フルスクリーンOFF';
 		var onText = 'フルスクリーンON';
 		var text = this.scale.isFullScreen ? offText : onText;
@@ -119,6 +128,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genLabel: function (x,y,func,text,textStyle,charType) {
+		// TODO textStyle per charType
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
 		btnSprite.setFrames( // overFrame, outFrame, downFrame, upFrame
@@ -134,6 +144,7 @@ BasicGame.Title.prototype = {
 		var delay = this.rnd.integerInRange(1000, 3000);
 		this.game.global.TweenManager.stressA(btnSprite,null,delay).start();
 		this.game.global.TweenManager.stressA(btnSprite.textSprite,null,delay).start();
+		this.game.global.TweenManager.stressA(btnSprite.textSprite.multipleTextSprite,null,delay).start();
 		return btnSprite;
 	},
 
@@ -181,7 +192,7 @@ BasicGame.Title.prototype = {
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
 		panelSprite.scale.setTo(0);
 		panelSprite.anchor.setTo(.5);
-		// panelSprite.tint = 0xfaebd7; // TODO think....
+		panelSprite.tint = 0xffe4b5;
 		panelSprite.hide();
 		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
 		panelSprite.popUpTween = tween;
@@ -210,12 +221,12 @@ BasicGame.Title.prototype = {
 	genSelectTitleTextSprite: function () {
 		var textStyle = {
 			fontSize: '60px',
-			fill: '#a0522d', // TODO color
+			fill: '#800000',
 			stroke:'#FFFFFF',
-			multipleStroke:'#a0522d', // TODO color
+			multipleStroke:'#800000',
 		};
 		var s = this.game.global.SpriteManager;
-		var text = 'キャラクター選択';
+		var text = 'Vtuberを選択';
 		var textSprite = s.genText(this.world.centerX, 280, text, textStyle);
 		textSprite.hide();
 		return textSprite;
@@ -236,7 +247,9 @@ BasicGame.Title.prototype = {
 		var modeTextSprite = this.genModeTextSprite(x,y,charType);
 		group.add(frameSprite);
 		group.add(charSprite);
+		group.add(charNameTextSprite.multipleTextSprite);
 		group.add(charNameTextSprite);
+		group.add(modeTextSprite.multipleTextSprite);
 		group.add(modeTextSprite);
 	},
 
@@ -259,16 +272,32 @@ BasicGame.Title.prototype = {
 	},
 
 	genCharNameTextSprite: function (x,y,charType) {
-		var textStyle = { fontSize: '30px', };
-		var text = this.game.conf.CharInfo[charType].name;
+		var c = this.game.conf.CharInfo[charType];
+		var textStyle = { 
+			fontSize: '30px', 
+			fill: c.colorS,
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:c.colorS,
+			multipleStrokeThickness: 10,
+		};
+		var text = c.name;
 		var s = this.game.global.SpriteManager;
 		var textSprite = s.genText(x,y+120,text,textStyle);
 		return textSprite;
 	},
 
 	genModeTextSprite: function (x,y,charType) {
-		var textStyle = { fontSize: '40px', };
-		var text = this.game.conf.CharInfo[charType].modeName;
+		var c = this.game.conf.CharInfo[charType];
+		var textStyle = { 
+			fontSize: '40px', 
+			fill: c.colorS,
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke:c.colorS,
+			multipleStrokeThickness: 10,
+		};
+		var text = c.modeName;
 		var s = this.game.global.SpriteManager;
 		var textSprite = s.genText(x,y-120,text,textStyle);
 		return textSprite;
@@ -285,9 +314,9 @@ BasicGame.Title.prototype = {
 	genHowtoTextSprite: function () {
 		var textStyle = {
 			fontSize: '40px',
-			fill: '#a0522d',
+			fill: '#800000',
 			stroke:'#FFFFFF',
-			multipleStroke:'#a0522d',
+			multipleStroke:'#800000',
 			wordWrap: true,
 			wordWrapWidth: 300,
 		};
@@ -306,9 +335,6 @@ BasicGame.Title.prototype = {
 			+'スコアが減るよ！ '
 			+' '
 			+'高得点を目指して頑張ろう！ '
-			+' '
-			+'※PCでのプレイは '
-			+'スコアが常時1.2倍です。 '
 			+' '
 			+'お問い合わせはこちら '
 			+__DEVELOPER_TWITTER;
