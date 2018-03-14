@@ -37,6 +37,12 @@ BasicGame.Preloader.prototype = {
 			'Char_K': './images/cafenozombiko/Human.png',
 			'Char_N': './images/cafenozombiko/Human.png',
 			'Char_G': './images/cafenozombiko/Human.png',
+			'TitleBg_T': './images/eff/Pmang_2.png',
+			'TitleBg_M': './images/eff/DeadTree.png',
+			'TitleBg_K': './images/eff/TestTree.png',
+			'TitleBg_N': './images/eff/Tree.png',
+			'TitleBg_G': './images/eff/Pmang_1.png',
+			'PlayBgDecoration': './images/eff/Fire_1.png',
 			'Logo': './images/TenMaKiNinVerG/Logo.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
@@ -45,6 +51,14 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAudio: function () {
+		// ThemeBGM_T
+		this.load.audio('ThemeBGM_M', [
+			'./sounds/BGM/ChiptuneAdventuresBossFight.mp3',
+			'./sounds/BGM/ChiptuneAdventuresBossFight.wav',
+		]);
+		// ThemeBGM_K
+		// ThemeBGM_N
+		// ThemeBGM_G
 		/*
 		this.load.audio('HumanVoice', [
 			'./sounds/VOICE/VSEL/Human/Human_Good_06.mp3',

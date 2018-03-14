@@ -9,19 +9,22 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.GC = this.GameController();
-		this.time.reset();
 		this.genBgContainer();
-		// TODO skill btn
 		this.inputController();
+		this.soundController();
 		this.spawnBoard();
+		this.genSpellLeftBtnSprite();
+		this.genSpellRightBtnSprite();
 		this.HUD = this.genHUDContainer();
 		this.ready();
 		this.test();
+		__setSPBrowserColor(this.game.conf.CharInfo[this.game.global.currentChar].colorS);
 	},
 
 	GameController: function () {
 		this.ModeInfo = this.game.conf.ModeInfo[this.game.global.currentMode];
 		return {
+			started: false,
 			isPlaying: false,
 			touched: false,
 			score: 0,
@@ -30,7 +33,7 @@ BasicGame.Play.prototype = {
 			CountLimit: 20,
 			BOARD_COLS: 8,
 			BOARD_ROWS: 10,
-			GAME_FRAME: {x:30,y:300},
+			GAME_FRAME: {x:30,y:200},
 			STONE_SIZE_SPACED: 105,
 			MATCH_MIN: 3,
 			allowInput: false,
@@ -40,6 +43,8 @@ BasicGame.Play.prototype = {
 			selectedStoneTween: null,
 			stoneFrames: this.makeStoneFrames(),
 			isMovingStone: false,
+			doneSpell_1: false,
+			doneSpell_2: false,
 		};
 	},
 
@@ -47,6 +52,17 @@ BasicGame.Play.prototype = {
 		var baseFrames = [0,1,2,3,4];
 		if (this.ModeInfo.TotalFrame < 5) {
 			Phaser.ArrayUtils.removeRandomItem(baseFrames);
+		}
+		Phaser.ArrayUtils.shuffle(baseFrames);
+		var checkFlag = false;
+		var targetFrame = this.game.conf.CharInfo[this.game.global.currentChar].frame;
+		for (var key in baseFrames) {
+			if (baseFrames[key] == targetFrame) {
+				checkFlag = true;
+			}
+		}
+		if (!checkFlag) {
+			baseFrames[0] = targetFrame;
 		}
 		return baseFrames;
 	},
@@ -56,24 +72,67 @@ BasicGame.Play.prototype = {
 		// per char bg
 	},
 
+	genSpellLeftBtnSprite: function () {
+		var label = this.genLabelTpl(this.world.centerX/2,this.world.height-180,function () {
+			if (!this.GC.doneSpell_1 && this.GC.isPlaying && this.GC.allowInput) {
+				this.GC.doneSpell_1 = true;
+				var frame = this.GC.stoneFrames[this.rndInt(0,this.ModeInfo.TotalFrame-1)];
+				this.spellKillStones(frame);
+				label.allHide();
+			}
+		}, 'ランダム全消し');
+		label.allShow();
+	},
+
+	genSpellRightBtnSprite: function () {
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		var label = this.genLabelTpl(this.world.centerX/2*3,this.world.height-180,function () {
+			if (!this.GC.doneSpell_2 && this.GC.isPlaying && this.GC.allowInput) {
+				this.GC.doneSpell_2 = true;
+				var frame = c.frame;
+				this.spellKillStones(frame);
+				label.allHide();
+			}
+		}, c.spellName);
+		label.allShow();
+	},
+
+	spellKillStones: function (frame) {
+		this.GC.allowInput = false;
+		for (var i=0;i<this.GC.BOARD_COLS;i++) {
+			for (var j=this.GC.BOARD_ROWS-1;j>=0;j--) {
+				var stone = this.getStone(i,j);
+				if (stone.frame == frame) {
+					stone.kill();
+				}
+			}
+		}
+		this.removeKilledStones();
+		var dropStoneDuration = this.dropStones();
+		this.time.events.add(dropStoneDuration*100,this.refillBoard,this);
+		// this.GC.selectedStone = null;
+		// this.GC.tempShiftedStone = null;
+	},
+
 	inputController: function () {
 		this.input.addMoveCallback(this.slideStone, this);
 	},
 
 	soundController: function () {
+		return; // TODO
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
-		// TODO fix time 1800 ->
-		this.time.events.add(1800, function () {
+		this.time.events.add(800, function () {
 			s.stop('currentBGM');
-			s.play({key:'HappyBGM_2',isBGM:true,loop:true,volume:1.2,});
+			var c = this.game.conf.CharInfo[this.game.global.currentChar];
+			s.play({key:c.themeBGM,isBGM:true,loop:true,volume:c.themeVol});
 		}, this);
 	},
 
 	update: function () {
 		if (this.GC.isPlaying) {
 			this.timeManager();
-		} else if (this.GC.isMovingStone === false) {
+		} else if (this.GC.isMovingStone === false && this.GC.started) {
 			this.GC.isMovingStone = 'END';
 			this.time.events.add(1500,this.genResultPanelContainer,this);
 		}
@@ -102,12 +161,8 @@ BasicGame.Play.prototype = {
 			}
 		}
 		this.removeKilledStones();
-		var dropStoneDuration = 10; // TODO ready total time (*100)
-		// var dropStoneDuration = this.dropStones();
-		this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
-		// this.GC.allowInput = false;
-		// this.GC.selectedStone = null;
-		// this.GC.tempShiftedStone = null;
+		// var dropStoneDuration = this.dropStones(); // ORIGIN
+		// this.time.events.add(dropStoneDuration*100, this.refillBoard, this); // ORIGIN
 	},
 
 	getGameFrameCoordinate: function (x,y) {
@@ -160,7 +215,7 @@ BasicGame.Play.prototype = {
 		this.GC.CountLimit--;
 		this.HUD.changeCountLimit(this.GC.CountLimit);
 		if (this.GC.CountLimit<=0) {
-			this.gameOverCount();
+			this.time.events.add(dropStoneDuration*100,this.gameOverCount,this);
 		}
 	},
 
@@ -220,8 +275,7 @@ BasicGame.Play.prototype = {
 	},
 
 	randomizeStone: function (stone) {
-		var TotalFrame = this.ModeInfo.TotalFrame;
-		stone.frame = this.GC.stoneFrames[this.rndInt(0,TotalFrame-1)];
+		stone.frame = this.GC.stoneFrames[this.rndInt(0,this.ModeInfo.TotalFrame-1)];
 		// stone.frame = this.rnd.integerInRange(0,stone.animations.frameTotal-1); // ORIGIN
 	},
 
@@ -278,10 +332,6 @@ BasicGame.Play.prototype = {
 	},
 
 	refillBoard: function () {
-		this.GC.mashScore += 1;
-		if (this.GC.mashScore>1) {
-			// TODO combo tween
-		}
 		this.GC.isMovingStone = true;
 		var maxStonesMissingFromCol = 0;
 		for (var i=0;i<this.GC.BOARD_COLS;i++) {
@@ -326,6 +376,10 @@ BasicGame.Play.prototype = {
 			var dropStoneDuration = this.dropStones();
 			this.time.events.add(dropStoneDuration*100, this.refillBoard, this);
 			this.GC.allowInput = false;
+			this.GC.mashScore += 1;
+			if (this.GC.mashScore>1) {
+				this.addMashScoreEffect();
+			}
 		} else {
 			this.GC.allowInput = true;
 			this.GC.isMovingStone = false;
@@ -407,7 +461,7 @@ BasicGame.Play.prototype = {
 			textStyle:{
 				fill: '#800000',
 				stroke:'#FFFFFF',
-				strokeThickness: 10,
+				strokeThickness: 15,
 				multipleStroke:'#800000',
 				multipleStrokeThickness: 10,
 			},
@@ -452,8 +506,6 @@ BasicGame.Play.prototype = {
 
 	addScoreEffect: function (text) {
 		text = text+'';
-		var s = this.game.global.SpriteManager;
-		var t = this.game.global.TweenManager;
 		var textStyle = {stroke:'#00ff00'};
 		var x = this.HUD.score.right;
 		if (text[0]=='-') {
@@ -463,6 +515,8 @@ BasicGame.Play.prototype = {
 		} else {
 			text = '+'+text;
 		}
+		var s = this.game.global.SpriteManager;
+		var t = this.game.global.TweenManager;
 		var textSprite = s.genText(x, this.HUD.score.y, text,textStyle);
 		var tween = t.moveA(textSprite, {y:'-50'}, this.rndInt(800,1200));
 		t.onComplete(tween,function () {
@@ -471,23 +525,51 @@ BasicGame.Play.prototype = {
 		tween.start();
 	},
 
+	addMashScoreEffect: function () {
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		var textStyle = {
+			fontSize: '100px',
+			fill: c.textColorS,
+			stroke:'#FFFFFF',
+			strokeThickness: 20,
+			multipleStroke:c.textColorS,
+			multipleStrokeThickness: 20,
+		};
+		var text = this.GC.mashScore+'連鎖！';
+		var s = this.game.global.SpriteManager;
+		var t = this.game.global.TweenManager;
+		var textSprite = s.genText(this.world.centerX, 300, text,textStyle);
+		textSprite.setScale(0,0);
+		var tween = t.popUpB(textSprite, 800);
+		t.onComplete(tween,function () {
+			textSprite.destroy();
+		},this);
+		tween.start();
+	},
+
 	ready: function () {
-		this.start();
+		this.genPopupTextSprite('スタート').hide(1500);
+		this.time.events.add(1000, function () {
+			this.time.reset();
+			this.start();
+			this.refillBoard();
+		}, this);
 	},
 
 	start: function () {
 		this.GC.isPlaying = true;
+		this.GC.started = true;
 	},
 
 	gameOverTime: function () {
 		this.gameOver();
 		this.HUD.changeTime(0);
-		this.genResultTextSprite('タイムアップ！');
+		this.genPopupTextSprite('タイムアップ！');
 	},
 
 	gameOverCount: function () {
 		this.gameOver();
-		this.genResultTextSprite('チャレンジ終了！');
+		this.genPopupTextSprite('チャレンジ終了！');
 	},
 
 	gameOver: function () {
@@ -495,20 +577,26 @@ BasicGame.Play.prototype = {
 		this.GC.allowInput = false;
 	},
 
-	genResultTextSprite: function (text) {
+	genPopupTextSprite: function (text) {
 		var s = this.game.global.SpriteManager;
 		var textStyle = {
 			fontSize: '100px',
 			fill: '#800000',
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 30,
 			multipleStroke:'#800000',
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 30,
 		};
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
 		textSprite.setScale(0,0);
-		this.game.global.TweenManager.popUpB(textSprite, 800).start();
-		this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800).start();
+		var t = this.game.global.TweenManager;
+		t.popUpB(textSprite, 800).start();
+		t.popUpB(textSprite.multipleTextSprite, 800).start();
+		textSprite.hide = function (delay) {
+			t.fadeOutA(textSprite, 800, delay).start();
+			t.fadeOutA(textSprite.multipleTextSprite, 800, delay).start();
+		};
+		return textSprite;
 	},
 
 	genResultPanelContainer: function () {
@@ -517,9 +605,9 @@ BasicGame.Play.prototype = {
 			fontSize: '100px',
 			fill: '#800000',
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 20,
 			multipleStroke:'#800000',
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 20,
 		};
 		var panelSprite = this.genPanelSprite();
 		var panelTextSprite = this.genPanelTextSprite(textStyle);
@@ -605,24 +693,24 @@ BasicGame.Play.prototype = {
 	},
 
 	genLabelTpl: function (x,y,func,text) {
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
 		var textStyle = {
 			fontSize:'45px',
-			// TODO current char color
-			fill: '#b8860b',
+			fill: c.textColorS,
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
-			multipleStroke:'#b8860b',
-			multipleStrokeThickness: 10,
+			strokeThickness: 20,
+			multipleStroke:c.textColorS,
+			multipleStrokeThickness: 20,
 		};
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x,y,'greySheet',func,this);
 		btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(0);
-		btnSprite.tint = 0xf5deb3; // TODO current char color
+		btnSprite.tint = c.color;
 		var textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
-			// this.game.global.SoundManager.play({key:'Click',volume:1,});
+			// this.game.global.SoundManager.play({key:'Click',volume:1,}); // TODO
 		}, this);
 		textSprite.setScale(0,0);
 		var t = this.game.global.TweenManager;
@@ -632,12 +720,16 @@ BasicGame.Play.prototype = {
 			t.popUpB(textSprite, 800, null, delay).start();
 			t.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();
 		};
+		btnSprite.allHide = function () {
+			t.fadeOutA(btnSprite, 800).start();
+			t.fadeOutA(textSprite, 800).start();
+			t.fadeOutA(textSprite.multipleTextSprite, 800).start();
+		};
 		return btnSprite;
 	},
 
 	tweet: function () {
 		var c = this.game.conf.CharInfo[this.game.global.currentChar];
-		// this.game.global.SoundManager.play('MenuStart'); // TODO
 		var text = '叩き出したスコアは '+this.GC.score+' です！\n'
 		+c.emoji+'\n'
 		+'・選んだVtuber: '+c.name+'\n'
@@ -663,6 +755,7 @@ BasicGame.Play.prototype = {
 		if (__ENV!='prod') {
 			this.GC.TimeLimit = getQuery('time') || this.GC.TimeLimit;
 			this.GC.CountLimit = getQuery('count') || this.GC.CountLimit;
+			this.game.global.currentChar = getQuery('char') || this.game.global.currentChar;
 		}
 	},
 };

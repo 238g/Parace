@@ -19,3 +19,9 @@ function getYmd () {
 	var d = ('0'+(new Date().getDate())).slice(-2);
 	return Y+'-'+m+'-'+d;
 }
+
+function __setSPBrowserColor (colorString) {
+	if (document.getElementsByName('theme-color')) {
+		document.getElementsByName('theme-color')[0].setAttribute('content', colorString);
+	}
+}

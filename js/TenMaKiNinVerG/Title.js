@@ -9,7 +9,7 @@ BasicGame.Title.prototype = {
 		this.genBgContainer();
 		this.genBtnContainer();
 		this.Panel = this.genPanelContainer();
-		// this.soundController();
+		this.soundController();
 		this.inputController();
 	},
 
@@ -20,6 +20,7 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
+		return; // TODO
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
@@ -28,8 +29,23 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgContainer: function () {
+		this.genBgSprite();
 		this.genBgEffect();
 		this.genTitleSprite();
+	},
+
+	genBgSprite: function () {
+		// TODO
+		var s = this.game.global.SpriteManager;
+		var c = this.game.conf.CharInfo;
+		// TODO sprites[]
+		for (var key in c) {
+			// TODO [].push ?
+			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'TitleBg_'+key);
+			// sprite.alpha = 1;
+			console.log(sprite);
+			// sprite id?
+		}
 	},
 
 	genBgEffect: function () {
@@ -37,14 +53,18 @@ BasicGame.Title.prototype = {
 		emitter.makeParticles('CharStones', [0,1,2,3,4]);
 		emitter.setYSpeed(80, 500);
 		emitter.gravity = 0;
+		emitter.minParticleScale = .8;
+		emitter.maxParticleScale = 3;
 		emitter.width = this.world.width;
-		emitter.start(false, 14000, 100);
+		emitter.start(false, 14000, 500);
 		var emitter2 = this.add.emitter(this.world.centerX, this.world.height, 200);
 		emitter2.makeParticles('CharStones', [0,1,2,3,4]);
 		emitter2.setYSpeed(-80, -500);
 		emitter2.gravity = 0;
+		emitter2.minParticleScale = .8;
+		emitter2.maxParticleScale = 3;
 		emitter2.width = this.world.width;
-		emitter2.start(false, 14000, 100);
+		emitter2.start(false, 14000, 500);
 	},
 
 	genTitleSprite: function () {
@@ -56,46 +76,31 @@ BasicGame.Title.prototype = {
 	},
 
 	genBtnContainer: function () {
-		// TODO label func textstyle set
-		var textStyle = {
-			fontSize: '43px',
-			fill: '#000000',
-			stroke:'#FFFFFF',
-			strokeThickness: 10,
-			multipleStroke:'#000000',
-			multipleStrokeThickness: 10,
-		};
 		var margin = 150;
 		var x = this.world.centerX;
 		var y = this.world.height-margin;
-		this.genStartBtn(x/2,y,textStyle);
-		this.genHowtoBtn(x/2*3,y,textStyle);
+		this.genStartBtn(x/2,y);
+		this.genHowtoBtn(x/2*3,y);
 		y = margin;
-		this.genMuteBtnSprite(x/2,y,textStyle);
-		this.genFullScreenBtnSprite(x/2*3,y,textStyle);
+		this.genMuteBtnSprite(x/2,y);
+		this.genFullScreenBtnSprite(x/2*3,y);
 	},
 
-	genStartBtn: function (x,y,textStyle) {
-		textStyle.fill = '#1e90ff'; // TODO set char / label func textstyle set
-		textStyle.multipleStroke = '#1e90ff';
+	genStartBtn: function (x,y) {
 		var text = 'スタート';
 		this.genLabel(x,y,function () {
 			this.Panel.selectShow();
-		},text,textStyle,'K');
+		},text,'K');
 	},
 
-	genHowtoBtn: function (x,y,textStyle) {
-		textStyle.fill = '#d2691e'; // TODO set char / label func textstyle set
-		textStyle.multipleStroke = '#d2691e';
+	genHowtoBtn: function (x,y) {
 		var text = '遊び方';
 		this.genLabel(x,y,function () {
 			this.Panel.howtoShow();
-		},text,textStyle,'N');
+		},text,'N');
 	},
 
-	genMuteBtnSprite: function (x,y,textStyle) {
-		textStyle.fill = '#ff6347'; // TODO set char / label func textstyle set
-		textStyle.multipleStroke = '#ff6347';
+	genMuteBtnSprite: function (x,y) {
 		var offText = 'ミュートOFF';
 		var onText = 'ミュートON';
 		var text = this.sound.mute ? offText : onText;
@@ -107,12 +112,10 @@ BasicGame.Title.prototype = {
 				pointer.textSprite.changeText(offText);
 				this.sound.mute = true;
 			}
-		},text,textStyle,'T');
+		},text,'T');
 	},
 
-	genFullScreenBtnSprite: function (x,y,textStyle) {
-		textStyle.fill = '#9932cc'; // TODO set char / label func textstyle set
-		textStyle.multipleStroke = '#9932cc';
+	genFullScreenBtnSprite: function (x,y) {
 		var offText = 'フルスクリーンOFF';
 		var onText = 'フルスクリーンON';
 		var text = this.scale.isFullScreen ? offText : onText;
@@ -124,18 +127,25 @@ BasicGame.Title.prototype = {
 				pointer.textSprite.changeText(offText);
 				this.scale.startFullScreen(false);
 			}
-		},text,textStyle,'M');
+		},text,'M');
 	},
 
-	genLabel: function (x,y,func,text,textStyle,charType) {
-		// TODO textStyle per charType
+	genLabel: function (x,y,func,text,charType) {
+		var c = this.game.conf.CharInfo[charType];
+		var textStyle = {
+			fontSize: '43px',
+			fill: c.textColorS,
+			stroke: '#FFFFFF',
+			strokeThickness: 20,
+			multipleStroke: c.textColorS,
+			multipleStrokeThickness: 20,
+		};
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
-		btnSprite.setFrames( // overFrame, outFrame, downFrame, upFrame
-			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(2.2);
-		btnSprite.tint = this.game.conf.CharInfo[charType].color;
+		btnSprite.tint = c.color;
 		btnSprite.textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
 			// TODO sound
@@ -223,7 +233,9 @@ BasicGame.Title.prototype = {
 			fontSize: '60px',
 			fill: '#800000',
 			stroke:'#FFFFFF',
+			strokeThickness: 20,
 			multipleStroke:'#800000',
+			multipleStrokeThickness: 20,
 		};
 		var s = this.game.global.SpriteManager;
 		var text = 'Vtuberを選択';
@@ -277,9 +289,9 @@ BasicGame.Title.prototype = {
 			fontSize: '30px', 
 			fill: c.colorS,
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 15,
 			multipleStroke:c.colorS,
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 15,
 		};
 		var text = c.name;
 		var s = this.game.global.SpriteManager;
@@ -293,9 +305,9 @@ BasicGame.Title.prototype = {
 			fontSize: '40px', 
 			fill: c.colorS,
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 15,
 			multipleStroke:c.colorS,
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 15,
 		};
 		var text = c.modeName;
 		var s = this.game.global.SpriteManager;
@@ -316,28 +328,32 @@ BasicGame.Title.prototype = {
 			fontSize: '40px',
 			fill: '#800000',
 			stroke:'#FFFFFF',
+			strokeThickness: 15,
 			multipleStroke:'#800000',
+			multipleStrokeThickness: 15,
 			wordWrap: true,
 			wordWrapWidth: 300,
 		};
 		var s = this.game.global.SpriteManager;
-		// TODO
 		var text = 
-			'ゾンビ子が生前働いていたカフェの '
-			+'店長（ミニゾンビ）を '
-			+'タッチして倒そう！！ '
-			+'小さい店長ほどスコアが高いぞ！ '
+			'石を移動させて同じVtuberの石を '
+			+'3つ以上そろえよう。 '
 			+' '
-			+'タッチする度にスコアは減るので '
-			+'タッチのしすぎに注意！ '
-			+'人間を倒すと3秒間スコア5倍！ '
-			+'ゾンビ子やタカシを倒すと '
-			+'スコアが減るよ！ '
+			+'制限時間が0になるとゲーム終了だよ。 '
+			+'移動回数が0になっても '
+			+'ゲーム終了だよ。 '
 			+' '
-			+'高得点を目指して頑張ろう！ '
+			+'連鎖をするほど得点が高くなるぞ！ '
+			+'同時に消す石が多いほど '
+			+'得点が高くなるぞ！ '
 			+' '
-			+'お問い合わせはこちら '
-			+__DEVELOPER_TWITTER;
+			+'移動できない時は下の '
+			+'スキルボタンを押そう！ '
+			+'まとめて石が消えるよ！ '
+			+' '
+			+'高得点を目指してがんばろう！ '
+			+' '
+			+'お問い合わせ:　'+__DEVELOPER_TWITTER;
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
 		textSprite.hide();
 		return textSprite;
