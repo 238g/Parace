@@ -32,11 +32,11 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Char_T': './images/cafenozombiko/Human.png',
-			'Char_M': './images/cafenozombiko/Human.png',
-			'Char_K': './images/cafenozombiko/Human.png',
-			'Char_N': './images/cafenozombiko/Human.png',
-			'Char_G': './images/cafenozombiko/Human.png',
+			'Char_T': './images/TenMaKiNinVerG/Char_T.png',
+			'Char_M': './images/TenMaKiNinVerG/Char_M.png',
+			'Char_K': './images/TenMaKiNinVerG/Char_K.png',
+			'Char_N': './images/TenMaKiNinVerG/Char_N.png',
+			'Char_G': './images/TenMaKiNinVerG/Char_G.png',
 			'TitleBg_T': './images/eff/Pmang_2.png',
 			'TitleBg_M': './images/eff/DeadTree.png',
 			'TitleBg_K': './images/eff/TestTree.png',

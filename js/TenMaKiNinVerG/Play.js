@@ -93,7 +93,7 @@ BasicGame.Play.prototype = {
 				this.spellKillStones(frame);
 				label.allHide();
 			}
-		}, c.spellName);
+		}, this.rnd.pick(c.spellName));
 		label.allShow();
 	},
 

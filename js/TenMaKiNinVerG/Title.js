@@ -35,17 +35,31 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgSprite: function () {
-		// TODO
+		var bgGroup = this.add.group();
 		var s = this.game.global.SpriteManager;
 		var c = this.game.conf.CharInfo;
-		// TODO sprites[]
+		var spriteKeys = [];
 		for (var key in c) {
-			// TODO [].push ?
 			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'TitleBg_'+key);
-			// sprite.alpha = 1;
-			console.log(sprite);
-			// sprite id?
+			sprite.anchor.setTo(.5);
+			sprite.alpha = 0;
+			bgGroup.add(sprite);
 		}
+		bgGroup.shuffle();
+		var t = this.game.global.TweenManager;
+		function loop () {
+			var toBackSprite = bgGroup.getTop();
+			toBackSprite.alpha = 1;
+			var toTopSprite = bgGroup.getBottom();
+			bgGroup.bringToTop(toTopSprite);
+			var tween = t.fadeInA(toTopSprite, 3000, 3000);
+			t.onComplete(tween, function () {
+				toBackSprite.alpha = 0;
+				loop();
+			}, this);
+			tween.start();
+		}
+		loop();
 	},
 
 	genBgEffect: function () {
@@ -336,8 +350,8 @@ BasicGame.Title.prototype = {
 		};
 		var s = this.game.global.SpriteManager;
 		var text = 
-			'石を移動させて同じVtuberの石を '
-			+'3つ以上そろえよう。 '
+			'石をひとつずつ移動させて同じ '
+			+'Vtuberの石を3つ以上そろえよう。 '
 			+' '
 			+'制限時間が0になるとゲーム終了だよ。 '
 			+'移動回数が0になっても '

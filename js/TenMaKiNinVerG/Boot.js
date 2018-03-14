@@ -68,8 +68,11 @@ BasicGame.Boot.prototype = {
 					modeName: 'EASY',
 					emoji: '👼👼👼👼👼👼',
 					frame: 0,
-					spellName: '',// TODO
-					// ゲリラライブ,おまえのことなどひとにぎり,子羊,酒焼け天使,僕に年齢という概念はないのだ！
+					spellName: [
+						'ゲリラライブ',
+						'酒焼け天使',
+						'くるみちゃんまじ天使',
+					],
 					themeBGM: 'ThemeBGM_T',
 					themeVol: 1,
 				},
@@ -82,8 +85,11 @@ BasicGame.Boot.prototype = {
 					modeName: 'EASY',
 					emoji: '👿👿👿👿👿👿',
 					frame: 1,
-					spellName: '', // TODO
-					// フゥーハハハ！,い゛ろ゛は゛す゛,永遠の999歳,やめてやめてやめて！
+					spellName: [
+						'フゥーハハハ！',
+						'い゛ろ゛は゛す゛',
+						'やめてやめてやめて！',
+					],
 					themeBGM: 'ThemeBGM_M',
 					themeVol: 1,
 				},
@@ -96,8 +102,11 @@ BasicGame.Boot.prototype = {
 					modeName: 'NORMAL',
 					emoji: '🤖🤖🤖🤖🤖🤖',
 					frame: 2,
-					spellName: '', // TODO
-					// VT-212,たけのこ派メカ,もちろんたけのこ派、ですよね？
+					spellName: [
+						'たけのこ派メカ',
+						'ロケットパンチ',
+						'ビームサーベル',
+					],
 					themeBGM: 'ThemeBGM_K',
 					themeVol: 1,
 				},
@@ -110,22 +119,28 @@ BasicGame.Boot.prototype = {
 					modeName: 'NORMAL',
 					emoji: '🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻🐱‍💻',
 					frame: 3,
-					spellName: '', // TODO
-					// お屋形様,お屋形ぁ今何キロ！？,おはござ～,然らば御免！ドロン！
+					spellName: [
+						'禁術使いでは？',
+						'おはござ～！',
+						'90 55 86',
+					],
 					themeBGM: 'ThemeBGM_N',
 					themeVol: 1,
 				},
 				G:{
 					name: 'バーチャルゴリラ',
-					color: 0x333333,
+					color: 0x58ea73,
 					colorS: '#333333',
 					textColorS: '#333333',
 					mode: c.HARD_MODE,
 					modeName: 'HARD',
 					emoji: '🦍🦍🦍🦍🦍🦍',
 					frame: 4,
-					spellName: '', // TODO
-					// 恐縮です。,めずらし！！喋れるゴリラだ！！
+					spellName: [
+						'恐縮です。',
+						'喋れるゴリラだ！',
+						'森の賢人',
+					],
 					themeBGM: 'ThemeBGM_G',
 					themeVol: 1,
 				},

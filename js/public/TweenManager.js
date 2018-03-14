@@ -48,6 +48,14 @@ TweenManager.prototype = {
 		this.tweens[target.key] = tween;
 		return tween;
 	},
+	fadeInA: function (target, duration, delay) {
+		duration = duration || 1000;
+		delay = delay || 0;
+		var tween = this.self.add.tween(target).to(
+			{alpha:1}, duration, Phaser.Easing.Linear.None, false, delay);
+		this.tweens[target.key] = tween;
+		return tween;
+	},
 	fadeOutA: function (target, duration, delay) {
 		duration = duration || 1000;
 		delay = delay || 0;
