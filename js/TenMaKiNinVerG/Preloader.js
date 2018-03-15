@@ -44,6 +44,7 @@ BasicGame.Preloader.prototype = {
 			'TitleBg_G': './images/eff/Pmang_1.png',
 			'PlayBgDecoration': './images/eff/Fire_1.png',
 			'Logo': './images/TenMaKiNinVerG/Logo.png',
+			'Particle':     './images/cafenozombiko/Shine.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/CharStones.png', 100, 100);
@@ -51,29 +52,58 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAudio: function () {
-		// ThemeBGM_T
+		this.load.audio('TitleBGM', [
+			'./sounds/BGM/ChoroBavarioLoop.mp3',
+			'./sounds/BGM/ChoroBavarioLoop.wav',
+			'./sounds/BGM/ChoroBavarioLoop.ogg',
+		]);
+		this.load.audio('ThemeBGM_T', [
+			'./sounds/BGM/BusyDayAtTheMarketLoop.mp3',
+			'./sounds/BGM/BusyDayAtTheMarketLoop.wav',
+		]);
 		this.load.audio('ThemeBGM_M', [
-			'./sounds/BGM/ChiptuneAdventuresBossFight.mp3',
-			'./sounds/BGM/ChiptuneAdventuresBossFight.wav',
+			'./sounds/BGM/GreatBoss.mp3',
+			'./sounds/BGM/GreatBoss.wav',
+			'./sounds/BGM/GreatBoss.ogg',
 		]);
-		// ThemeBGM_K
-		// ThemeBGM_N
-		// ThemeBGM_G
-		/*
-		this.load.audio('HumanVoice', [
-			'./sounds/VOICE/VSEL/Human/Human_Good_06.mp3',
-			'./sounds/VOICE/VSEL/Human/Human_Good_06.wav',
+		this.load.audio('ThemeBGM_K', [
+			'./sounds/BGM/SpeedWay.mp3',
+			'./sounds/BGM/SpeedWay.wav',
 		]);
-		this.load.audio('HappyBGM_1', [
-			'./sounds/BGM/HappyBGM_1.mp3',
-			'./sounds/BGM/HappyBGM_1.wav',
-			'./sounds/BGM/HappyBGM_1.ogg',
+		this.load.audio('ThemeBGM_N', [
+			'./sounds/BGM/ThemeNinja.mp3',
+			'./sounds/BGM/ThemeNinja.wav',
+			'./sounds/BGM/ThemeNinja.ogg',
 		]);
-		this.load.audio('HappyBGM_2', [
-			'./sounds/BGM/HappyBGM_2.mp3',
-			'./sounds/BGM/HappyBGM_2.wav',
+		this.load.audio('ThemeBGM_G', [
+			'./sounds/BGM/ANewDay.mp3',
+			'./sounds/BGM/ANewDay.wav',
+			'./sounds/BGM/ANewDay.wav',
 		]);
-		*/
+		this.load.audio('PageOpen', [
+			'./sounds/SE/Cartoon/CartoonThrow.mp3',
+			'./sounds/SE/Cartoon/CartoonThrow.wav',
+		]);
+		this.load.audio('Cheer', [
+			'./sounds/SE/SpellSet1/cheer.mp3',
+			'./sounds/SE/SpellSet1/cheer.wav',
+		]);
+		this.load.audio('SelectChar', [
+			'./sounds/SE/GUI_Sound_Effects/positive.mp3',
+			'./sounds/SE/GUI_Sound_Effects/positive.wav',
+		]);
+		this.load.audio('KillStone', [
+			'./sounds/SE/SpellSet2/spell1.mp3',
+			'./sounds/SE/SpellSet2/spell1.wav',
+		]);
+		this.load.audio('UseSpell', [
+			'./sounds/SE/SpellSet2/teleport.mp3',
+			'./sounds/SE/SpellSet2/teleport.wav',
+		]);
+		this.load.audio('GameOver', [
+			'./sounds/SE/JingleSet1/leave.mp3',
+			'./sounds/SE/JingleSet1/leave.wav',
+		]);
 	},
 
 	loadOnlyFirst: function () {

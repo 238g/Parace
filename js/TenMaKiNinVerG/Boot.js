@@ -43,15 +43,14 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.game.global = {
-			// currentMode: 3, // TODO del
 			currentMode: 1,
-			currentChar: 'T', // TODO del
-			// currentChar: null,
+			currentChar: 'T',
 			nextSceen: null,
 			loadedOnlyFirst: false,
 			SpriteManager: new SpriteManager(this),
 			SoundManager: null,
 			TweenManager: new TweenManager(this),
+			lowSpec: getQuery('spec') ? true : false,
 		};
 	},
 
@@ -91,7 +90,7 @@ BasicGame.Boot.prototype = {
 						'やめてやめてやめて！',
 					],
 					themeBGM: 'ThemeBGM_M',
-					themeVol: 1,
+					themeVol: .9,
 				},
 				K:{
 					name: 'ニーツ',
@@ -108,7 +107,7 @@ BasicGame.Boot.prototype = {
 						'ビームサーベル',
 					],
 					themeBGM: 'ThemeBGM_K',
-					themeVol: 1,
+					themeVol: .9,
 				},
 				N:{
 					name: '乾伸一郎',
@@ -125,7 +124,7 @@ BasicGame.Boot.prototype = {
 						'90 55 86',
 					],
 					themeBGM: 'ThemeBGM_N',
-					themeVol: 1,
+					themeVol: 1.1,
 				},
 				G:{
 					name: 'バーチャルゴリラ',
@@ -142,7 +141,7 @@ BasicGame.Boot.prototype = {
 						'森の賢人',
 					],
 					themeBGM: 'ThemeBGM_G',
-					themeVol: 1,
+					themeVol: .9,
 				},
 			},
 			ModeInfo: {},

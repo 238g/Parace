@@ -20,11 +20,11 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return; // TODO
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
-			s.play({key:'HappyBGM_1',isBGM:true,loop:true,volume:1,});
+			s.stop('currentBGM');
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1,});
 		}, this);
 	},
 
@@ -63,6 +63,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgEffect: function () {
+		if (this.game.global.lowSpec) { return ;}
 		var emitter = this.add.emitter(this.world.centerX, 0, 200);
 		emitter.makeParticles('CharStones', [0,1,2,3,4]);
 		emitter.setYSpeed(80, 500);
@@ -162,8 +163,7 @@ BasicGame.Title.prototype = {
 		btnSprite.tint = c.color;
 		btnSprite.textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
-			// TODO sound
-			// this.game.global.SoundManager.play({key:'Click',volume:1,});
+			this.game.global.SoundManager.play({key:'PageOpen',volume:1,});
 		}, this);
 		var delay = this.rnd.integerInRange(1000, 3000);
 		this.game.global.TweenManager.stressA(btnSprite,null,delay).start();
@@ -205,6 +205,7 @@ BasicGame.Title.prototype = {
 				howtoTextSprite.hide();
 				selectContainer.hide();
 				panelSprite.scale.setTo(0);
+				this.game.global.SoundManager.play({key:'PageOpen',volume:1,});
 			}
 		}, this);
 		return c;
@@ -330,8 +331,7 @@ BasicGame.Title.prototype = {
 	},
 
 	selectedChar: function (p) {
-		// TODO sound
-		// this.game.global.SoundManager.play({key:'Click',volume:1,});
+		this.game.global.SoundManager.play({key:'SelectChar',volume:1,});
 		this.game.global.currentMode = this.game.conf.CharInfo[p.charType].mode;
 		this.game.global.currentChar = p.charType;
 		this.play();

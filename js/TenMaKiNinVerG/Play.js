@@ -4,6 +4,7 @@ BasicGame.Play.prototype = {
 		this.GC = null;
 		this.HUD = null;
 		this.stoneGroup = null;
+		this.particle = null;
 		this.ModeInfo = null;
 	},
 
@@ -11,8 +12,9 @@ BasicGame.Play.prototype = {
 		this.GC = this.GameController();
 		this.genBgContainer();
 		this.inputController();
-		this.soundController();
+		this.stopBGM();
 		this.spawnBoard();
+		this.particle = this.genParticle();
 		this.genSpellLeftBtnSprite();
 		this.genSpellRightBtnSprite();
 		this.HUD = this.genHUDContainer();
@@ -82,6 +84,9 @@ BasicGame.Play.prototype = {
 			}
 		}, 'ランダム全消し');
 		label.allShow();
+		label.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
+		}, this);
 	},
 
 	genSpellRightBtnSprite: function () {
@@ -95,6 +100,9 @@ BasicGame.Play.prototype = {
 			}
 		}, this.rnd.pick(c.spellName));
 		label.allShow();
+		label.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
+		}, this);
 	},
 
 	spellKillStones: function (frame) {
@@ -116,17 +124,6 @@ BasicGame.Play.prototype = {
 
 	inputController: function () {
 		this.input.addMoveCallback(this.slideStone, this);
-	},
-
-	soundController: function () {
-		return; // TODO
-		var s = this.game.global.SoundManager;
-		s.stop('currentBGM');
-		this.time.events.add(800, function () {
-			s.stop('currentBGM');
-			var c = this.game.conf.CharInfo[this.game.global.currentChar];
-			s.play({key:c.themeBGM,isBGM:true,loop:true,volume:c.themeVol});
-		}, this);
 	},
 
 	update: function () {
@@ -205,6 +202,7 @@ BasicGame.Play.prototype = {
 				this.swapStonePosition(stone, this.GC.tempShiftedStone);
 				this.GC.tempShiftedStone = null;
 			}
+			// TODO negative se
 		}
 		this.removeKilledStones();
 		var dropStoneDuration = this.dropStones();
@@ -380,6 +378,7 @@ BasicGame.Play.prototype = {
 			if (this.GC.mashScore>1) {
 				this.addMashScoreEffect();
 			}
+			this.game.global.SoundManager.play({key:'KillStone',volume:1,});
 		} else {
 			this.GC.allowInput = true;
 			this.GC.isMovingStone = false;
@@ -434,6 +433,7 @@ BasicGame.Play.prototype = {
 			for (var j=fromY;j<=toY;j++) {
 				var stone = this.getStone(i,j);
 				stone.kill();
+				this.fireParticle(stone);
 			}
 		}
 	},
@@ -441,18 +441,35 @@ BasicGame.Play.prototype = {
 	addScore: function (stoneCount) {
 		var bonusScore = this.ModeInfo.BonusScore;
 		if (this.GC.touched) {
-			var addScore = 73
+			var addScore = 23
 				*stoneCount*stoneCount*stoneCount*stoneCount*stoneCount
 				*bonusScore
 				*this.GC.mashScore*this.GC.mashScore;
 		} else {
-			var addScore = 73
+			var addScore = 777
 				*stoneCount
 				*bonusScore;
 		}
 		this.GC.score += addScore;
 		this.HUD.changeScore(this.GC.score);
 		this.addScoreEffect(addScore);
+	},
+
+	genParticle: function () {
+		if (this.game.global.lowSpec) { return null; }
+		var particle = this.add.emitter(0, 0, 300);
+		particle.makeParticles('Particle');
+		particle.setYSpeed(-300, 300);
+		particle.setXSpeed(-300, 300);
+		particle.gravity = 0;
+		return particle;
+	},
+
+	fireParticle: function (target) {
+		if (!this.particle) { return; }
+		this.particle.x = target.x;
+		this.particle.y = target.y;
+		this.particle.explode(500, 5);
 	},
 
 	genHUDContainer: function () {
@@ -551,9 +568,26 @@ BasicGame.Play.prototype = {
 		this.genPopupTextSprite('スタート').hide(1500);
 		this.time.events.add(1000, function () {
 			this.time.reset();
+			this.stopBGM();
+			this.playBGM();
 			this.start();
 			this.refillBoard();
 		}, this);
+	},
+
+	playBGM: function () {
+		var s = this.game.global.SoundManager;
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		if (s.isPlaying(c.themeBGM)) { return; }
+		s.play({key:c.themeBGM,isBGM:true,loop:true,volume:c.themeVol});
+	},
+
+	stopBGM: function () {
+		var s = this.game.global.SoundManager;
+		var c = this.game.conf.CharInfo[this.game.global.currentChar];
+		if (s.isPlaying(c.themeBGM)) { return; }
+		s.stop('currentBGM');
+		s.stop('TitleBGM');
 	},
 
 	start: function () {
@@ -575,6 +609,7 @@ BasicGame.Play.prototype = {
 	gameOver: function () {
 		this.GC.isPlaying = false;
 		this.GC.allowInput = false;
+		this.game.global.SoundManager.play({key:'GameOver',volume:1,});
 	},
 
 	genPopupTextSprite: function (text) {

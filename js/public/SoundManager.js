@@ -62,6 +62,13 @@ SoundManager.prototype = {
 			sound.fadeOut(duration);
 		}
 	},
+	isPlaying: function (key) {
+		var sound = this.getSound(key);
+		return sound ? sound.isPlaying : false;
+	},
+	getSound: function (key) {
+		return this.sounds[key] || false;
+	},
 	//this.sound.onMute
 	//this.sound.onUnMute
 	//this.sound.volume / onVolumeChange
