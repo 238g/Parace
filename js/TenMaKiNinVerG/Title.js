@@ -40,7 +40,7 @@ BasicGame.Title.prototype = {
 		var c = this.game.conf.CharInfo;
 		var spriteKeys = [];
 		for (var key in c) {
-			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'TitleBg_'+key);
+			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'Bg_'+key);
 			sprite.anchor.setTo(.5);
 			sprite.alpha = 0;
 			bgGroup.add(sprite);

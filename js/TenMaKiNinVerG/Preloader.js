@@ -32,19 +32,19 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Char_T': './images/TenMaKiNinVerG/Char_T.png',
-			'Char_M': './images/TenMaKiNinVerG/Char_M.png',
-			'Char_K': './images/TenMaKiNinVerG/Char_K.png',
-			'Char_N': './images/TenMaKiNinVerG/Char_N.png',
-			'Char_G': './images/TenMaKiNinVerG/Char_G.png',
-			'TitleBg_T': './images/eff/Pmang_2.png',
-			'TitleBg_M': './images/eff/DeadTree.png',
-			'TitleBg_K': './images/eff/TestTree.png',
-			'TitleBg_N': './images/eff/Tree.png',
-			'TitleBg_G': './images/eff/Pmang_1.png',
+			'Logo':             './images/TenMaKiNinVerG/Logo.png',
+			'Char_T':           './images/TenMaKiNinVerG/Char_T.png',
+			'Char_M':           './images/TenMaKiNinVerG/Char_M.png',
+			'Char_K':           './images/TenMaKiNinVerG/Char_K.png',
+			'Char_N':           './images/TenMaKiNinVerG/Char_N.png',
+			'Char_G':           './images/TenMaKiNinVerG/Char_G.png',
+			'Bg_T':        './images/eff/Pmang_2.png',
+			'Bg_M':        './images/eff/DeadTree.png',
+			'Bg_K':        './images/eff/TestTree.png',
+			'Bg_N':        './images/eff/Tree.png',
+			'Bg_G':        './images/eff/Pmang_1.png',
+			'Particle':         './images/cafenozombiko/Shine.png',
 			'PlayBgDecoration': './images/eff/Fire_1.png',
-			'Logo': './images/TenMaKiNinVerG/Logo.png',
-			'Particle':     './images/cafenozombiko/Shine.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/CharStones.png', 100, 100);
@@ -103,6 +103,18 @@ BasicGame.Preloader.prototype = {
 		this.load.audio('GameOver', [
 			'./sounds/SE/JingleSet1/leave.mp3',
 			'./sounds/SE/JingleSet1/leave.wav',
+		]);
+		this.load.audio('NoneKillStone', [
+			'./sounds/SE/GUI_Sound_Effects/negative.mp3',
+			'./sounds/SE/GUI_Sound_Effects/negative.wav',
+		]);
+		this.load.audio('SwapStone', [
+			'./sounds/SE/GUI_Sound_Effects/sharp_echo.mp3',
+			'./sounds/SE/GUI_Sound_Effects/sharp_echo.wav',
+		]);
+		this.load.audio('Result', [
+			'./sounds/SE/GUI_Sound_Effects/save.mp3',
+			'./sounds/SE/GUI_Sound_Effects/save.wav',
 		]);
 	},
 

@@ -70,8 +70,10 @@ BasicGame.Play.prototype = {
 	},
 
 	genBgContainer: function () {
-		// TODO
-		// per char bg
+		var s = this.game.global.SpriteManager;
+		var sprite = s.genSprite(this.world.centerX,this.world.centerY,'Bg_'+this.game.global.currentChar);
+		sprite.anchor.setTo(.5);
+		// TODO frame
 	},
 
 	genSpellLeftBtnSprite: function () {
@@ -202,7 +204,9 @@ BasicGame.Play.prototype = {
 				this.swapStonePosition(stone, this.GC.tempShiftedStone);
 				this.GC.tempShiftedStone = null;
 			}
-			// TODO negative se
+			this.game.global.SoundManager.play({key:'NoneKillStone',volume:2});
+		} else {
+			this.game.global.SoundManager.play({key:'KillStone',volume:1});
 		}
 		this.removeKilledStones();
 		var dropStoneDuration = this.dropStones();
@@ -270,6 +274,7 @@ BasicGame.Play.prototype = {
 		var tempPosY = stone1.posY;
 		this.setStonePos(stone1, stone2.posX, stone2.posY);
 		this.setStonePos(stone2, tempPosX, tempPosY);
+		this.game.global.SoundManager.play({key:'SwapStone',volume:1});
 	},
 
 	randomizeStone: function (stone) {
@@ -635,6 +640,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genResultPanelContainer: function () {
+		this.game.global.SoundManager.play({key:'Result',volume:2,});
 		this.time.events.removeAll();
 		var textStyle = {
 			fontSize: '100px',
@@ -711,20 +717,32 @@ BasicGame.Play.prototype = {
 	},
 
 	genRestartLabel: function () {
-		return this.genLabelTpl(this.world.centerX,this.world.centerY+100,function () {
+		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+100,function () {
 			this.state.start(this.game.global.nextSceen);
 		}, 'もう一度挑戦');
+		label.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'SelectChar',volume:1,});
+		}, this);
+		return label;
 	},
 
 	genTweetLabel: function () {
-		return this.genLabelTpl(this.world.centerX,this.world.centerY+300,this.tweet, '結果をツイート');
+		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+300,this.tweet, '結果をツイート');
+		label.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'SelectChar',volume:1,});
+		}, this);
+		return label;
 	},
 
 	genBackLabel: function () {
-		return this.genLabelTpl(this.world.centerX,this.world.centerY+500,function () {
+		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+500,function () {
 			this.game.global.nextSceen = 'Title';
 			this.state.start(this.game.global.nextSceen);
 		}, 'タイトルにもどる');
+		label.UonInputDown(function () {
+			this.game.global.SoundManager.play({key:'SelectChar',volume:1,});
+		}, this);
+		return label;
 	},
 
 	genLabelTpl: function (x,y,func,text) {
@@ -744,9 +762,6 @@ BasicGame.Play.prototype = {
 		btnSprite.scale.setTo(0);
 		btnSprite.tint = c.color;
 		var textSprite = s.genText(x,y,text,textStyle);
-		btnSprite.UonInputDown(function () {
-			// this.game.global.SoundManager.play({key:'Click',volume:1,}); // TODO
-		}, this);
 		textSprite.setScale(0,0);
 		var t = this.game.global.TweenManager;
 		btnSprite.allShow = function (delay) {
