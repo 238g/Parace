@@ -50,7 +50,6 @@ BasicGame.Preloader.prototype = {
 			'PlayBg_N':         './images/TenMaKiNinVerG/PlayBg_N.jpg',
 			'PlayBg_G':         './images/TenMaKiNinVerG/PlayBg_G.jpg',
 			'Particle':         './images/cafenozombiko/Shine.png',
-			'PlayBgDecoration': './images/eff/Fire_1.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/CharStones.png', 100, 100);
