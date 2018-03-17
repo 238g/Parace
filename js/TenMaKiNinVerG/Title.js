@@ -24,7 +24,7 @@ BasicGame.Title.prototype = {
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
 			s.stop('currentBGM');
-			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1,});
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1.5,});
 		}, this);
 	},
 
@@ -40,7 +40,7 @@ BasicGame.Title.prototype = {
 		var c = this.game.conf.CharInfo;
 		var spriteKeys = [];
 		for (var key in c) {
-			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'Bg_'+key);
+			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'TitleBg_'+key);
 			sprite.anchor.setTo(.5);
 			sprite.alpha = 0;
 			bgGroup.add(sprite);

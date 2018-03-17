@@ -71,9 +71,8 @@ BasicGame.Play.prototype = {
 
 	genBgContainer: function () {
 		var s = this.game.global.SpriteManager;
-		var sprite = s.genSprite(this.world.centerX,this.world.centerY,'Bg_'+this.game.global.currentChar);
+		var sprite = s.genSprite(this.world.centerX,this.world.centerY,'PlayBg_'+this.game.global.currentChar);
 		sprite.anchor.setTo(.5);
-		// TODO frame
 	},
 
 	genSpellLeftBtnSprite: function () {
@@ -83,12 +82,10 @@ BasicGame.Play.prototype = {
 				var frame = this.GC.stoneFrames[this.rndInt(0,this.ModeInfo.TotalFrame-1)];
 				this.spellKillStones(frame);
 				label.allHide();
+				this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
 			}
 		}, 'ランダム全消し');
 		label.allShow();
-		label.UonInputDown(function () {
-			this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
-		}, this);
 	},
 
 	genSpellRightBtnSprite: function () {
@@ -99,12 +96,10 @@ BasicGame.Play.prototype = {
 				var frame = c.frame;
 				this.spellKillStones(frame);
 				label.allHide();
+				this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
 			}
 		}, this.rnd.pick(c.spellName));
 		label.allShow();
-		label.UonInputDown(function () {
-			this.game.global.SoundManager.play({key:'UseSpell',volume:2,});
-		}, this);
 	},
 
 	spellKillStones: function (frame) {
@@ -507,7 +502,7 @@ BasicGame.Play.prototype = {
 	genTimeCounterTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
 		var baseText = '制限時間: ';
-		var textSprite = s.genText(10,10,'',HUD.textStyle);
+		var textSprite = s.genText(20,20,'',HUD.textStyle);
 		textSprite.setAnchor(0,0);
 		HUD.changeTime = function (val) {
 			textSprite.changeText(baseText+val.toFixed(2));
@@ -518,7 +513,7 @@ BasicGame.Play.prototype = {
 	genCountLimitTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
 		var baseText = '残り移動回数: ';
-		var textSprite = s.genText(this.world.width-10,10,'',HUD.textStyle);
+		var textSprite = s.genText(this.world.width-20,20,'',HUD.textStyle);
 		textSprite.setAnchor(1,0);
 		HUD.changeCountLimit = function (val) {
 			textSprite.changeText(baseText+val);
@@ -614,7 +609,7 @@ BasicGame.Play.prototype = {
 	gameOver: function () {
 		this.GC.isPlaying = false;
 		this.GC.allowInput = false;
-		this.game.global.SoundManager.play({key:'GameOver',volume:1,});
+		this.game.global.SoundManager.play({key:'GameOver',volume:1.5,});
 	},
 
 	genPopupTextSprite: function (text) {

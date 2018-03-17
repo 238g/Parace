@@ -1,14 +1,16 @@
-SoundManager = function (self) { this.constructor(self); };
+SoundManager = function (self, obj) { this.constructor(self, obj); };
 SoundManager.prototype = {
 	self: null,
 	sounds: null,
-	constructor: function (self) {
+	constructor: function (self, obj) {
 		this.self = self;
 		var sounds = {
 			currentBGM: null,
 		};
-		var arr = self.cache._cache.sound;
-		for (var key in arr) {
+		if (typeof obj != 'object') {
+			obj = self.cache._cache.sound;
+		}
+		for (var key in obj) {
 			sounds[key] = self.add.audio(key);
 			sounds[key].onComplete = false;
 		}

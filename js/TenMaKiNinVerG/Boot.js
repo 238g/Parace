@@ -69,11 +69,11 @@ BasicGame.Boot.prototype = {
 					frame: 0,
 					spellName: [
 						'ゲリラライブ',
-						'酒焼け天使',
+						'ひとにぎり',
 						'くるみちゃんまじ天使',
 					],
 					themeBGM: 'ThemeBGM_T',
-					themeVol: 1,
+					themeVol: .8,
 				},
 				M:{
 					name: 'あっくん大魔王',
@@ -90,7 +90,7 @@ BasicGame.Boot.prototype = {
 						'やめてやめてやめて！',
 					],
 					themeBGM: 'ThemeBGM_M',
-					themeVol: .9,
+					themeVol: .7,
 				},
 				K:{
 					name: 'ニーツ',
@@ -107,7 +107,7 @@ BasicGame.Boot.prototype = {
 						'ビームサーベル',
 					],
 					themeBGM: 'ThemeBGM_K',
-					themeVol: .9,
+					themeVol: .7,
 				},
 				N:{
 					name: '乾伸一郎',
@@ -124,7 +124,7 @@ BasicGame.Boot.prototype = {
 						'90 55 86',
 					],
 					themeBGM: 'ThemeBGM_N',
-					themeVol: 1.1,
+					themeVol: 1,
 				},
 				G:{
 					name: 'バーチャルゴリラ',
@@ -141,7 +141,7 @@ BasicGame.Boot.prototype = {
 						'森の賢人',
 					],
 					themeBGM: 'ThemeBGM_G',
-					themeVol: .9,
+					themeVol: .7,
 				},
 			},
 			ModeInfo: {},
