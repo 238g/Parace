@@ -10,5 +10,7 @@ https://238g.github.io/Parace/
 
 テンちょう🚫バスたーず (https://238g.github.io/Parace/cafenozombiko.html) Release 3/10
 
+天魔機忍ストーンズverG (https://238g.github.io/Parace/TenMaKiNinVerG.html) Release 3/17
+
 
 https://github.com/238g/Parace
