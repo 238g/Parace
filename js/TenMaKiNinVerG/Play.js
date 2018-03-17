@@ -782,7 +782,8 @@ BasicGame.Play.prototype = {
 		+'👼👿🤖🐱‍💻🦍\n'
 		+'『'+this.game.const.GAME_TITLE+'』';
 		var tweetText = encodeURIComponent(text);
-		var tweetUrl = location.href;
+		// var tweetUrl = location.href;
+		var tweetUrl = 'https://238g.github.io/Parace/TenMaKiNinVerG.html';
 		var tweetHashtags = '天魔機忍verGゲーム'; // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
