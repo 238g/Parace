@@ -35,7 +35,7 @@ BasicGame.Boot.prototype = {
 	defineConst: function () {
 		this.game.const = {
 			GAME_TITLE: 'あああああああああ',
-			GAME_COLOR: '#d494fd',
+			GAME_MAIN_COLOR: '#d494fd',
 			EASY_MODE: 1,
 			NORMAL_MODE: 2,
 			HARD_MODE: 3,
