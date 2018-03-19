@@ -177,6 +177,7 @@ BasicGame.Title.prototype = {
 		var panelSprite = this.genPanelSprite();
 		var selectContainer = this.genSelectContainer();
 		var howtoTextSprite = this.genHowtoTextSprite();
+		var inquiryBtnSprite = this.genInquiryBtnSprite();
 		var t = this.game.global.TweenManager;
 		t.onComplete(panelSprite.popUpTween, function () {
 			if (panelSprite.visible) {
@@ -184,6 +185,8 @@ BasicGame.Title.prototype = {
 					selectContainer.show();
 				} else {
 					howtoTextSprite.show();
+					inquiryBtnSprite.show();
+					inquiryBtnSprite.textSprite.show();
 				}
 			}
 		}, this);
@@ -203,6 +206,8 @@ BasicGame.Title.prototype = {
 				if (t && t.sprite && t.sprite.charType) { return; }
 				panelSprite.hide();
 				howtoTextSprite.hide();
+				inquiryBtnSprite.hide();
+				inquiryBtnSprite.textSprite.hide();
 				selectContainer.hide();
 				panelSprite.scale.setTo(0);
 				this.game.global.SoundManager.play({key:'PageOpen',volume:1,});
@@ -366,11 +371,20 @@ BasicGame.Title.prototype = {
 			+'まとめて石が消えるよ！ '
 			+' '
 			+'高得点を目指してがんばろう！ '
-			+' '
-			+'お問い合わせ:　'+__DEVELOPER_TWITTER;
+			+'  ';
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
 		textSprite.hide();
 		return textSprite;
+	},
+
+	genInquiryBtnSprite: function () {
+		var text = 'お問い合わせ';
+		var labelSprite = this.genLabel(this.world.centerX,this.world.height-250,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		},text,'G');
+		labelSprite.hide();
+		labelSprite.textSprite.hide();
+		return labelSprite;
 	},
 
 	play: function () {
