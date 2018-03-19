@@ -106,16 +106,21 @@ BasicGame.Title.prototype = {
 		panelSprite.tint = 0xfaebd7;
 		panelSprite.hide();
 		var howtoTextSprite = this.genHowtoTextSprite();
+		var inquiryBtnSprite = this.genInquiryBtnSprite();
 		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
 		t.onComplete(tween, function () {
 			if (panelSprite.visible) {
 				howtoTextSprite.show();
+				inquiryBtnSprite.show();
+				inquiryBtnSprite.textSprite.show();
 			}
 		}, this);
 		this.game.input.onDown.add(function () {
 			if (panelSprite.visible) {
 				panelSprite.hide();
 				howtoTextSprite.hide();
+				inquiryBtnSprite.hide();
+				inquiryBtnSprite.textSprite.hide();
 				panelSprite.scale.setTo(0);
 			}
 		}, this);
@@ -144,9 +149,7 @@ BasicGame.Title.prototype = {
 			+' '
 			+'※PCでのプレイは '
 			+'スコアが常時1.2倍です。 '
-			+' '
-			+'お問い合わせはこちら '
-			+__DEVELOPER_TWITTER;
+			+'  ';
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, this.TOP.textStyle_H);
 		textSprite.hide();
 		return textSprite;
@@ -166,6 +169,16 @@ BasicGame.Title.prototype = {
 			this.game.global.SoundManager.play({key:'Click',volume:1,});
 		}, this);
 		return btnSprite;
+	},
+	
+	genInquiryBtnSprite: function () {
+		var text = 'お問い合わせ';
+		var labelSprite = this.genBtnTpl(this.world.centerX,this.world.height-250,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		},text);
+		labelSprite.hide();
+		labelSprite.textSprite.hide();
+		return labelSprite;
 	},
 
 	play: function () {

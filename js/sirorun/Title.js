@@ -49,8 +49,9 @@ BasicGame.Title.prototype = {
 		var textStyle = {
 			fontSize:'40px',
 		};
-		this.genFullScreenBtnSprite(250,80,textStyle);
-		this.genMuteBtnSprite(700,80,textStyle);
+		this.genFullScreenBtnSprite(220,80,textStyle);
+		this.genMuteBtnSprite(640,80,textStyle);
+		this.genInquiryBtnSprite(1060,80,textStyle);
 	},
 
 	genFullScreenBtnSprite: function (x,y,textStyle) {
@@ -80,6 +81,13 @@ BasicGame.Title.prototype = {
 				pointer.textSprite.changeText(offText);
 				this.sound.mute = true;
 			}
+		},text,textStyle);
+	},
+
+	genInquiryBtnSprite: function (x,y,textStyle) {
+		var text = 'お問い合わせ';
+		this.genBtnTpl(x,y,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
 		},text,textStyle);
 	},
 

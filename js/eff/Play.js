@@ -84,9 +84,10 @@ BasicGame.Play.prototype = {
 		var tween = t.popUpA(panelSprite, 500, panelSprite.scale);
 		t.onComplete(tween, function () {
 			this.genGameOverTextSprite();
-			this.HUD.gameoverScoreText(this.world.centerX,this.world.centerY);
+			this.HUD.gameoverScoreText(this.world.centerX,this.world.centerY-50);
 			this.genRestartBtn();
 			this.genTweetBtn();
+			this.genInquiryBtnSprite();
 		}, this);
 		panelSprite.scale.setTo(.5);
 		tween.start();
@@ -95,14 +96,14 @@ BasicGame.Play.prototype = {
 
 	genGameOverTextSprite: function () {
 		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX, this.world.centerY-150, 'ゲームオーバー', {fontSize: '80px'});
+		var textSprite = s.genText(this.world.centerX, this.world.centerY-200, 'ゲームオーバー', {fontSize: '80px'});
 		this.panelGroup.add(textSprite);
 	},
 
 	genRestartBtn: function () {
 		var s = this.game.global.SpriteManager;
 		var x = this.world.centerX-300;
-		var y = this.world.centerY+200;
+		var y = this.world.centerY+130;
 		var btn = s.genButton(x,y,'greySheet',function () {
 			this.game.global.SoundManager.play('MenuStart');
 			this.state.start(this.game.global.nextSceen);
@@ -117,7 +118,7 @@ BasicGame.Play.prototype = {
 	genTweetBtn: function () {
 		var s = this.game.global.SpriteManager;
 		var x = this.world.centerX+300;
-		var y = this.world.centerY+200;
+		var y = this.world.centerY+130;
 		var btn = s.genButton(x,y,'greySheet',function () {
 			this.game.global.SoundManager.play('MenuStart');
 			var text = 'あなたが燃やした森は、燃やし度: '+this.GC.score+' です！\n🔥🔥🌲🌲🔥🔥\n『燃やせ！エルフの森！』';
@@ -139,6 +140,21 @@ BasicGame.Play.prototype = {
 		btn.scale.setTo(2.5);
 		this.panelGroup.add(btn);
 		s.genText(x,y,'結果をツイート');
+	},
+
+	genInquiryBtnSprite: function (x,y,textStyle) {
+		var text = 'お問い合わせ';
+		var s = this.game.global.SpriteManager;
+		var x = this.world.centerX;
+		var y = this.world.centerY+260;
+		var btn = s.genButton(x,y,'greySheet',function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		},this);
+		btn.frame = 'grey_button00';
+		btn.anchor.setTo(.5);
+		btn.scale.setTo(2.5);
+		this.panelGroup.add(btn);
+		s.genText(x,y,text);
 	},
 
 	timerController: function () {
