@@ -33,7 +33,9 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Logo':      './images/TenMaKiNinVerG/Logo.png',
+			'Fish':      './images/cafenozombiko/MiniZombie_2.png',
+			'Fish':      './images/sirorun/ground.png',
+
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		// this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/CharStones.png', 100, 100);

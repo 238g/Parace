@@ -35,15 +35,13 @@ BasicGame.Title.prototype = {
 	},
 
 	BtnContainer: function () {
-		// TODO rows right side / left char
-		var margin = 150;
-		var x = this.world.centerX;
-		var y = this.world.height-margin;
-		this.genStartBtnSprite(x/2,y);
-		this.genHowtoBtnSprite(x/2*3,y);
-		y = margin;
-		this.genMuteBtnSprite(x/2,y);
-		this.genFullScreenBtnSprite(x/2*3,y);
+		var x = this.world.width*3/4;
+		var y = this.world.height;
+		this.genStartBtnSprite(x,y-100);
+		this.genHowtoBtnSprite(x,y-250);
+		this.genMuteBtnSprite(x,y-400);
+		this.genFullScreenBtnSprite(x,y-550);
+		this.genInquiryBtnSprite(x,y-700);
 	},
 
 	genStartBtnSprite: function (x,y) {
@@ -115,7 +113,6 @@ BasicGame.Title.prototype = {
 		var panelSprite = this.genDialogSprite();
 		var selectContainer = this.SelectContainer();
 		var howtoTextSprite = this.genHowtoTextSprite();
-		var inquiryBtnSprite = this.genInquiryBtnSprite(); // TODO del
 		var t = this.game.global.TweenManager;
 		t.onComplete(panelSprite.popUpTween, function () {
 			if (panelSprite.visible) {
@@ -123,7 +120,6 @@ BasicGame.Title.prototype = {
 					selectContainer.show();
 				} else {
 					howtoTextSprite.show();
-					inquiryBtnSprite.show(); // TODO del
 				}
 			}
 		}, this);
@@ -145,7 +141,6 @@ BasicGame.Title.prototype = {
 				panelSprite.scale.setTo(0);
 				selectContainer.hide();
 				howtoTextSprite.hide();
-				inquiryBtnSprite.hide(); // TODO del
 				// this.game.global.SoundManager.play({key:'PageOpen',volume:1,}); // TODO
 			}
 		}, this);
@@ -221,14 +216,11 @@ BasicGame.Title.prototype = {
 		return textSprite;
 	},
 
-	// TODO delete hide
-	genInquiryBtnSprite: function () {
+	genInquiryBtnSprite: function (x,y) {
 		var text = 'お問い合わせ';
-		var labelSprite = this.genLabel(this.world.centerX,this.world.height-250,function () {
+		this.genLabel(x,y,function () {
 			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
 		},text);
-		labelSprite.hide();
-		return labelSprite;
 	},
 
 	play: function () {
