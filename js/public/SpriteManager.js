@@ -148,4 +148,21 @@ SpriteManager.prototype = {
 		};
 		return textSprite;
 	},
+	genLabel: function (x,y,key,func,_self,text,textStyle) {
+		var labelContainer = {};
+		var btnSprite = this.genButton(x,y,key,func,_self);
+		btnSprite.anchor.setTo(.5);
+		var textSprite = this.genText(x,y,text,textStyle);
+		labelContainer.btnSprite = btnSprite;
+		labelContainer.textSprite = textSprite;
+		labelContainer.show = function () {
+			btnSprite.show();
+			textSprite.show();
+		};
+		labelContainer.hide = function () {
+			btnSprite.hide();
+			textSprite.hide();
+		};
+		return labelContainer;
+	},
 };
