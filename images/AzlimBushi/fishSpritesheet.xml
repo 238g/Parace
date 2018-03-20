@@ -1,0 +1,146 @@
+<TextureAtlas imagePath="fishSpritesheet">
+	<!-- SeaFloor White/Brown Fill/Wave/Hollow/Hill Deep/Shallow Back Stroke ManyMark/Shell/Starfish -->
+	<!-- Fish Blue/Red/Orange/Green/Eel/Pink/Blowfish Bone/Front/Rear Stroke -->
+	<!-- Bubble Small/Large/SmallFill -->
+	<!-- Water Fill/Wave OHTER -->
+	<!-- Seaweed Green/Pink/Orange Wave/Straight/Thick/Large/Small Short Stroke -->
+	<!-- Stone Lump/Ragged Stroke -->
+	<!-- Num * -->
+
+	<SubTexture name="SeaFloorWFill"    x="0" y="0" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveD"   x="0" y="128" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveDB"  x="0" y="256" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveS"   x="0" y="384" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveSB"  x="0" y="512" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHollow"  x="0" y="640" width="128" height="120"/>
+	<SubTexture name="SeaFloorWHill"    x="0" y="760" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHollowB" x="0" y="888" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHollowS" x="0" y="1016" width="128" height="120"/>
+
+	<SubTexture name="SeaFloorBHillM"        x="128" y="0" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHillM"        x="128" y="128" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHollowB"      x="128" y="256" width="128" height="128"/>
+	<SubTexture name="SeaFloorWFillShell"    x="128" y="384" width="128" height="128"/>
+	<SubTexture name="SeaFloorWFillStarfish" x="128" y="512" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveDS"       x="128" y="640" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveDBS"      x="128" y="768" width="128" height="128"/>
+	<SubTexture name="SeaFloorWWaveSS"       x="128" y="896" width="128" height="128"/>
+	<SubTexture name="FishBlueS"             x="128" y="1024" width="122" height="72"/>
+	<SubTexture name="BubbleS"               x="128" y="1096" width="24" height="24"/>
+	<SubTexture name="BubbleSF"              x="152" y="1096" width="24" height="24"/>
+
+	<SubTexture name="SeaFloorWWaveSBS"   x="256" y="0" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHillS"     x="256" y="128" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHill"      x="256" y="256" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveDBS"   x="256" y="384" width="128" height="128"/>
+	<SubTexture name="SeaFloorWHillSM"    x="256" y="512" width="128" height="128"/>
+	<SubTexture name="SeaFloorBFillShell" x="256" y="640" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveDB"    x="256" y="768" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHillSM"    x="256" y="896" width="128" height="128"/>
+	<SubTexture name="FishRedS"           x="250" y="1024" width="120" height="96"/>
+
+	<SubTexture name="SeaFloorBWaveSB"       x="384" y="0" width="128" height="128"/>
+	<SubTexture name="SeaFloorWFillM"        x="384" y="128" width="128" height="128"/>
+	<SubTexture name="SeaFloorBFillStarfish" x="384" y="256" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveDS"       x="384" y="384" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHollow"       x="384" y="512" width="128" height="120"/>
+	<SubTexture name="SeaFloorBHollowSB"     x="384" y="632" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveS"        x="384" y="760" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHollowBS"     x="384" y="888" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHollowS"      x="384" y="1016" width="128" height="120"/>
+
+	<SubTexture name="SeaFloorWHollowBS" x="512" y="0" width="128" height="128"/>
+	<SubTexture name="WaterFill"         x="512" y="128" width="128" height="128"/>
+	<SubTexture name="SeaFloorBHillS"    x="512" y="256" width="128" height="128"/>
+	<SubTexture name="SeaFloorBFillM"    x="512" y="384" width="128" height="128"/>
+	<SubTexture name="SeaFloorBFill"     x="512" y="512" width="128" height="128"/>
+	<SubTexture name="WaterWave"         x="512" y="640" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveD"    x="512" y="768" width="128" height="128"/>
+	<SubTexture name="SeaFloorBWaveSBS"  x="512" y="896" width="128" height="128"/>
+	<SubTexture name="FishEelS"          x="512" y="1024" width="118" height="87"/>
+
+	<SubTexture name="FishGreenS"     x="640" y="0" width="116" height="84"/>
+	<SubTexture name="FishEelFront"   x="640" y="84" width="115" height="80"/>
+	<SubTexture name="FishBlowfishS"  x="640" y="164" width="114" height="120"/>
+	<SubTexture name="StoneLumpS"     x="640" y="284" width="114" height="64"/>
+	<SubTexture name="FishBlue"       x="640" y="348" width="114" height="64"/>
+	<SubTexture name="FishRed"        x="640" y="412" width="112" height="88"/>
+	<SubTexture name="StoneRaggedS"   x="640" y="500" width="110" height="68"/>
+	<SubTexture name="FishRedBoneS"   x="640" y="568" width="110" height="88"/>
+	<SubTexture name="FishBlueBoneS"  x="640" y="656" width="109" height="62"/>
+	<SubTexture name="FishOrange"     x="640" y="718" width="108" height="58"/>
+	<SubTexture name="FishGreen"      x="640" y="776" width="108" height="76"/>
+	<SubTexture name="FishGreenBoneS" x="640" y="852" width="108" height="77"/>
+	<SubTexture name="StoneLump"      x="640" y="929" width="106" height="60"/>
+	<SubTexture name="FishOrangeS"    x="630" y="1024" width="116" height="66"/>
+	<SubTexture name="FishEel"        x="630" y="1090" width="109" height="41"/>
+
+	<SubTexture name="SeaweedGreenWS"   x="756" y="0" width="97" height="118"/>
+	<SubTexture name="FishPink"         x="755" y="118" width="78" height="46"/>
+	<SubTexture name="FishOrangeBoneS"  x="754" y="164" width="101" height="52"/>
+	<SubTexture name="FishEelFrontS"    x="754" y="216" width="101" height="46"/>
+	<SubTexture name="FishGreenBone"    x="754" y="262" width="98" height="69"/>
+	<SubTexture name="FishOrangeBone"   x="754" y="331" width="93" height="44"/>
+	<SubTexture name="FishBlueBone"     x="752" y="412" width="101" height="54"/>
+	<SubTexture name="WaterStoneRagged" x="750" y="500" width="102" height="64"/>
+	<SubTexture name="SeaweedGreenSS"   x="750" y="564" width="102" height="119"/>
+	<SubTexture name="FishRedBone"      x="748" y="718" width="102" height="80"/>
+	<SubTexture name="StoneRagged"      x="748" y="798" width="102" height="64"/>
+	<SubTexture name="FishEelRearS"     x="748" y="862" width="102" height="49"/>
+	<SubTexture name="WaterStoneLump"   x="746" y="929" width="106" height="60"/>
+	<SubTexture name="FishBlowfish"     x="746" y="989" width="106" height="103"/>
+	<SubTexture name="FishEelRear"      x="739" y="1092" width="97" height="41"/>
+
+	<SubTexture name="SeaweedGreenW"   x="853" y="0" width="89" height="114"/>
+	<SubTexture name="SeaweedPinkW"    x="855" y="114" width="89" height="114"/>
+	<SubTexture name="NumPoint"        x="855" y="228" width="37" height="34"/>
+	<SubTexture name="FishPinkS"       x="852" y="262" width="86" height="54"/>
+	<SubTexture name="SeaweedOrangeLS" x="847" y="331" width="90" height="75"/>
+	<SubTexture name="FishPinkBoneS"   x="853" y="406" width="79" height="54"/>
+	<SubTexture name="WaterSeaweedW"   x="852" y="466" width="89" height="114"/>
+	<SubTexture name="SeaweedOrangeL"  x="852" y="580" width="82" height="71"/>
+	<SubTexture name="SeaweedPinkWS"   x="850" y="683" width="97" height="118"/>
+	<SubTexture name="SeaweedGreenS"   x="850" y="801" width="94" height="115"/>
+	<SubTexture name="WaterSeaweedS"   x="852" y="916" width="94" height="115"/>
+	<SubTexture name="NumPercent"      x="852" y="1031" width="91" height="83"/>
+
+	<SubTexture name="FishPinkBone"          x="942" y="0" width="71" height="46"/>
+	<SubTexture name="NumTwo"                x="944" y="46" width="71" height="78"/>
+	<SubTexture name="NumEight"              x="944" y="124" width="71" height="81"/>
+	<SubTexture name="SeaweedGreenTS"        x="938" y="228" width="78" height="88"/>
+	<SubTexture name="SeaweedPinkTS"         x="937" y="316" width="78" height="88"/>
+	<SubTexture name="NumDollar"             x="941" y="404" width="77" height="93"/>
+	<SubTexture name="NumZero"               x="941" y="497" width="73" height="80"/>
+	<SubTexture name="WaterSeaweedOrangeL"   x="934" y="580" width="82" height="71"/>
+	<SubTexture name="SeaweedPinkT"          x="947" y="651" width="70" height="84"/>
+	<SubTexture name="NumPlus"               x="947" y="735" width="67" height="63"/>
+	<SubTexture name="WaterSeaweedT"         x="944" y="801" width="70" height="84"/>
+	<SubTexture name="SeaweedGreenT"         x="946" y="885" width="70" height="84"/>
+	<SubTexture name="SeaweedOrangeSS"       x="946" y="969" width="66" height="62"/>
+	<SubTexture name="NumFive"               x="943" y="1031" width="71" height="79"/>
+
+	<SubTexture name="NumSix"              x="1015" y="0" width="66" height="80"/>
+	<SubTexture name="SeaweedGreenTShortS" x="1015" y="80" width="65" height="74"/>
+	<SubTexture name="SeaweedPinkTShortS"  x="1015" y="154" width="65" height="74"/>
+	<SubTexture name="SeaweedGreenWShortS" x="1016" y="228" width="61" height="84"/>
+	<SubTexture name="SeaweedPinkWShortS"  x="1015" y="316" width="61" height="84"/>
+	<SubTexture name="SeaweedOrangeS"      x="1018" y="400" width="58" height="58"/>
+	<SubTexture name="NumNine"             x="1014" y="497" width="67" height="80"/>
+	<SubTexture name="SeaweedGreenSShortS" x="1017" y="577" width="58" height="94"/>
+	<SubTexture name="WaterSeaweedOrangeS" x="1017" y="671" width="58" height="58"/>
+	<SubTexture name="NumThree"            x="1014" y="735" width="69" height="80"/>
+	<SubTexture name="NumOne"              x="1016" y="815" width="59" height="78"/>
+	<SubTexture name="SeaweedGreenTShort"  x="1016" y="893" width="58" height="69"/>
+	<SubTexture name="NumSeven"            x="1014" y="969" width="67" height="79"/>
+	<SubTexture name="NumFour"             x="1014" y="1048" width="67" height="77"/>
+
+	<SubTexture name="WaterSeaweedSShort" x="1080" y="80" width="50" height="90"/>
+	<SubTexture name="SeaweedGreenSShort" x="1080" y="170" width="50" height="90"/>
+	<SubTexture name="SeaweedGreenWShort" x="1076" y="312" width="53" height="80"/>
+	<SubTexture name="SeaweedPinkWShort"  x="1076" y="392" width="53" height="80"/>
+	<SubTexture name="NumColon"           x="1081" y="472" width="42" height="62"/>
+	<SubTexture name="WaterSeaweedWShort" x="1075" y="577" width="53" height="80"/>
+	<SubTexture name="BubbleL"            x="1075" y="657" width="48" height="48"/>
+	<SubTexture name="SeaweedPinkTShort"  x="1075" y="815" width="58" height="69"/>
+	<SubTexture name="WaterSeaweedTShort" x="1074" y="893" width="58" height="69"/>
+</TextureAtlas>
