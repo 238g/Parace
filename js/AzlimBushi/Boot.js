@@ -34,8 +34,10 @@ BasicGame.Boot.prototype = {
 
 	defineConst: function () {
 		this.game.const = {
-			GAME_TITLE: 'あああああああああ',
+			GAME_TITLE: 'アズリム節',
 			GAME_MAIN_COLOR: '#d494fd',
+			GAME_MAIN_COLOR_B: 0xd494fd,
+			GAME_TEXT_COLOR: '#9a53eb',
 			EASY_MODE: 1,
 			NORMAL_MODE: 2,
 			HARD_MODE: 3,
@@ -56,6 +58,46 @@ BasicGame.Boot.prototype = {
 	defineConf: function () {
 		var c = this.game.const;
 		this.game.conf = {
+			ModeInfo: {},
+		};
+		this.game.conf.ModeInfo[c.EASY_MODE] = {
+			key: c.EASY_MODE,
+			array: 1,
+			text: 'かんたん',
+			modeScore: 1,
+			fishFrequency: 100,
+			healingVal: 20,
+			bonusInfo: {
+				gravityX: 100,
+				gravityY: 0,
+				frequency: 12000,
+			},
+		};
+		this.game.conf.ModeInfo[c.NORMAL_MODE] = {
+			key: c.NORMAL_MODE,
+			array: 2,
+			text: 'ふつう',
+			modeScore: 3,
+			fishFrequency: 200,
+			healingVal: 15,
+			bonusInfo: {
+				gravityX: 200,
+				gravityY: 10,
+				frequency: 11000,
+			},
+		};
+		this.game.conf.ModeInfo[c.HARD_MODE] = {
+			key: c.HARD_MODE,
+			array: 3,
+			text: 'むずかしい',
+			modeScore: 5,
+			fishFrequency: 300,
+			healingVal: 10,
+			bonusInfo: {
+				gravityX: 300,
+				gravityY: 30,
+				frequency: 9000,
+			},
 		};
 	},
 };

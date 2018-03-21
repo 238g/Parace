@@ -6,6 +6,7 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
+		this.stage.backgroundColor = '#ffffff';　// TODO
 		// TODO favicon
 		this.BgContainer();
 		this.BtnContainer();
@@ -31,7 +32,23 @@ BasicGame.Title.prototype = {
 	},
 
 	BgContainer: function () {
+		this.genTitleTextSprite();
+	},
 
+	genTitleTextSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var c = this.game.const;
+		var textStyle = {
+			fontSize: 100,
+			fill: c.GAME_TEXT_COLOR,
+			stroke: '#FFFFFF',
+			strokeThickness: 20,
+			multipleStroke: c.GAME_TEXT_COLOR,
+			multipleStrokeThickness: 20,
+		};
+		var textSprite = s.genText(this.world.centerX+100,200,c.GAME_TITLE,textStyle);
+		this.game.global.TweenManager.beatA(textSprite,180).start();
+		this.game.global.TweenManager.beatA(textSprite.multipleTextSprite,180).start();
 	},
 
 	BtnContainer: function () {
@@ -59,8 +76,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genMuteBtnSprite: function (x,y) {
-		var offText = 'ミュートOFF';
-		var onText = 'ミュートON';
+		var offText = '音を出す';
+		var onText = '音を消す';
 		var text = this.sound.mute ? offText : onText;
 		this.genLabel(x,y,function (pointer) {
 			if (this.sound.mute) {
@@ -74,8 +91,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genFullScreenBtnSprite: function (x,y) {
-		var offText = 'フルスクリーンOFF';
-		var onText = 'フルスクリーンON';
+		var offText = 'フルスクリーン　☓';
+		var onText = 'フルスクリーン　◯';
 		var text = this.scale.isFullScreen ? offText : onText;
 		this.genLabel(x,y,function (pointer) {
 			if (this.scale.isFullScreen) {
@@ -89,19 +106,20 @@ BasicGame.Title.prototype = {
 	},
 
 	genLabel: function (x,y,func,text) {
+		var c = this.game.const;
 		var textStyle = {
 			fontSize: '43px',
-			fill: '#000000',
+			fill: c.GAME_TEXT_COLOR,
 			stroke: '#FFFFFF',
 			strokeThickness: 20,
-			multipleStroke: '#000000',
+			multipleStroke: c.GAME_TEXT_COLOR,
 			multipleStrokeThickness: 20,
 		};
 		var s = this.game.global.SpriteManager;
 		var labelSprite = s.genLabel(x,y,'greySheet',func,this,text,textStyle);
 		labelSprite.btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		labelSprite.btnSprite.scale.setTo(2.2);
-		// btnSprite.tint = c.color; // TODO
+		labelSprite.btnSprite.tint = c.GAME_MAIN_COLOR_B;
 		labelSprite.btnSprite.UonInputDown(function () {
 			// this.game.global.SoundManager.play({key:'PageOpen',volume:1,}); // TODO
 		}, this);
@@ -121,6 +139,8 @@ BasicGame.Title.prototype = {
 				} else {
 					howtoTextSprite.show();
 				}
+			} else {
+				panelSprite.scale.setTo(0);
 			}
 		}, this);
 		c.selectShow = function () {
@@ -136,7 +156,7 @@ BasicGame.Title.prototype = {
 		this.game.input.onDown.add(function (p) {
 			if (panelSprite.visible) {
 				var t = p.targetObject;
-				if (t && t.sprite) { return; }
+				if (t && t.sprite && t.sprite.type=='play') return;
 				panelSprite.hide();
 				panelSprite.scale.setTo(0);
 				selectContainer.hide();
@@ -148,12 +168,13 @@ BasicGame.Title.prototype = {
 	},
 
 	genDialogSprite: function () {
+		var c = this.game.const;
 		var t = this.game.global.TweenManager;
 		var s = this.game.global.SpriteManager;
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
 		panelSprite.scale.setTo(0);
 		panelSprite.anchor.setTo(.5);
-		// panelSprite.tint = 0xffe4b5; // TODO
+		panelSprite.tint = c.GAME_MAIN_COLOR_B;
 		panelSprite.hide();
 		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
 		panelSprite.popUpTween = tween;
@@ -162,56 +183,114 @@ BasicGame.Title.prototype = {
 
 	SelectContainer: function () {
 		var c = {};
-		/*
 		var selectTitleTextSprite = this.genSelectTitleTextSprite();
-		var charGroup = this.add.group();
-		for (var key in this.game.conf.CharInfo) {
-			this.genCharContainer(key,charGroup);
-		}
-		charGroup.visible = false;
-		*/
+		var selectGroup = this.add.group();
+		var m = this.game.conf.ModeInfo;
+		for (var key in m) this.genDifficultyBtnSprite(m[key],selectGroup);
+		selectGroup.visible = false;
 		c.show = function () {
-			// selectTitleTextSprite.show();
-			// charGroup.visible = true;
+			selectTitleTextSprite.show();
+			selectGroup.visible = true;
 		};
 		c.hide = function () {
-			// selectTitleTextSprite.hide();
-			// charGroup.visible = false;
+			selectTitleTextSprite.hide();
+			selectGroup.visible = false;
 		};
 		return c;
 	},
 
-	genHowtoTextSprite: function () {
+	genSelectTitleTextSprite: function () {
+		var c = this.game.const;
 		var textStyle = {
-			fontSize: '40px',
-			fill: '#800000', // TODO
+			fontSize: '60px',
+			fill: c.GAME_TEXT_COLOR,
 			stroke:'#FFFFFF',
-			strokeThickness: 15,
-			multipleStroke:'#800000', // TODO
+			strokeThickness: 20,
+			multipleStroke: c.GAME_TEXT_COLOR,
+			multipleStrokeThickness: 20,
+		};
+		var s = this.game.global.SpriteManager;
+		var text = '難易度を 選んでね';
+		var textSprite = s.genText(this.world.centerX, 280, text, textStyle);
+		textSprite.hide();
+		return textSprite;
+	},
+
+	genDifficultyBtnSprite: function (ModeInfo, group) {
+		var x = this.world.centerX;
+		var y = 300 * ModeInfo.array + 200;
+		var c = this.game.const;
+		var textStyle = {
+			fontSize: '80px',
+			fill: c.GAME_TEXT_COLOR,
+			stroke: '#FFFFFF',
+			strokeThickness: 20,
+			multipleStroke: c.GAME_TEXT_COLOR,
+			multipleStrokeThickness: 20,
+		};
+		var s = this.game.global.SpriteManager;
+		var btnSprite = s.genButton(x,y,'greySheet',function () {
+			this.game.global.currentMode = ModeInfo.key;
+			this.play();
+		},this);
+		btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+		btnSprite.scale.setTo(3);
+		btnSprite.anchor.setTo(.5);
+		btnSprite.tint = c.GAME_MAIN_COLOR_B;
+		btnSprite.type = 'play';
+		var textSprite = s.genText(x,y,ModeInfo.text,textStyle);
+		group.add(btnSprite);
+		group.add(textSprite.multipleTextSprite);
+		group.add(textSprite);
+	},
+
+	genHowtoTextSprite: function () {
+		var c = this.game.const;
+		var textStyle = {
+			fontSize: 40,
+			fill: c.GAME_TEXT_COLOR,
+			stroke:'#FFFFFF',
+			strokeThickness: 10,
+			multipleStroke: c.GAME_TEXT_COLOR,
 			multipleStrokeThickness: 15,
 			wordWrap: true,
 			wordWrapWidth: 300,
 		};
 		var s = this.game.global.SpriteManager;
-		var text = 
-			'石をひとつずつ移動させて同じ '
-			+'Vtuberの石を3つ以上そろえよう。 '
+		var beforeText = 
+			'あみを　投げて '
+			+'アズリムと　一緒に '
+			+'魚を　つかまえよう！ '
 			+' '
-			+'制限時間が0になるとゲーム終了だよ。 '
-			+'移動回数が0になっても '
-			+'ゲーム終了だよ。 '
+			+'あみを　投げると '
+			+'スタミナを　消費するよ！ '
+			+'スタミナが　なくなると '
+			+'回復まで　あみを　投げれないよ '
 			+' '
-			+'連鎖をするほど得点が高くなるぞ！ '
-			+'同時に消す石が多いほど '
-			+'得点が高くなるぞ！ '
-			+' '
-			+'移動できない時は下の '
-			+'スキルボタンを押そう！ '
-			+'まとめて石が消えるよ！ '
-			+' '
-			+'高得点を目指してがんばろう！ '
-			+'  ';
-		var textSprite = s.genText(this.world.centerX, this.world.centerY, text, textStyle);
+			+'魚によって　スコアが違うよ ';
+		var fishText_1 = 'フグ/うなぎ　→　５倍 ';
+		var fishText_2 = 'ピンク/青色/オレンジ　→　３倍 ';
+		var fishText_3 = '赤色/緑色　→　１倍 ';
+		var fishMinus = '骨　→　-マイナス点 ';
+		var fishBonus = '牛丼　→　ボーナスモード ';
+		var middleText = fishText_1+fishText_2+fishText_3+fishMinus+fishBonus;
+		var afterText =
+			' '
+			+'めざせ！　高得点！ ';
+		var textSprite = s.genText(this.world.centerX, this.world.centerY, beforeText+middleText+afterText, textStyle);
+		textSprite.addStrokeColor('#ffffff', 0);
+		var textLength = beforeText.length;
+		textSprite.addColor('#ff0000', textLength); // 1
+		textLength += fishText_1.length;
+		textSprite.addColor('#ff00ff', textLength); // 2
+		textLength += fishText_2.length;
+		textSprite.addColor('#3cb371', textLength); // 3
+		textLength += fishText_3.length;
+		textSprite.addColor('#4169e1', textLength); // minus
+		textLength += fishMinus.length;
+		textSprite.addColor('#ff8c00', textLength); // bonus
+		textLength += fishBonus.length;
+		textSprite.addColor(c.GAME_TEXT_COLOR, textLength);
 		textSprite.hide();
 		return textSprite;
 	},

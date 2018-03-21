@@ -32,13 +32,13 @@ BasicGame.Preloader.prototype = {
 	loadAssets: function () {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+		this.load.atlasXML('fishSpritesheet', 
+			'./images/AzlimBushi/fishSpritesheet.png', './images/AzlimBushi/fishSpritesheet.xml');
 		var imageAssets = {
-			'Fish':      './images/cafenozombiko/MiniZombie_2.png',
-			'Fish':      './images/sirorun/ground.png',
-
+			'Net': './images/AzlimBushi/Net.png',
+			'BeefBowl': './images/AzlimBushi/BeefBowl.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
-		// this.load.spritesheet('CharStones', './images/TenMaKiNinVerG/CharStones.png', 100, 100);
 		this.loadAudio();
 	},
 

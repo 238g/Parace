@@ -25,3 +25,7 @@ function __setSPBrowserColor (colorString) {
 		document.getElementsByName('theme-color')[0].setAttribute('content', colorString);
 	}
 }
+
+function __formatComma (val) {
+	return String(val).replace(/(\d)(?=(\d{3})+$)/g,'$1,');
+}

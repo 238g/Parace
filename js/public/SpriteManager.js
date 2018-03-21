@@ -153,6 +153,7 @@ SpriteManager.prototype = {
 		var btnSprite = this.genButton(x,y,key,func,_self);
 		btnSprite.anchor.setTo(.5);
 		var textSprite = this.genText(x,y,text,textStyle);
+		btnSprite.textSprite = textSprite;
 		labelContainer.btnSprite = btnSprite;
 		labelContainer.textSprite = textSprite;
 		labelContainer.show = function () {
@@ -163,6 +164,7 @@ SpriteManager.prototype = {
 			btnSprite.hide();
 			textSprite.hide();
 		};
+		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
 	},
 };
