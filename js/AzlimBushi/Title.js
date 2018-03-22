@@ -32,7 +32,35 @@ BasicGame.Title.prototype = {
 	},
 
 	BgContainer: function () {
+		this.genBgSprite();
 		this.genTitleTextSprite();
+	},
+
+	genBgSprite: function () {
+		var bgGroup = this.add.group();
+		var s = this.game.global.SpriteManager;
+		for (var i=1;i<=this.game.global.albumCount;i++) {
+			var sprite = s.genSprite(this.world.centerX,this.world.centerY,'album_'+i);
+			sprite.anchor.setTo(.5);
+			sprite.scale.setTo(1.78);
+			sprite.alpha = 0;
+			bgGroup.add(sprite);
+		}
+		bgGroup.shuffle();
+		var t = this.game.global.TweenManager;
+		function loop () {
+			var toBackSprite = bgGroup.getTop();
+			toBackSprite.alpha = 1;
+			var toTopSprite = bgGroup.getBottom();
+			bgGroup.bringToTop(toTopSprite);
+			var tween = t.fadeInA(toTopSprite, 2000, 2000);
+			t.onComplete(tween, function () {
+				toBackSprite.alpha = 0;
+				loop();
+			}, this);
+			tween.start();
+		}
+		loop();
 	},
 
 	genTitleTextSprite: function () {
@@ -46,19 +74,21 @@ BasicGame.Title.prototype = {
 			multipleStroke: c.GAME_TEXT_COLOR,
 			multipleStrokeThickness: 20,
 		};
-		var textSprite = s.genText(this.world.centerX+100,200,c.GAME_TITLE,textStyle);
+		var textSprite = s.genText(this.world.centerX+100,this.world.centerY+250,c.GAME_TITLE,textStyle);
 		this.game.global.TweenManager.beatA(textSprite,180).start();
 		this.game.global.TweenManager.beatA(textSprite.multipleTextSprite,180).start();
 	},
 
 	BtnContainer: function () {
-		var x = this.world.width*3/4;
-		var y = this.world.height;
-		this.genStartBtnSprite(x,y-100);
-		this.genHowtoBtnSprite(x,y-250);
-		this.genMuteBtnSprite(x,y-400);
-		this.genFullScreenBtnSprite(x,y-550);
-		this.genInquiryBtnSprite(x,y-700);
+		var x = this.world.width/4;
+		var y = this.world.centerY+400;
+		var margin = 150;
+		this.genStartBtnSprite(x,y);
+		this.genHowtoBtnSprite(x*3,y);
+		this.genMuteBtnSprite(x,y+margin);
+		this.genFullScreenBtnSprite(x*3,y+margin);
+		// TODO this.AAA(x,y+margin*2);
+		this.genInquiryBtnSprite(x*3,y+margin*2);
 	},
 
 	genStartBtnSprite: function (x,y) {

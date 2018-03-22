@@ -37,8 +37,16 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Net': './images/AzlimBushi/Net.png',
 			'BeefBowl': './images/AzlimBushi/BeefBowl.png',
+			'Azlim_1': './images/AzlimBushi/Azlim_1.png',
+			'Azlim_2': './images/AzlimBushi/Azlim_2.png',
+			'Azlim_3': './images/AzlimBushi/Azlim_3.png',
+			'Azlim_4': './images/AzlimBushi/Azlim_4.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
+		for (var i=1;i<=12;i++) {
+			this.load.image('album_'+i, './images/AzlimBushi/album_'+i+'.jpg');
+			this.game.global.albumCount+=1;
+		}
 		this.loadAudio();
 	},
 

@@ -52,6 +52,7 @@ BasicGame.Boot.prototype = {
 			SoundManager: null,
 			TweenManager: new TweenManager(this),
 			currentMode: 1,
+			albumCount: 0,
 		};
 	},
 

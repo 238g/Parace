@@ -110,6 +110,11 @@ SpriteManager.prototype = {
 				multipleTextSprite.anchor.setTo(x, y);
 			}
 		};
+		textSprite.addMove = function (addX, addY) {
+			var x = textSprite.x+addX;
+			var y = textSprite.y+addY;
+			textSprite.move(x,y);
+		};
 		textSprite.move = function (x, y) {
 			textSprite.x = x;
 			textSprite.y = y;

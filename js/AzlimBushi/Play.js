@@ -80,8 +80,7 @@ BasicGame.Play.prototype = {
 		}, this);
 	},
 
-	BgContainer: function () {
-		// 8x13
+	BgContainer: function () { // 8x13
 		this.stage.backgroundColor = '#afeeee';
 		for (var i=0;i<8;i++) this.add.sprite(i*128,128,'fishSpritesheet', 'WaterWave');
 		for (var i=0;i<8;i++) {
@@ -185,7 +184,6 @@ BasicGame.Play.prototype = {
 				netBodySprite.kill();
 			}, this);
 			this.time.events.add(500, function () {
-				console.log('in', this.GC.catchFishCount,this.GC.catchFishScore); // TODO del
 				this.addScore();
 				this.GC.netFirst = false;
 				this.GC.catchFishCount = 0;
@@ -198,7 +196,7 @@ BasicGame.Play.prototype = {
 
 	checkKindOfFish: function (fishEmitter) {
 		var score = 13;
-		if (fishEmitter.key == 'BeefBowl') this.bonusMode(); return 0;
+		if (fishEmitter.key == 'BeefBowl') return this.bonusMode();
 		switch (fishEmitter.frameName) {
 			case 'FishEel': 
 			case 'FishBlowfish': score*=5; break;
@@ -220,6 +218,8 @@ BasicGame.Play.prototype = {
 	bonusMode: function () {
 		if (!this.GC.isBonusMode) {
 			this.HUD.showBonus();
+			this.HUD.showChar();
+			this.time.events.add(1500, this.HUD.hideChar, this);
 			this.GC.isBonusMode = true;
 			this.RightFishGroup.frequency = 20;
 			this.LeftFishGroup.frequency = 20;
@@ -229,6 +229,7 @@ BasicGame.Play.prototype = {
 				this.LeftFishGroup.frequency = this.GC.baseFishFrequency;
 			}, this);
 		}
+		return 0;
 	},
 
 	addScore: function () {
@@ -329,8 +330,10 @@ BasicGame.Play.prototype = {
 		this.genScoreTextSprite(c);
 		this.genTimeCounterTextSprite(c);
 		this.genGaugeTextSprite(c);
+		this.genStartTextSprite(c);
 		this.genBonusTextSprite(c);
 		this.genHealingTextSprite(c);
+		this.genGameOverTextSprite(c);
 		return c;
 	},
 
@@ -378,7 +381,7 @@ BasicGame.Play.prototype = {
 		HUD.textStyle.stroke = '#ff0000';
 		HUD.textStyle.strokeThickness = 20;
 		HUD.textStyle.multipleStroke = '#ffffff';
-		var textSprite = s.genText(this.world.centerX,this.world.centerY-200,baseText,HUD.textStyle);
+		var textSprite = s.genText(this.world.centerX,this.world.centerY+200,baseText,HUD.textStyle);
 		textSprite.setScale(0,0);
 		var tween = t.popUpB(textSprite,800);
 		var tween2 = t.popUpB(textSprite.multipleTextSprite,800);
@@ -413,6 +416,59 @@ BasicGame.Play.prototype = {
 		};
 	},
 
+	genGameOverTextSprite: function (HUD) {
+		var t = this.game.global.TweenManager;
+		var s = this.game.global.SpriteManager;
+		var baseText = 'ゲームオーバー！';
+		HUD.textStyle.fill = this.game.const.GAME_TEXT_COLOR; // TODO color
+		HUD.textStyle.stroke = '#FFFFFF';
+		HUD.textStyle.multipleStroke = this.game.const.GAME_TEXT_COLOR;
+		var textSprite = s.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		textSprite.setScale(0,0);
+		var tween = t.popUpB(textSprite,800);
+		var tween2 = t.popUpB(textSprite.multipleTextSprite,800);
+		var self = this;
+		HUD.showGameOver = function (onCompFunc) {
+			t.onComplete(tween, onCompFunc, self);
+			tween.start();
+			tween2.start();
+		};
+	},
+
+	genStartTextSprite: function (HUD) {
+		var t = this.game.global.TweenManager;
+		var s = this.game.global.SpriteManager;
+		var charSprite = s.genSprite(0,400,'Azlim_'+this.rnd.integerInRange(3,4));
+		charSprite.scale.setTo(0);
+		var baseText = 'スタート！';
+		HUD.textStyle.fontSize = '90px';
+		HUD.textStyle.fill = this.game.const.GAME_TEXT_COLOR; // TODO color
+		HUD.textStyle.stroke = '#FFFFFF';
+		HUD.textStyle.multipleStroke = this.game.const.GAME_TEXT_COLOR;
+		var textSprite = s.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		textSprite.setScale(0,0);
+		var tween = t.popUpB(textSprite,800);
+		var tween2 = t.popUpB(textSprite.multipleTextSprite,800);
+		var tween3 = t.popUpB(charSprite,800,{x:1.5,y:1.5});
+		var self = this;
+		HUD.showStart = function (onCompFunc) {
+			t.onComplete(tween, onCompFunc, self);
+			tween.start();
+			tween2.start();
+			tween3.start();
+		};
+		HUD.hideStart = function () {
+			textSprite.hide();
+			charSprite.scale.setTo(0);
+		};
+		HUD.showChar = function () {
+			tween3.start();
+		};
+		HUD.hideChar = function () {
+			charSprite.scale.setTo(0);
+		};
+	},
+
 	GaugeContainer: function () {
 		var c = {};
 		var x = this.world.centerX;
@@ -439,8 +495,10 @@ BasicGame.Play.prototype = {
 				self.GC.isHealing = false;
 			}
 			if (self.GC.isHealing) {
-				self.HUD.changeGauge('かいふくちゅう…');
+				self.HUD.showHealing();
+				self.HUD.changeGauge('回復中…');
 			} else {
+				self.HUD.hideHealing();
 				self.HUD.changeGauge(self.GC.currentGauge);
 			}
 			var newWidth =  (val * w) / 100;
@@ -464,7 +522,29 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
-		this.start();
+		this.HUD.showStart(function () {
+			this.time.events.add(1000, function () {
+				this.HUD.hideStart();
+				this.stopBGM();
+				this.playBGM();
+				this.start();
+			}, this);
+		});
+	},
+
+	playBGM: function () {
+		return; // TODO
+		var s = this.game.global.SoundManager;
+		if (s.isPlaying('aaaa')) { return; }
+		s.play({key:'aaaa',isBGM:true,loop:true,volume:1});
+	},
+
+	stopBGM: function () {
+		return; // TODO
+		var s = this.game.global.SoundManager;
+		if (s.isPlaying('aaaa')) { return; }
+		s.stop('currentBGM');
+		s.stop('TitleBGM');
 	},
 
 	start: function () {
@@ -478,11 +558,11 @@ BasicGame.Play.prototype = {
 		this.LeftFishGroup.on = false;
 		this.BonusFishGroup.on = false;
 		this.EnemyFishGroup.on = false;
-		this.genResultPanelContainer();
+		this.HUD.showGameOver(this.genResultPanelContainer);
 	},
 
 	genResultPanelContainer: function () {
-		// this.game.global.SoundManager.play({key:'Result',volume:2,});
+		// this.game.global.SoundManager.play({key:'Result',volume:2,}); // TODO
 		this.time.events.removeAll();
 		var textStyle = {
 			fontSize: '100px',
@@ -493,16 +573,19 @@ BasicGame.Play.prototype = {
 			multipleStrokeThickness: 20,
 		};
 		var panelSprite = this.genPanelSprite();
+		var charSprite = this.genCharSprite();
 		var panelTextSprite = this.genPanelTextSprite(textStyle);
 		var modeTextSprite = this.genModeTextSprite(textStyle);
-		var restartLabel = this.genRestartLabel();
-		var tweetLabel = this.genTweetLabel();
-		var backLabel = this.genBackLabel();
+		var x = this.world.centerX+200;
+		var restartLabel = this.genRestartLabel(x);
+		var tweetLabel = this.genTweetLabel(x);
+		var backLabel = this.genBackLabel(x);
 		var t = this.game.global.TweenManager;
-		var tween = t.popUpB(panelSprite, 500, {x:8,y:13});
+		var tween = t.popUpB(panelSprite, 800, {x:9,y:14});
 		t.onComplete(tween, function () {
 			panelTextSprite.show();
 			modeTextSprite.show();
+			charSprite.show();
 			this.genPanelScoreTextSprite(0,400,textStyle);
 			this.genPanelScoreTextSprite(1,400,textStyle);
 			restartLabel.allShow(600);
@@ -524,7 +607,7 @@ BasicGame.Play.prototype = {
 
 	genPanelTextSprite: function (textStyle) {
 		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX, 300, '結果発表', textStyle);
+		var textSprite = s.genText(this.world.centerX, 200, '結果発表', textStyle);
 		textSprite.setScale(0,0);
 		var t = this.game.global.TweenManager;
 		textSprite.show = function () {
@@ -538,7 +621,7 @@ BasicGame.Play.prototype = {
 		var s = this.game.global.SpriteManager;
 		textStyle.fontSize = '80px';
 		var m = this.game.conf.ModeInfo[this.game.global.currentMode];
-		var textSprite = s.genText(this.world.centerX, 450, '難易度: '+m.text, textStyle);
+		var textSprite = s.genText(this.world.centerX, 330, '難易度: '+m.text, textStyle);
 		textSprite.setScale(0,0);
 		var t = this.game.global.TweenManager;
 		textSprite.show = function () {
@@ -550,16 +633,16 @@ BasicGame.Play.prototype = {
 
 	genPanelScoreTextSprite: function (num,delay,textStyle) {
 		var s = this.game.global.SpriteManager;
-		var text = this.HUD.score.text; // TODO
+		var text = this.HUD.score.text;
 		text = text.split(': ')[num];
-		var textSprite = s.genText(this.world.centerX, 600+(num*150), text, textStyle);
+		var textSprite = s.genText(this.world.centerX, 460+(num*120), text, textStyle);
 		textSprite.setScale(0,0);
 		this.game.global.TweenManager.popUpB(textSprite, 800, null, delay).start();
 		this.game.global.TweenManager.popUpB(textSprite.multipleTextSprite, 800, null, delay).start();
 	},
 
-	genRestartLabel: function () {
-		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+100,function () {
+	genRestartLabel: function (x) {
+		var label = this.genLabelTpl(x,this.world.centerY,function () {
 			this.state.start(this.game.global.nextSceen);
 		}, 'もう一度プレイ');
 		label.UonInputDown(function () {
@@ -568,16 +651,16 @@ BasicGame.Play.prototype = {
 		return label;
 	},
 
-	genTweetLabel: function () {
-		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+300,this.tweet, '結果をツイート');
+	genTweetLabel: function (x) {
+		var label = this.genLabelTpl(x,this.world.centerY+200,this.tweet, '結果をツイート');
 		label.UonInputDown(function () {
 			// this.game.global.SoundManager.play({key:'SelectChar',volume:1,}); // TODO
 		}, this);
 		return label;
 	},
 
-	genBackLabel: function () {
-		var label = this.genLabelTpl(this.world.centerX,this.world.centerY+500,function () {
+	genBackLabel: function (x) {
+		var label = this.genLabelTpl(x,this.world.centerY+400,function () {
 			this.game.global.nextSceen = 'Title';
 			this.state.start(this.game.global.nextSceen);
 		}, 'タイトルにもどる');
@@ -585,6 +668,19 @@ BasicGame.Play.prototype = {
 			// this.game.global.SoundManager.play({key:'SelectChar',volume:1,}); // TODO
 		}, this);
 		return label;
+	},
+
+	genCharSprite: function () {
+		var s = this.game.global.SpriteManager;
+		var rndNum = this.rnd.integerInRange(1,2);
+		if (rndNum == 1) {
+			var charSprite = s.genSprite(this.world.centerX, this.world.centerY+220, 'Azlim_1');
+		} else {
+			var charSprite = s.genSprite(this.world.centerX-220, this.world.centerY+260, 'Azlim_2');
+		}
+		charSprite.anchor.setTo(.5);
+		charSprite.hide();
+		return charSprite;
 	},
 
 	genLabelTpl: function (x,y,func,text) {
@@ -656,7 +752,7 @@ BasicGame.Play.prototype = {
 	test: function () {
 		if (__ENV!='prod') {
 			this.GC.leftTime = getQuery('time') || this.GC.leftTime;
-			// this.GC.CountLimit = getQuery('count') || this.GC.CountLimit;
+			if(getQuery('bonusMode')) this.bonusMode();
 			// this.game.global.currentChar = getQuery('char') || this.game.global.currentChar;
 		}
 	},
