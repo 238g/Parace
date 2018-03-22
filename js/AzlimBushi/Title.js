@@ -6,7 +6,7 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
-		this.stage.backgroundColor = '#ffffff';　// TODO
+		this.stage.backgroundColor = '#ffffff';　// TODO OK???
 		// TODO favicon
 		this.BgContainer();
 		this.BtnContainer();
@@ -276,7 +276,9 @@ BasicGame.Title.prototype = {
 		var middleText = fishText_1+fishText_2+fishText_3+fishMinus+fishBonus;
 		var afterText =
 			' '
-			+'めざせ！　高得点！ ';
+			+'まとめて　つかまえて '
+			+'スコアアップ！！ '
+			+'めざせ！　高得点！';
 		var textSprite = s.genText(this.world.centerX, this.world.centerY, beforeText+middleText+afterText, textStyle);
 		textSprite.addStrokeColor('#ffffff', 0);
 		var textLength = beforeText.length;

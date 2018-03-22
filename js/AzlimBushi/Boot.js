@@ -68,8 +68,8 @@ BasicGame.Boot.prototype = {
 			fishFrequency: 100,
 			healingVal: 20,
 			bonusInfo: {
-				gravityX: 100,
-				gravityY: 0,
+				gravityX: 0,
+				gravityY: 200,
 				frequency: 12000,
 			},
 		};
@@ -81,8 +81,8 @@ BasicGame.Boot.prototype = {
 			fishFrequency: 200,
 			healingVal: 15,
 			bonusInfo: {
-				gravityX: 200,
-				gravityY: 10,
+				gravityX: 0,
+				gravityY: 300,
 				frequency: 11000,
 			},
 		};
@@ -94,8 +94,8 @@ BasicGame.Boot.prototype = {
 			fishFrequency: 300,
 			healingVal: 10,
 			bonusInfo: {
-				gravityX: 300,
-				gravityY: 30,
+				gravityX: 0,
+				gravityY: 600,
 				frequency: 9000,
 			},
 		};

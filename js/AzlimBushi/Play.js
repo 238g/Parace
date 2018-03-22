@@ -198,6 +198,7 @@ BasicGame.Play.prototype = {
 
 	checkKindOfFish: function (fishEmitter) {
 		var score = 13;
+		if (fishEmitter.key == 'BeefBowl') this.bonusMode(); return 0;
 		switch (fishEmitter.frameName) {
 			case 'FishEel': 
 			case 'FishBlowfish': score*=5; break;
@@ -206,7 +207,6 @@ BasicGame.Play.prototype = {
 			case 'FishOrange': score*=3; break;
 			case 'FishRed': break;
 			case 'FishGreen': break;
-			case 'BeefBowl': this.bonusMode(); return 0;
 			case 'FishRedBoneS':
 			case 'FishBlueBoneS':
 			case 'FishGreenBoneS':
@@ -291,16 +291,13 @@ BasicGame.Play.prototype = {
 	},
 
 	genBonusFishEmitter: function () {
-		// TODO
 		var b = this.game.conf.ModeInfo[this.game.global.currentMode].bonusInfo;
-		var fishArr = ['NumSix']; // TODO del
-		// var fishArr = ['BeefBowl'];
-		var emitter = this.add.emitter(-500, this.world.centerY-100, 2);
+		var emitter = this.add.emitter(this.world.centerX, -100, 2);
 		this.BonusFishGroup = emitter;
 		emitter.gravity.x = b.gravityX;
 		emitter.gravity.y = b.gravityY;
-		emitter.makeParticles('fishSpritesheet',fishArr,2,true,false); // TODO
-		emitter.height = 1000;
+		emitter.makeParticles('BeefBowl',0,2,true,false);
+		emitter.width = 300;
 		emitter.start(false, 6000, b.frequency);
 	},
 
@@ -333,6 +330,7 @@ BasicGame.Play.prototype = {
 		this.genTimeCounterTextSprite(c);
 		this.genGaugeTextSprite(c);
 		this.genBonusTextSprite(c);
+		this.genHealingTextSprite(c);
 		return c;
 	},
 
@@ -391,6 +389,27 @@ BasicGame.Play.prototype = {
 			self.time.events.add(self.GC.bonusTime, function () {
 				textSprite.setScale(0,0);
 			}, self);
+		};
+	},
+
+	genHealingTextSprite: function (HUD) {
+		var t = this.game.global.TweenManager;
+		var s = this.game.global.SpriteManager;
+		var baseText = 'スタミナ回復中…';
+		HUD.textStyle.fill = this.game.const.GAME_TEXT_COLOR; // TODO color
+		HUD.textStyle.stroke = '#FFFFFF';
+		HUD.textStyle.multipleStroke = this.game.const.GAME_TEXT_COLOR;
+		var textSprite = s.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		textSprite.setScale(0,0);
+		var tween = t.popUpA(textSprite,300);
+		var tween2 = t.popUpA(textSprite.multipleTextSprite,300);
+		var self = this;
+		HUD.showHealing = function () {
+			tween.start();
+			tween2.start();
+		};
+		HUD.hideHealing = function () {
+			textSprite.setScale(0,0);
 		};
 	},
 
