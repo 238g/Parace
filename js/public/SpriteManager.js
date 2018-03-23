@@ -78,13 +78,13 @@ SpriteManager.prototype = {
 		}
 		var multipleTextSprite = { managerExist: false };
 		if (commonTextStyle.multipleStroke) {
-			multipleTextSprite.managerExist = true;
 			multipleTextStyle.fill = commonTextStyle.multipleStroke;
 			multipleTextStyle.stroke = commonTextStyle.multipleStroke;
 			multipleTextStyle.strokeThickness = commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness;
 			multipleTextSprite = this.self.add.text(x, y, text, multipleTextStyle);
 			multipleTextSprite.anchor.setTo(.5);
 			multipleTextSprite.lineSpacing = -commonTextStyle.multipleStrokeThickness;
+			multipleTextSprite.managerExist = true;
 		}
 		var textSprite = this.self.add.text(x, y, text, commonTextStyle);
 		textSprite.anchor.setTo(.5);

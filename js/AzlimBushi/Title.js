@@ -20,12 +20,11 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return;
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
 			s.stop('currentBGM');
-			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1.5,});
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1});
 		}, this);
 	},
 
@@ -73,7 +72,7 @@ BasicGame.Title.prototype = {
 		this.genHowtoBtnSprite(x*3,y);
 		this.genMuteBtnSprite(x,y+margin);
 		this.genFullScreenBtnSprite(x*3,y+margin);
-		// TODO this.AAA(x,y+margin*2);
+		this.genSoundBtnSprite(x,y+margin*2);
 		this.genInquiryBtnSprite(x*3,y+margin*2);
 	},
 
@@ -137,9 +136,34 @@ BasicGame.Title.prototype = {
 		labelSprite.btnSprite.scale.setTo(2.2);
 		labelSprite.btnSprite.tint = c.GAME_MAIN_COLOR_B;
 		labelSprite.btnSprite.UonInputDown(function () {
-			// this.game.global.SoundManager.play({key:'PageOpen',volume:1,}); // TODO
+			this.game.global.SoundManager.play({key:'Ou',volume:1,});
 		}, this);
 		return labelSprite;
+	},
+
+	genSoundBtnSprite: function (x,y) {
+		var s = this.game.global.SpriteManager;
+		var c = this.game.const;
+		var textStyle = {
+			fontSize: '43px',
+			fill: c.GAME_TEXT_COLOR,
+			stroke: '#FFFFFF',
+			strokeThickness: 20,
+			multipleStroke: c.GAME_TEXT_COLOR,
+			multipleStrokeThickness: 20,
+		};
+		for (var i=0;i<3;i++) {
+			var editX = x+130*i-130;
+			var btn = this.add.button(editX,y,'greySheet',function (pointer) {
+				this.game.global.SoundManager.play({key:'SoundBtn_'+(pointer.i+1),volume:.8,});
+			},this);
+			btn.tint = c.GAME_MAIN_COLOR_B;
+			btn.anchor.setTo(.5);
+			btn.scale.setTo(3);
+			btn.frameName = 'grey_circle';
+			btn.i = i;
+			s.genText(editX,y,(i+1),textStyle);
+		}
 	},
 
 	DialogContainer: function () {
@@ -177,7 +201,7 @@ BasicGame.Title.prototype = {
 				panelSprite.scale.setTo(0);
 				selectContainer.hide();
 				howtoTextSprite.hide();
-				// this.game.global.SoundManager.play({key:'PageOpen',volume:1,}); // TODO
+				this.game.global.SoundManager.play({key:'Ou',volume:1});
 			}
 		}, this);
 		return c;
@@ -279,7 +303,7 @@ BasicGame.Title.prototype = {
 			+'あみを　投げると '
 			+'スタミナを　消費するよ！ '
 			+'スタミナが　なくなると '
-			+'回復まで　あみを　投げれないよ '
+			+'全回復まで　あみを　投げれないよ '
 			+' '
 			+'魚によって　スコアが違うよ ';
 		var fishText_1 = 'フグ/うなぎ　→　５倍 ';

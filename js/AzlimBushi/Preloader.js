@@ -25,7 +25,7 @@ BasicGame.Preloader.prototype = {
 			'Azlim_3': './images/AzlimBushi/Azlim_3.png',
 			'Azlim_4': './images/AzlimBushi/Azlim_4.png',
 		};
-		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
+		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		for (var i=1;i<=12;i++) {
 			this.load.image('album_'+i, './images/AzlimBushi/album_'+i+'.jpg');
 			this.game.global.albumCount+=1;
@@ -35,19 +35,53 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			'TitleBGM': [
-				'./sounds/BGM/ChoroBavarioLoop.mp3',
-				'./sounds/BGM/ChoroBavarioLoop.wav',
-				'./sounds/BGM/ChoroBavarioLoop.ogg',
+			'PlayBGM': [
+				'./sounds/BGM/RainbowRush_loop.ogg',
+				'./sounds/BGM/RainbowRush_loop.mp3',
+				'./sounds/BGM/RainbowRush_loop.wav',
 			],
-			'PageOpen': [
-				'./sounds/SE/Cartoon/CartoonThrow.mp3',
-				'./sounds/SE/Cartoon/CartoonThrow.wav',
+			'TitleBGM': [
+				'./sounds/BGM/SoranBushi.mp3',
+				'./sounds/BGM/SoranBushi.wav',
+			],
+			'SoundBtn_1': [
+				'./sounds/SE/LabJP/Performance/Japan/drum-japanese1.mp3',
+				'./sounds/SE/LabJP/Performance/Japan/drum-japanese1.wav',
+			],
+			'SoundBtn_2': [
+				'./sounds/SE/LabJP/Performance/Japan/hyoushigi1.mp3',
+				'./sounds/SE/LabJP/Performance/Japan/hyoushigi1.wav',
+			],
+			'SoundBtn_3': [
+				'./sounds/SE/LabJP/Performance/Japan/kotsudumi1.mp3',
+				'./sounds/SE/LabJP/Performance/Japan/kotsudumi1.wav',
+			],
+			'Ou': [
+				'./sounds/VOICE/LabJP/Performance/mens-ou1.mp3',
+				'./sounds/VOICE/LabJP/Performance/mens-ou1.wav',
+			],
+			'CastNet': [
+				'./sounds/SE/LabJP/Battle/Other/whip-gesture2.mp3',
+				'./sounds/SE/LabJP/Battle/Other/whip-gesture2.wav',
+			],
+			'Result': [
+				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.mp3',
+				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.wav',
+			],
+			'BonusMode': [
+				'./sounds/SE/LabJP/Performance/Anime/shakin1.mp3',
+				'./sounds/SE/LabJP/Performance/Anime/shakin1.wav',
+			],
+			'Show': [
+				'./sounds/SE/LabJP/Btn/decision8.mp3',
+				'./sounds/SE/LabJP/Btn/decision8.wav',
+			],
+			'ScoreUp': [
+				'./sounds/SE/LabJP/Btn/decision4.mp3',
+				'./sounds/SE/LabJP/Btn/decision4.wav',
 			],
 		};
-		for (var key in this.sounds) {
-			this.load.audio(key, this.sounds[key]);
-		}
+		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},
 
 	loadOnlyFirst: function () {
