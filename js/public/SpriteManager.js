@@ -1,8 +1,12 @@
 SpriteManager = function (self) { this.constructor(self); };
 SpriteManager.prototype = {
 	self: null,
+	TweenManager: null,
 	constructor: function (self) {
 		this.self = self;
+	},
+	useTween: function (TweenManager) {
+		this.TweenManager = TweenManager;
 	},
 	genSprite: function (x, y, key, frame) {
 		_self = this.self;
@@ -72,8 +76,9 @@ SpriteManager.prototype = {
 			commonTextStyle[key] = textStyle[key];
 			multipleTextStyle[key] = textStyle[key];
 		}
-		var multipleTextSprite = {};
+		var multipleTextSprite = { managerExist: false };
 		if (commonTextStyle.multipleStroke) {
+			multipleTextSprite.managerExist = true;
 			multipleTextStyle.fill = commonTextStyle.multipleStroke;
 			multipleTextStyle.stroke = commonTextStyle.multipleStroke;
 			multipleTextStyle.strokeThickness = commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness;
@@ -84,9 +89,14 @@ SpriteManager.prototype = {
 		var textSprite = this.self.add.text(x, y, text, commonTextStyle);
 		textSprite.anchor.setTo(.5);
 		textSprite.multipleTextSprite = multipleTextSprite;
+		var self = this;
 		textSprite.show = function () {
 			textSprite.visible = true;
 			multipleTextSprite.visible = true;
+		};
+		textSprite.tweenShow = function (tweenType,option) {
+			self.TweenManager[tweenType](textSprite,option.duration).start();
+			if (multipleTextSprite.managerExist) self.TweenManager[tweenType](multipleTextSprite,option.duration).start();
 		};
 		textSprite.hide = function () {
 			textSprite.visible = false;
@@ -171,5 +181,52 @@ SpriteManager.prototype = {
 		};
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
+	},
+	setMidDialog: function (sprite, option) {
+		/* ////////////////////////////////
+			Need this.useTween
+			option = {
+				tint: 0x000000,
+				tween: popUpA,
+				duration: 1000,
+				scale: {x:1,y:1},
+				onCompFunc: function () {},
+				onCompBind: this,
+			};
+		*/ ////////////////////////////////
+		sprite.scale.setTo(0);
+		sprite.anchor.setTo(.5);
+		if (option.tint) sprite.tint = option.tint;
+		sprite.switchShow = function () {
+			if (option.scale) return sprite.scale.setTo(option.scale.x,option.scale.y);
+			sprite.scale.setTo(1);
+		};
+		if (option.tween) {
+			sprite.tweenMidDialog = this.TweenManager[option.tween](sprite,option.duration||1000,option.scale||{x:1,y:1});
+			if (!sprite.tween) sprite.tween = sprite.tweenMidDialog;
+			sprite.tweenShow = function () {
+				sprite.tweenMidDialog.start();
+			};
+		}
+		if (sprite.tweenMidDialog && option.onCompFunc && option.onCompBind) {
+			this.TweenManager.onComplete(sprite.tweenMidDialog,option.onCompFunc,option.onCompBind);
+		}
+		return sprite;
+	},
+	MidLoadingAnim: function () {
+		var loadingSprite = this.self.add.sprite(this.self.world.centerX, this.self.world.centerY, 'loading');
+		loadingSprite.anchor.setTo(.5);
+		loadingSprite.scale.setTo(1.5);
+		loadingSprite.animations.add('loading').play(18, true);
+	},
+	MidLoadingText: function (_self) {
+		var textSprite = _self.add.text(
+			_self.world.centerX, _self.world.centerY+120, '0%', 
+			{ font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 }
+		);
+		textSprite.anchor.setTo(.5);
+		_self.load.onFileComplete.add(function (progress/*, cacheKey, success, totalLoaded, totalFiles*/) {
+			textSprite.setText(progress+'%');
+		}, _self);
 	},
 };

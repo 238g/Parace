@@ -84,6 +84,19 @@ TweenManager.prototype = {
 		this.tweens[target.key] = startTween;
 		return startTween;
 	},
+	slideshow: function (group, duration, delay) {
+		var toBackSprite = group.getTop();
+		toBackSprite.alpha = 1;
+		var toTopSprite = group.getBottom();
+		group.bringToTop(toTopSprite);
+		var tween = this.fadeInA(toTopSprite, duration, delay);
+		var self = this;
+		this.onComplete(tween, function () {
+			toBackSprite.alpha = 0;
+			self.slideshow(group, duration, delay);
+		});
+		tween.start();
+	},
 	onComplete: function (target, func, self) {
 		target.onComplete.add(func, (self || this.self));
 	},

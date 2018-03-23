@@ -64,9 +64,7 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			var game = new Phaser.Game(900, 1600, Phaser.AUTO);
-			for (var className in BasicGame) {
-				game.state.add(className, BasicGame[className]);
-			}
+			for (var className in BasicGame) game.state.add(className, BasicGame[className]);
 			game.state.start('Boot');
 		};
 	</script>

@@ -29,3 +29,9 @@ function __setSPBrowserColor (colorString) {
 function __formatComma (val) {
 	return String(val).replace(/(\d)(?=(\d{3})+$)/g,'$1,');
 }
+
+function __copyJson (json) {
+	var newJson = {};
+	for (var key in json) newJson[key] = json[key];
+	return newJson;
+}

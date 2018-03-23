@@ -6,8 +6,6 @@ BasicGame.Title.prototype = {
 	},
 
 	create: function () {
-		this.stage.backgroundColor = '#ffffff';　// TODO OK???
-		// TODO favicon
 		this.BgContainer();
 		this.BtnContainer();
 		this.Dialog = this.DialogContainer();
@@ -32,6 +30,7 @@ BasicGame.Title.prototype = {
 	},
 
 	BgContainer: function () {
+		this.stage.backgroundColor = '#ffffff';
 		this.genBgSprite();
 		this.genTitleTextSprite();
 	},
@@ -47,20 +46,7 @@ BasicGame.Title.prototype = {
 			bgGroup.add(sprite);
 		}
 		bgGroup.shuffle();
-		var t = this.game.global.TweenManager;
-		function loop () {
-			var toBackSprite = bgGroup.getTop();
-			toBackSprite.alpha = 1;
-			var toTopSprite = bgGroup.getBottom();
-			bgGroup.bringToTop(toTopSprite);
-			var tween = t.fadeInA(toTopSprite, 2000, 2000);
-			t.onComplete(tween, function () {
-				toBackSprite.alpha = 0;
-				loop();
-			}, this);
-			tween.start();
-		}
-		loop();
+		this.game.global.TweenManager.slideshow(bgGroup,2000,2000);
 	},
 
 	genTitleTextSprite: function () {
@@ -162,7 +148,7 @@ BasicGame.Title.prototype = {
 		var selectContainer = this.SelectContainer();
 		var howtoTextSprite = this.genHowtoTextSprite();
 		var t = this.game.global.TweenManager;
-		t.onComplete(panelSprite.popUpTween, function () {
+		t.onComplete(panelSprite.tweenMidDialog, function () {
 			if (panelSprite.visible) {
 				if (panelSprite.showWhat == 'select') {
 					selectContainer.show();
@@ -176,12 +162,12 @@ BasicGame.Title.prototype = {
 		c.selectShow = function () {
 			panelSprite.show();
 			panelSprite.showWhat = 'select';
-			panelSprite.popUpTween.start();
+			panelSprite.tweenShow();
 		};
 		c.howtoShow = function () {
 			panelSprite.show();
 			panelSprite.showWhat = 'howto';
-			panelSprite.popUpTween.start();
+			panelSprite.tweenShow();
 		};
 		this.game.input.onDown.add(function (p) {
 			if (panelSprite.visible) {
@@ -199,16 +185,14 @@ BasicGame.Title.prototype = {
 
 	genDialogSprite: function () {
 		var c = this.game.const;
-		var t = this.game.global.TweenManager;
 		var s = this.game.global.SpriteManager;
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
-		panelSprite.scale.setTo(0);
-		panelSprite.anchor.setTo(.5);
-		panelSprite.tint = c.GAME_MAIN_COLOR_B;
-		panelSprite.hide();
-		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
-		panelSprite.popUpTween = tween;
-		return panelSprite;
+		return s.setMidDialog(panelSprite,{
+			tween:'popUpA',
+			duration: 500,
+			scale:{x:8,y:13},
+			tint:c.GAME_MAIN_COLOR_B,
+		});
 	},
 
 	SelectContainer: function () {
