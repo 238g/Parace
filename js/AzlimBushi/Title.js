@@ -26,6 +26,11 @@ BasicGame.Title.prototype = {
 			s.stop('currentBGM');
 			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1});
 		}, this);
+		this.time.events.add(1200, function () {
+			if (s.isPlaying('TitleBGM')) return;
+			s.stop('currentBGM');
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1});
+		});
 	},
 
 	BgContainer: function () {

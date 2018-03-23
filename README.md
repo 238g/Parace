@@ -12,5 +12,6 @@ https://238g.github.io/Parace/
 
 天魔機忍ストーンズverG (https://238g.github.io/Parace/TenMaKiNinVerG.html) Release 3/17
 
+アズリム節 (https://238g.github.io/Parace/AzlimBushi.html) Release 3/24
 
 https://github.com/238g/Parace
