@@ -160,7 +160,9 @@ BasicGame.Title.prototype = {
 		for (var i=0;i<3;i++) {
 			var editX = x+130*i-130;
 			var btn = this.add.button(editX,y,'greySheet',function (pointer) {
-				this.game.global.SoundManager.play({key:'SoundBtn_'+(pointer.i+1),volume:.8,});
+				var volume = .9;
+				if (pointer.i == 0) volume = 1.1; 
+				this.game.global.SoundManager.play({key:'SoundBtn_'+(pointer.i+1),volume:volume});
 			},this);
 			btn.tint = c.GAME_MAIN_COLOR_B;
 			btn.anchor.setTo(.5);
