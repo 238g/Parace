@@ -186,6 +186,7 @@ BasicGame.Title.prototype = {
 				}
 			} else {
 				panelSprite.scale.setTo(0);
+				panelSprite.hide();
 			}
 		}, this);
 		c.selectShow = function () {
@@ -216,6 +217,7 @@ BasicGame.Title.prototype = {
 		var c = this.game.const;
 		var s = this.game.global.SpriteManager;
 		var panelSprite = s.genSprite(this.world.centerX, this.world.centerY, 'greySheet', 'grey_panel');
+		panelSprite.hide();
 		return s.setMidDialog(panelSprite,{
 			tween:'popUpA',
 			duration: 500,
