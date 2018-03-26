@@ -1,12 +1,9 @@
 BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
 	init: function () { this.sounds = null; },
-	create: function () { this.loadManager(); },
-
-	loadManager: function () {
-		var s = this.game.global.SpriteManager;
-		s.MidLoadingAnim();
-		s.MidLoadingText(this);
+	create: function () {
+		this.M.S.BasicLoadingAnim();
+		this.M.S.BasicLoadingText();
 		this.load.onLoadComplete.add(this.loadComplete, this);
 		this.loadAssets();
 		this.load.start();
@@ -34,17 +31,15 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadOnlyFirst: function () {
-		var g = this.game.global;
-		if (!g.loadedOnlyFirst) {
-			g.loadedOnlyFirst = true;
+		if (!this.M.getGlobal('loadedOnlyFirst')) {
+			this.M.setGlobal('loadedOnlyFirst',true);
 			if (this.game.device.desktop) document.body.style.cursor = 'pointer';
-			g.SoundManager = new SoundManager(this, this.sounds);
-			g.SpriteManager.useTween(g.TweenManager);
+			this.M.SE.setSounds(this.sounds);
 		}
 	},
 
 	loadComplete: function () {
 		this.loadOnlyFirst();
-		this.state.start(this.game.global.nextSceen);
+		this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');
 	},
 };
