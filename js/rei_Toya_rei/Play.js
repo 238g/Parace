@@ -221,10 +221,10 @@ BasicGame.Play.prototype = {
 			case 180: this.Enemys.setYSpeed(1200,2000); break;
 			case 200: this.Enemys.setYSpeed(1200,2200); break;
 			case 250: this.Enemys.setYSpeed(1200,2800); break;
-			case 280: this.GC.nuisanceRate = 10; break;
+			case 255: this.GC.nuisanceRate = 10; break;
 			case 300: this.Enemys.setYSpeed(1200,3500); break;
-			case 320: this.GC.nuisanceRate = 30; break;
-			case 350: this.Enemys.setYSpeed(1000,4000); break;
+			case 350: this.GC.nuisanceRate = 30; break;
+			case 400: this.Enemys.setYSpeed(1000,4000); break;
 		}
 	},
 

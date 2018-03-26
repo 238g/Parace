@@ -117,7 +117,6 @@ BasicGame.Title.prototype = {
 		var y = this.world.centerY+400;
 		var margin = 150;
 		this.genStartBtnSprite(x*this.rnd.integerInRange(1,3),y);
-		this.genHowtoBtnSprite(x*3,y);
 		this.genMuteBtnSprite(x,60);
 		this.genFullScreenBtnSprite(x*3,80);
 		this.genInquiryBtnSprite(x*this.rnd.integerInRange(1,3),y+margin*2+30);
@@ -126,14 +125,6 @@ BasicGame.Title.prototype = {
 	genStartBtnSprite: function (x,y) {
 		var text = 'スタート';
 		this.genLabel(x,y,this.play,text);
-	},
-
-	genHowtoBtnSprite: function (x,y) {
-		return;
-		var text = '遊び方';
-		this.genLabel(x,y,function () {
-			// 遊び方？遊べばわかる。
-		},text);
 	},
 
 	genMuteBtnSprite: function (x,y) {
