@@ -124,6 +124,7 @@ Middleware.prototype.SpriteManager.prototype = {
 	},
 	genText: function (x, y, text, textStyle) {
 		var Scene = this.M.getScene();
+		var T = this.M.T;
 		var commonTextStyle = { 
 			fontSize: '50px', 
 			fill: '#FFFFFF', 
@@ -155,6 +156,8 @@ Middleware.prototype.SpriteManager.prototype = {
 			multipleTextSprite.SExist = true;
 		}
 		var textSprite = Scene.add.text(x, y, text, commonTextStyle);
+		textSprite.textTween = {};
+		if (multipleTextSprite.SExist) textSprite.multipleTextTween ={};
 		textSprite.anchor.setTo(.5);
 		textSprite.multipleTextSprite = multipleTextSprite;
 		textSprite.show = function () {
@@ -198,21 +201,30 @@ Middleware.prototype.SpriteManager.prototype = {
 			group.add(multipleTextSprite);
 			group.add(textSprite);
 		};
-		textSprite.onInputOver = function (func) {
+		textSprite.UonInputOver = function (func) {
 			textSprite.inputEnabled = true;
 			textSprite.events.onInputOver.add(func,Scene);
 		};
-		textSprite.onInputOut = function (func) {
+		textSprite.UonInputOut = function (func) {
 			textSprite.inputEnabled = true;
 			textSprite.events.onInputOut.add(func,Scene);
 		};
-		textSprite.onInputDown = function (func) {
+		textSprite.UonInputDown = function (func) {
 			textSprite.inputEnabled = true;
 			textSprite.events.onInputDown.add(func,Scene);
 		};
-		textSprite.onInputUp = function (func) {
+		textSprite.UonInputUp = function (func) {
 			textSprite.inputEnabled = true;
 			textSprite.events.onInputUp.add(func,Scene);
+		};
+		textSprite.addTween = function (tween, option) {
+			console.log(T[tween]);
+			textSprite.textTween[tween] = T[tween](textSprite,option);
+			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween] = T[tween](multipleTextSprite,option);
+		};
+		textSprite.startTween = function (tween) {
+			textSprite.textTween[tween].start();
+			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween].start();
 		};
 		return textSprite;
 	},
@@ -243,11 +255,11 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 		labelContainer.addTween = function (tween, option) {
 			this.btnTween[tween] = this.T[tween](btnSprite,option);
-			this.textTween[tween] = this.T[tween](textSprite,option);
+			textSprite.addTween(tween, option);
 		};
 		labelContainer.startTween = function (tween) {
 			this.btnTween[tween].start();
-			this.textTween[tween].start();
+			textSprite.startTween(tween);
 		};
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
