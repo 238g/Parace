@@ -145,6 +145,7 @@ BasicGame.Play.prototype = {
 			if (pos) {
 				this.GC.currentPosition--;
 				this.Player.x = pos.x;
+				this.game.global.SoundManager.play({key:'Move',volume:2});
 			}
 		}
 	},
@@ -155,6 +156,7 @@ BasicGame.Play.prototype = {
 			if (pos) {
 				this.GC.currentPosition++;
 				this.Player.x = pos.x;
+				this.game.global.SoundManager.play({key:'Move',volume:2});
 			}
 		}
 	},
@@ -173,6 +175,7 @@ BasicGame.Play.prototype = {
 		var self = this;
 		this.Nuisance.tweenStart = function () {
 			if (!self.Nuisance.tween.isRunning && !self.Nuisance.tweenBack.isRunning) {
+				self.game.global.SoundManager.play({key:'Feint',volume:1,});
 				self.Nuisance.x = self.Player.x;
 				self.Nuisance.tween.start();
 			}
@@ -255,10 +258,8 @@ BasicGame.Play.prototype = {
 		var baseText = '虚空行き: ';
 		var textSprite = s.genText(this.world.centerX,this.world.height-50,baseText+this.GC.score,HUD.textStyle);
 		textSprite.setAnchor(.5);
-		// var self = this;
 		HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
-			// self.addScoreEffect(self.GC.score, textSprite.x-100, textSprite.y+60, '+50');
 		};
 		HUD.score = textSprite;
 	},
@@ -278,7 +279,6 @@ BasicGame.Play.prototype = {
 		var tween2 = t.moveB(textSprite.multipleTextSprite,{x:-600},800);
 		var self = this;
 		HUD.showGameOver = function (onCompFunc) {
-			// self.game.global.SoundManager.play({key:'Show',volume:1,}); // TODO
 			textSprite.show();
 			t.onComplete(tween, function () {
 				self.time.events.add(800, onCompFunc, self);
@@ -314,8 +314,8 @@ BasicGame.Play.prototype = {
 
 	ready: function () {
 		this.stopBGM();
+		this.game.global.SoundManager.play({key:'Show',volume:3});
 		this.HUD.showStart(function () {
-			// this.game.global.SoundManager.play({key:'Show',volume:1,}); // TODO
 			this.time.events.add(1000, function () {
 				this.stopBGM();
 				this.HUD.hideStart();
@@ -326,10 +326,10 @@ BasicGame.Play.prototype = {
 	},
 
 	playBGM: function () {
-		return; // TODO
 		var s = this.game.global.SoundManager;
 		if (s.isPlaying('PlayBGM')) return;
-		s.play({key:'PlayBGM',isBGM:true,loop:true,volume:.85});
+		s.play({key:'PlayBGM',isBGM:true,loop:true,volume:2});
+		// s.play({key:'PlayBGM',isBGM:true,loop:true,volume:.9});
 	},
 
 	stopBGM: function () {
@@ -353,6 +353,7 @@ BasicGame.Play.prototype = {
 			this.time.slowMotion = 1;
 		},this);
 		this.HUD.showGameOver(this.genResultPanelContainer);
+		this.game.global.SoundManager.play({key:'HitEnemy',volume:1});
 	},
 
 	genResultPanelContainer: function () {
@@ -371,7 +372,7 @@ BasicGame.Play.prototype = {
 		var tweetLabel = this.genTweetLabel(x);
 		var backLabel = this.genBackLabel(x);
 		this.game.global.TweenManager.onComplete(panelSprite.tweenMidDialog, function () {
-			// this.game.global.SoundManager.play({key:'Result',volume:1}); // TODO
+			this.game.global.SoundManager.play({key:'Result',volume:1});
 			panelTextSprite.tweenShow('popUpB',800);
 			this.genPanelScoreTextSprite(0,400,textStyle);
 			this.genPanelScoreTextSprite(1,400,textStyle);
@@ -415,21 +416,21 @@ BasicGame.Play.prototype = {
 
 	genRestartLabel: function (x) {
 		return this.genLabelTpl(x,this.world.centerY,function () {
-			// this.game.global.SoundManager.play({key:'Show',volume:1,}); // TODO
+			this.game.global.SoundManager.play({key:'Hit',volume:1});
 			this.state.start(this.game.global.nextSceen);
 		}, 'もう一度プレイ');
 	},
 
 	genTweetLabel: function (x) {
 		return this.genLabelTpl(x,this.world.centerY+200,function () {
-			// this.game.global.SoundManager.play({key:'Show',volume:1,}); // TODO
+			this.game.global.SoundManager.play({key:'Hit',volume:1});
 			this.tweet();
 		}, '結果をツイート');
 	},
 
 	genBackLabel: function (x) {
 		return this.genLabelTpl(x,this.world.centerY+400,function () {
-			// this.game.global.SoundManager.play({key:'Show',volume:1,}); // TODO
+			this.game.global.SoundManager.play({key:'Hit',volume:1});
 			this.game.global.nextSceen = 'Title';
 			this.state.start(this.game.global.nextSceen);
 		}, 'タイトルにもどる');
@@ -508,6 +509,8 @@ BasicGame.Play.prototype = {
 	test: function () {
 		if (__ENV!='prod') {
 			if(getQuery('gameover')) this.genResultPanelContainer();
+			if(getQuery('feint')) this.GC.nuisanceRate=getQuery('feint');
+		
 		}
 	},
 };

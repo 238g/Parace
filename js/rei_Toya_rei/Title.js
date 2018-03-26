@@ -24,17 +24,16 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return;
 		var s = this.game.global.SoundManager;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
 			s.stop('currentBGM');
-			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1});
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:.9});
 		}, this);
 		this.time.events.add(1200, function () {
 			if (s.isPlaying('TitleBGM')) return;
 			s.stop('currentBGM');
-			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:1});
+			s.play({key:'TitleBGM',isBGM:true,loop:true,volume:.9});
 		});
 	},
 
@@ -91,7 +90,7 @@ BasicGame.Title.prototype = {
 			this.burstEmitter.x = pointer.x;
 			this.burstEmitter.y = pointer.y;
 			this.burstEmitter.explode(4000, 10);
-			this.game.global.SoundManager.play({key:'Hit',volume:1,});
+			this.game.global.SoundManager.play({key:'Hit',volume:1});
 		}, this);
 	},
 

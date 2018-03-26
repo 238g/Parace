@@ -31,15 +31,37 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			// TODO
 			'TitleBGM': [
-				'./sounds/BGM/RainbowRush_loop.ogg',
-				'./sounds/BGM/RainbowRush_loop.mp3',
-				'./sounds/BGM/RainbowRush_loop.wav',
+				'./sounds/BGM/CopyCat.mp3',
+				'./sounds/BGM/CopyCat.wav',
+			],
+			'PlayBGM': [
+				'./sounds/BGM/WaveMenuLoop.mp3',
+				'./sounds/BGM/WaveMenuLoop.wav',
 			],
 			'Hit': [
 				'./sounds/SE/LabJP/Performance/Anime/feed1.mp3',
 				'./sounds/SE/LabJP/Performance/Anime/feed1.wav',
+			],
+			'Show': [
+				'./sounds/SE/Digital_SFX/laser4.mp3',
+				'./sounds/SE/Digital_SFX/laser4.wav',
+			],
+			'HitEnemy': [
+				'./sounds/SE/SpellSet1/explode.mp3',
+				'./sounds/SE/SpellSet1/explode.wav',
+			],
+			'Move': [
+				'./sounds/SE/phaseJump5.mp3',
+				'./sounds/SE/phaseJump5.wav',
+			],
+			'Result': [
+				'./sounds/SE/JingleSet1/receive.mp3',
+				'./sounds/SE/JingleSet1/receive.wav',
+			],
+			'Feint': [
+				'./sounds/SE/LabJP/Performance/Anime/eye-shine1.mp3',
+				'./sounds/SE/LabJP/Performance/Anime/eye-shine1.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
