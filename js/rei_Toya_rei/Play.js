@@ -51,6 +51,7 @@ BasicGame.Play.prototype = {
 	},
 
 	hitEnemy: function (player, enemy) {
+		enemy.body.velocity.y = 80;
 		this.gameOver();
 	},
 
