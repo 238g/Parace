@@ -228,6 +228,16 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 		return textSprite;
 	},
+	genBmpSprite: function (x,y,w,h,fillStyle) {
+		var Scene = this.M.getScene();
+		var bmp = Scene.add.bitmapData(w,h);
+		bmp.ctx.fillStyle = fillStyle;
+		bmp.ctx.beginPath();
+		bmp.ctx.rect(0,0,w,h);
+		bmp.ctx.fill();
+		bmp.update();
+		return this.genSprite(x,y,bmp);
+	},
 	BasicGrayLabel: function (x,y,func,text,textStyle) {
 		var labelContainer = {
 			T: this.M.T,
@@ -286,6 +296,23 @@ Middleware.prototype.SpriteManager.prototype = {
 
 /////////////////////////////////////////////////////////////////////
 
+/*
+	Phaser.Easing.
+	Linear
+
+	Sinusoidal
+	Quadratic
+	Cubic
+	Quartic
+	Quintic
+	Exponential
+
+	Circular
+	Back
+	Elastic
+	Bounce
+*/
+
 Middleware.prototype.TweenManager = function (game, M) { this.initialize(game, M); };
 Middleware.prototype.TweenManager.prototype = {
 	initVar: function () {
@@ -311,7 +338,7 @@ Middleware.prototype.TweenManager.prototype = {
 		option = option || {};
 		option.scale = option.scale || {};
 		return Scene.add.tween(target.scale).to(
-			{x: (scale.x || 1), y: (scale.y || 1)}, option.duration, 
+			{x: (option.scale.x || 1), y: (option.scale.y || 1)}, option.duration, 
 			Phaser.Easing.Sinusoidal.Out, false, option.delay);
 	},
 	// [duration, scale, delay]
@@ -320,8 +347,17 @@ Middleware.prototype.TweenManager.prototype = {
 		option = option || {};
 		option.scale = option.scale || {};
 		return Scene.add.tween(target.scale).to(
-			{x: (scale.x || 1), y: (scale.y || 1)}, option.duration, 
+			{x: (option.scale.x || 1), y: (option.scale.y || 1)}, option.duration, 
 			Phaser.Easing.Back.Out, false, option.delay);
+	},
+	// easing[, duration, scale, delay]
+	popUpX: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		option.scale = option.scale || {};
+		return Scene.add.tween(target.scale).to(
+			{x: (option.scale.x || 1), y: (option.scale.y || 1)}, option.duration, 
+			option.easing, false, option.delay);
 	},
 	// xy[, duration, delay]
 	moveA: function (target, option) {
@@ -335,10 +371,17 @@ Middleware.prototype.TweenManager.prototype = {
 	moveB: function (target, option) {
 		var Scene = this.M.getScene();
 		option = option || {};
-		var tween = this.self.add.tween(target).to(
+		return Scene.add.tween(target).to(
 			option.xy, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
-		return tween;
+	},
+	// xy, easing[, duration, delay]
+	moveX: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		return Scene.add.tween(target).to(
+			option.xy, option.duration, 
+			option.easing, false, option.delay);
 	},
 	// [duration, delay]
 	fadeInA: function (target, option) {
@@ -352,7 +395,7 @@ Middleware.prototype.TweenManager.prototype = {
 	fadeOutA: function (target, option) {
 		var Scene = this.M.getScene();
 		option = option || {};
-		return this.self.add.tween(target).to(
+		return Scene.add.tween(target).to(
 			{alpha:0}, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
 	},
