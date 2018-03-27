@@ -38,6 +38,7 @@ BasicGame.Play.prototype = {
 			nuisanceRate: 1,
 			addFrequency: (this.game.device.desktop)?0:1000,
 			addVelocity: (this.game.device.desktop)?0:500,
+			checkCounter: 0,
 		};
 	},
 
@@ -199,13 +200,12 @@ BasicGame.Play.prototype = {
 		var scale = .3;
 		this.Enemys.setScale(scale,scale,scale,scale);
 		this.Enemys.start(false, 8000, 2000+this.GC.addFrequency);
-		var counter = 0;
+		this.GC.checkCounter = 0;
 		this.time.events.loop(500, function () {
-			// console.log(counter);
-			this.checkEnemyLogic(counter);
+			this.checkEnemyLogic(this.GC.checkCounter);
 			this.checkNuisance();
 			this.Enemys.x = this.GC.position[this.rnd.integerInRange(1,4)].x+100;
-			counter++;
+			this.GC.checkCounter++;
 		}, this);
 	},
 
@@ -515,11 +515,17 @@ BasicGame.Play.prototype = {
 		// for (var key in this.Enemys.children) if(this.Enemys.children[key].alive) this.game.debug.body(this.Enemys.children[key]);
 	},
 
+	renderD: function () {
+		this.time.events.loop(500, function () {
+			this.game.debug.text(this.GC.checkCounter,100,100, null, '80px Courier');
+		}, this);
+	},
+
 	test: function () {
 		if (__ENV!='prod') {
 			if(getQuery('gameover')) this.genResultPanelContainer();
 			if(getQuery('feint')) this.GC.nuisanceRate=getQuery('feint');
-		
 		}
+		if(getQuery('debug') == 'C10E37556700766F1A83A68D8AEAD481') this.renderD();
 	},
 };
