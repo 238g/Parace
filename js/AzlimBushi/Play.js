@@ -223,8 +223,9 @@ BasicGame.Play.prototype = {
 			this.HUD.showChar();
 			this.time.events.add(1500, this.HUD.hideChar, this);
 			this.GC.isBonusMode = true;
-			this.RightFishGroup.frequency = (this.game.device.desktop)?20:50;
-			this.LeftFishGroup.frequency = (this.game.device.desktop)?20:50;
+			var frequency = (this.game.device.desktop)?20:50;
+			this.RightFishGroup.frequency = frequency;
+			this.LeftFishGroup.frequency = frequency;
 			this.time.events.add(this.GC.bonusTime, function () {
 				this.GC.isBonusMode = false;
 				this.RightFishGroup.frequency = this.GC.baseFishFrequency;
@@ -237,9 +238,11 @@ BasicGame.Play.prototype = {
 
 	addScore: function () {
 		var m = this.game.conf.ModeInfo[this.game.global.currentMode];
+		var deviceScore = (this.game.device.desktop)?1:1.1;
 		var score = this.GC.catchFishScore 
 				* this.GC.catchFishCount
-				* m.modeScore;
+				* m.modeScore
+				* deviceScore;
 		this.GC.score += score;
 		this.HUD.changeScore(this.GC.score);
 	},
@@ -741,6 +744,7 @@ BasicGame.Play.prototype = {
 			this.GC.leftTime = getQuery('time') || this.GC.leftTime;
 			if(getQuery('bonusMode')) this.bonusMode();
 			if(getQuery('st')) this.GC.currentGauge = Number(getQuery('st'));
+			console.log(this.game.device.desktop);
 		}
 	},
 };

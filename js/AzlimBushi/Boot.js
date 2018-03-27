@@ -66,7 +66,7 @@ BasicGame.Boot.prototype = {
 			array: 1,
 			text: 'かんたん',
 			modeScore: 1,
-			fishFrequency: (this.game.device.desktop)?100:200,
+			fishFrequency: ((this.game.device.desktop)?100:200),
 			healingVal: 20,
 			bonusInfo: {
 				gravityX: 0,
@@ -79,7 +79,7 @@ BasicGame.Boot.prototype = {
 			array: 2,
 			text: 'ふつう',
 			modeScore: 3,
-			fishFrequency: (this.game.device.desktop)?200:250,
+			fishFrequency: ((this.game.device.desktop)?200:250),
 			healingVal: 15,
 			bonusInfo: {
 				gravityX: 0,
