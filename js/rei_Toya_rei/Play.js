@@ -363,7 +363,7 @@ BasicGame.Play.prototype = {
 			// this.time.slowMotion = 1;
 		// },this);
 		this.HUD.showGameOver(this.genResultPanelContainer);
-		this.game.global.SoundManager.play({key:'HitEnemy',volume:1});
+		this.game.global.SoundManager.play({key:'HitEnemy',volume:2});
 	},
 
 	genResultPanelContainer: function () {
