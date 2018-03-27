@@ -36,7 +36,8 @@ BasicGame.Play.prototype = {
 				4: {x:680,y:this.world.height-500},
 			},
 			nuisanceRate: 1,
-			addFrequency: (this.game.device.desktop)?0:1000,
+			addFrequency: 0,
+			// addFrequency: (this.game.device.desktop)?0:1000,
 			addVelocity: (this.game.device.desktop)?0:500,
 			checkCounter: 0,
 		};
