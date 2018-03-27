@@ -223,14 +223,14 @@ BasicGame.Play.prototype = {
 			this.HUD.showChar();
 			this.time.events.add(1500, this.HUD.hideChar, this);
 			this.GC.isBonusMode = true;
-			this.RightFishGroup.frequency = 20;
-			this.LeftFishGroup.frequency = 20;
+			this.RightFishGroup.frequency = (this.game.device.desktop)?20:50;
+			this.LeftFishGroup.frequency = (this.game.device.desktop)?20:50;
 			this.time.events.add(this.GC.bonusTime, function () {
 				this.GC.isBonusMode = false;
 				this.RightFishGroup.frequency = this.GC.baseFishFrequency;
 				this.LeftFishGroup.frequency = this.GC.baseFishFrequency;
 			}, this);
-			this.game.global.SoundManager.play({key:'BonusMode',volume:.5,});
+			this.game.global.SoundManager.play({key:'BonusMode',volume:.5});
 		}
 		return 0;
 	},

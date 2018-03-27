@@ -88,7 +88,7 @@ BasicGame.Preloader.prototype = {
 		var g = this.game.global;
 		if (!g.loadedOnlyFirst) {
 			g.loadedOnlyFirst = true;
-			if (this.game.device.desktop) { document.body.style.cursor = 'pointer'; }
+			if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 			g.SoundManager = new SoundManager(this, this.sounds);
 			g.SpriteManager.useTween(g.TweenManager);
 		}
