@@ -71,14 +71,14 @@ BasicGame.Title.prototype = {
 		this.bgEmitterLeft.setYSpeed(-50,50);
 		this.bgEmitterLeft.setScale(.1,.1,.1,.1);
 		this.bgEmitterLeft.makeParticles('ToyaFace_1',0,250,true,true);
-		this.bgEmitterLeft.start(false,8000,20);
+		this.bgEmitterLeft.start(false,8000,(this.game.device.desktop)?30:100);
 		this.bgEmitterRight = this.add.emitter(this.world.width-50,y);
 		this.bgEmitterRight.bounce.setTo(.8,.8);
 		this.bgEmitterRight.setXSpeed(-100,-200);
 		this.bgEmitterRight.setYSpeed(-50,50);
 		this.bgEmitterRight.setScale(.1,.1,.1,.1);
 		this.bgEmitterRight.makeParticles('ToyaFace_1',0,250,true,true);
-		this.bgEmitterRight.start(false,8000,20);
+		this.bgEmitterRight.start(false,8000,(this.game.device.desktop)?30:100);
 	},
 
 	EffectContainer: function () {
@@ -167,16 +167,23 @@ BasicGame.Title.prototype = {
 			multipleStrokeThickness: 20,
 		};
 		var s = this.game.global.SpriteManager;
-		var labelSprite = s.genSprite(x,y,'greySheet','grey_button00');
-		this.btnGroup.add(labelSprite);
-		var scale = specialFlag?2.2:this.rnd.integerInRange(18,22)*.1;
-		labelSprite.scale.setTo(scale);
-		labelSprite.anchor.setTo(.5);
-		labelSprite.tint = c.GAME_MAIN_COLOR_B;
-		labelSprite.UonInputDown(func,this);
-		labelSprite.body.immovable = true;
-		var textSprite = s.genText(x,y,text,textStyle);
-		labelSprite.textSprite = textSprite;
+		if (specialFlag) {
+			var labelSprite = s.genLabel(x,y,'greySheet',func,this,text,textStyle);
+			labelSprite.btnSprite.setFrames('grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
+			labelSprite.btnSprite.scale.setTo(2.2);
+			labelSprite.btnSprite.tint = c.GAME_MAIN_COLOR_B;
+		} else {
+			var labelSprite = s.genSprite(x,y,'greySheet','grey_button00');
+			this.btnGroup.add(labelSprite);
+			var scale = this.rnd.integerInRange(18,22)*.1;
+			labelSprite.scale.setTo(scale);
+			labelSprite.anchor.setTo(.5);
+			labelSprite.tint = c.GAME_MAIN_COLOR_B;
+			labelSprite.UonInputDown(func,this);
+			labelSprite.body.immovable = true;
+			var textSprite = s.genText(x,y,text,textStyle);
+			labelSprite.textSprite = textSprite;
+		}
 		return labelSprite;
 	},
 

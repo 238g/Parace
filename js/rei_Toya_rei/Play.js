@@ -36,6 +36,8 @@ BasicGame.Play.prototype = {
 				4: {x:680,y:this.world.height-500},
 			},
 			nuisanceRate: 1,
+			addFrequency: (this.game.device.desktop)?0:1000,
+			addVelocity: (this.game.device.desktop)?0:500,
 		};
 	},
 
@@ -77,10 +79,13 @@ BasicGame.Play.prototype = {
 		var h = this.world.height;
 		var framePx = 5;
 		for (var i=0;i<5;i++) {
-			this.add.sprite(i*220,0,this.genBmpTpl(framePx,h,'#0b29bfc9'));
+			var a = this.add.sprite(i*220,0,this.genBmpTpl(framePx,h,'#0b29bf'));
+			a.alpha = .8;
 			this.add.sprite(i*220+framePx,0,this.genBmpTpl(20-framePx*2,h,'#c2d0d2'));
-			this.add.sprite(i*220+20-framePx,0,this.genBmpTpl(framePx,h,'#0b29bfc9'));
-			this.add.sprite(i*220+20,0,this.genBmpTpl(200,h,'#0bdfff85'));
+			var b = this.add.sprite(i*220+20-framePx,0,this.genBmpTpl(framePx,h,'#0b29bf'));
+			b.alpha = .8;
+			var c = this.add.sprite(i*220+20,0,this.genBmpTpl(200,h,'#0bdfff'));
+			c.alpha = .5;
 		}
 	},
 
@@ -183,16 +188,17 @@ BasicGame.Play.prototype = {
 	},
 
 	EnemyContainer: function () {
+		var av = this.GC.addVelocity;
 		var keyArr = ['ToyaFace_1','ToyaFace_R'];
 		this.Enemys = this.add.emitter(this.GC.position[this.rnd.integerInRange(1,4)].x+100,-300,30);
 		this.Enemys.makeParticles(keyArr,null,30,true,false);
-		this.Enemys.setYSpeed(300,500);
+		this.Enemys.setYSpeed(300+av,500+av);
 		this.Enemys.setXSpeed(0,0);
 		this.Enemys.gravity = 0;
 		this.Enemys.setRotation(0, 0);
 		var scale = .3;
 		this.Enemys.setScale(scale,scale,scale,scale);
-		this.Enemys.start(false, 8000, 2000);
+		this.Enemys.start(false, 8000, 2000+this.GC.addFrequency);
 		var counter = 0;
 		this.time.events.loop(500, function () {
 			// console.log(counter);
@@ -204,31 +210,33 @@ BasicGame.Play.prototype = {
 	},
 
 	checkEnemyLogic: function (counter) {
+		var av = this.GC.addVelocity;
+		var af = this.GC.addFrequency;
 		switch (counter) { // 2->1sec / 20->10sec
-			case 20: this.Enemys.setYSpeed(500,800); break;
-			case 30: this.Enemys.frequency = 1500; break;
-			case 40: this.Enemys.setYSpeed(800,1200); break;
-			case 50: this.Enemys.frequency = 1200; break;
+			case 20: this.Enemys.setYSpeed(500+av,800+av); break;
+			case 30: this.Enemys.frequency = 1500+af; break;
+			case 40: this.Enemys.setYSpeed(800+av,1200+av); break;
+			case 50: this.Enemys.frequency = 1300+af; break;
 			case 55: this.GC.nuisanceRate = 3; break;
-			case 60: this.Enemys.setYSpeed(1000,1400); break;
-			case 70: this.Enemys.frequency = 1000; break;
-			case 80: this.Enemys.setYSpeed(300,1000); break;
-			case 90: this.Enemys.frequency = 800; break;
-			case 100: this.Enemys.setYSpeed(300,1000); break;
+			case 60: this.Enemys.setYSpeed(1000+av,1400+av); break;
+			case 70: this.Enemys.frequency = 1200+af; break;
+			case 80: this.Enemys.setYSpeed(300+av,1000+av); break;
+			case 90: this.Enemys.frequency = 1000+af; break;
+			case 100: this.Enemys.setYSpeed(300+av,1000+av); break;
 			case 105: this.GC.nuisanceRate = 5; break;
-			case 110: this.Enemys.frequency = 1000; break;
-			case 120: this.Enemys.setYSpeed(1200,1500); break;
-			case 130: this.Enemys.frequency = 800; break;
-			case 140: this.Enemys.setYSpeed(500,1500); break;
-			case 150: this.Enemys.frequency = 600; break;
+			case 110: this.Enemys.frequency = 900+af; break;
+			case 120: this.Enemys.setYSpeed(1200+av,1500+av); break;
+			case 130: this.Enemys.frequency = 800+af; break;
+			case 140: this.Enemys.setYSpeed(500+av,1500+av); break;
+			case 150: this.Enemys.frequency = 600+af; break;
 			case 155: this.GC.nuisanceRate = 8; break;
-			case 180: this.Enemys.setYSpeed(1200,2000); break;
-			case 200: this.Enemys.setYSpeed(1200,2200); break;
-			case 250: this.Enemys.setYSpeed(1200,2800); break;
+			case 180: this.Enemys.setYSpeed(1200+av,2000); break;
+			case 200: this.Enemys.setYSpeed(1200+av,2200); break;
+			case 250: this.Enemys.setYSpeed(1200+av,2800); break;
 			case 255: this.GC.nuisanceRate = 10; break;
-			case 300: this.Enemys.setYSpeed(1200,3500); break;
+			case 300: this.Enemys.setYSpeed(1200+av,3500); break;
 			case 350: this.GC.nuisanceRate = 30; break;
-			case 400: this.Enemys.setYSpeed(1000,4000); break;
+			case 400: this.Enemys.setYSpeed(1000+av,4000); break;
 		}
 	},
 
@@ -275,8 +283,10 @@ BasicGame.Play.prototype = {
 		textStyle.multipleStroke = '#FFFFFF';
 		var textSprite = s.genText(this.world.width+600,this.world.centerY,baseText,textStyle);
 		textSprite.hide();
-		var tween = t.moveB(textSprite,{x:-600},800);
-		var tween2 = t.moveB(textSprite.multipleTextSprite,{x:-600},800);
+		var duration = 2400;
+		// var duration = 800;
+		var tween = t.moveB(textSprite,{x:-600},duration);
+		var tween2 = t.moveB(textSprite.multipleTextSprite,{x:-600},duration);
 		var self = this;
 		HUD.showGameOver = function (onCompFunc) {
 			textSprite.show();
@@ -329,7 +339,6 @@ BasicGame.Play.prototype = {
 		var s = this.game.global.SoundManager;
 		if (s.isPlaying('PlayBGM')) return;
 		s.play({key:'PlayBGM',isBGM:true,loop:true,volume:2});
-		// s.play({key:'PlayBGM',isBGM:true,loop:true,volume:.9});
 	},
 
 	stopBGM: function () {
@@ -342,16 +351,16 @@ BasicGame.Play.prototype = {
 	start: function () {
 		this.GC.isPlaying = true;
 		this.GC.inputEnable = true;
-		this.time.slowMotion = 1;
+		// this.time.slowMotion = 1;
 	},
 
 	gameOver: function () {
 		this.GC.isPlaying = false;
 		this.Enemys.on = false;
-		this.time.slowMotion = 3;
-		this.time.events.add(2000, function () {
-			this.time.slowMotion = 1;
-		},this);
+		// this.time.slowMotion = 3;
+		// this.time.events.add(2000, function () {
+			// this.time.slowMotion = 1;
+		// },this);
 		this.HUD.showGameOver(this.genResultPanelContainer);
 		this.game.global.SoundManager.play({key:'HitEnemy',volume:1});
 	},
@@ -379,7 +388,7 @@ BasicGame.Play.prototype = {
 			restartLabel.allShow(600);
 			tweetLabel.allShow(800);
 			backLabel.allShow(1000);
-			this.time.slowMotion = 1;
+			// this.time.slowMotion = 1;
 			this.time.events.removeAll();
 		}, this);
 		panelSprite.tweenShow();
