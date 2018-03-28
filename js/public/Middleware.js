@@ -1,4 +1,4 @@
-Middleware = function (game,BasicGame,BootClass) { this.initialize(game,BasicGame,BootClass); };
+Middleware = function (game,GameObj,BootClass) { this.initialize(game,GameObj,BootClass); };
 Middleware.prototype = {
 	initVar: function () {
 		this.game = null;
@@ -13,10 +13,10 @@ Middleware.prototype = {
 		this.const = {};
 		this.conf = {};
 	},
-	initialize: function (game,BasicGame,BootClass) {
+	initialize: function (game,GameObj,BootClass) {
 		this.initVar();
 		game.M = this;
-		for (var className in BasicGame) game.state.add(className, BasicGame[className]);
+		for (var className in GameObj) game.state.add(className, GameObj[className]);
 		this.S = new this.SpriteManager(game, this);
 		this.T = new this.TweenManager(game, this);
 		this.SE = new this.SoundManager(game, this);
