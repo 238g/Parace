@@ -13,9 +13,16 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Net': './images/AzlimBushi/Net.png',
+			// 'Pandey_1': './images/kashikomari/Pandey_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		var PandeyImgArr = [];
+		for (var i=1;i<=9;i++) {
+			var key = 'Pandey_'+i;
+			this.load.image(key, './images/kashikomari/'+key+'.png');
+			PandeyImgArr.push(key);
+		}
+		this.M.setGlobal('PandeyImgArr', PandeyImgArr);
 		this.loadAudio();
 	},
 

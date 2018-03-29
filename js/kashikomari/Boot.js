@@ -19,7 +19,15 @@ BasicGame.Boot.prototype = {
 
 	defineConst: function () {
 		this.M.defineConst({
-			GAME_TITLE: 'aaaaaaaaaaaa',
+			GAME_TITLE: 'まりちゃんばりん',
+			MAIN_COLOR: '#fffd3a',
+			MAIN_TINT:  0xfffd3a,
+			MAIN_TEXT_COLOR: '#eaad18',
+			PERFECT: 1,
+			COOL: 2,
+			GOOD: 3,
+			BAD: 4,
+			FALSE: 5,
 		});
 	},
 
@@ -30,7 +38,7 @@ BasicGame.Boot.prototype = {
 
 	defineConf: function () {
 		this.M.defineConf({
-			scores: this.scores(),
+			MusicalScores: this.genMusicalScores(),
 		});
 	},
 };

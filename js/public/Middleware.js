@@ -35,7 +35,6 @@ Middleware.prototype = {
 		if (orientation) {
 			// TODO test
 			Scene.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
-
 			if (!Scene.game.device.desktop) {
 				Scene.scale.forceOrientation(true, false);
 				Scene.scale.enterIncorrectOrientation.add(function () {
@@ -69,7 +68,7 @@ Middleware.prototype = {
 	setGlobal: function (key, val) { this.global[key] = val; },
 	getGlobal: function (key) { return this.global[key]; },
 	defineConst: function (val) { this.const = val; },
-	getConst: function (key) { return this.const[key]; },
+	getConst: function (key) { if (!key) return this.const; return this.const[key]; },
 	defineConf: function (val) { this.conf = val; },
 	setConf: function (key, val) { this.conf[key] = val; },
 	getConf: function (key) { return this.conf[key]; },
@@ -218,7 +217,6 @@ Middleware.prototype.SpriteManager.prototype = {
 			textSprite.events.onInputUp.add(func,Scene);
 		};
 		textSprite.addTween = function (tween, option) {
-			console.log(T[tween]);
 			textSprite.textTween[tween] = T[tween](textSprite,option);
 			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween] = T[tween](multipleTextSprite,option);
 		};
@@ -273,6 +271,28 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
+	},
+	// [x,y,tint,tween,duration,scale,onCompFunc]
+	BasicGrayDialog: function (option) {
+		var Scene = this.M.getScene();
+		var T = this.M.T;
+		option = option || {};
+		var sprite = this.genSprite(
+			option.x||Scene.world.centerX, 
+			option.y||Scene.world.centerY, 'greySheet', 'grey_panel');
+		sprite.scale.setTo(0);
+		sprite.anchor.setTo(.5);
+		sprite.tint = option.tint||0xffffff;
+		option.scale = option.scale||(this.M.orientated?{x:13,y:8}:{x:8,y:13});
+		sprite.switchShow = function () {
+			sprite.scale.setTo(option.scale.x,option.scale.y);
+		};
+		sprite.tweenDialog = T[option.tween||'popUpB'](sprite,option);
+		sprite.tweenShow = function () {
+			sprite.tweenDialog.start();
+		};
+		if (option.onComplete) T.onComplete(sprite.tweenDialog,option.onComplete);
+		return sprite;
 	},
 	BasicLoadingAnim: function () {
 		var Scene = this.M.getScene();

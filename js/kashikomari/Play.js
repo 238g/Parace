@@ -11,31 +11,112 @@ BasicGame.Play.prototype = {
 	create: function () {
 		this.GC = this.GameController();
 		this.OC = this.OperationContainer();
-		this.InputController();
+		// this.InputController();
 		this.NoteGroups = this.NoteContainer();
 		this.HUD = this.HUDContainer();
 		this.ready();
+		this.test();
 	},
 
 	GameController: function () {
-		var Score = this.M.getConf('scores')['score_1'];
+		var MusicalScores = this.M.getConf('MusicalScores')['MusicalScore_1'];
+		if (MusicalScores.type=='String') this.genTambourine = this.genTambourineS;
+		if (MusicalScores.type=='Number') this.genTambourine = this.genTambourineN;
 		return {
 			isPlaying: false,
-			Score: Score,
-			currentRawOfScore: Score.body.length-1,
+			MusicalScores: MusicalScores,
+			currentRawOfMusicalScores: MusicalScores.body.length-1,
+			PandeyImgArr: this.getRandomArr(),
+			PerfectMargin: 50,
+			CoolMargin: 200,
+			GoodMargin: 500,
+			BadMargin: 1000,
+			score: 0,
+			combo: 0, // TODO
+			maxCombo: 0, // TODO
 		};
 	},
 
-	checkHit: function (sprite/*,pointer*/) {
-		console.log(sprite.id);
-		sprite.tint=0xff0000;
-		var touchTime = this.time.now;
+	checkHit: function (btnSprite/*,pointer*/) {
+		if (this.GC.isPlaying) {
+			btnSprite.tint = 0xff0000;
+			var targetSprite = this.NoteGroups[btnSprite.id].getFirstAlive();
+			var c = this.M.getConst();
+			if (targetSprite) {
+				targetSprite.destroy();
+				var timing = targetSprite.timing;
+				var touchTime = this.time.now;
+				var g = this.GC;
+				if (timing>=touchTime-g.BadMargin&&timing<=touchTime+g.BadMargin) {
+					if (timing>=touchTime-g.GoodMargin&&timing<=touchTime+g.GoodMargin) {
+						if (timing>=touchTime-g.CoolMargin&&timing<=touchTime+g.CoolMargin) {
+							if (timing>=touchTime-g.PerfectMargin&&timing<=touchTime+g.PerfectMargin) {
+								return this.hit(c.PERFECT);
+							} else {
+								return this.hit(c.COOL);
+							}
+						} else {
+							return this.hit(c.GOOD);
+						}
+					} else {
+						return this.hit(c.BAD);
+					}
+				}
+			}
+			return this.hit(c.FALSE);
+		}
+	},
+
+	hit: function (judgment) {
+		var c = this.M.getConst();
+		var text='';
+		var score=0;
+		switch (judgment) {
+			case c.PERFECT: 
+				text = 'パーフェクト！';
+				score = 5000;
+				break;
+			case c.COOL: 
+				text = 'クール！';
+				score = 3000;
+				break;
+			case c.GOOD: 
+				text = 'グッド！';
+				score = 1000;
+				break;
+			case c.BAD: 
+				text = 'バッド…';
+				score = 500;
+				break;
+			case c.FALSE: 
+				text = 'フォルス…';
+				score = 100;
+				break;
+		}
+		this.hitEffect(text);
+		this.addScore(score);
+	},
+
+	hitEffect: function (text) {
+		console.log(text);
+	},
+
+	addScore: function (val) {
+		this.GC.score += val;
+		this.HUD.changeText(this.GC.score);
+	},
+
+	getRandomArr: function () {
+		var PandeyImgArr = this.M.getGlobal('PandeyImgArr');
+		var copyArr = PandeyImgArr.slice();
+		for (var i=copyArr.length;i>4;i--) Phaser.ArrayUtils.removeRandomItem(copyArr);
+		return Phaser.ArrayUtils.shuffle(copyArr);
 	},
 
 	OperationContainer: function () {
 		var c = {PanelBtns:[]};
 		var x = this.world.centerX;
-		var y = this.world.centerY+200;
+		var y = this.world.centerY+350;
 		var w = 300;
 		var h = 300;
 		for (var i=0;i<2;i++) {
@@ -52,7 +133,16 @@ BasicGame.Play.prototype = {
 				btnSprite.UonInputOut(this.revertBtnColor, this);
 				var id = i+1+j*2;
 				btnSprite.id = id; // 1,2,3,4
-				this.M.S.genText(btnSprite.centerX,btnSprite.centerY,id);
+				var charSprite = this.M.S.genSprite(btnSprite.centerX,btnSprite.centerY,this.GC.PandeyImgArr[id-1]);
+				charSprite.anchor.setTo(.5);
+				charSprite.scale.setTo(.9)
+				this.M.S.genText(btnSprite.right-50,btnSprite.top+50,id,{
+					fill: this.M.getConst('MAIN_TEXT_COLOR'),
+					stroke:'#FFFFFF',
+					strokeThickness: 15,
+					multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
+					multipleStrokeThickness: 10,
+				});
 				c.PanelBtns[id] = btnSprite;
 			}
 		}
@@ -116,6 +206,7 @@ BasicGame.Play.prototype = {
 		sprite.tint = 0xfbff00;
 	},
 
+	/*
 	InputController: function () {
 		if (!this.game.device.desktop) return;
 		for (var i=0;i<4;i++) {
@@ -139,6 +230,7 @@ BasicGame.Play.prototype = {
 	onUpKeyBoard: function (key) {
 		this.revertBtnColor(this.OC.PanelBtns[key.event.key]);
 	},
+	*/
 
 	NoteContainer: function () {
 		var c = {};
@@ -146,37 +238,158 @@ BasicGame.Play.prototype = {
 		return c;
 	},
 
-	genTambourine: function () {
-		// TODO
-		var scoreRaw = this.GC.Score.body[this.GC.currentRawOfScore];
-		console.log(scoreRaw);
+	genTambourine: function () {},
+	genTambourineS: function () {
+		var musicalScoreRaw = this.GC.MusicalScores.body[this.GC.currentRawOfMusicalScores];
+		for (var i=0;i<musicalScoreRaw.length;i++) {
+			if (musicalScoreRaw[i]=='o') {
+				var num = i+1;
+				this.genTambourineCore(num);
+				break;
+			}
+		}
+	},
+	genTambourineN: function () {
+		var num = this.GC.MusicalScores.body[this.GC.currentRawOfMusicalScores];
+		console.log(num);
+		if (num>=1&&num<=4) this.genTambourineCore(num);
+	},
+
+	genTambourineCore: function (num) {
+		var panelBtnSprite = this.OC.PanelBtns[num];
+		var startX;
+		var startY;
+		switch (this.rnd.integerInRange(1,4)) {
+			case 1: startX=0;startY=0;break;
+			case 2: startX=this.world.width;startY=0;break;
+			case 3: startX=0;startY=this.world.height;break;
+			case 4: startX=this.world.width;startY=this.world.height;break;
+		}
+		var sprite = this.add.sprite(startX,startY,this.GC.PandeyImgArr[(num-1)]);
+		sprite.anchor.setTo(.5);
+		sprite.timing = this.time.now + this.GC.MusicalScores.speed;
+		this.NoteGroups[num].add(sprite);
+		var tween = this.M.T.moveX(
+			sprite,{
+				xy:{x:panelBtnSprite.centerX,y:panelBtnSprite.centerY},
+				easing: Phaser.Easing.Linear.None,
+				duration: this.GC.MusicalScores.speed,
+			}).start();
+		this.M.T.onComplete(tween,function () {
+			console.log(sprite.timing,this.time.now);
+			this.time.events.add(this.GC.BadMargin, function () {
+				// if (3) console.log('false');
+				sprite.destroy();
+			}, this);
+		});
 	},
 
 	HUDContainer: function () {
-		var c = {};
-		// TODO
-		return c;
+		var HUD = {
+			score:null,changeScore:null,hideStart:null,
+			textStyle: {
+				fill: this.M.getConst('MAIN_TEXT_COLOR'),
+				stroke:'#FFFFFF',
+				strokeThickness: 15,
+				multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
+				multipleStrokeThickness: 10,
+			},
+		};
+		this.genScoreTextSprite(HUD);
+		this.genStartTextSprite(HUD);
+		this.genGameOverTextSprite(HUD);
+		return HUD;
+	},
+
+	genScoreTextSprite: function (HUD) {
+		var baseText = 'スコア: ';
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-50,baseText+this.GC.score,HUD.textStyle);
+		textSprite.setAnchor(.5);
+		HUD.changeScore = function (val) {
+			textSprite.changeText(baseText+val);
+		};
+		HUD.score = textSprite;
+	},
+
+	genStartTextSprite: function (HUD) {
+		var baseText = '動画を再生させるとスタートするよ！';
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		textSprite.setAnchor(.5);
+		HUD.hideStart = textSprite.hide;
+	},
+
+	genGameOverTextSprite: function (HUD) {
+		var baseText = '演奏終了！！';
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		textSprite.setAnchor(.5);
+		textSprite.setScale(0,0);
+		var self = this;
+		HUD.showGameOver = function () {
+			textSprite.addTween('popUpB',{scale:{x:2,y:2}});
+			textSprite.startTween('popUpB');
+		};
 	},
 
 	ready: function () {
-		this.start();
+		document.getElementById('YoutubePlayer').style.display = 'block';
+		var self = this;
+		__GameStart = function () { 
+			if (self.time.events.paused) return self.time.events.resume();
+			self.start(); 
+		};
+		__GamePause = function () { self.pause(); };
 	},
 
 	start: function () {
 		this.GC.isPlaying = true;
+		this.time.reset();
+		__YoutubePlayer.setVolume(50);
+		this.HUD.hideStart();
 		this.startGameLoop();
 	},
 
+	pause: function () {
+		this.time.events.pause();
+	},
+
 	startGameLoop: function () {
-		this.time.events.loop(this.GC.Score.frequency, function () {
-			if (this.GC.currentRawOfScore<0) return this.gameOver();
-			this.genTambourine();
-			this.GC.currentRawOfScore--;
+		this.time.events.add(this.GC.MusicalScores.delay, function () {
+			this.time.events.loop(this.GC.MusicalScores.frequency, function () {
+				if (this.GC.currentRawOfMusicalScores<0) {
+					this.time.events.removeAll();
+					return this.time.events.add(this.GC.MusicalScores.frequency+this.GC.BadMargin, function () {
+						this.gameOver();
+					}, this);
+				}
+				this.genTambourine();
+				this.GC.currentRawOfMusicalScores--;
+			}, this);
 		}, this);
 	},
 
 	gameOver: function () {
-		this.time.events.removeAll();
-		console.log('gameOver');
+		// TODO SE
+		this.GC.isPlaying = false;
+		this.HUD.showGameOver();
+		this.time.events.add(2000, function () {
+			document.getElementById('YoutubePlayer').style.display = 'none';
+			__YoutubePlayer.seekTo(0);
+			__YoutubePlayer.stopVideo();
+			this.ResultContainer();
+		}, this);
+	},
+
+	ResultContainer: function () {
+		this.M.S.BasicGrayDialog({onComplete:function () {
+			console.log(33333);
+			// TODO
+			this.M.NextScene('Title');
+		},}).tweenShow();
+	},
+
+	test: function () {
+		if (__ENV!='prod') {
+			if(this.M.H.getQuery('gameover')) this.GC.currentRawOfMusicalScores = 5;
+		}
 	},
 };
