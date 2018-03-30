@@ -41,6 +41,10 @@ BasicGame.Play.prototype = {
 		if (this.GC.isPlaying) {
 			btnSprite.tint = 0xff0000;
 			var targetSprite = this.NoteGroups[btnSprite.id].getFirstAlive();
+			var pos = {
+				x:targetSprite.centerX,
+				y:targetSprite.centerY
+			};
 			var c = this.M.getConst();
 			if (targetSprite) {
 				targetSprite.destroy();
@@ -51,23 +55,23 @@ BasicGame.Play.prototype = {
 					if (timing>=touchTime-g.GoodMargin&&timing<=touchTime+g.GoodMargin) {
 						if (timing>=touchTime-g.CoolMargin&&timing<=touchTime+g.CoolMargin) {
 							if (timing>=touchTime-g.PerfectMargin&&timing<=touchTime+g.PerfectMargin) {
-								return this.hit(c.PERFECT);
+								return this.hit(c.PERFECT, pos);
 							} else {
-								return this.hit(c.COOL);
+								return this.hit(c.COOL, pos);
 							}
 						} else {
-							return this.hit(c.GOOD);
+							return this.hit(c.GOOD, pos);
 						}
 					} else {
-						return this.hit(c.BAD);
+						return this.hit(c.BAD, pos);
 					}
 				}
 			}
-			return this.hit(c.FALSE);
+			return this.hit(c.FALSE, pos);
 		}
 	},
 
-	hit: function (judgment) {
+	hit: function (judgment, pos) {
 		var c = this.M.getConst();
 		var text='';
 		var score=0;
@@ -93,12 +97,12 @@ BasicGame.Play.prototype = {
 				score = 100;
 				break;
 		}
-		this.hitEffect(text);
+		this.hitEffect(text, pos);
 		this.addScore(score);
 	},
 
-	hitEffect: function (text) {
-		console.log(text);
+	hitEffect: function (text, pos) {
+		console.log(text, pos);
 	},
 
 	addScore: function (val) {
@@ -334,10 +338,10 @@ BasicGame.Play.prototype = {
 		document.getElementById('YoutubePlayer').style.display = 'block';
 		var self = this;
 		__GameStart = function () { 
-			if (self.time.events.paused) return self.time.events.resume();
+			if (self.time.events.paused) return this.resumeGame();
 			self.start(); 
 		};
-		__GamePause = function () { self.pause(); };
+		__GamePause = function () { self.pauseGame(); };
 	},
 
 	start: function () {
@@ -348,8 +352,12 @@ BasicGame.Play.prototype = {
 		this.startGameLoop();
 	},
 
-	pause: function () {
+	pauseGame: function () {
 		this.time.events.pause();
+	},
+
+	resumeGame: function () {
+		this.time.events.resume();
 	},
 
 	startGameLoop: function () {
@@ -371,7 +379,7 @@ BasicGame.Play.prototype = {
 		// TODO SE
 		this.GC.isPlaying = false;
 		this.HUD.showGameOver();
-		this.time.events.add(2000, function () {
+		this.time.events.add(2500, function () {
 			document.getElementById('YoutubePlayer').style.display = 'none';
 			__YoutubePlayer.seekTo(0);
 			__YoutubePlayer.stopVideo();
@@ -380,11 +388,14 @@ BasicGame.Play.prototype = {
 	},
 
 	ResultContainer: function () {
-		this.M.S.BasicGrayDialog({onComplete:function () {
-			console.log(33333);
-			// TODO
-			this.M.NextScene('Title');
-		},}).tweenShow();
+		this.M.S.BasicGrayDialog({
+			tint: this.M.getConst('MAIN_TINT'),
+			onComplete:function () {
+				console.log(33333);
+				// TODO
+				this.M.NextScene('Title');
+			},
+		}).tweenShow();
 	},
 
 	test: function () {
