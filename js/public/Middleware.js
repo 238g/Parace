@@ -224,6 +224,10 @@ Middleware.prototype.SpriteManager.prototype = {
 			textSprite.textTween[tween].start();
 			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween].start();
 		};
+		textSprite.Udestroy = function () {
+			textSprite.destroy();
+			if (multipleTextSprite.SExist) multipleTextSprite.destroy();
+		};
 		return textSprite;
 	},
 	genBmpSprite: function (x,y,w,h,fillStyle) {
@@ -236,20 +240,23 @@ Middleware.prototype.SpriteManager.prototype = {
 		bmp.update();
 		return this.genSprite(x,y,bmp);
 	},
-	BasicGrayLabel: function (x,y,func,text,textStyle) {
+	BasicGrayLabel: function (x,y,func,text,textStyle,option) {
 		var labelContainer = {
-			T: this.M.T,
+			M: this.M,
 			btnSprite: null,
 			textSprite: null,
 			btnTween: {},
 			textTween: {},
 			changeText: null,
 		};
+		option = option||{};
 		var btnSprite = this.genButton(x,y,'greySheet',func);
 		var textSprite = this.genText(x,y,text,textStyle);
 		btnSprite.setFrames('grey_button00','grey_button00','grey_button01','grey_button00');
 		btnSprite.anchor.setTo(.5);
-		btnSprite.scale.setTo(2.2);
+		var btnSpriteScale = 2.2;
+		btnSprite.scale.setTo(btnSpriteScale);
+		btnSprite.tint = option.tint||0xffffff;
 		btnSprite.textSprite = textSprite;
 		labelContainer.btnSprite = btnSprite;
 		labelContainer.textSprite = textSprite;
@@ -261,8 +268,14 @@ Middleware.prototype.SpriteManager.prototype = {
 			btnSprite.hide();
 			textSprite.hide();
 		};
+		labelContainer.setScale = function (x,y) {
+			btnSprite.scale.setTo(x,y);
+			textSprite.setScale(x,y);
+		};
 		labelContainer.addTween = function (tween, option) {
-			this.btnTween[tween] = this.T[tween](btnSprite,option);
+			var btnOption = this.M.H.copyJson(option);
+			btnOption.scale = btnOption.btnSpriteScale || {x:btnSpriteScale,y:btnSpriteScale};
+			this.btnTween[tween] = this.M.T[tween](btnSprite,btnOption);
 			textSprite.addTween(tween, option);
 		};
 		labelContainer.startTween = function (tween) {
@@ -284,6 +297,29 @@ Middleware.prototype.SpriteManager.prototype = {
 		sprite.anchor.setTo(.5);
 		sprite.tint = option.tint||0xffffff;
 		option.scale = option.scale||(this.M.orientated?{x:13,y:8}:{x:8,y:13});
+		sprite.switchShow = function () {
+			sprite.scale.setTo(option.scale.x,option.scale.y);
+		};
+		sprite.tweenDialog = T[option.tween||'popUpB'](sprite,option);
+		sprite.tweenShow = function () {
+			sprite.tweenDialog.start();
+		};
+		if (option.onComplete) T.onComplete(sprite.tweenDialog,option.onComplete);
+		return sprite;
+	},
+	// key[,x,y,tint,tween,duration,scale,onCompFunc]
+	genDialog: function (key,option) {
+		var Scene = this.M.getScene();
+		var T = this.M.T;
+		option = option || {};
+		var sprite = this.genSprite(
+			option.x||Scene.world.centerX, 
+			option.y||Scene.world.centerY, key);
+		sprite.scale.setTo(0);
+		sprite.anchor.setTo(.5);
+		sprite.tint = option.tint||0xffffff;
+		sprite.angle = (this.M.orientated)?90:0;
+		option.scale = option.scale||{x:1,y:1};
 		sprite.switchShow = function () {
 			sprite.scale.setTo(option.scale.x,option.scale.y);
 		};
@@ -551,5 +587,16 @@ Middleware.prototype.Helper.prototype = {
 		var newJson = {};
 		for (var key in json) newJson[key] = json[key];
 		return newJson;
+	},
+	// tweetHashtags:'A,B,C'
+	tweet: function (text,tweetHashtags,tweetUrl) {
+		var tweetText = encodeURIComponent(text);
+		tweetUrl = tweetUrl||location.href;
+		window.open(
+			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
+			'share window', 
+			'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600'
+		);
+		return false;
 	},
 };

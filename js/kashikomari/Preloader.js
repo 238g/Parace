@@ -13,7 +13,7 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			// 'Pandey_1': './images/kashikomari/Pandey_1.png',
+			'Dialog_1': './images/public/dialogs/Dialog_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		var PandeyImgArr = [];
@@ -28,10 +28,14 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			'PlayBGM': [
-				'./sounds/BGM/RainbowRush_loop.ogg',
-				'./sounds/BGM/RainbowRush_loop.mp3',
-				'./sounds/BGM/RainbowRush_loop.wav',
+			'TitleBGM': [
+				'./sounds/BGM/H/HappymelancholicWhole.ogg',
+				'./sounds/BGM/H/HappymelancholicWhole.mp3',
+				'./sounds/BGM/H/HappymelancholicWhole.wav',
+			],
+			'Result': [
+				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.mp3',
+				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
