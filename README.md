@@ -13,3 +13,5 @@
 アズリム節 (https://238g.github.io/Parace/AzlimBushi.html) Release 3/24
 
 虚空の果てに (https://238g.github.io/Parace/rei_Toya_rei.html) Release 3/28
+
+まりちゃんばりん (https://238g.github.io/Parace/kashikomari.html) Release 4/1
