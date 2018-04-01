@@ -42,12 +42,14 @@ BasicGame.Boot.prototype = {
 			YoutubeInfo: [
 				{
 					btnText: 'やさしさに包まれたなら',
-					youtubeId: 'cOtT55-SH4k',
+					youtubeId: 'cOtT55-SH4k', // dont use now
 				},
+				/*
 				{
 					btnText: 'やさしさに包まれたなら',
-					youtubeId: 'cOtT55-SH4k',
+					youtubeId: 'cOtT55-SH4k', // dont use now
 				},
+				*/
 			],
 			JudgeInfo: {
 				1: { // PERFECT
