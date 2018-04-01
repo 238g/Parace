@@ -14,8 +14,15 @@ BasicGame.Preloader.prototype = {
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
 			'Dialog_1': './images/public/dialogs/Dialog_1.png',
+			'Logo': './images/kashikomari/Logo.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		this.loadPandey();
+		this.loadKashikomari();
+		this.loadAudio();
+	},
+
+	loadPandey: function () {
 		var PandeyImgArr = [];
 		for (var i=1;i<=9;i++) {
 			var key = 'Pandey_'+i;
@@ -23,7 +30,13 @@ BasicGame.Preloader.prototype = {
 			PandeyImgArr.push(key);
 		}
 		this.M.setGlobal('PandeyImgArr', PandeyImgArr);
-		this.loadAudio();
+	},
+
+	loadKashikomari: function () {
+		for (var i=1;i<=8;i++) {
+			var key = 'Kashikomari_'+i;
+			this.load.image(key, './images/kashikomari/'+key+'.png');
+		}
 	},
 
 	loadAudio: function () {
@@ -38,7 +51,18 @@ BasicGame.Preloader.prototype = {
 				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.wav',
 			],
 		};
+		this.addSoundHitTheTambourine();
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
+	},
+
+	addSoundHitTheTambourine: function () {
+		for (var i=1;i<=4;i++) {
+			var name = 'HitTheTambourine_'+i;
+			this.sounds[name] = [
+				'./sounds/SE/Instrument/'+name+'.mp3',
+				'./sounds/SE/Instrument/'+name+'.wav',
+			];
+		}
 	},
 
 	loadOnlyFirst: function () {

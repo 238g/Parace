@@ -26,11 +26,31 @@ BasicGame.Play.prototype = {
 			isPlaying: false,
 			MusicalScores: MusicalScores,
 			currentRawOfMusicalScores: MusicalScores.body.length-1,
-			PandeyImgArr: this.getRandomArr(),
-			PerfectMargin: 50,
-			CoolMargin: 200,
-			GoodMargin: 500,
-			BadMargin: 1000,
+			PandeyImgArr: this.M.H.getRndItemsFromArr(this.M.getGlobal('PandeyImgArr'),4),
+			JudgeMarginInfo: {
+				Perfect: 50,
+				Cool: 200,
+				Good: 500,
+				Bad: 1000,
+			},
+			JudgeCountInfo: {
+				Perfect: 0,
+				Cool: 0,
+				Good: 0,
+				Bad: 0,
+				False: 0,
+			},
+			RankPercentInfo: {
+				s: {text:'S',percent:95},
+				aaa: {text:'AAA',percent:90},
+				aa: {text:'AA',percent:85},
+				a: {text:'A',percent:80},
+				b: {text:'B',percent:70},
+				c: {text:'C',percent:60},
+				d: {text:'D',percent:50},
+				e: {text:'E',percent:40},
+				f: {text:'F',percent:0},
+			},
 			score: 0,
 			combo: 0,
 			maxCombo: 0,
@@ -40,6 +60,7 @@ BasicGame.Play.prototype = {
 
 	checkHit: function (btnSprite,pointer) {
 		if (this.GC.isPlaying) {
+			this.M.SE.play('HitTheTambourine_'+btnSprite.id);
 			btnSprite.tint = 0xff0000;
 			var targetSprite = this.NoteGroups[btnSprite.id].getFirstAlive();
 			var c = this.M.getConst();
@@ -51,11 +72,11 @@ BasicGame.Play.prototype = {
 				targetSprite.destroy();
 				var timing = targetSprite.timing;
 				var touchTime = this.time.now;
-				var g = this.GC;
-				if (timing>=touchTime-g.BadMargin&&timing<=touchTime+g.BadMargin) {
-					if (timing>=touchTime-g.GoodMargin&&timing<=touchTime+g.GoodMargin) {
-						if (timing>=touchTime-g.CoolMargin&&timing<=touchTime+g.CoolMargin) {
-							if (timing>=touchTime-g.PerfectMargin&&timing<=touchTime+g.PerfectMargin) {
+				var i = this.GC.JudgeMarginInfo;
+				if (timing>=touchTime-i.Bad&&timing<=touchTime+i.Bad) {
+					if (timing>=touchTime-i.Good&&timing<=touchTime+i.Good) {
+						if (timing>=touchTime-i.Cool&&timing<=touchTime+i.Cool) {
+							if (timing>=touchTime-i.Perfect&&timing<=touchTime+i.Perfect) {
 								return this.hit(c.PERFECT, pos);
 							} else {
 								return this.hit(c.COOL, pos);
@@ -73,49 +94,31 @@ BasicGame.Play.prototype = {
 	},
 
 	hit: function (judgment, pos) {
-		var c = this.M.getConst();
-		var text = '';
+		var info = this.M.getConf('JudgeInfo')[judgment];
+		var color = info.color;
 		var textStyle = {
-			fill: this.M.getConst('MAIN_TEXT_COLOR'),
+			fill: color,
 			stroke:'#FFFFFF',
 			strokeThickness: 15,
-			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
+			multipleStroke: color,
 			multipleStrokeThickness: 10,
 		};
-		var score = 0;
-		var combo = 0;
+		var c = this.M.getConst();
+		var jci = this.GC.JudgeCountInfo;
 		switch (judgment) {
-			case c.PERFECT: 
-				text = 'PERFECT!!';
-				score = 5000;
-				combo = 1;
-				break;
-			case c.COOL: 
-				text = 'COOL!';
-				score = 3000;
-				combo = 1;
-				break;
-			case c.GOOD: 
-				text = 'GOOD';
-				score = 1000;
-				combo = 1;
-				break;
-			case c.BAD: 
-				text = 'BAD';
-				score = 100;
-				combo = 1;
-				break;
-			case c.FALSE: 
-				text = 'FALSE';
-				score = -1000;
-				this.GC.combo = 0;
-				break;
+			case c.PERFECT: jci.Perfect++; break;
+			case c.COOL: jci.Cool++; break;
+			case c.GOOD: jci.Good++; break;
+			case c.BAD: jci.Bad++; break;
+			case c.FALSE: jci.False++; break;
 		}
+		var combo = info.combo;
+		if (combo==0) this.GC.combo = 0;
 		this.GC.combo += combo;
 		if (this.GC.combo > this.GC.maxCombo) this.GC.maxCombo = this.GC.combo;
-		this.hitEffect(text, pos, textStyle);
+		this.hitEffect(info.text, pos, textStyle);
 		this.comboEffect(this.GC.combo);
-		this.addScore(score);
+		this.addScore(info.score);
 	},
 
 	hitEffect: function (text, pos, textStyle) {
@@ -138,13 +141,6 @@ BasicGame.Play.prototype = {
 	addScore: function (val) {
 		this.GC.score += val;
 		this.HUD.changeScore(this.GC.score);
-	},
-
-	getRandomArr: function () {
-		var PandeyImgArr = this.M.getGlobal('PandeyImgArr');
-		var copyArr = PandeyImgArr.slice();
-		for (var i=copyArr.length;i>4;i--) Phaser.ArrayUtils.removeRandomItem(copyArr);
-		return Phaser.ArrayUtils.shuffle(copyArr);
 	},
 
 	calculateFullCombo: function (MusicalScores) {
@@ -322,11 +318,13 @@ BasicGame.Play.prototype = {
 				duration: this.GC.MusicalScores.speed,
 			}).start();
 		this.M.T.onComplete(tween,function () {
-			console.log(sprite.timing,this.time.now);
-			this.time.events.add(this.GC.BadMargin, function () {
-				if (sprite.alive) this.hit(this.M.getConst('FALSE'),{x:sprite.x,y:sprite.y});
-				sprite.destroy();
-			}, this);
+			// console.log(sprite.timing,this.time.now);
+			if (sprite.alive) {
+				this.time.events.add(this.GC.JudgeMarginInfo.Bad, function () {
+					if (sprite.alive) this.hit(this.M.getConst('FALSE'),{x:sprite.x,y:sprite.y});
+					sprite.destroy();
+				}, this);
+			}
 		});
 	},
 
@@ -372,10 +370,11 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
+		this.time.events.paused = false;
 		document.getElementById('YoutubePlayer').style.display = 'block';
 		var self = this;
 		__GameStart = function () { 
-			if (self.time.events.paused) return this.resumeGame();
+			if (self.time.events.paused) return self.resumeGame();
 			self.start(); 
 		};
 		__GamePause = function () { self.pauseGame(); };
@@ -385,7 +384,7 @@ BasicGame.Play.prototype = {
 	start: function () {
 		this.GC.isPlaying = true;
 		this.time.reset();
-		__YoutubePlayer.setVolume(50);
+		__YoutubePlayer.setVolume(100);
 		this.HUD.hideStart();
 		this.startGameLoop();
 	},
@@ -408,7 +407,7 @@ BasicGame.Play.prototype = {
 			this.time.events.loop(this.GC.MusicalScores.frequency, function () {
 				if (this.GC.currentRawOfMusicalScores<0) {
 					this.time.events.removeAll();
-					return this.time.events.add(this.GC.MusicalScores.frequency+this.GC.BadMargin, function () {
+					return this.time.events.add(this.GC.MusicalScores.frequency+this.GC.JudgeMarginInfo.Bad, function () {
 						this.gameOver();
 					}, this);
 				}
@@ -442,15 +441,101 @@ BasicGame.Play.prototype = {
 		var y = this.world.centerY;
 		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
-		// TODO text / score,combo,maxcombo,fullcombo,
-		this.genRestartLabel(x,y+200,textStyle,{duration:800,delay:600},tint);
-		this.genTweetLabel(x,y+400,textStyle,{duration:800,delay:800},tint);
+		this.genResultCharSprite();
+		this.M.S.genText(x,200,'結果発表',this.M.H.mergeJson({fontSize:80},this.StaticBaseTextStyle()));
+		this.genResultTextContainer();
+		this.genRestartLabel(x,y+350,textStyle,{duration:800,delay:600},tint);
+		this.genTweetLabel(x,y+475,textStyle,{duration:800,delay:800},tint);
 		this.genBackLabel(x,y+600,textStyle,{duration:800,delay:1000},tint);
+	},
+
+	genResultCharSprite: function () {
+		var num;
+		var rank = this.getResultRank();
+		switch (rank) {
+			case 'S': num = 2; break;
+			case 'AAA': num = 3; break;
+			case 'AA': num = 4; break;
+			case 'A': num = 5; break;
+			default: num = this.rnd.integerInRange(6,8);
+		}
+		var charSprite = this.M.S.genSprite(this.world.centerX/2,this.world.centerY,'Kashikomari_'+num);
+		charSprite.anchor.setTo(.5);
+		if (num==6) charSprite.x += 100;
+	},
+
+	genResultTextContainer: function () {
+		var c = this.M.getConst();
+		var info = this.M.getConf('JudgeInfo');
+		var xL = this.world.centerX+50;
+		var xR = this.world.centerX+270;
+		var y = 300;
+		var yM = 70;
+		var s = this.M.S;
+		var color;
+		/////////
+		var jci = this.GC.JudgeCountInfo;
+		s.genText(xL,y,'PERFECT',this.getResultTextStyle(info[c.PERFECT].color));
+		s.genText(xL,y+yM,jci.Perfect,this.getResultTextStyle(info[c.PERFECT].color));
+		s.genText(xR,y,'COOL',this.getResultTextStyle(info[c.COOL].color));
+		s.genText(xR,y+yM,jci.Cool,this.getResultTextStyle(info[c.COOL].color));
+		/////////
+		s.genText(xL,y+yM*2,'GOOD',this.getResultTextStyle(info[c.GOOD].color));
+		s.genText(xL,y+yM*3,jci.Good,this.getResultTextStyle(info[c.GOOD].color));
+		s.genText(xR,y+yM*2,'BAD',this.getResultTextStyle(info[c.BAD].color));
+		s.genText(xR,y+yM*3,jci.Bad,this.getResultTextStyle(info[c.BAD].color));
+		/////////
+		s.genText(xL,y+yM*4,'FALSE',this.getResultTextStyle(info[c.FALSE].color));
+		s.genText(xL,y+yM*5,jci.False,this.getResultTextStyle(info[c.FALSE].color));
+		/////////
+		var comboTextStyle = this.M.H.mergeJson({fontSize:40,fill:'#0000ff',multipleStroke:'#0000ff'},this.StaticBaseTextStyle());
+		s.genText(xL,y+yM*6,'MAX COMBO',comboTextStyle);
+		s.genText(xL,y+yM*7,this.GC.maxCombo,comboTextStyle);
+		s.genText(xR,y+yM*6,'COMBO',comboTextStyle);
+		s.genText(xR,y+yM*7,this.getResultCombo(),comboTextStyle);
+		/////////
+		var scoreTextStyle = this.M.H.mergeJson({fontSize:40,fill:'#3cb371',multipleStroke:'#3cb371'},this.StaticBaseTextStyle());
+		s.genText(xL,y+yM*8,'スコア',scoreTextStyle);
+		s.genText(xL,y+yM*9,this.M.H.formatComma(this.GC.score),scoreTextStyle);
+		/////////
+		s.genText(xL,y+yM*10,'Rank',this.M.H.mergeJson({fontSize:40,fill:'#dc143c',multipleStroke:'#dc143c'},this.StaticBaseTextStyle()));
+		s.genText(xR,y+yM*10+30,this.getResultRank(),this.M.H.mergeJson({fontSize:80,fill:'#dc143c',multipleStroke:'#dc143c'},this.StaticBaseTextStyle()));
+	},
+
+	getResultTextStyle: function (color) {
+		return {
+			fontSize: 40,
+			fill: color,
+			stroke:'#FFFFFF',
+			strokeThickness: 15,
+			multipleStroke: color,
+			multipleStrokeThickness: 10,
+		};
+	},
+
+	getResultCombo: function () {
+		if (this.GC.combo==this.GC.FullCombo) 'FULLCOMBO';
+		return this.GC.combo;
+	},
+
+	getResultRank: function () {
+		var highestScore = this.M.getConf('JudgeInfo')[this.M.getConst('PERFECT')].score;
+		var maxScore = this.GC.FullCombo*highestScore;
+		var rankInfo = this.GC.RankPercentInfo;
+		var rankText = 'F';
+		for (var key in rankInfo) {
+			var percent = rankInfo[key].percent;
+			var judgeNum = maxScore*percent/100;
+			if (this.GC.score>=judgeNum) {
+				rankText = rankInfo[key].text;
+				break;
+			}
+		}
+		return rankText;
 	},
 
 	genRestartLabel: function (x,y,textStyle,tweenOption,tint) {
 		var label = this.M.S.BasicGrayLabel(x,y,function () {
-			// TODO se
 			this.M.NextScene('Play');
 		},'もう一度プレイ',textStyle,{tint:tint});
 		label.setScale(0,0);
@@ -460,19 +545,19 @@ BasicGame.Play.prototype = {
 
 	genTweetLabel: function (x,y,textStyle,tweenOption,tint) {
 		var label = this.M.S.BasicGrayLabel(x,y,function () {
-			// TODO se
 			this.tweet();
-		},'ツイートして\nみんなにも広める',textStyle,{tint:tint});
+		// },'ツイートして\nみんなにも広める',textStyle,{tint:tint});
+		},'結果をツイート',textStyle,{tint:tint});
 		label.setScale(0,0);
-		var option = this.M.H.copyJson(tweenOption);
-		option.btnSpriteScale = {x:2.2,y:4.4};
-		label.addTween('popUpB',option);
+		// var option = this.M.H.copyJson(tweenOption);
+		// option.btnSpriteScale = {x:2.2,y:4.4};
+		// label.addTween('popUpB',option);
+		label.addTween('popUpB',tweenOption);
 		label.startTween('popUpB');
 	},
 
 	genBackLabel: function (x,y,textStyle,tweenOption,tint) {
 		var label = this.M.S.BasicGrayLabel(x,y,function () {
-			// TODO se
 			this.M.NextScene('Title');
 		},'タイトルにもどる',textStyle,{tint:tint});
 		label.setScale(0,0);
@@ -481,7 +566,22 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
-		var text = '';
+		var emoji;
+		var rndNum = this.rnd.integerInRange(1,10);
+		if (rndNum>=6) {
+			emoji = '🍺🍺🍺🍺🍺🍺';
+		} else if (rndNum>=2) {
+			emoji = '🍻🍻🍻🍻🍻🍻';
+		} else {
+			emoji = '😐😐😐😐😐😐';
+		}
+		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
+					+'あなたの成績は……\n'
+					+emoji+'\n'
+					+'スコア： '+this.GC.score+'\n'
+					+'コンボ： '+this.getResultCombo()+'\n'
+					+'ランク： '+this.getResultRank()+'\n'
+					+emoji+'\n';
 		var hashtags = 'ちゃんまりゲーム,パンディゲーム';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
@@ -499,7 +599,10 @@ BasicGame.Play.prototype = {
 	test: function () {
 		if (__ENV!='prod') {
 			if(this.M.H.getQuery('gameover')) this.GC.currentRawOfMusicalScores = 1;
-			if(this.M.H.getQuery('result')) document.getElementById('YoutubePlayer').style.display = 'none';this.ResultContainer();
+			if(this.M.H.getQuery('result')) {
+				document.getElementById('YoutubePlayer').style.display = 'none';
+				this.ResultContainer();
+			}
 		}
 	},
 };

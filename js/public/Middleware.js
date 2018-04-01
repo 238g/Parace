@@ -521,6 +521,7 @@ Middleware.prototype.SoundManager.prototype = {
 	},
 	play: function (key, option) {
 		var sound = this.sounds[key];
+		option = option||{};
 		if (option.loop) sound.loop = true;
 		if (option.volume) sound.volume = option.volume;
 		if (option.isBGM) this.sounds.currentBGM = sound;
@@ -587,6 +588,15 @@ Middleware.prototype.Helper.prototype = {
 		var newJson = {};
 		for (var key in json) newJson[key] = json[key];
 		return newJson;
+	},
+	mergeJson: function (fromJson,toJson) {
+		for (var key in fromJson) toJson[key] = fromJson[key];
+		return toJson;
+	},
+	getRndItemsFromArr: function (arr,count) {
+		var copyArr = arr.slice();
+		for (var i=copyArr.length;i>count;i--) Phaser.ArrayUtils.removeRandomItem(copyArr);
+		return Phaser.ArrayUtils.shuffle(copyArr);
 	},
 	// tweetHashtags:'A,B,C'
 	tweet: function (text,tweetHashtags,tweetUrl) {

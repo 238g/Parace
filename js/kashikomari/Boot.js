@@ -39,6 +39,48 @@ BasicGame.Boot.prototype = {
 	defineConf: function () {
 		this.M.defineConf({
 			MusicalScores: this.genMusicalScores(),
+			YoutubeInfo: [
+				{
+					btnText: 'やさしさに包まれたなら',
+					youtubeId: 'cOtT55-SH4k',
+				},
+				{
+					btnText: 'やさしさに包まれたなら',
+					youtubeId: 'cOtT55-SH4k',
+				},
+			],
+			JudgeInfo: {
+				1: { // PERFECT
+					text:'PERFECT!!',
+					score: 5000,
+					combo: 1,
+					color: '#ff00ff',
+				},
+				2: { // COOL
+					text:'COOL!',
+					score: 3000,
+					combo: 1,
+					color: '#00bfff',
+				},
+				3: { // GOOD
+					text:'GOOD',
+					score: 1000,
+					combo: 1,
+					color: '#d2691e',
+				},
+				4: { // BAD
+					text:'BAD',
+					score: 100,
+					combo: 1,
+					color: '#9400d3',
+				},
+				5: { // FALSE
+					text:'FALSE',
+					score: -1000,
+					combo: 0,
+					color: '#32cd32',
+				},
+			},
 		});
 	},
 };
