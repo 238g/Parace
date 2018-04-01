@@ -578,8 +578,8 @@ BasicGame.Play.prototype = {
 		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+'あなたの成績は……\n'
 					+emoji+'\n'
-					+'スコア： '+this.GC.score+'\n'
-					+'コンボ： '+this.GC.maxCombo+'\n'
+					+'スコア： '+this.M.H.formatComma(this.GC.score)+'\n'
+					+'MAXコンボ： '+this.GC.maxCombo+'\n'
 					+'ランク： '+this.getResultRank()+'\n'
 					+emoji+'\n';
 		var hashtags = 'ちゃんまりゲーム,パンディゲーム';
