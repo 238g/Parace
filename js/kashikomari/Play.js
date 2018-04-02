@@ -514,7 +514,7 @@ BasicGame.Play.prototype = {
 	},
 
 	getResultCombo: function () {
-		if (this.GC.combo==this.GC.FullCombo) 'FULLCOMBO';
+		if (this.GC.combo==this.GC.FullCombo) return 'FULLCOMBO';
 		return this.GC.combo;
 	},
 
