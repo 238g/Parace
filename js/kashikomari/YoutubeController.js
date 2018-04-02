@@ -6,6 +6,7 @@ var __YoutubePlayer;
 var onYouTubeIframeAPIReady = function () {
 	__YoutubePlayer = new YT.Player('YoutubePlayer', {
 		height: window.innerHeight/2-100,
+		// height: window.innerHeight,
 		width: window.innerWidth,
 		videoId: 'cOtT55-SH4k',
 		events: {
