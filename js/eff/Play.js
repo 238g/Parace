@@ -127,7 +127,7 @@ BasicGame.Play.prototype = {
 			}
 			var tweetText = encodeURIComponent(text);
 			var tweetUrl = location.href;
-			var tweetHashtags = 'えるゲーム'; // 'A,B,C'
+			var tweetHashtags = encodeURIComponent('えるゲーム'); // 'A,B,C'
 			window.open(
 				'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 				'share window', 

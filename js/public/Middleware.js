@@ -598,10 +598,11 @@ Middleware.prototype.Helper.prototype = {
 		for (var i=copyArr.length;i>count;i--) Phaser.ArrayUtils.removeRandomItem(copyArr);
 		return Phaser.ArrayUtils.shuffle(copyArr);
 	},
-	// tweetHashtags:'A,B,C'
-	tweet: function (text,tweetHashtags,tweetUrl) {
+	// hashtags:'A,B,C'
+	tweet: function (text,hashtags,tweetUrl) {
 		var tweetText = encodeURIComponent(text);
 		tweetUrl = tweetUrl||location.href;
+		var tweetHashtags = encodeURIComponent(hashtags);
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 
