@@ -9,6 +9,9 @@ var onYouTubeIframeAPIReady = function () {
 		// height: window.innerHeight,
 		width: window.innerWidth,
 		videoId: 'cOtT55-SH4k',
+		playerVars: {
+			playsinline: 1,
+		},
 		events: {
 			'onReady': function () {},
 			'onStateChange': __onPlayerStateChange
