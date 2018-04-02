@@ -511,7 +511,7 @@ BasicGame.Play.prototype = {
 					+'『'+this.game.const.GAME_TITLE+'』';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
-		var tweetHashtags = '力也ゲーム,刀也ゲーム'; // 'A,B,C'
+		var tweetHashtags = encodeURIComponent('力也ゲーム,刀也ゲーム'); // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 

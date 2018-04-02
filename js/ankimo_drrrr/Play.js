@@ -321,7 +321,7 @@ BasicGame.Play.prototype = {
 		var text = 'あなたのスコアは '+this.score+' です！\n🐻🐻🐻🐻🐻🐻\n『レッツ・あん肝！』';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
-		var tweetHashtags = 'そらゲーム,あん肝ゲーム'; // 'A,B,C'
+		var tweetHashtags = encodeURIComponent('そらともゲーム,あん肝ゲーム'); // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 

@@ -354,7 +354,7 @@ BasicGame.Play.prototype = {
 		var text = 'あナタの'+this.GOP.SCORE_TEXT+'は '+this.GOP.score+' でス！\nﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）\n『'+this.game.global.GAME_TITLE+'』';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
-		var tweetHashtags = 'ゾンビ子ゲーム'; // 'A,B,C'
+		var tweetHashtags = encodeURIComponent('ゾンビ子ゲーム'); // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 

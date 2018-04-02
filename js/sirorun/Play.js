@@ -434,7 +434,7 @@ BasicGame.Play.prototype = {
 		var text = 'あなたのスコアは '+this.GAME.score+' です！\n'+addText+'\n『シロラン』';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
-		var tweetHashtags = 'シロゲーム,シロラン'; // 'A,B,C'
+		var tweetHashtags = encodeURIComponent('シロゲーム,シロラン'); // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 

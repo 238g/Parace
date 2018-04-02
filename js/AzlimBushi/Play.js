@@ -724,7 +724,7 @@ BasicGame.Play.prototype = {
 					+'🕸'+emoji+'🕸\n';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
-		var tweetHashtags = 'アズリムゲーム'; // 'A,B,C'
+		var tweetHashtags = encodeURIComponent('アズリムゲーム'); // 'A,B,C'
 		window.open(
 			'https://twitter.com/intent/tweet?text='+tweetText+'&url='+tweetUrl+'&hashtags='+tweetHashtags, 
 			'share window', 
