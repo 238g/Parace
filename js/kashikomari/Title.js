@@ -11,6 +11,7 @@ BasicGame.Title.prototype = {
 		this.Dialog = this.DialogContainer();
 		this.soundController();
 		this.inputController();
+		this.genCautionTextSprite();
 	},
 
 	inputController: function () {
@@ -242,6 +243,14 @@ BasicGame.Title.prototype = {
 		textStyle.wordWrap = true;
 		Dialog.howtoTextSprite = this.M.S.genText(this.world.centerX, this.world.centerY, text, textStyle);
 		Dialog.howtoTextSprite.hide();
+	},
+
+	genCautionTextSprite: function () {
+		var d = this.game.device;
+		if (d.iOS||d.iPad||d.iPhone||d.iPhone4) {
+			this.M.S.genText(this.world.centerX,this.world.centerY+280,
+				'iOS系でプレイできないです…(T-T)',this.StaticBaseTextStyle());
+		}
 	},
 
 	StaticBaseTextStyle: function () {
