@@ -249,7 +249,7 @@ BasicGame.Title.prototype = {
 		var d = this.game.device;
 		if (d.iOS||d.iPad||d.iPhone||d.iPhone4) {
 			this.M.S.genText(this.world.centerX,this.world.centerY+280,
-				'iOS系でプレイできないです…(T-T)',this.StaticBaseTextStyle());
+				'iOS系でプレイできないかも…(T-T)',this.StaticBaseTextStyle());
 		}
 	},
 
