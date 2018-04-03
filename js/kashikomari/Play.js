@@ -71,7 +71,9 @@ BasicGame.Play.prototype = {
 				};
 				targetSprite.destroy();
 				var timing = targetSprite.timing;
-				var touchTime = this.time.now;
+				// var touchTime = this.time.now;
+				var touchTime = this.time.time;
+				// console.log(this.time.now,this.time.time);
 				var i = this.GC.JudgeMarginInfo;
 				if (timing>=touchTime-i.Bad&&timing<=touchTime+i.Bad) {
 					if (timing>=touchTime-i.Good&&timing<=touchTime+i.Good) {
@@ -309,7 +311,8 @@ BasicGame.Play.prototype = {
 		}
 		var sprite = this.add.sprite(startX,startY,this.GC.PandeyImgArr[(num-1)]);
 		sprite.anchor.setTo(.5);
-		sprite.timing = this.time.now + this.GC.MusicalScores.speed;
+		sprite.timing = this.time.time + this.GC.MusicalScores.speed;
+		// sprite.timing = this.time.now + this.GC.MusicalScores.speed;
 		this.NoteGroups[num].add(sprite);
 		var tween = this.M.T.moveX(
 			sprite,{

@@ -243,7 +243,7 @@ BasicGame.Play.prototype = {
 				* this.GC.catchFishCount
 				* m.modeScore
 				* deviceScore;
-		this.GC.score += score;
+		this.GC.score += parseInt(score);
 		this.HUD.changeScore(this.GC.score);
 	},
 
