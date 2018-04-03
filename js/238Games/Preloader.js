@@ -13,7 +13,7 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Net': './images/AzlimBushi/Net.png',
+			// 'Net': './images/AzlimBushi/Net.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -21,11 +21,13 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
+			/*
 			'PlayBGM': [
 				'./sounds/BGM/RainbowRush_loop.ogg',
 				'./sounds/BGM/RainbowRush_loop.mp3',
 				'./sounds/BGM/RainbowRush_loop.wav',
 			],
+			*/
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},
