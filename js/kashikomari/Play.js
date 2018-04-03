@@ -19,7 +19,7 @@ BasicGame.Play.prototype = {
 	},
 
 	GameController: function () {
-		var MusicalScores = this.M.getConf('MusicalScores')['MusicalScore_1'];
+		var MusicalScores = this.M.getConf('MusicalScores')[this.M.getGlobal('currentMusicalScores')];
 		// --UNIMPLEMENTED // if (MusicalScores.type=='String') this.genTambourine = this.genTambourineS;
 		if (MusicalScores.type=='Number') this.genTambourine = this.genTambourineN;
 		return {
@@ -73,7 +73,7 @@ BasicGame.Play.prototype = {
 				var timing = targetSprite.timing;
 				// var touchTime = this.time.now;
 				var touchTime = this.time.time;
-				// console.log(this.time.now,this.time.time);
+				// console.log(timing,touchTime);
 				var i = this.GC.JudgeMarginInfo;
 				if (timing>=touchTime-i.Bad&&timing<=touchTime+i.Bad) {
 					if (timing>=touchTime-i.Good&&timing<=touchTime+i.Good) {

@@ -213,11 +213,15 @@ BasicGame.Title.prototype = {
 		for (var i=0;i<infos.length;i++) {
 			var info = infos[i];
 			var text = info.btnText;
-			var y = i * 200 + 350;
-			var label = this.M.S.BasicGrayLabel(x,y,function () {
+			var y = i * 150 + 350;
+			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
+				__YoutubePlayer.loadVideoById(btnSprite.youtubeId);
+				this.M.setGlobal('currentMusicalScores',btnSprite.MusicalScores);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
 			label.btnSprite.scale.setTo(4,2.2);
+			label.btnSprite.youtubeId = info.youtubeId;
+			label.btnSprite.MusicalScores = info.MusicalScores;
 			selectGroup.add(label.btnSprite);
 			label.textSprite.addGroup(selectGroup);
 		}

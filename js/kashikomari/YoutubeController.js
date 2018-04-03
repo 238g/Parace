@@ -3,7 +3,7 @@ tag.src = "https://www.youtube.com/iframe_api";
 var firstScriptTag = document.getElementsByTagName('script')[0];
 firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
 var __YoutubePlayer;
-var onYouTubeIframeAPIReady = function () {
+function onYouTubeIframeAPIReady () {
 	__YoutubePlayer = new YT.Player('YoutubePlayer', {
 		height: window.innerHeight/2-100,
 		// height: window.innerHeight,

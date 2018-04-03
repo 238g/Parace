@@ -33,6 +33,7 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.M.defineGlobal({
+			currentMusicalScores: 'MusicalScore_1',
 		});
 	},
 
@@ -42,14 +43,14 @@ BasicGame.Boot.prototype = {
 			YoutubeInfo: [
 				{
 					btnText: 'やさしさに包まれたなら',
-					youtubeId: 'cOtT55-SH4k', // dont use now
+					youtubeId: 'cOtT55-SH4k',
+					MusicalScores: 'MusicalScore_1',
 				},
-				/*
 				{
-					btnText: 'やさしさに包まれたなら',
-					youtubeId: 'cOtT55-SH4k', // dont use now
+					btnText: 'メルト',
+					youtubeId: 'wRmYHK14yyI',
+					MusicalScores: 'MusicalScore_2',
 				},
-				*/
 			],
 			JudgeInfo: {
 				1: { // PERFECT
