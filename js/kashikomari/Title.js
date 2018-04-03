@@ -11,7 +11,7 @@ BasicGame.Title.prototype = {
 		this.Dialog = this.DialogContainer();
 		this.soundController();
 		this.inputController();
-		this.genCautionTextSprite();
+		// this.genCautionTextSprite();
 	},
 
 	inputController: function () {
