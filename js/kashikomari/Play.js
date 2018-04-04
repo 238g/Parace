@@ -429,6 +429,7 @@ BasicGame.Play.prototype = {
 			document.getElementById('YoutubePlayer').style.display = 'none';
 			__YoutubePlayer.seekTo(0);
 			__YoutubePlayer.stopVideo();
+			this.time.events.removeAll();
 			this.ResultContainer();
 		}, this);
 	},
