@@ -210,20 +210,22 @@ BasicGame.Title.prototype = {
 		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
 		var x = this.world.centerX;
-		for (var i=0;i<infos.length;i++) {
-			var info = infos[i];
-			var text = info.btnText;
+		var i = 0;
+		for (var MusicalScoresId in infos) {
+			var info = infos[MusicalScoresId];
+			var text = info.title;
 			var y = i * 150 + 350;
 			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
 				__YoutubePlayer.loadVideoById(btnSprite.youtubeId);
-				this.M.setGlobal('currentMusicalScores',btnSprite.MusicalScores);
+				this.M.setGlobal('currentMusicalScoresId',btnSprite.MusicalScoresId);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
 			label.btnSprite.scale.setTo(4,2.2);
 			label.btnSprite.youtubeId = info.youtubeId;
-			label.btnSprite.MusicalScores = info.MusicalScores;
+			label.btnSprite.MusicalScoresId = MusicalScoresId;
 			selectGroup.add(label.btnSprite);
 			label.textSprite.addGroup(selectGroup);
+			i++;
 		}
 	},
 

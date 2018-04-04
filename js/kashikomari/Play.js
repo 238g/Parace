@@ -19,11 +19,13 @@ BasicGame.Play.prototype = {
 	},
 
 	GameController: function () {
-		var MusicalScores = this.M.getConf('MusicalScores')[this.M.getGlobal('currentMusicalScores')];
+		var YoutubeInfo = this.M.getConf('YoutubeInfo')[this.M.getGlobal('currentMusicalScoresId')];
+		var MusicalScores = this.M.getConf('MusicalScores')[YoutubeInfo.MusicalScores];
 		// --UNIMPLEMENTED // if (MusicalScores.type=='String') this.genTambourine = this.genTambourineS;
 		if (MusicalScores.type=='Number') this.genTambourine = this.genTambourineN;
 		return {
 			isPlaying: false,
+			YoutubeInfo: YoutubeInfo,
 			MusicalScores: MusicalScores,
 			currentRawOfMusicalScores: MusicalScores.body.length-1,
 			PandeyImgArr: this.M.H.getRndItemsFromArr(this.M.getGlobal('PandeyImgArr'),4),
@@ -581,6 +583,7 @@ BasicGame.Play.prototype = {
 		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+'あなたの成績は……\n'
 					+emoji+'\n'
+					+'選んだ曲： 「'+this.GC.YoutubeInfo.title+'」\n'
 					+'スコア： '+this.M.H.formatComma(this.GC.score)+'\n'
 					+'MAXコンボ： '+this.GC.maxCombo+'\n'
 					+'ランク： '+this.getResultRank()+'\n'
