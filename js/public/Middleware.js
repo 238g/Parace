@@ -197,7 +197,7 @@ Middleware.prototype.SpriteManager.prototype = {
 			}
 		};
 		textSprite.addGroup = function (group) {
-			group.add(multipleTextSprite);
+			if (multipleTextSprite.SExist) group.add(multipleTextSprite);
 			group.add(textSprite);
 		};
 		textSprite.UonInputOver = function (func) {
