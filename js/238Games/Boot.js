@@ -29,6 +29,6 @@ BasicGame.Boot.prototype = {
 	},
 
 	defineConf: function () {
-		this.M.defineConf(__conf);
+		this.M.defineConf(this.conf());
 	},
 };

@@ -2,99 +2,112 @@ BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
 		this.GC = null;
-		this.Games = null;
 		this.SlidePanels = null;
 		this.SlideImgs = null;
-		this.SlideTexts = null;
+		this.SlideTitleTexts = null;
 		// this.ListPanels = null; // TODO
 	},
 
 	create: function () {
 		this.GC = this.GameController();
-		this.Games = this.M.getConf('Games');
 		this.PanelContainer();
 		this.inputController();
 		this.BtnContainer();
-		// this.test();
+		this.start();
 	},
 
 	GameController: function () {
+		var GamesInfo = this.M.getConf('GamesInfo');
 		return {
-			inputPosX: 0,
+			inputEnabled: false,
+			inputOnDownPosX: 0,
 			currentSlideCenter: 0,
-			DISABLE_INPUT_WORLD_MARGIN: 50,
+			currentUrl: null,
+		    GamesInfo: GamesInfo,
+		    GamesInfoLength: Object.keys(GamesInfo).length,
+			DISABLE_INPUT_WORLD_MARGIN: 100,
 			SLIDE_TOUCH_SENSITIVITY: 100,
-			slideSmallPanelScale: {x:.2,y:.8},
-			slideLargePanelScale: {x:6,y:10},
-			slideTweenDuration: 600,
-			slideTweenMoveLeftDistance: '-'+(this.world.centerX-50),
-			slideTweenMoveRightDistance: '+'+(this.world.centerX-50),
-			tweenFirst: null,
+			SLIDE_SMALL_PANEL_SCALE: {x:.2,y:.8},
+			SLIDE_LARGE_PANEL_SCALE: {x:6,y:10},
+			SLIDE_TWEEN_DURATION: 600,
+			SLIDE_TWEEN_MOVE_LEFT_DISTANCE: '-'+(this.world.centerX-50),
+			SLIDE_TWEEN_MOVE_RIGHT_DISTANCE: '+'+(this.world.centerX-50),
+			tweenForChecking: null,
 		};
 	},
 
 	PanelContainer: function () {
 		this.SlidePanels = this.add.group();
 		this.SlideImgs = this.add.group();
-		this.SlideTexts = this.add.group();
+		this.SlideTitleTexts = this.add.group();
 		// this.ListPanels = this.add.group(); // TODO
-		for (var id in this.Games) {
-			var gameInfo = this.Games[id];
-			this.genSlidePanels();
-			this.genSlideImgs(gameInfo.mainImg);
-			this.genSlideTexts(gameInfo.title);
+		var GamesInfo = this.GC.GamesInfo;
+		var orderGamesInfo = [];
+		for (var id in GamesInfo) {
+			var order = GamesInfo[id].order;
+			orderGamesInfo[order] = GamesInfo[id];
+		}
+		for (var key in orderGamesInfo) {
+			var gameInfo = orderGamesInfo[key];
+			this.genSlidePanel(gameInfo);
+			this.genSlideImg(gameInfo.slideImg);
+			this.genSlideTitle(gameInfo.title);
 		}
 		this.initSlidePanel();
 	},
 
-	genSlidePanels: function () {
-		var scaleX = this.GC.slideSmallPanelScale.x;
-		var scaleY = this.GC.slideSmallPanelScale.y;
-		var sprite = this.M.S.genSprite(this.world.width-50,this.world.centerY-100,'greySheet','grey_panel');
-		sprite.anchor.setTo(.5);
-		sprite.scale.setTo(scaleX,scaleY);
-		this.SlidePanels.add(sprite);
+	genSlidePanel: function (gameInfo) {
+		var scaleX = this.GC.SLIDE_SMALL_PANEL_SCALE.x;
+		var scaleY = this.GC.SLIDE_SMALL_PANEL_SCALE.y;
+		var panelSprite = this.M.S.genSprite(this.world.width-50,this.world.centerY-100,'greySheet','grey_panel');
+		panelSprite.anchor.setTo(.5);
+		panelSprite.scale.setTo(scaleX,scaleY);
+		panelSprite.id = gameInfo.id;
+		// TODO tint gameInfo
+		this.SlidePanels.add(panelSprite);
 	},
 
-	genSlideImgs: function (img) {
+	genSlideImg: function (img) {
 		var imgSprite = this.M.S.genSprite(this.world.centerX,this.world.centerY-100,img);
 		imgSprite.anchor.setTo(.5);
 		imgSprite.hide();
 		this.SlideImgs.add(imgSprite);
 	},
 
-	genSlideTexts: function (text) {
+	genSlideTitle: function (text) {
 		var textStyle = {};
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY/2,text,textStyle);
 		textSprite.hide();
-		textSprite.addGroup(this.SlideTexts);
+		textSprite.addGroup(this.SlideTitleTexts);
+		// TODO textStyle?textColor?
 	},
 
 	initSlidePanel: function () {
-		var slps = this.GC.slideLargePanelScale;
+		var SLPS = this.GC.SLIDE_LARGE_PANEL_SCALE;
 		var centerPanel = this.SlidePanels.children[0];
-		centerPanel.scale.setTo(slps.x,slps.y);
+		centerPanel.scale.setTo(SLPS.x,SLPS.y);
 		centerPanel.x = this.world.centerX;
 		var imgSprite = this.SlideImgs.children[0];
 		imgSprite.show();
-		var textSprite = this.SlideTexts.children[0];
+		var textSprite = this.SlideTitleTexts.children[0];
 		textSprite.show();
+		this.GC.currentUrl = this.GC.GamesInfo[centerPanel.id].url;
 	},
 
 	inputController: function () {
-		var g = this.GC;
-		var DIWM = g.DISABLE_INPUT_WORLD_MARGIN;
-		var STS = g.SLIDE_TOUCH_SENSITIVITY;
+		var GC = this.GC;
+		var DIWM = GC.DISABLE_INPUT_WORLD_MARGIN;
+		var STS = GC.SLIDE_TOUCH_SENSITIVITY;
 		this.game.input.onDown.add(function (pointer/*,event*/) {
-			g.inputPosX = pointer.x;
+			GC.inputOnDownPosX = pointer.x;
 		},this);
 		this.game.input.onUp.add(function (pointer/*,event*/) {
 			if (!this.SlidePanels.visible) return;
 			if (pointer.y<DIWM || pointer.y>this.world.height-DIWM 
 			|| pointer.x<DIWM || pointer.x>this.world.width-DIWM) return;
-			if (g.tweenFirst&&g.tweenFirst.isRunning) return;
-			if (pointer.x+STS<g.inputPosX) this.leftSlide();
-			if (pointer.x-STS>g.inputPosX) this.rightSlide();
+			if (GC.tweenForChecking&&GC.tweenForChecking.isRunning) return;
+			if (pointer.x+STS<GC.inputOnDownPosX) this.leftSlide();
+			if (pointer.x-STS>GC.inputOnDownPosX) this.rightSlide();
 		}, this);
 		if (!this.game.device.desktop) return;
 		for (var i=0;i<2;i++) {
@@ -110,51 +123,51 @@ BasicGame.Title.prototype = {
 	},
 
 	leftSlide: function () {
-		var g = this.GC;
-		if (g.currentSlideCenter==Object.keys(this.Games).length-1) return; 
-		if (g.tweenFirst&&g.tweenFirst.isRunning) return;
-		var centerSprite = this.SlidePanels.children[g.currentSlideCenter];
-		var rightSprite = this.SlidePanels.children[g.currentSlideCenter+1];
-		this.hideCenterContents();
+		var GC = this.GC;
+		if (GC.currentSlideCenter==GC.GamesInfoLength-1) return; 
+		if (GC.tweenForChecking&&GC.tweenForChecking.isRunning) return;
+		var centerSprite = this.SlidePanels.children[GC.currentSlideCenter];
+		var rightSprite = this.SlidePanels.children[GC.currentSlideCenter+1];
+		this.slideStart();
 		this.leftSlideTween(centerSprite,rightSprite);
-		g.currentSlideCenter++;
+		GC.currentSlideCenter++;
 	},
 
 	leftSlideTween: function (centerSprite,rightSprite) {
 		this.slideTween(
 			centerSprite,rightSprite,
-			this.GC.slideTweenMoveLeftDistance);
+			this.GC.SLIDE_TWEEN_MOVE_LEFT_DISTANCE);
 	},
 
 	rightSlide: function () {
-		var g = this.GC;
-		if (g.currentSlideCenter==0) return;
-		if (g.tweenFirst&&g.tweenFirst.isRunning) return;
-		var centerSprite = this.SlidePanels.children[g.currentSlideCenter];
-		var leftSprite = this.SlidePanels.children[g.currentSlideCenter-1];
-		this.hideCenterContents();
+		var GC = this.GC;
+		if (GC.currentSlideCenter==0) return;
+		if (GC.tweenForChecking&&GC.tweenForChecking.isRunning) return;
+		var centerSprite = this.SlidePanels.children[GC.currentSlideCenter];
+		var leftSprite = this.SlidePanels.children[GC.currentSlideCenter-1];
+		this.slideStart();
 		this.rightSlideTween(centerSprite,leftSprite);
-		g.currentSlideCenter--;
+		GC.currentSlideCenter--;
 	},
 
 	rightSlideTween: function (centerSprite,leftSprite) {
 		this.slideTween(
 			centerSprite,leftSprite,
-			this.GC.slideTweenMoveRightDistance);
+			this.GC.SLIDE_TWEEN_MOVE_RIGHT_DISTANCE);
 	},
 
 	slideTween: function (fromCenterSprite,toCenterSprite,moving) {
-		var duration = this.GC.slideTweenDuration;
-		var ssps = this.GC.slideSmallPanelScale;
-		var slps = this.GC.slideLargePanelScale;
-		this.GC.tweenFirst = this.M.T.moveX(fromCenterSprite,{
+		var duration = this.GC.SLIDE_TWEEN_DURATION;
+		var SSPC = this.GC.SLIDE_SMALL_PANEL_SCALE;
+		var SLPS = this.GC.SLIDE_LARGE_PANEL_SCALE;
+		this.GC.tweenForChecking = this.M.T.moveX(fromCenterSprite,{
 			xy:{x:moving},
 			easing:Phaser.Easing.Quartic.InOut,
 			duration: duration,
 		});
-		this.GC.tweenFirst.start();
+		this.GC.tweenForChecking.start();
 		this.M.T.popUpX(fromCenterSprite,{
-			scale:{x:ssps.x,y:ssps.y},
+			scale:{x:SSPC.x,y:SSPC.y},
 			easing:Phaser.Easing.Quartic.In,
 			duration: duration,
 		}).start();
@@ -164,34 +177,50 @@ BasicGame.Title.prototype = {
 			duration: duration,
 		}).start();
 		this.M.T.popUpX(toCenterSprite,{
-			scale:{x:slps.x,y:slps.y},
+			scale:{x:SLPS.x,y:SLPS.y},
 			easing:Phaser.Easing.Back.Out,
 			duration: duration,
 		}).start();
-		this.M.T.onComplete(this.GC.tweenFirst,this.slideTweenComp);
+		this.M.T.onComplete(this.GC.tweenForChecking,this.slideTweenComp);
 	},
 
 	slideTweenComp: function (/*sprite,tween*/) {
-		var csc = this.GC.currentSlideCenter;
-		var imgSprite = this.SlideImgs.children[csc];
+		var currentSC = this.GC.currentSlideCenter;
+		var imgSprite = this.SlideImgs.children[currentSC];
 		imgSprite.show();
-		var textSprite = this.SlideTexts.children[csc];
+		var textSprite = this.SlideTitleTexts.children[currentSC];
 		textSprite.show();
+		var centerPanel = this.SlidePanels.children[this.GC.currentSlideCenter];
+		this.GC.currentUrl = this.GC.GamesInfo[centerPanel.id].url;
+		this.GC.inputEnabled = true;
+	},
+
+	slideStart: function () {
+		this.GC.inputEnabled = false;
+		this.hideCenterContents();
 	},
 
 	hideCenterContents: function () {
-		var csc = this.GC.currentSlideCenter;
-		var imgSprite = this.SlideImgs.children[csc];
+		var currentSC = this.GC.currentSlideCenter;
+		var imgSprite = this.SlideImgs.children[currentSC];
 		imgSprite.hide();
-		var textSprite = this.SlideTexts.children[csc];
+		var textSprite = this.SlideTitleTexts.children[currentSC];
 		textSprite.hide();
 	},
 
 	BtnContainer: function () {
 		var textStyle = {};
-		var leftBtn = this.M.S.BasicGrayLabel(150,this.world.height-100,this.rightSlide,'←',textStyle);
+		var y = this.world.height-100;
+		var leftBtn = this.M.S.BasicGrayLabel(130,y,this.rightSlide,'←',textStyle);
 		leftBtn.setScale(1,2.2);
-		var rightBtn = this.M.S.BasicGrayLabel(this.world.width-150,this.world.height-100,this.leftSlide,'→',textStyle);
+		var rightBtn = this.M.S.BasicGrayLabel(this.world.width-130,y,this.leftSlide,'→',textStyle);
 		rightBtn.setScale(1,2.2);
+		this.M.S.BasicGrayLabel(this.world.centerX,y,function () {
+			if (this.GC.inputEnabled) console.log(this.GC.currentUrl);
+		}, 'スタート', textStyle);
+	},
+
+	start: function () {
+		this.GC.inputEnabled = true;
 	},
 };
