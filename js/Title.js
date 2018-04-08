@@ -15,6 +15,7 @@ BasicGame.Title.prototype = {
 		this.genTitleText();
 		this.genStartBtn();
 		this.genOptionBtn();
+		this.genInquiryBtnSprite();
 		this.genOptionMenuContainer();
 	},
 
@@ -234,5 +235,14 @@ BasicGame.Title.prototype = {
 		if (text == '-') {
 			changeText.bind(this)();
 		}
-	}
+	},
+
+	genInquiryBtnSprite: function () {
+		var x = this.world.centerX;
+		var y = this.world.centerY+300;
+
+		this.btnTemplate(x, y, function () {
+			window.open('https://238g.github.io/Parace/238Games.html','_blank');
+		}, '  OTHER GAME  ');
+	},
 };
