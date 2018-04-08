@@ -1,5 +1,7 @@
 # Parace
 
+238Games (https://238g.github.io/Parace/238Games.html) Release 4/8
+
 レッツ・あん肝！ (https://238g.github.io/Parace/ankimo_drrrr.html) Release 2/18
 
 シロラン (https://238g.github.io/Parace/sirorun.html) Release 3/2

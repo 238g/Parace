@@ -143,12 +143,12 @@ BasicGame.Play.prototype = {
 	},
 
 	genInquiryBtnSprite: function (x,y,textStyle) {
-		var text = 'お問い合わせ';
+		var text = '他のゲームを遊ぶ';
 		var s = this.game.global.SpriteManager;
 		var x = this.world.centerX;
 		var y = this.world.centerY+260;
 		var btn = s.genButton(x,y,'greySheet',function () {
-			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+			window.open('https://238g.github.io/Parace/238Games.html','_blank');
 		},this);
 		btn.frame = 'grey_button00';
 		btn.anchor.setTo(.5);

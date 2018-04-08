@@ -188,9 +188,9 @@ BasicGame.Title.prototype = {
 	},
 
 	genInquiryBtnSprite: function (x,y) {
-		var text = 'お問い合わせ';
+		var text = '他のゲームを遊ぶ';
 		this.genLabel(x,y,function () {
-			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+			window.open('https://238g.github.io/Parace/238Games.html','_blank');
 		},text);
 	},
 
