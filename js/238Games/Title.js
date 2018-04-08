@@ -234,7 +234,13 @@ BasicGame.Title.prototype = {
 
 	genStartBtnSprite: function (y, textStyle) {
 		this.M.S.BasicGrayLabel(this.world.centerX,y,function () {
-			if (this.GC.inputEnabled) window.open(this.GC.currentUrl,'_blank');
+			if (this.GC.inputEnabled) {
+				if (this.game.device.desktop) {
+					window.open(this.GC.currentUrl,'_blank');
+				} else {
+					location.href = this.GC.currentUrl;
+				}
+			}
 		}, 'スタート', textStyle);
 	},
 
