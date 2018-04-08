@@ -10,6 +10,7 @@ BasicGame.Title.prototype = {
 
 	create: function () {
 		this.GC = this.GameController();
+		this.BgContainer();
 		this.PanelContainer();
 		this.inputController();
 		this.BtnContainer();
@@ -36,6 +37,9 @@ BasicGame.Title.prototype = {
 		};
 	},
 
+	BgContainer: function () {
+	},
+
 	PanelContainer: function () {
 		this.SlidePanels = this.add.group();
 		this.SlideImgs = this.add.group();
@@ -51,7 +55,7 @@ BasicGame.Title.prototype = {
 			var gameInfo = orderGamesInfo[key];
 			this.genSlidePanel(gameInfo);
 			this.genSlideImg(gameInfo.slideImg);
-			this.genSlideTitle(gameInfo.title);
+			this.genSlideTitle(gameInfo);
 		}
 		this.initSlidePanel();
 	},
@@ -74,12 +78,17 @@ BasicGame.Title.prototype = {
 		this.SlideImgs.add(imgSprite);
 	},
 
-	genSlideTitle: function (text) {
-		var textStyle = {};
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY/2,text,textStyle);
+	genSlideTitle: function (gameInfo) {
+		var textStyle = {
+			fill: gameInfo.textColor,
+			stroke: '#FFFFFF',
+			strokeThickness: 15,
+			multipleStroke: gameInfo.textColor,
+			multipleStrokeThickness: 10,
+		};
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY/2,gameInfo.title,textStyle);
 		textSprite.hide();
 		textSprite.addGroup(this.SlideTitleTexts);
-		// TODO textStyle?textColor?
 	},
 
 	initSlidePanel: function () {
@@ -89,9 +98,11 @@ BasicGame.Title.prototype = {
 		centerPanel.x = this.world.centerX;
 		var imgSprite = this.SlideImgs.children[0];
 		imgSprite.show();
-		var textSprite = this.SlideTitleTexts.children[0];
+		var textSprite = this.SlideTitleTexts.children[1];
 		textSprite.show();
-		this.GC.currentUrl = this.GC.GamesInfo[centerPanel.id].url;
+		var gameInfo = this.GC.GamesInfo[centerPanel.id];
+		this.GC.currentUrl = gameInfo.url;
+		this.stage.backgroundColor = gameInfo.bgColor;
 	},
 
 	inputController: function () {
@@ -188,10 +199,12 @@ BasicGame.Title.prototype = {
 		var currentSC = this.GC.currentSlideCenter;
 		var imgSprite = this.SlideImgs.children[currentSC];
 		imgSprite.show();
-		var textSprite = this.SlideTitleTexts.children[currentSC];
+		var textSprite = this.SlideTitleTexts.children[currentSC*2+1];
 		textSprite.show();
 		var centerPanel = this.SlidePanels.children[this.GC.currentSlideCenter];
-		this.GC.currentUrl = this.GC.GamesInfo[centerPanel.id].url;
+		var gameInfo = this.GC.GamesInfo[centerPanel.id];
+		this.GC.currentUrl = gameInfo.url;
+		this.stage.backgroundColor = gameInfo.bgColor;
 		this.GC.inputEnabled = true;
 	},
 
@@ -204,7 +217,7 @@ BasicGame.Title.prototype = {
 		var currentSC = this.GC.currentSlideCenter;
 		var imgSprite = this.SlideImgs.children[currentSC];
 		imgSprite.hide();
-		var textSprite = this.SlideTitleTexts.children[currentSC];
+		var textSprite = this.SlideTitleTexts.children[currentSC*2+1];
 		textSprite.hide();
 	},
 
@@ -215,9 +228,20 @@ BasicGame.Title.prototype = {
 		leftBtn.setScale(1,2.2);
 		var rightBtn = this.M.S.BasicGrayLabel(this.world.width-130,y,this.leftSlide,'→',textStyle);
 		rightBtn.setScale(1,2.2);
+		this.genStartBtnSprite(y);
+		this.genInquiryBtnSprite(textStyle);
+	},
+
+	genStartBtnSprite: function (y, textStyle) {
 		this.M.S.BasicGrayLabel(this.world.centerX,y,function () {
-			if (this.GC.inputEnabled) console.log(this.GC.currentUrl);
+			if (this.GC.inputEnabled) window.open(this.GC.currentUrl,'_blank');
 		}, 'スタート', textStyle);
+	},
+
+	genInquiryBtnSprite: function (textStyle) {
+		this.M.S.BasicGrayLabel(250,100,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		}, 'お問い合わせ', textStyle);
 	},
 
 	start: function () {
