@@ -5,7 +5,7 @@ BasicGame.Play.prototype = {
 		this.Player = null;
 		this.Obstacles = null;
 		this.HUD = null;
-		this.stage.backgroundColor = '#ffffff';
+		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
 	},
 
 	create: function () {
@@ -208,7 +208,7 @@ BasicGame.Play.prototype = {
 	StaticBaseTextStyle: function () {
 		return {
 			fill: this.M.getConst('MAIN_TEXT_COLOR'),
-			stroke:'#FFFFFF',
+			stroke: this.M.getConst('WHITE_COLOR'),
 			strokeThickness: 15,
 			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
 			multipleStrokeThickness: 10,

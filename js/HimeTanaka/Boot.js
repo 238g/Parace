@@ -20,9 +20,11 @@ BasicGame.Boot.prototype = {
 	defineConst: function () {
 		this.M.defineConst({
 			GAME_TITLE: 'aaaaaaa',
-			MAIN_COLOR: '#fffd3a',
-			MAIN_TINT:  0xfffd3a,
-			MAIN_TEXT_COLOR: '#eaad18',
+			MAIN_COLOR: '#fba4d1',
+			MAIN_TINT:  0xfba4d1,
+			MAIN_TEXT_COLOR: '#e30c4f',
+			WHITE_COLOR: '#f8e2e5',
+			SUB_TINT: 0xffc9e5,
 		});
 	},
 

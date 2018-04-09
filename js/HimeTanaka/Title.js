@@ -35,7 +35,7 @@ BasicGame.Title.prototype = {
 	},
 
 	BgContainer: function () {
-		this.stage.backgroundColor = '#ffffff';
+		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
 		this.genBgSprite();
 		this.genTitleTextSprite();
 	},
@@ -138,7 +138,7 @@ BasicGame.Title.prototype = {
 
 	genDialogSprite: function (Dialog) {
 		Dialog.dialogSprite = this.M.S.genDialog('Dialog_1',{
-			tint: 0xffeb8f,
+			tint: this.M.getConst('SUB_TINT'),
 			onComplete:function () {
 				if (Dialog.dialogSprite.visible) {
 					if (Dialog.dialogSprite.showTarget == 'select') {
@@ -237,7 +237,7 @@ BasicGame.Title.prototype = {
 	StaticBaseTextStyle: function () {
 		return {
 			fill: this.M.getConst('MAIN_TEXT_COLOR'),
-			stroke:'#FFFFFF',
+			stroke: this.M.getConst('WHITE_COLOR'),
 			strokeThickness: 15,
 			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
 			multipleStrokeThickness: 10,
