@@ -174,7 +174,12 @@ BasicGame.Title.prototype = {
 	genInquiryBtnSprite: function () {
 		var text = '他のゲームを遊ぶ';
 		var labelSprite = this.genBtnTpl(this.world.centerX,this.world.height-250,function () {
-			window.open('https://238g.github.io/Parace/238Games.html','_blank');
+			var url = 'https://238g.github.io/Parace/238Games.html';
+			if (this.game.device.desktop) {
+				window.open(url,'_blank');
+			} else {
+				location.href = url;
+			}
 		},text);
 		labelSprite.hide();
 		labelSprite.textSprite.hide();

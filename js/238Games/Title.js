@@ -247,7 +247,7 @@ BasicGame.Title.prototype = {
 	genInquiryBtnSprite: function (textStyle) {
 		this.M.S.BasicGrayLabel(250,100,function () {
 			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
-		}, 'お問い合わせ', textStyle);
+		}, '開発者', textStyle);
 	},
 
 	start: function () {
