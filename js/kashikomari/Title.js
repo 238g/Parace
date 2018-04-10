@@ -177,8 +177,6 @@ BasicGame.Title.prototype = {
 	dialogInputController: function (Dialog) {
 		this.game.input.onDown.add(function (p) {
 			if (Dialog.dialogSprite.visible) {
-				var t = p.targetObject;
-				if (t && t.sprite && t.sprite.type=='play') return;
 				Dialog.dialogSprite.hide();
 				Dialog.dialogSprite.scale.setTo(0);
 				Dialog.selectContainer.hide();

@@ -164,7 +164,7 @@ BasicGame.Title.prototype = {
 		this.game.input.onDown.add(function (p) {
 			if (Dialog.dialogSprite.visible) {
 				var t = p.targetObject;
-				if (t && t.sprite && t.sprite.type=='play') return;
+				if (t && t.sprite && t.sprite.Utype=='play') return;
 				Dialog.dialogSprite.hide();
 				Dialog.dialogSprite.scale.setTo(0);
 				Dialog.selectContainer.hide();
@@ -207,6 +207,7 @@ BasicGame.Title.prototype = {
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
 			label.btnSprite.scale.setTo(4,2.2);
+			label.btnSprite.Utype = 'play';
 			selectGroup.add(label.btnSprite);
 			label.textSprite.addGroup(selectGroup);
 		}

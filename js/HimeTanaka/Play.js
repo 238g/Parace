@@ -5,11 +5,11 @@ BasicGame.Play.prototype = {
 		this.Player = null;
 		this.Obstacles = null;
 		this.HUD = null;
-		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
 	},
 
 	create: function () {
 		this.GC = this.GameController();
+		this.BgContainer();
 		this.PhysicsController();
 		this.Obstacles = this.ObstaclesContainer();
 		this.Player = this.PlayerContainer();
@@ -57,6 +57,10 @@ BasicGame.Play.prototype = {
 		if (this.GC.isPlaying){
 			// this.physics.arcade.overlap(this.EnemyFishGroup, this.GC.netBodySprite, this.castNet, null, this);
 		}
+	},
+
+	BgContainer: function () {
+		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
 	},
 
 	ObstaclesContainer: function () {
@@ -147,7 +151,7 @@ BasicGame.Play.prototype = {
 	ResultContainer: function () {
 		// this.M.SE.play('Result',{volume:.5}); // TODO
 		this.M.S.genDialog('Dialog_1',{
-			tint: 0xffeb8f,
+			tint: this.M.getConst('SUB_TINT'),
 			onComplete:this.openedResult,
 		}).tweenShow();
 	},
@@ -199,9 +203,13 @@ BasicGame.Play.prototype = {
 	},
 
 	InputController: function () {
-		// TODO addOnce
+		this.time.events.add(800, function () {
+			this.game.input.onDown.addOnce(this.start, this);
+		}, this);
 		this.game.input.onDown.add(function (pointer) {
-			// TODO
+			if (this.GC.isPlaying) {
+				console.log(pointer);
+			}
 		}, this);
 	},
 
