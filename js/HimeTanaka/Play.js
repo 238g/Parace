@@ -10,11 +10,12 @@ BasicGame.Play.prototype = {
 	create: function () {
 		this.GC = this.GameController();
 		this.BgContainer();
-		this.PhysicsController();
+		this.PhysicsManager();
 		this.Obstacles = this.ObstaclesContainer();
 		this.Player = this.PlayerContainer();
 		this.HUD = this.HUDContainer();
-		this.InputController();
+		this.InputManager();
+		this.CameraManager();
 		this.ready();
 		this.test();
 	},
@@ -28,19 +29,19 @@ BasicGame.Play.prototype = {
 		};
 	},
 
-	PhysicsController: function () {
+	PhysicsManager: function () {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.world.enableBody = true;
 	},
 
 	update: function () {
 		if (this.GC.isPlaying) {
-			this.timerController();
+			this.timerManager();
 			this.collisionManager();
 		}
 	},
 
-	timerController: function () {
+	timerManager: function () {
 		this.GC.timeCounter += this.time.elapsed;
 		if (this.GC.timeCounter > 1000) {
 			this.GC.timeCounter = 0;
@@ -54,9 +55,26 @@ BasicGame.Play.prototype = {
 	},
 
 	collisionManager: function () {
-		if (this.GC.isPlaying){
-			// this.physics.arcade.overlap(this.EnemyFishGroup, this.GC.netBodySprite, this.castNet, null, this);
-		}
+		// this.physics.arcade.overlap(this.EnemyFishGroup, this.GC.netBodySprite, this.castNet, null, this);
+	},
+
+	InputManager: function () {
+		this.time.events.add(800, function () {
+			this.game.input.onDown.addOnce(this.start, this);
+		}, this);
+		this.game.input.onDown.add(function (pointer) {
+			if (this.GC.isPlaying) {
+				// console.log(pointer);
+				console.log(this.camera);
+				this.Player.jump();
+			}
+		}, this);
+	},
+
+	CameraManager: function () {
+		this.world.setBounds(0, -1000, 900, 2600); // TODO
+		// this.world.setBounds(0, -5000, 900, 6600); // TODO
+		this.camera.follow(this.Player);
 	},
 
 	BgContainer: function () {
@@ -68,20 +86,28 @@ BasicGame.Play.prototype = {
 	},
 
 	PlayerContainer: function () {
-		var playerSprite = this.M.S.genSprite(100,100,'Player');
+		var playerSprite = this.M.S.genSprite(this.world.centerX,this.world.centerY,'Player');
 		playerSprite.anchor.setTo(.5);
 		this.physics.arcade.enable(playerSprite);
 		playerSprite.body.enable = true;
-		playerSprite.body.setCircle(100, 90, 90);
-		playerSprite.body.gravity.y = 5000;
-		playerSprite.body.collideWorldBounds = true;
+		playerSprite.body.setCircle(100, 90, 90); // TODO
+		playerSprite.checkWorldBounds = true;
+		playerSprite.outOfBoundsKill = true;
+		playerSprite.events.onKilled.add(this.OnKilledPlayer,this);
+		playerSprite.jump = function () {
+			playerSprite.body.velocity.y = -1000;
+		};
 		return playerSprite;
+	},
+
+	OnKilledPlayer: function (/*playerSprite*/) {
+		this.gameOver();
 	},
 
 	HUDContainer: function () {
 		var HUD = {
 			score:null,changeScore:null,
-			hideStart:null,showGameOver:null,
+			showGameOver:null,
 			textStyle: this.StaticBaseTextStyle(),
 		};
 		this.genScoreTextSprite(HUD);
@@ -92,13 +118,14 @@ BasicGame.Play.prototype = {
 
 	genScoreTextSprite: function (HUD) {
 		var baseText = 'スコア: ';
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-50,baseText+this.GC.score,HUD.textStyle);
-		textSprite.setAnchor(.5);
+		var textSprite = this.M.S.genText(this.world.width-50,50,baseText+this.GC.score,HUD.textStyle);
+		textSprite.setAnchor(1,0);
 		var self = this;
 		HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+self.M.H.formatComma(val));
 		};
 		HUD.score = textSprite;
+		// textSprite.fixedToCamera = true; // TODO
 	},
 
 	addScore: function (val) {
@@ -108,9 +135,8 @@ BasicGame.Play.prototype = {
 
 	genStartTextSprite: function (HUD) {
 		var baseText = 'タッチしてスタート！';
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,HUD.textStyle);
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-50,baseText,HUD.textStyle);
 		textSprite.setAnchor(.5);
-		HUD.hideStart = textSprite.hide;
 	},
 
 	genGameOverTextSprite: function (HUD) {
@@ -130,7 +156,7 @@ BasicGame.Play.prototype = {
 
 	start: function () {
 		this.GC.isPlaying = true;
-		this.HUD.hideStart();
+		this.Player.body.gravity.y = 3000;
 	},
 
 	// startBGM
@@ -195,22 +221,21 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
-		var emoji = '😐😐😐😐😐😐';
-		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
-					+emoji+'\n';
-		var hashtags = 's,d';
-		this.M.H.tweet(text,hashtags,location.href);
-	},
-
-	InputController: function () {
-		this.time.events.add(800, function () {
-			this.game.input.onDown.addOnce(this.start, this);
-		}, this);
-		this.game.input.onDown.add(function (pointer) {
-			if (this.GC.isPlaying) {
-				console.log(pointer);
+		var emoji = '';
+		for (var i=0;i<6;i++) {
+			var rndNum = this.rnd.integerInRange(1,4);
+			if (rndNum==1) {
+				emoji += '👲';
+			} else if (rndNum==2) {
+				emoji += '🀄';
+			} else {
+				emoji += '🍜';
 			}
-		}, this);
+		}
+		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
+					+emoji+'\n'; // TODO
+		var hashtags = '田中ゲー';
+		this.M.H.tweet(text,hashtags,location.href);
 	},
 
 	StaticBaseTextStyle: function () {
