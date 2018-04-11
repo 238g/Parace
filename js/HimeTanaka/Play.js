@@ -62,6 +62,8 @@ BasicGame.Play.prototype = {
 
 	collideObstacle: function (player/*, obstacle*/) {
 		// player.kill();
+		// TODO if obstacle==goal -> gameOver, SE
+		// TODO tanaka thai kick img??
 		player.reset(this.GC.cameraCenterPos.x,this.GC.cameraCenterPos.y);
 		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 	},
@@ -76,7 +78,7 @@ BasicGame.Play.prototype = {
 	},
 
 	CameraManager: function () {
-		this.world.setBounds(0, this.GC.obstacleY, 900, (this.GC.obstacleY * -1 + this.world.height));
+		this.world.setBounds(0, this.GC.obstacleY, this.world.width, (this.GC.obstacleY * -1 + this.world.height));
 		this.camera.follow(this.Player);
 	},
 
@@ -86,127 +88,127 @@ BasicGame.Play.prototype = {
 	},
 
 	genClaspSprite: function () {
-		var sprite = this.M.S.genBmpSprite(this.world.centerX,this.world.centerY+200,300,100,this.M.getConst('WHITE_COLOR'));
-		sprite.anchor.setTo(.5);
-		this.physics.arcade.enable(sprite);
-		sprite.body.enable = true;
-		sprite.body.immovable = true;
-		this.Clasp = sprite;
+		var claspSprite = this.M.S.genBmpSprite(this.world.centerX,this.world.centerY+200,300,100,this.M.getConst('WHITE_COLOR'));
+		claspSprite.anchor.setTo(.5);
+		this.physics.arcade.enable(claspSprite);
+		claspSprite.body.enable = true;
+		claspSprite.body.immovable = true;
+		this.Clasp = claspSprite;
+		var shadowSprite = this.add.sprite(claspSprite.x+10, claspSprite.y+10, claspSprite.key);
+		shadowSprite.anchor.setTo(.5);
+		shadowSprite.tint = 0x000000;
+		shadowSprite.alpha = .2;
+		this.world.bringToTop(claspSprite);
 	},
 
 	ObstaclesContainer: function () {
 		this.Obstacles = this.add.group();
 		for (var key in this.GC.LevelInfo.obstacles) {
 			var objectType = this.GC.LevelInfo.obstacles[key];
-			console.log(objectType); // TODO del
 			switch (objectType) {
-				case 1: this.genHorizontalTweenOB(); break;
-				case 2: this.genDoubleHorizontalTweenOB(); break;
-				case 3: this.genRotationOB(); break;
-				case 4: this.genDoubleRotationOB(); break;
-				case 5: this.genHorizontalChDuTweenOB(); break;
-				case 100: this.genGoalOB(); break;
-				default: this.genSpaceOB();
+				case 1: this.genHorizontalTweenObj(0); break;
+				case 2: this.genDoubleHorizontalTweenObj(); break;
+				case 3: this.genRotationObj(); break;
+				case 4: this.genDoubleRotationObj(); break;
+				case 5: this.genHorizontalChDuTweenObj(); break;
+				case 6: this.genDoubleHorizontalChDuTweenObj(); break;
+				case 7: this.genRndHorizontalTweenObj(); break;
+				case 100: this.genGoalObj(); break;
+				default: this.genSpaceObj();
 			}
 		}
 	},
 
-	genSpaceOB: function () {
+	genSpaceObj: function () {
 		this.GC.obstacleY-=this.world.centerY;
 	},
 
-	genHorizontalTweenOB: function (x) {
-		var sprite = this.M.S.genSprite(x||0,this.GC.obstacleY,'Player');
+	genHorizontalTweenObj: function (x, rndFlag) {
+		var sprite = this.add.sprite(x||0,this.GC.obstacleY,'Chair_1');
 		sprite.anchor.setTo(.5);
+		if (x) sprite.scale.setTo(-1,1);
 		this.physics.arcade.enable(sprite);
 		sprite.body.enable = true;
 		this.Obstacles.add(sprite);
-		this.M.T.moveC(sprite,{xy:{x:this.world.width-sprite.x},duration:1500}).start();
+		var tween = this.M.T.moveC(sprite,{xy:{x:this.world.width-sprite.x},duration:1500});
+		tween.onLoop.add(function () {
+			sprite.scale.setTo(sprite.scale.x*-1,1);
+			if (rndFlag) tween.updateTweenData('duration',this.rnd.integerInRange(500,1500));
+		},this);
+		tween.start();
 		this.GC.obstacleY-=this.world.centerY;
 	},
 
-	genHorizontalChDuTweenOB: function () {
-		var sprite = this.M.S.genSprite(0,this.GC.obstacleY,'Player');
+	genHorizontalChDuTweenObj: function (x) {
+		var sprite = this.add.sprite(x||0,this.GC.obstacleY,'Chair_1');
 		sprite.anchor.setTo(.5);
+		if (x) sprite.scale.setTo(-1,1);
 		this.physics.arcade.enable(sprite);
 		sprite.body.enable = true;
 		this.Obstacles.add(sprite);
 		var tween = this.M.T.moveC(sprite,
-			{xy:{x:this.world.width},
+			{xy:{x:this.world.width-sprite.x},
 			duration:1500});
 		var durations = [500,500,1800,1000,1500,800];
 		var currentDuration = 0;
 		tween.onLoop.add(function () {
 			if (currentDuration == durations.length) currentDuration = 0;
 			tween.updateTweenData('duration',durations[currentDuration]);
+			sprite.scale.setTo(sprite.scale.x*-1,1);
 			currentDuration++;
 		},this);
 		tween.start();
 		this.GC.obstacleY-=this.world.centerY;
 	},
 
-	genDoubleHorizontalTweenOB: function () {
-		this.genHorizontalTweenOB();
-		this.GC.obstacleY+=this.world.centerY; // TODO think...
-		this.genHorizontalTweenOB(this.world.width);
+	genDoubleHorizontalTweenObj: function () {
+		this.genHorizontalTweenObj(0);
+		this.GC.obstacleY+=this.world.centerY-150;
+		this.genHorizontalTweenObj(this.world.width);
 	},
 
-	genRotationOB: function () {
-		// TODO TESTrotation
+	genDoubleHorizontalChDuTweenObj: function () {
+		this.genHorizontalChDuTweenObj(0);
+		this.GC.obstacleY+=this.world.centerY-150;
+		this.genHorizontalChDuTweenObj(this.world.width);
 	},
 
-	genDoubleRotationOB: function () {
-		// TODO TESTdoubleRotation
+	genRndHorizontalTweenObj: function () {
+		this.genHorizontalTweenObj(0, true);
 	},
 
-	genGoalOB: function () {
-
-	},
-
-	TESTrotation: function () {
+	genRotationObj: function () {
+		this.GC.obstacleY-=200;
 		var rndNum = this.rnd.integerInRange(1,4);
+		var pivotMargin = 280;
 		for (var i=0;i<2;i++) {
 			for (var j=0;j<2;j++) {
 				if (i+j*2+1==rndNum) continue;
-				// var x = this.world.centerX+400*i-200;
-				// var y = this.world.centerY+400*j-200;
-				var x = this.world.centerX;
-				var y = this.world.centerY;
-				var sprite = this.add.sprite(x,y,'Player');
-				sprite.scale.setTo(.5);
-				sprite.pivot.x = 1000*i-500;
-				// sprite.pivot.x = 500*i-250;
-				sprite.pivot.y = 1000*j-500;
-				// sprite.pivot.y = 500*j-250;
+				var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,'Pig_1');
+				sprite.pivot.x = pivotMargin*2*i-pivotMargin;
+				sprite.pivot.y = pivotMargin*2*j-pivotMargin;
 				sprite.anchor.set(.5);
-				sprite.Utype='obstacle';
 				sprite.postUpdate = function () {
 					this.rotation += 0.02;
 				};
 				this.Obstacles.add(sprite);
 			}
 		}
+		this.GC.obstacleY-=(this.world.centerY+200);
 	},
 
-	TESTdoubleRotation: function () {
+	genDoubleRotationObj: function () {
+		this.GC.obstacleY-=300;
 		var rndNum = this.rnd.integerInRange(1,4);
+		var pivotMargin = 280;
 		for (var k=0;k<2;k++) {
 			for (var i=0;i<2;i++) {
 				for (var j=0;j<2;j++) {
 					if (i+j*2+1==rndNum) continue;
-					// var x = this.world.centerX+400*i-200;
-					// var y = this.world.centerY+400*j-200;
-					// var x = this.world.centerX+300*k-150;
-					var x = this.world.centerX+600*k-300;
-					var y = this.world.centerY;
-					var sprite = this.add.sprite(x,y,'Player');
-					sprite.scale.setTo(.5);
-					sprite.pivot.x = 1000*i-500;
-					// sprite.pivot.x = 500*i-250;
-					sprite.pivot.y = 1000*j-500;
-					// sprite.pivot.y = 500*j-250;
+					var sprite = this.add.sprite(this.world.centerX+600*k-300,this.GC.obstacleY,'Pig_1');
+					sprite.pivot.x = pivotMargin*2*i-pivotMargin;
+					sprite.pivot.y = pivotMargin*2*j-pivotMargin;
 					sprite.anchor.set(.5);
-					sprite.Utype='obstacle';
 					if (k==0) {
 						sprite.postUpdate = function () {
 							this.rotation -= 0.02;
@@ -225,14 +227,19 @@ BasicGame.Play.prototype = {
 				rndNum++;
 			}
 		}
+		this.GC.obstacleY-=(this.world.centerY+300);
+	},
+
+	genGoalObj: function () {
+		// TODO
 	},
 
 	PlayerContainer: function () {
-		var playerSprite = this.M.S.genSprite(this.world.centerX,this.world.centerY,'Player');
+		var playerSprite = this.M.S.genSprite(this.world.centerX,this.world.centerY,'Nikuman_1');
 		playerSprite.anchor.setTo(.5);
 		this.physics.arcade.enable(playerSprite);
 		playerSprite.body.enable = true;
-		playerSprite.body.setCircle(100, 90, 90); // TODO
+		playerSprite.body.setCircle(80,20,10);
 		// playerSprite.checkWorldBounds = true;
 		// playerSprite.outOfBoundsKill = true;
 		playerSprite.body.collideWorldBounds = true;
@@ -271,8 +278,12 @@ BasicGame.Play.prototype = {
 	},
 
 	genStartTextSprite: function (HUD) {
-		var baseText = 'タッチしてスタート！';
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-50,baseText,HUD.textStyle);
+		if (this.game.device.touch) {
+			var baseText = 'はおー！ヒメまで肉まん届けてね！\nタッチしてスタートだよー！';
+		} else {
+			var baseText = 'はおー！ヒメまで肉まん届けてね！\nクリックしてスタートだよー！';
+		}
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-150,baseText,HUD.textStyle);
 		textSprite.setAnchor(.5);
 	},
 
@@ -401,8 +412,9 @@ BasicGame.Play.prototype = {
 			this.game.debug.font='30px Courier';
 			this.game.debug.lineHeight=30;
 			if (this.M.H.getQuery('posTest')) {
+				var velocity = this.M.H.getQuery('posTest');
 				this.collisionManager = function () {};
-				this.Player.jump = function () {this.body.velocity.y = -3000;};
+				this.Player.jump = function () {this.body.velocity.y = -velocity;};
 			}
 		}
 	},

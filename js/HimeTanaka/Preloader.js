@@ -15,6 +15,10 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Dialog_1': './images/public/dialogs/Dialog_1.png',
 			'Player': './images/ankimo_drrrr/player.png',
+			'Nikuman_1': './images/HimeTanaka/Nikuman_1.png',
+			'Turtle_1': './images/HimeTanaka/Turtle_1.png',
+			'Pig_1': './images/HimeTanaka/Pig_1.png',
+			'Chair_1': './images/HimeTanaka/Chair_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();

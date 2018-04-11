@@ -207,14 +207,14 @@ BasicGame.Title.prototype = {
 			var text = 'Level '+idNum;
 			var y = i * 150 + 350;
 			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
-				this.M.setGlobal('currentLevel', label.level);
+				this.M.setGlobal('currentLevel', btnSprite.level);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
 			label.btnSprite.scale.setTo(4,2.2);
 			label.btnSprite.Utype = 'play';
+			label.btnSprite.level = idNum;
 			selectGroup.add(label.btnSprite);
 			label.textSprite.addGroup(selectGroup);
-			label.level = idNum;
 			i++;
 		}
 	},
