@@ -13,7 +13,7 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-
+			'transp': './images/238Games/transp.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		var GamesInfo = this.M.getConf('GamesInfo');
