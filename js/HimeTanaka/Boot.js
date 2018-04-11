@@ -30,11 +30,13 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.M.defineGlobal({
+			currentLevel: 1,
 		});
 	},
 
 	defineConf: function () {
 		this.M.defineConf({
+			LevelInfo: this.genLevelInfo(),
 		});
 	},
 };

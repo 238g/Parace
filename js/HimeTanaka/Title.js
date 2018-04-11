@@ -3,6 +3,7 @@ BasicGame.Title.prototype = {
 	init: function () {
 		this.inputEnabled = false;
 		this.Dialog = null;
+		this.world.setBounds(0, 0, this.game.width, this.game.height);
 	},
 
 	create: function () {
@@ -200,33 +201,39 @@ BasicGame.Title.prototype = {
 		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
 		var x = this.world.centerX;
-		for (var i=0;i<2;i++) {
-			var text = 'aaaaa';
+		var LevelInfo = this.M.getConf('LevelInfo');
+		var i = 0;
+		for (var idNum in LevelInfo) {
+			var text = 'Level '+idNum;
 			var y = i * 150 + 350;
 			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
+				this.M.setGlobal('currentLevel', label.level);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
 			label.btnSprite.scale.setTo(4,2.2);
 			label.btnSprite.Utype = 'play';
 			selectGroup.add(label.btnSprite);
 			label.textSprite.addGroup(selectGroup);
+			label.level = idNum;
+			i++;
 		}
 	},
 
 	genHowtoTextSprite: function (Dialog) {
 		var text = 
-			'ちゃんまりと一緒に音楽を奏でよう！ '
+			// TODO
+			'説明欄！ '
 			+' '
-			+'飛んでくるパンディが '
-			+'パネルのパンディと重なる '
-			+'タイミングでパネルを押そう！ '
+			+'説明欄！ '
+			+'説明欄！ '
+			+'説明欄！ '
 			+' '
-			+'タイミングが良いとスコアが高くなるよ！ '
+			+'説明欄！ '
 			+' '
-			+'演奏が終わるとランクやコンボ数が出るよ '
-			+'ランクはS,AAA,AA,A,B,C,D,E,Fがあるよ '
+			+'説明欄！ '
+			+'説明欄！ '
 			+' '
-			+'コンボを重ねて　目指せ！高ランク！ '
+			+'説明欄！ '
 			+' ';
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 40;

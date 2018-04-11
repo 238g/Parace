@@ -431,6 +431,14 @@ Middleware.prototype.TweenManager.prototype = {
 			option.xy, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
 	},
+	// xy[, duration, delay] // loop yoyo
+	moveC: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		return Scene.add.tween(target).to(
+			option.xy, option.duration, 
+			Phaser.Easing.Cubic.Out, false, option.delay, -1, true);
+	},
 	// xy, easing[, duration, delay]
 	moveX: function (target, option) {
 		var Scene = this.M.getScene();
