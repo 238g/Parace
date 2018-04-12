@@ -13,12 +13,13 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Dialog_1': './images/public/dialogs/Dialog_1.png',
-			'Player': './images/ankimo_drrrr/player.png',
+			'Dialog': './images/public/dialogs/Dialog_2.png',
+			'Hime_1': './images/HimeTanaka/Hime_1.png',
 			'Nikuman_1': './images/HimeTanaka/Nikuman_1.png',
 			'Turtle_1': './images/HimeTanaka/Turtle_1.png',
 			'Pig_1': './images/HimeTanaka/Pig_1.png',
 			'Chair_1': './images/HimeTanaka/Chair_1.png',
+			'Logo': './images/HimeTanaka/Logo.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -26,17 +27,30 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			/*
 			'TitleBGM': [
-				'./sounds/BGM/H/HappymelancholicWhole.ogg',
-				'./sounds/BGM/H/HappymelancholicWhole.mp3',
-				'./sounds/BGM/H/HappymelancholicWhole.wav',
+				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.mp3',
+				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.wav',
 			],
-			'Result': [
-				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.mp3',
-				'./sounds/SE/LabJP/Performance/Other/dondonpafupafu1.wav',
+			'PlayBGM': [
+				'./sounds/BGM/C/Chikurin.mp3',
+				'./sounds/BGM/C/Chikurin.wav',
 			],
-			*/
+			'Gong': [
+				'./sounds/SE/LabJP/Performance/Anime/ban1.mp3',
+				'./sounds/SE/LabJP/Performance/Anime/ban1.wav',
+			],
+			'Jump': [
+				'./sounds/SE/phaseJump3.mp3',
+				'./sounds/SE/phaseJump3.wav',
+			],
+			'Hit': [
+				'./sounds/SE/LabJP/Performance/Anime/feed1.mp3',
+				'./sounds/SE/LabJP/Performance/Anime/feed1.wav',
+			],
+			'Clear': [
+				'./sounds/SE/LabJP/Performance/Other/trumpet1.mp3',
+				'./sounds/SE/LabJP/Performance/Other/trumpet1.wav',
+			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},

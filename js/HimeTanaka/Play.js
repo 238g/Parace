@@ -19,6 +19,7 @@ BasicGame.Play.prototype = {
 		this.HUDContainer();
 		this.InputManager();
 		this.CameraManager();
+		this.ready();
 		this.test();
 	},
 
@@ -64,7 +65,7 @@ BasicGame.Play.prototype = {
 	collideObstacle: function (player, obstacle) {
 		// player.kill();
 		if (obstacle.tag=='goal') return this.gameOver();
-		// TODO tanaka thai kick img??
+		this.M.SE.play('Hit');
 		player.reset(this.GC.cameraCenterPos.x,this.GC.cameraCenterPos.y);
 		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 	},
@@ -85,7 +86,13 @@ BasicGame.Play.prototype = {
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
+		this.genStartCharSprite();
 		this.genClaspSprite();
+	},
+
+	genStartCharSprite: function () {
+		var sprite = this.add.sprite(this.world.width,this.world.height,'Hime_1');
+		sprite.anchor.setTo(1);
 	},
 
 	genClaspSprite: function () {
@@ -260,9 +267,11 @@ BasicGame.Play.prototype = {
 	},
 
 	genGoalObj: function () {
-		var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,'Player');
+		var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,'Hime_1');
 		sprite.anchor.setTo(.5);
 		sprite.tag = 'goal';
+		this.physics.arcade.enable(sprite);
+		sprite.body.setCircle(100);
 		this.Obstacles.add(sprite);
 		this.GC.obstacleY-=this.world.centerY;
 	},
@@ -282,7 +291,9 @@ BasicGame.Play.prototype = {
 		// playerSprite.outOfBoundsKill = true;
 		playerSprite.body.collideWorldBounds = true;
 		// playerSprite.events.onKilled.add(this.OnKilledPlayer,this);
+		var self = this;
 		playerSprite.jump = function () {
+			self.M.SE.play('Jump',{volume:2});
 			playerSprite.body.velocity.y = -1000;
 		};
 		this.Player = playerSprite;
@@ -317,11 +328,11 @@ BasicGame.Play.prototype = {
 
 	genStartTextSprite: function (HUD) {
 		if (this.game.device.touch) {
-			var baseText = 'はおー！肉まんをヒメまで届けてね！\nタッチしてスタートだよー！';
+			var baseText = 'はおー！\n肉まんを上のヒメまで届けてね！\nタッチしてスタートだよー！';
 		} else {
-			var baseText = 'はおー！肉まんをヒメまで届けてね！\nクリックしてスタートだよー！';
+			var baseText = 'はおー！\n肉まんを上のヒメまで届けてね！\nクリックしてスタートだよー！';
 		}
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-230,baseText,HUD.textStyle);
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-270,baseText,HUD.textStyle);
 		textSprite.setAnchor(.5);
 	},
 
@@ -331,7 +342,6 @@ BasicGame.Play.prototype = {
 		textSprite.setAnchor(.5);
 		textSprite.setScale(0,0);
 		HUD.showGameOver = function () {
-			// SE?
 			textSprite.addTween('popUpB',{scale:{x:2,y:2}});
 			textSprite.startTween('popUpB');
 		};
@@ -344,11 +354,22 @@ BasicGame.Play.prototype = {
 		this.Player.body.gravity.y = 3000;
 	},
 
-	// TODO startBGM
+	ready: function () {
+		this.stopBGM();
+		this.playBGM();
+	},
+
+	playBGM: function () {
+		var s = this.M.SE;
+		if (s.isPlaying('PlayBGM')) return;
+		s.play('PlayBGM',{isBGM:true,loop:true,volume:1});
+	},
 
 	stopBGM: function () {
-		this.M.SE.stop('currentBGM');
-		this.M.SE.stop('TitleBGM');
+		var s = this.M.SE;
+		if (s.isPlaying('PlayBGM')) return;
+		s.stop('currentBGM');
+		s.stop('TitleBGM');
 	},
 
 	gameOver: function () {
@@ -357,14 +378,15 @@ BasicGame.Play.prototype = {
 		this.Player.body.velocity.y = 0;
 		this.HUD.showGameOver();
 		this.GC.cameraCenterPos.y += this.camera.y;
+		this.M.SE.play('Clear');
 		this.time.events.add(1500, function () {
 			this.ResultContainer();
+			this.M.SE.play('Gong');
 		}, this);
 	},
 
 	ResultContainer: function () {
-		// this.M.SE.play('Result',{volume:.5}); // TODO
-		this.M.S.genDialog('Dialog_1',{
+		this.M.S.genDialog('Dialog',{
 			tint: this.M.getConst('SUB_TINT'),
 			onComplete:this.openedResult,
 			x: this.GC.cameraCenterPos.x,
@@ -377,10 +399,11 @@ BasicGame.Play.prototype = {
 		var y = this.GC.cameraCenterPos.y;
 		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
-		this.M.S.genText(x,y-600,'結果発表',this.M.H.mergeJson({fontSize:80},this.StaticBaseTextStyle()));
-		this.genRestartLabel(x,y+350,textStyle,{duration:800,delay:600},tint);
-		this.genTweetLabel(x,y+475,textStyle,{duration:800,delay:800},tint);
-		this.genBackLabel(x,y+600,textStyle,{duration:800,delay:1000},tint);
+		this.M.S.genText(x,y-570,'結果発表',this.M.H.mergeJson({fontSize:80},this.StaticBaseTextStyle()));
+		// TODO result text
+		this.genRestartLabel(x,y+320,textStyle,{duration:800,delay:600},tint);
+		this.genTweetLabel(x,y+455,textStyle,{duration:800,delay:800},tint);
+		this.genBackLabel(x,y+580,textStyle,{duration:800,delay:1000},tint);
 	},
 
 	genRestartLabel: function (x,y,textStyle,tweenOption,tint) {
@@ -424,7 +447,7 @@ BasicGame.Play.prototype = {
 		}
 		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+emoji+'\n'; // TODO
-		var hashtags = '田中ゲー';
+		var hashtags = 'ヒメゲー,田中ゲー';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
 
@@ -438,7 +461,7 @@ BasicGame.Play.prototype = {
 		};
 	},
 
-	Trender: function () {
+	render: function () {
 		this.game.debug.body(this.Player);
 		this.Obstacles.forEach(function (sprite) {
 			this.game.debug.body(sprite);

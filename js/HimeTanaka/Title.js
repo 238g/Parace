@@ -21,27 +21,27 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return;
 		var s = this.M.SE;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
 			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:.9});
+			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
 		}, this);
 		this.time.events.add(1200, function () {
 			if (s.isPlaying('TitleBGM')) return;
 			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:.9});
+			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
 		});
 	},
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
-		this.genBgSprite();
+		this.genBgCharSprite();
 		this.genTitleTextSprite();
 	},
 
-	genBgSprite: function () {
+	genBgCharSprite: function () {
+		this.add.sprite(this.world.centerX,this.world.centerY,'');
 	},
 
 	genTitleTextSprite: function () {
@@ -50,7 +50,7 @@ BasicGame.Title.prototype = {
 		var textSprite = this.M.S.genText(
 			this.world.centerX-30,130,
 			this.M.getConst('GAME_TITLE'),textStyle);
-		textSprite.addTween('beatA',{duration:764});
+		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
 	},
 
@@ -65,6 +65,8 @@ BasicGame.Title.prototype = {
 		this.genMuteBtnSprite(x,y+margin,textStyle,tint);
 		this.genFullScreenBtnSprite(x*3,y+margin,textStyle,tint);
 		this.genInquiryBtnSprite(x,y+margin*2,textStyle,tint);
+
+		this.genLogoBtnSprite();
 	},
 
 	genStartBtnSprite: function (x,y,textStyle,tint) {
@@ -123,6 +125,20 @@ BasicGame.Title.prototype = {
 		},text,textStyle,{tint:tint});
 	},
 
+	genLogoBtnSprite: function () {
+		var logoSprite = this.M.S.genSprite(this.world.width-5,this.world.height-25,'Logo');
+		logoSprite.anchor.setTo(1);
+		logoSprite.UonInputDown(function () {
+			window.open('https://www.youtube.com/channel/UCFv2z4iM5vHrS8bZPq4fHQQ','_blank');	
+		});
+		this.M.T.beatA(logoSprite,{duration:508}).start();
+		var logoBgSprite = this.M.S.genBmpSprite(
+			this.world.width,this.world.height,
+			logoSprite.width+50,logoSprite.height+50,this.M.getConst('MAIN_COLOR'));
+		logoBgSprite.anchor.setTo(1);
+		this.world.bringToTop(logoSprite);
+	},
+
 	DialogContainer: function () {
 		var Dialog = {
 			selectContainer:null,
@@ -138,7 +154,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genDialogSprite: function (Dialog) {
-		Dialog.dialogSprite = this.M.S.genDialog('Dialog_1',{
+		Dialog.dialogSprite = this.M.S.genDialog('Dialog',{
 			tint: this.M.getConst('SUB_TINT'),
 			onComplete:function () {
 				if (Dialog.dialogSprite.visible) {
@@ -154,7 +170,9 @@ BasicGame.Title.prototype = {
 			},
 		});
 		Dialog.dialogSprite.hide();
+		var self = this;
 		Dialog.showDialog = function (showTarget) {
+			self.M.SE.play('Gong');
 			Dialog.dialogSprite.showTarget = showTarget;
 			Dialog.dialogSprite.show();
 			Dialog.dialogSprite.tweenShow();
@@ -171,7 +189,6 @@ BasicGame.Title.prototype = {
 				Dialog.selectContainer.hide();
 				Dialog.howtoTextSprite.hide();
 			}
-			// this.M.SE.play('HitTheTambourine_1'); // TODO sound
 		}, this);
 	},
 
@@ -193,7 +210,7 @@ BasicGame.Title.prototype = {
 	genSelectTitleTextSprite: function (selectGroup) {
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 80;
-		var textSprite = this.M.S.genText(this.world.centerX,200,'ステージを選択',textStyle);
+		var textSprite = this.M.S.genText(this.world.centerX,230,'ステージを選択',textStyle);
 		textSprite.addGroup(selectGroup);
 	},
 
@@ -207,6 +224,7 @@ BasicGame.Title.prototype = {
 			var text = 'Level '+idNum;
 			var y = i * 150 + 350;
 			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
+				this.M.SE.play('Gong');
 				this.M.setGlobal('currentLevel', btnSprite.level);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
