@@ -210,7 +210,7 @@ BasicGame.Title.prototype = {
 				this.M.setGlobal('currentLevel', btnSprite.level);
 				this.M.NextScene('Play');
 			},text,textStyle,{tint:tint});
-			label.btnSprite.scale.setTo(4,2.2);
+			label.btnSprite.scale.setTo(2.5,2.2);
 			label.btnSprite.Utype = 'play';
 			label.btnSprite.level = idNum;
 			selectGroup.add(label.btnSprite);

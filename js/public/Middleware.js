@@ -307,6 +307,47 @@ Middleware.prototype.SpriteManager.prototype = {
 		if (option.onComplete) T.onComplete(sprite.tweenDialog,option.onComplete);
 		return sprite;
 	},
+	// [x,y,tint,tween,duration,TFunc,message]
+	BasicConfirmDialog: function (option) {
+		var Scene = this.M.getScene();
+		var T = this.M.T;
+		option = option || {};
+		var sprite = this.genSprite(
+			option.x||Scene.world.centerX, 
+			option.y||Scene.world.centerY, 'greySheet', 'grey_panel');
+		sprite.scale.setTo(0);
+		sprite.anchor.setTo(.5);
+		sprite.tint = option.tint||0xffffff;
+		option.scale = {x:7,y:4};
+		var messageTextSprite = this.genText(sprite.x,sprite.y-60,option.message||'');
+		messageTextSprite.hide();
+		var TLabel = this.BasicGrayLabel(sprite.x-170,sprite.y+80,option.TFunc,'はい');
+		TLabel.btnSprite.scale.setTo(1.5);
+		TLabel.hide();
+		var FLabel = this.BasicGrayLabel(sprite.x+170,sprite.y+80,function () {
+			sprite.scale.setTo(0);
+			TLabel.hide();
+			FLabel.hide();
+			messageTextSprite.hide();
+		},'いいえ');
+		FLabel.btnSprite.scale.setTo(1.5);
+		FLabel.hide();
+		function showContents () {
+			TLabel.show();
+			FLabel.show();
+			messageTextSprite.show();
+		};
+		sprite.switchShow = function () {
+			sprite.scale.setTo(option.scale.x,option.scale.y);
+			showContents();
+		};
+		sprite.tweenDialog = T[option.tween||'popUpB'](sprite,option);
+		sprite.tweenShow = function () {
+			sprite.tweenDialog.start();
+		};
+		T.onComplete(sprite.tweenDialog,showContents);
+		return sprite;
+	},
 	// key[,x,y,tint,tween,duration,scale,onCompFunc]
 	genDialog: function (key,option) {
 		var Scene = this.M.getScene();

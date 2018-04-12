@@ -15,6 +15,7 @@ BasicGame.Play.prototype = {
 		this.PhysicsManager();
 		this.ObstaclesContainer();
 		this.PlayerContainer();
+		this.BtnContainer();
 		this.HUDContainer();
 		this.InputManager();
 		this.CameraManager();
@@ -60,9 +61,9 @@ BasicGame.Play.prototype = {
 		this.physics.arcade.collide(this.Player,this.Clasp);
 	},
 
-	collideObstacle: function (player/*, obstacle*/) {
+	collideObstacle: function (player, obstacle) {
 		// player.kill();
-		// TODO if obstacle==goal -> gameOver, SE
+		if (obstacle.tag=='goal') return this.gameOver();
 		// TODO tanaka thai kick img??
 		player.reset(this.GC.cameraCenterPos.x,this.GC.cameraCenterPos.y);
 		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
@@ -101,12 +102,33 @@ BasicGame.Play.prototype = {
 		this.world.bringToTop(claspSprite);
 	},
 
+	BtnContainer: function () {
+		this.genBackBtnSprite();
+	},
+
+	genBackBtnSprite: function () {
+		var confirmDialog = this.M.S.BasicConfirmDialog({
+			tint: this.M.getConst('SUB_TINT'),
+			x: this.GC.cameraCenterPos.x,
+			y: this.GC.cameraCenterPos.y,
+			TFunc: function () {
+				this.M.NextScene('Title');
+			},
+			duration: 800,
+			message: '本当に戻りますか？',
+		});
+		var text = 'タイトルに戻る';
+		var label = this.M.S.BasicGrayLabel(this.world.centerX,this.world.height-80,function () {
+			confirmDialog.tweenShow();
+		},text,this.StaticBaseTextStyle(),{tint:this.M.getConst('SUB_TINT')});
+	},
+
 	ObstaclesContainer: function () {
 		this.Obstacles = this.add.group();
 		for (var key in this.GC.LevelInfo.obstacles) {
 			var objectType = this.GC.LevelInfo.obstacles[key];
 			switch (objectType) {
-				case 1: this.genHorizontalTweenObj(0); break;
+				case 1: this.genHorizontalTweenObj(0,false); break;
 				case 2: this.genDoubleHorizontalTweenObj(); break;
 				case 3: this.genRotationObj(); break;
 				case 4: this.genDoubleRotationObj(); break;
@@ -120,15 +142,16 @@ BasicGame.Play.prototype = {
 	},
 
 	genSpaceObj: function () {
-		this.GC.obstacleY-=this.world.centerY;
+		this.GC.obstacleY-=300;
 	},
 
-	genHorizontalTweenObj: function (x, rndFlag) {
-		var sprite = this.add.sprite(x||0,this.GC.obstacleY,'Chair_1');
+	genHorizontalTweenObj: function (x,rndFlag) {
+		var imgKey = rndFlag ? this.GC.LevelInfo.imgKeyRHT : this.GC.LevelInfo.imgKeyHT;
+		var sprite = this.add.sprite(x||0,this.GC.obstacleY,imgKey);
 		sprite.anchor.setTo(.5);
-		if (x) sprite.scale.setTo(-1,1);
 		this.physics.arcade.enable(sprite);
-		sprite.body.enable = true;
+		this.setBodySize(sprite);
+		if (x) sprite.scale.setTo(-1,1);
 		this.Obstacles.add(sprite);
 		var tween = this.M.T.moveC(sprite,{xy:{x:this.world.width-sprite.x},duration:1500});
 		tween.onLoop.add(function () {
@@ -140,11 +163,11 @@ BasicGame.Play.prototype = {
 	},
 
 	genHorizontalChDuTweenObj: function (x) {
-		var sprite = this.add.sprite(x||0,this.GC.obstacleY,'Chair_1');
+		var sprite = this.add.sprite(x||0,this.GC.obstacleY,this.GC.LevelInfo.imgKeyHT);
 		sprite.anchor.setTo(.5);
-		if (x) sprite.scale.setTo(-1,1);
 		this.physics.arcade.enable(sprite);
-		sprite.body.enable = true;
+		this.setBodySize(sprite);
+		if (x) sprite.scale.setTo(-1,1);
 		this.Obstacles.add(sprite);
 		var tween = this.M.T.moveC(sprite,
 			{xy:{x:this.world.width-sprite.x},
@@ -162,9 +185,9 @@ BasicGame.Play.prototype = {
 	},
 
 	genDoubleHorizontalTweenObj: function () {
-		this.genHorizontalTweenObj(0);
+		this.genHorizontalTweenObj(0,false);
 		this.GC.obstacleY+=this.world.centerY-150;
-		this.genHorizontalTweenObj(this.world.width);
+		this.genHorizontalTweenObj(this.world.width,false);
 	},
 
 	genDoubleHorizontalChDuTweenObj: function () {
@@ -181,13 +204,16 @@ BasicGame.Play.prototype = {
 		this.GC.obstacleY-=200;
 		var rndNum = this.rnd.integerInRange(1,4);
 		var pivotMargin = 280;
+		var imgKey = this.GC.LevelInfo.imgKeyR;
 		for (var i=0;i<2;i++) {
 			for (var j=0;j<2;j++) {
 				if (i+j*2+1==rndNum) continue;
-				var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,'Pig_1');
+				var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,imgKey);
 				sprite.pivot.x = pivotMargin*2*i-pivotMargin;
 				sprite.pivot.y = pivotMargin*2*j-pivotMargin;
 				sprite.anchor.set(.5);
+				this.physics.arcade.enable(sprite);
+				this.setBodySize(sprite);
 				sprite.postUpdate = function () {
 					this.rotation += 0.02;
 				};
@@ -201,14 +227,17 @@ BasicGame.Play.prototype = {
 		this.GC.obstacleY-=300;
 		var rndNum = this.rnd.integerInRange(1,4);
 		var pivotMargin = 280;
+		var imgKey = this.GC.LevelInfo.imgKeyR;
 		for (var k=0;k<2;k++) {
 			for (var i=0;i<2;i++) {
 				for (var j=0;j<2;j++) {
 					if (i+j*2+1==rndNum) continue;
-					var sprite = this.add.sprite(this.world.centerX+600*k-300,this.GC.obstacleY,'Pig_1');
+					var sprite = this.add.sprite(this.world.centerX+600*k-300,this.GC.obstacleY,imgKey);
 					sprite.pivot.x = pivotMargin*2*i-pivotMargin;
 					sprite.pivot.y = pivotMargin*2*j-pivotMargin;
 					sprite.anchor.set(.5);
+					this.physics.arcade.enable(sprite);
+					this.setBodySize(sprite);
 					if (k==0) {
 						sprite.postUpdate = function () {
 							this.rotation -= 0.02;
@@ -231,14 +260,23 @@ BasicGame.Play.prototype = {
 	},
 
 	genGoalObj: function () {
-		// TODO
+		var sprite = this.add.sprite(this.world.centerX,this.GC.obstacleY,'Player');
+		sprite.anchor.setTo(.5);
+		sprite.tag = 'goal';
+		this.Obstacles.add(sprite);
+		this.GC.obstacleY-=this.world.centerY;
+	},
+
+	setBodySize: function (sprite) {
+		var offset = 30;
+		sprite.body.setSize(sprite.width-offset*2,sprite.height-offset*2,offset,offset);
 	},
 
 	PlayerContainer: function () {
 		var playerSprite = this.M.S.genSprite(this.world.centerX,this.world.centerY,'Nikuman_1');
 		playerSprite.anchor.setTo(.5);
 		this.physics.arcade.enable(playerSprite);
-		playerSprite.body.enable = true;
+		// playerSprite.body.enable = true;
 		playerSprite.body.setCircle(80,20,10);
 		// playerSprite.checkWorldBounds = true;
 		// playerSprite.outOfBoundsKill = true;
@@ -279,11 +317,11 @@ BasicGame.Play.prototype = {
 
 	genStartTextSprite: function (HUD) {
 		if (this.game.device.touch) {
-			var baseText = 'はおー！ヒメまで肉まん届けてね！\nタッチしてスタートだよー！';
+			var baseText = 'はおー！肉まんをヒメまで届けてね！\nタッチしてスタートだよー！';
 		} else {
-			var baseText = 'はおー！ヒメまで肉まん届けてね！\nクリックしてスタートだよー！';
+			var baseText = 'はおー！肉まんをヒメまで届けてね！\nクリックしてスタートだよー！';
 		}
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-150,baseText,HUD.textStyle);
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-230,baseText,HUD.textStyle);
 		textSprite.setAnchor(.5);
 	},
 
@@ -293,6 +331,7 @@ BasicGame.Play.prototype = {
 		textSprite.setAnchor(.5);
 		textSprite.setScale(0,0);
 		HUD.showGameOver = function () {
+			// SE?
 			textSprite.addTween('popUpB',{scale:{x:2,y:2}});
 			textSprite.startTween('popUpB');
 		};
@@ -314,9 +353,11 @@ BasicGame.Play.prototype = {
 
 	gameOver: function () {
 		this.GC.isPlaying = false;
+		this.Player.body.gravity.y = 0;
+		this.Player.body.velocity.y = 0;
 		this.HUD.showGameOver();
 		this.GC.cameraCenterPos.y += this.camera.y;
-		this.time.events.add(2500, function () {
+		this.time.events.add(1500, function () {
 			this.ResultContainer();
 		}, this);
 	},
@@ -397,7 +438,7 @@ BasicGame.Play.prototype = {
 		};
 	},
 
-	render: function () {
+	Trender: function () {
 		this.game.debug.body(this.Player);
 		this.Obstacles.forEach(function (sprite) {
 			this.game.debug.body(sprite);
