@@ -17,3 +17,5 @@
 虚空の果てに (https://238g.github.io/Parace/rei_Toya_rei.html) Release 3/28
 
 まりちゃんばりん (https://238g.github.io/Parace/kashikomari.html) Release 4/1
+
+田中ヒメ中華街 (https://238g.github.io/Parace/HimeTanaka.html) Release 4/13

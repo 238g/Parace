@@ -92,6 +92,16 @@ BasicGame.Boot.prototype.conf = function () {
 				textColor: '#eaad18',
 				bgColor: '#fffd3a',
 			},
+			1010: {
+				id: 1010,
+				title: '田中ヒメ中華街',
+				url: 'https://238g.github.io/Parace/HimeTanaka.html',
+				slideImg: 'HimeTanaka_1',
+				slideImgUrl: './images/238Games/HimeTanaka_1.png',
+				order: totalCount-9,
+				textColor: '#e30c4f',
+				bgColor: '#fba4d1',
+			},
 			/*
 			1000: {
 				id: 1000,
