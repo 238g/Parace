@@ -41,8 +41,15 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
-		// TODO
-		this.add.sprite(this.world.centerX,this.world.centerY,'');
+		var bgGroup = this.add.group();
+		for (var i=1;i<=this.M.getConst('ALBUM_COUNT');i++) {
+			var sprite = this.add.sprite(this.world.centerX,this.world.centerY-100,'Album_'+i);
+			sprite.anchor.setTo(.5);
+			sprite.alpha = 0;
+			bgGroup.add(sprite);
+		}
+		bgGroup.shuffle();
+		this.M.T.slideshow(bgGroup,{duration:2000,delay:2000});
 	},
 
 	genTitleTextSprite: function () {

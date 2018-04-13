@@ -17,7 +17,6 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			imgKeyHT: 'Turtle_1',
 			imgKeyR: 'Turtle_1',
 			imgKeyRHT: 'Turtle_1',
-			// obstacles: [100],
 			obstacles: [1,0,1,0,2,100],
 		},
 		2: {

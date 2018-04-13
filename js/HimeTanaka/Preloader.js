@@ -22,6 +22,7 @@ BasicGame.Preloader.prototype = {
 			'Logo': './images/HimeTanaka/Logo.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		for (var i=1;i<=this.M.getConst('ALBUM_COUNT');i++) this.load.image('Album_'+i, './images/HimeTanaka/Album_'+i+'.jpg');
 		this.loadAudio();
 	},
 
@@ -60,6 +61,7 @@ BasicGame.Preloader.prototype = {
 			this.M.setGlobal('loadedOnlyFirst',true);
 			if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 			this.M.SE.setSounds(this.sounds);
+			this.M.H.setSPBrowserColor(this.M.getConst('MAIN_COLOR'));
 		}
 	},
 

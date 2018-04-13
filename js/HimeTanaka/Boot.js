@@ -26,6 +26,7 @@ BasicGame.Boot.prototype = {
 			WHITE_COLOR: '#f8e2e5',
 			SUB_TINT: 0xffc9e5,
 			YOUTUBE_URL: 'https://www.youtube.com/channel/UCFv2z4iM5vHrS8bZPq4fHQQ',
+			ALBUM_COUNT: 12,
 		});
 	},
 

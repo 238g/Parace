@@ -528,7 +528,6 @@ Middleware.prototype.TweenManager.prototype = {
 	},
 	// [duration, delay]
 	slideshow: function (group, option) {
-		var slideshow = this.slideshow;
 		var toBackSprite = group.getTop();
 		toBackSprite.alpha = 1;
 		var toTopSprite = group.getBottom();
@@ -536,7 +535,7 @@ Middleware.prototype.TweenManager.prototype = {
 		var tween = this.fadeInA(toTopSprite, option);
 		this.onComplete(tween, function () {
 			toBackSprite.alpha = 0;
-			slideshow(group, option);
+			this.M.T.slideshow(group, option);
 		});
 		tween.start();
 	},

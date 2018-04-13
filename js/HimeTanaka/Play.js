@@ -471,6 +471,7 @@ BasicGame.Play.prototype = {
 			'ｱｱｱｱｱｱｱｱｱｗｗｗｗｗｗ',
 			'​ﾝｱｱｱｱｱｱｗｗｗｗｗｗ',
 			'はい、替えの鼓膜。',
+			'え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛え゛',
 		];
 		var emoji = '';
 		for (var i=0;i<6;i++) {
@@ -486,7 +487,7 @@ BasicGame.Play.prototype = {
 		var text = this.rnd.pick(quotes)+'\n'
 					+emoji+'\n'
 					+'挑戦したレベル： '+this.GC.currentLevel+'\n'
-					+'クリアタイム： '+this.GC.timer+'\n'
+					+'クリアタイム： '+this.GC.timer+'秒\n'
 					+emoji+'\n'
 					+'『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n';
 		var hashtags = 'ヒメゲー,田中ゲー';
@@ -503,7 +504,7 @@ BasicGame.Play.prototype = {
 		};
 	},
 
-	render: function () {
+	Trender: function () {
 		this.game.debug.body(this.Player);
 		this.Obstacles.forEach(function (sprite) {
 			this.game.debug.body(sprite);
