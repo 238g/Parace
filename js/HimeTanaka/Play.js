@@ -310,6 +310,7 @@ BasicGame.Play.prototype = {
 			textStyle: this.StaticBaseTextStyle(),
 		};
 		this.genTimerTextSprite(this.HUD);
+		this.genLevelTextSprite(this.HUD);
 		this.genStartTextSprite(this.HUD);
 		this.genGameOverTextSprite(this.HUD);
 	},
@@ -321,6 +322,15 @@ BasicGame.Play.prototype = {
 		HUD.changeTimerText = function (val) {
 			textSprite.changeText(baseText+val);
 		};
+		HUD.score = textSprite;
+		textSprite.fixedToCamera = true;
+		textSprite.multipleTextSprite.fixedToCamera = true;
+	},
+
+	genLevelTextSprite: function (HUD) {
+		var baseText = 'レベル: ';
+		var textSprite = this.M.S.genText(this.world.width-50,50,baseText+this.GC.currentLevel,HUD.textStyle);
+		textSprite.setAnchor(1,0);
 		HUD.score = textSprite;
 		textSprite.fixedToCamera = true;
 		textSprite.multipleTextSprite.fixedToCamera = true;
