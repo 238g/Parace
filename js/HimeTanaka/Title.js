@@ -41,6 +41,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
+		// TODO
 		this.add.sprite(this.world.centerX,this.world.centerY,'');
 	},
 
@@ -61,11 +62,10 @@ BasicGame.Title.prototype = {
 		var margin = 150;
 		var tint = this.M.getConst('MAIN_TINT');
 		this.genStartBtnSprite(x,y,textStyle,tint);
-		this.genHowtoBtnSprite(x*3,y,textStyle,tint);
-		this.genMuteBtnSprite(x,y+margin,textStyle,tint);
+		// this.genHowtoBtnSprite(x*3,y,textStyle,tint);
+		this.genMuteBtnSprite(x*3,y,textStyle,tint);
 		this.genFullScreenBtnSprite(x*3,y+margin,textStyle,tint);
-		this.genInquiryBtnSprite(x,y+margin*2,textStyle,tint);
-
+		this.genInquiryBtnSprite(x,y+margin,textStyle,tint);
 		this.genLogoBtnSprite();
 	},
 
@@ -126,16 +126,16 @@ BasicGame.Title.prototype = {
 	},
 
 	genLogoBtnSprite: function () {
-		var logoSprite = this.M.S.genSprite(this.world.width-5,this.world.height-25,'Logo');
-		logoSprite.anchor.setTo(1);
+		var logoSprite = this.M.S.genSprite(this.world.centerX,this.world.height-25,'Logo');
+		logoSprite.anchor.setTo(.5,1);
 		logoSprite.UonInputDown(function () {
-			window.open('https://www.youtube.com/channel/UCFv2z4iM5vHrS8bZPq4fHQQ','_blank');	
+			window.open(this.M.getConst('YOUTUBE_URL'),'_blank');	
 		});
 		this.M.T.beatA(logoSprite,{duration:508}).start();
 		var logoBgSprite = this.M.S.genBmpSprite(
-			this.world.width,this.world.height,
-			logoSprite.width+50,logoSprite.height+50,this.M.getConst('MAIN_COLOR'));
-		logoBgSprite.anchor.setTo(1);
+			this.world.centerX,this.world.height-5,
+			logoSprite.width+80,logoSprite.height+50,this.M.getConst('MAIN_COLOR'));
+		logoBgSprite.anchor.setTo(.5,1);
 		this.world.bringToTop(logoSprite);
 	},
 
@@ -148,7 +148,7 @@ BasicGame.Title.prototype = {
 		};
 		this.genDialogSprite(Dialog);
 		this.SelectContainer(Dialog);
-		this.genHowtoTextSprite(Dialog);
+		// this.genHowtoTextSprite(Dialog);
 		this.dialogInputController(Dialog);
 		return Dialog;
 	},
@@ -221,7 +221,7 @@ BasicGame.Title.prototype = {
 		var LevelInfo = this.M.getConf('LevelInfo');
 		var i = 0;
 		for (var idNum in LevelInfo) {
-			var text = 'Level '+idNum;
+			var text = 'レベル '+idNum;
 			var y = i * 150 + 350;
 			var label = this.M.S.BasicGrayLabel(x,y,function (btnSprite) {
 				this.M.SE.play('Gong');
@@ -238,18 +238,10 @@ BasicGame.Title.prototype = {
 	},
 
 	genHowtoTextSprite: function (Dialog) {
+		var word = 'クリック';
+		if (this.game.device.touch) word = 'タッチ';
 		var text = 
-			// TODO
 			'説明欄！ '
-			+' '
-			+'説明欄！ '
-			+'説明欄！ '
-			+'説明欄！ '
-			+' '
-			+'説明欄！ '
-			+' '
-			+'説明欄！ '
-			+'説明欄！ '
 			+' '
 			+'説明欄！ '
 			+' ';

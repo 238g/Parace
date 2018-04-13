@@ -86,7 +86,7 @@ BasicGame.Play.prototype = {
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
-		this.genStartCharSprite();
+		// this.genStartCharSprite();
 		this.genClaspSprite();
 	},
 
@@ -271,7 +271,7 @@ BasicGame.Play.prototype = {
 		sprite.anchor.setTo(.5);
 		sprite.tag = 'goal';
 		this.physics.arcade.enable(sprite);
-		sprite.body.setCircle(100);
+		sprite.body.setCircle(100,100);
 		this.Obstacles.add(sprite);
 		this.GC.obstacleY-=this.world.centerY;
 	},
@@ -328,9 +328,9 @@ BasicGame.Play.prototype = {
 
 	genStartTextSprite: function (HUD) {
 		if (this.game.device.touch) {
-			var baseText = 'はおー！\n肉まんを上のヒメまで届けてね！\nタッチしてスタートだよー！';
+			var baseText = 'はおー！\n上にいるヒメまで肉まんを届けてね！\nタッチしてスタートだよー！';
 		} else {
-			var baseText = 'はおー！\n肉まんを上のヒメまで届けてね！\nクリックしてスタートだよー！';
+			var baseText = 'はおー！\n上にいるヒメまで肉まんを届けてね！\nクリックしてスタートだよー！';
 		}
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.height-270,baseText,HUD.textStyle);
 		textSprite.setAnchor(.5);
@@ -400,10 +400,31 @@ BasicGame.Play.prototype = {
 		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
 		this.M.S.genText(x,y-570,'結果発表',this.M.H.mergeJson({fontSize:80},this.StaticBaseTextStyle()));
-		// TODO result text
-		this.genRestartLabel(x,y+320,textStyle,{duration:800,delay:600},tint);
-		this.genTweetLabel(x,y+455,textStyle,{duration:800,delay:800},tint);
-		this.genBackLabel(x,y+580,textStyle,{duration:800,delay:1000},tint);
+		this.genResultLevelTextSprite(x,y-350,{duration:800});
+		this.genResultTimeTextSprite(x,y-150,{duration:800});
+		this.genRestartLabel(x,y+100,textStyle,{duration:800,delay:600},tint);
+		this.genTweetLabel(x,y+300,textStyle,{duration:800,delay:800},tint);
+		this.genBackLabel(x,y+500,textStyle,{duration:800,delay:1000},tint);
+	},
+
+	genResultLevelTextSprite: function (x,y,tweenOption) {
+		var textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 90;
+		var text = 'レベル: '+this.GC.currentLevel;
+		var textSprite = this.M.S.genText(x,y,text,textStyle);
+		textSprite.setScale(0,0);
+		textSprite.addTween('popUpB',tweenOption);
+		textSprite.startTween('popUpB');
+	},
+
+	genResultTimeTextSprite: function (x,y,tweenOption) {
+		var textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 90;
+		var text = 'タイム: '+this.GC.timer;
+		var textSprite = this.M.S.genText(x,y,text,textStyle);
+		textSprite.setScale(0,0);
+		textSprite.addTween('popUpB',tweenOption);
+		textSprite.startTween('popUpB');
 	},
 
 	genRestartLabel: function (x,y,textStyle,tweenOption,tint) {
@@ -434,6 +455,23 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
+		var quotes = [
+			'はおー！',
+			'世界中の田中とヴォイヴォイしたい！！ 三└(┐卍^o^)卍',
+			'誰が「酒焼け笑い袋」じゃあああああ！！！ｗｗｗｗ',
+			'おっはおー＼＼\\٩( \'ω\' )و //／／',
+			'はおはおはおはおはおはおー！！！！！！！！！！！！！！！！！',
+			'はっおおお！！！',
+			'三└(┐卍^o^)卍 三└(┐卍^o^)卍 三└(┐卍^o^)卍 三└(┐卍^o^)卍',
+			'近う寄れ！',
+			'田中ァ！',
+			'いどのい たなかひめなまほうそう',
+			'ｱｱｱｱｱｱｱｱｱｳｳｳｳｳｳｳｳｳｳ﻿ｗｗｗｗｗｗ',
+			'ｳｳｳｳｳｳｳｳｳｳ﻿ｗｗｗｗｗｗ',
+			'ｱｱｱｱｱｱｱｱｱｗｗｗｗｗｗ',
+			'​ﾝｱｱｱｱｱｱｗｗｗｗｗｗ',
+			'はい、替えの鼓膜。',
+		];
 		var emoji = '';
 		for (var i=0;i<6;i++) {
 			var rndNum = this.rnd.integerInRange(1,4);
@@ -445,8 +483,12 @@ BasicGame.Play.prototype = {
 				emoji += '🍜';
 			}
 		}
-		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
-					+emoji+'\n'; // TODO
+		var text = this.rnd.pick(quotes)+'\n'
+					+emoji+'\n'
+					+'挑戦したレベル： '+this.GC.currentLevel+'\n'
+					+'クリアタイム： '+this.GC.timer+'\n'
+					+emoji+'\n'
+					+'『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n';
 		var hashtags = 'ヒメゲー,田中ゲー';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
