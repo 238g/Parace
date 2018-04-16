@@ -14,12 +14,13 @@ BasicGame.Preloader.prototype = {
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		this.load.atlasJSONHash('Trump', 
 			'./images/AliceMononobe/Trump.png', './images/AliceMononobe/Trump.json');
+		this.load.atlasJSONHash('Darts', 
+			'./images/AliceMononobe/Darts.png', './images/AliceMononobe/Darts.json');
+		this.load.atlasXML('GameIcons', 
+			'./images/public/sheets/GameIconsWhite.png', './images/public/sheets/GameIconsWhite.xml');
 		var imageAssets = {
 			'Dialog': './images/public/dialogs/Dialog_2.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
-			'Darts_yellow': './images/AliceMononobe/Darts_yellow.png',
-			'Darts_blue': './images/AliceMononobe/Darts_blue.png',
-			'Darts_red': './images/AliceMononobe/Darts_red.png',
 			'Board': './images/AliceMononobe/Board.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);

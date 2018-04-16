@@ -66,7 +66,7 @@ BasicGame.Title.prototype = {
 
 	genStartBtnSprite: function (x,y,textStyle,tint) {
 		var text = 'スタート';
-		var label = this.M.S.BasicGrayLabel(x,y,function () {
+		this.M.S.BasicGrayLabel(x,y,function () {
 			if (this.inputEnabled) this.M.NextScene('Play');
 		},text,textStyle,{tint:tint});
 	},

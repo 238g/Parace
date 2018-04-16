@@ -217,8 +217,13 @@ Middleware.prototype.SpriteManager.prototype = {
 			textSprite.events.onInputUp.add(func,Scene);
 		};
 		textSprite.addTween = function (tween, option) {
-			textSprite.textTween[tween] = T[tween](textSprite,option);
-			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween] = T[tween](multipleTextSprite,option);
+			option = option || {};
+			textSprite.textTween[option.tweenName||tween] = T[tween](textSprite,option);
+			if (multipleTextSprite.SExist) textSprite.multipleTextTween[option.tweenName||tween] = T[tween](multipleTextSprite,option);
+		};
+		textSprite.chainTween = function (tween1, tween2) {
+			textSprite.textTween[tween1].chain(textSprite.textTween[tween2]);
+			if (multipleTextSprite.SExist) textSprite.multipleTextTween[tween1].chain(textSprite.multipleTextTween[tween2]);
 		};
 		textSprite.startTween = function (tween) {
 			textSprite.textTween[tween].start();
@@ -281,6 +286,10 @@ Middleware.prototype.SpriteManager.prototype = {
 		labelContainer.startTween = function (tween) {
 			this.btnTween[tween].start();
 			textSprite.startTween(tween);
+		};
+		labelContainer.addGroup = function (group) {
+			group.add(btnSprite);
+			textSprite.addGroup(group);
 		};
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
@@ -427,6 +436,14 @@ Middleware.prototype.TweenManager.prototype = {
 		option = option || {};
 		return Scene.add.tween(target.scale).to(
 			{x: '+.1', y: '+.1'}, option.duration, 
+			Phaser.Easing.Sinusoidal.Out, false, option.delay, -1, true);
+	},
+	// xy[, duration, delay]
+	pointingA: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		return Scene.add.tween(target).to(
+			option.xy, option.duration, 
 			Phaser.Easing.Sinusoidal.Out, false, option.delay, -1, true);
 	},
 	// [duration, scale, delay]
