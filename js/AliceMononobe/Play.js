@@ -6,12 +6,13 @@ BasicGame.Play.prototype = {
 		this.Darts = {};
 		this.Board = {};
 		this.Dialog = {};
+		this.RuleDialog = {};
 	},
 
 	create: function () {
 		this.GameManager();
 		this.BgContainer();
-		this.BtnContainer();
+		this.RuleContainer();
 		this.DartsContainer();
 		this.HUDContainer();
 		this.ready();
@@ -31,9 +32,9 @@ BasicGame.Play.prototype = {
 			currentScore: 301,
 			beforeScore: 301,
 			TrumpInfos: this.getTrumpInfors(),
-			currentRoundTrumps: [],
+			currentRoundDeckTrumps: [],
 			currentCardNum: 0,
-			onDartsCardsNum: 0,
+			onDartsCardsCount: 0,
 			DartsInfos: {
 				Dart_blue: {
 					score: 0,
@@ -55,6 +56,7 @@ BasicGame.Play.prototype = {
 			throwCount: 0,
 			throwTimer: null,
 			deckPos: {x:120,y:this.world.centerY+280},
+			clearFlag: false,
 		};
 	},
 
@@ -75,8 +77,53 @@ BasicGame.Play.prototype = {
 		this.genBoardSprite();
 	},
 
-	BtnContainer: function () {
-		// TODO rule btn
+	RuleContainer: function () {
+		this.genRuleBtnSprite();
+		this.genRuleDialog();
+		this.genRuleTextSprite();
+	},
+
+	genRuleDialog: function () {
+		this.RuleDialog = this.M.S.genSprite(this.world.centerX,this.world.centerY,'Dialog');
+		this.RuleDialog.anchor.setTo(.5);
+		this.RuleDialog.UonInputDown(function (sprite) {
+			this.GM.inputEnabled = true;
+			sprite.hide();
+		});
+		this.RuleDialog.hide();
+	},
+
+	genRuleBtnSprite: function () {
+		var label = this.M.S.BasicGrayLabel(120,this.world.centerY,function () {
+			if (this.GM.isPlaying) {
+				this.GM.inputEnabled = false;
+				this.RuleDialog.bringToTop();
+				this.RuleDialog.show();
+			}
+		},'ルール',this.StaticBaseTextStyle(),{tint:this.M.getConst('MAIN_TINT')});
+		label.btnSprite.scale.setTo(1.2,2.2);
+	},
+
+	genRuleTextSprite: function () {
+		var ruleText = ''
+			+'トランプとダーツを組み合わせた'+'\n'
+			+'新感覚のゲーム！'+'\n'
+			+'1本のダーツにトランプを'+'\n'
+			+'3枚までセットして投げます。'+'\n'
+			+'左上の点数を0にしたらクリア！'+'\n'
+			+'12ターン以内にクリアしてください。'+'\n'
+			+'1ターンに6枚まで'+'\n'
+			+'山札からトランプを引けます。'+'\n'
+			+'ダーツは1本ずつ'+'\n'
+			+'倍率が変わるので注意！'+'\n'
+			+'説明難しいから！'+'\n'
+			+'とにかくやってみて！笑'+'\n'
+			;
+		var textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 40;
+		var textSprite = this.M.S.genText(0,0,ruleText,textStyle);
+		this.RuleDialog.addChild(textSprite.multipleTextSprite);
+		this.RuleDialog.addChild(textSprite);
 	},
 
 	genDeckSprite: function () {
@@ -117,11 +164,11 @@ BasicGame.Play.prototype = {
 			var addY=100+this.GM.DartsInfos[dartFrameName].setCard*70;
 			this.M.T.moveA(this.GM.Card,{xy:{x:sprite.x,y:sprite.y+addY}}).start();
 			this.GM.DartsInfos[dartFrameName].setCard += 1;
-			this.GM.onDartsCardsNum++;
+			this.GM.onDartsCardsCount++;
 			this.GM.Cards.push(this.GM.Card);
 			var cardFrameName = this.GM.Card.frameName;
 			this.GM.DartsInfos[dartFrameName].score += (cardFrameName.split('_')[1]*this.GM.DartsInfos[dartFrameName].MULTIPLE_SCORE);
-			if (this.GM.onDartsCardsNum==this.GM.ENABLE_SET_CARDS_NUM) return this.throwDart();
+			if (this.GM.onDartsCardsCount==this.GM.ENABLE_SET_CARDS_NUM) return this.throwDart();
 			this.setNextCard();
 		}
 	},
@@ -157,6 +204,7 @@ BasicGame.Play.prototype = {
 	throwDartOnComplete: function (sprite) {
 		var frameName = sprite.frameName;
 		this.GM.throwCount++;
+		this.HUD.changeThrowCount(this.GM.throwCount);
 		this.GM.beforeScore = this.GM.currentScore;
 		var minusScore = this.GM.DartsInfos[frameName].score;
 		this.GM.currentScore -= minusScore;
@@ -164,6 +212,7 @@ BasicGame.Play.prototype = {
 		this.HUD.changeScore(this.GM.currentScore);
 		if (this.GM.currentScore==0) {
 			this.time.events.remove(this.GM.throwTimer);
+			this.GM.clearFlag = true;
 			this.gameOver();
 		} else if (this.GM.currentScore<0) {
 			this.time.events.remove(this.GM.throwTimer);
@@ -185,6 +234,7 @@ BasicGame.Play.prototype = {
 	},
 
 	againRound: function () {
+		if (this.GM.currentRoundCount==this.GM.MAX_ROUND_COUNT) return this.gameOver();
 		this.GM.currentRoundCount++;
 		this.startRound();
 	},
@@ -195,11 +245,12 @@ BasicGame.Play.prototype = {
 			showRound: null,
 			showGameOver: null,
 			changeScore: null,
+			changeThrowCount: null,
 			minusScoreEffect: null,
 		};
-		// TODO throw count
 		this.genRoundTextSprite();
 		this.genScoreTextSprite();
+		this.genThrowCountTextSprite();
 		this.genMinusScoreTextSprite();
 		this.genGameOverTextSprite();
 	},
@@ -209,7 +260,7 @@ BasicGame.Play.prototype = {
 		textStyle.fontSize = 100;
 		var baseText = 'ラウンド目';
 		var x = this.world.width+500;
-		var y = this.world.centerY;
+		var y = this.world.centerY-200;
 		var textSprite = this.M.S.genText(x,y,this.GM.currentRoundCount+baseText,textStyle);
 		textSprite.setAnchor(.5);
 		textSprite.hide();
@@ -229,16 +280,14 @@ BasicGame.Play.prototype = {
 	genMinusScoreTextSprite: function () {
 		var baseText = '-';
 		var textStyle = this.StaticBaseTextStyle();
-		textStyle.fontSize = 80;
 		textStyle.fill = '#e7161b';
 		textStyle.multipleStroke = '#e7161b';
-		var textSprite = this.M.S.genText(100,50,0,textStyle);
-		textSprite.setAnchor(0,0);
+		var textSprite = this.M.S.genText(180,100,0,textStyle);
 		textSprite.hide();
 		textSprite.addTween('moveA',{xy:{y:'+50'}});
 		this.M.T.onComplete(textSprite.multipleTextTween.moveA, function () {
 			textSprite.hide();
-			textSprite.move(100,50);
+			textSprite.move(180,100);
 		});
 		this.HUD.minusScoreEffect = function (minusScore) {
 			textSprite.show();
@@ -248,15 +297,23 @@ BasicGame.Play.prototype = {
 	},
 
 	genScoreTextSprite: function () {
-		var baseText = '';
+		var baseText = '点数:';
 		var textStyle = this.StaticBaseTextStyle();
-		textStyle.fontSize = 80;
-		var textSprite = this.M.S.genText(50,50,this.GM.currentScore,textStyle);
-		textSprite.setAnchor(0,0);
+		textStyle.fontSize = 60;
+		var textSprite = this.M.S.genText(150,100,baseText+this.GM.currentScore,textStyle);
 		this.HUD.changeScore = function (val) {
-			textSprite.changeText(val);
+			textSprite.changeText(baseText+val);
 		};
-		this.HUD.score = textSprite;
+	},
+
+	genThrowCountTextSprite: function () {
+		var baseText = '投';
+		var textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 60;
+		var textSprite = this.M.S.genText(150,200,this.GM.throwCount+baseText,textStyle);
+		this.HUD.changeThrowCount = function (val) {
+			textSprite.changeText(val+baseText);
+		};
 	},
 
 	genGameOverTextSprite: function () {
@@ -293,16 +350,14 @@ BasicGame.Play.prototype = {
 
 	SelectModeContainer: function () {
 		this.Dialog = this.add.group();
-		var dialog = this.M.S.genDialog('Dialog',{
-			tint: this.M.getConst('SUB_TINT'),
-		});
+		var dialog = this.M.S.genDialog('Dialog');
 		dialog.switchShow();
 		this.Dialog.add(dialog);
 		var x = this.world.centerX;
-		var y = 220;
+		var y = 280;
 		this.genModeTitleTextSprite(x,y);
 		for (var key in this.GM.ModeInfos) {
-			y+=180;
+			y+=170;
 			this.genModeLabel(x,y,this.GM.ModeInfos[key]);
 		}
 	},
@@ -335,10 +390,10 @@ BasicGame.Play.prototype = {
 
 	startRound: function () {
 		this.HUD.showRound();
-		this.GM.currentRoundTrumps = this.M.H.getRndItemsFromArr(this.GM.TrumpInfos,this.GM.ENABLE_SET_CARDS_NUM);
-		this.GM.currentRoundTrumps.push('BackCard_Red');
+		this.GM.currentRoundDeckTrumps = this.M.H.getRndItemsFromArr(this.GM.TrumpInfos,this.GM.ENABLE_SET_CARDS_NUM);
+		this.GM.currentRoundDeckTrumps.push('BackCard_Red');
 		this.GM.currentCardNum = 0;
-		this.GM.onDartsCardsNum = 0;
+		this.GM.onDartsCardsCount = 0;
 		for (var key in this.GM.Cards) this.GM.Cards[key].destroy();
 		for (var key in this.GM.DartsInfos) {
 			this.GM.DartsInfos[key].score = 0;
@@ -354,7 +409,7 @@ BasicGame.Play.prototype = {
 
 	setNextCard: function () {
 		this.GM.inputEnabled = false;
-		var frameName = this.GM.currentRoundTrumps[this.GM.currentCardNum];
+		var frameName = this.GM.currentRoundDeckTrumps[this.GM.currentCardNum];
 		this.GM.Card = this.add.sprite(this.GM.deckPos.x,this.GM.deckPos.y,'Trump',frameName);
 		this.GM.Card.anchor.setTo(.5);
 		var tween = this.M.T.moveA(this.GM.Card,{xy:{y:'+330'}});
@@ -378,7 +433,6 @@ BasicGame.Play.prototype = {
 
 	ResultContainer: function () {
 		this.M.S.genDialog('Dialog',{
-			// tint: this.M.getConst('SUB_TINT'),
 			onComplete:this.openedResult,
 		}).tweenShow();
 	},
@@ -386,33 +440,24 @@ BasicGame.Play.prototype = {
 	openedResult: function () {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
-		var textStyle = this.StaticBaseTextStyle();
 		var tint = this.M.getConst('MAIN_TINT');
-		this.M.S.genText(x,y-570,'結果発表',this.M.H.mergeJson({fontSize:80},this.StaticBaseTextStyle()));
-		this.genResultLevelTextSprite(x,y-350,{duration:800});
-		this.genResultTimeTextSprite(x,y-150,{duration:800});
-		this.genRestartLabel(x,y+100,textStyle,{duration:800,delay:600},tint);
-		this.genTweetLabel(x,y+300,textStyle,{duration:800,delay:800},tint);
+		var textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 80;
+		this.genResultTextSprite(x,y-500,'結果発表',textStyle);
+		this.genResultTextSprite(x,y-350,'モード: '+this.GM.currentMode,textStyle);
+		this.genResultTextSprite(x,y-220,'ダーツ: '+this.GM.throwCount+'投',textStyle);
+		this.genResultTextSprite(x,y-90,'ターン: '+this.GM.currentRoundCount,textStyle);
+		this.genResultTextSprite(x,y+40,'結果: '+(this.GM.clearFlag?'クリア':'残念'),textStyle);
+		textStyle = this.StaticBaseTextStyle();
+		this.genRestartLabel(x,y+200,textStyle,{duration:800,delay:600},tint);
+		this.genTweetLabel(x,y+350,textStyle,{duration:800,delay:800},tint);
 		this.genBackLabel(x,y+500,textStyle,{duration:800,delay:1000},tint);
 	},
 
-	genResultLevelTextSprite: function (x,y,tweenOption) {
-		var textStyle = this.StaticBaseTextStyle();
-		textStyle.fontSize = 90;
-		var text = 'レベル: aaaaaa';
+	genResultTextSprite: function (x,y,text,textStyle) {
 		var textSprite = this.M.S.genText(x,y,text,textStyle);
 		textSprite.setScale(0,0);
-		textSprite.addTween('popUpB',tweenOption);
-		textSprite.startTween('popUpB');
-	},
-
-	genResultTimeTextSprite: function (x,y,tweenOption) {
-		var textStyle = this.StaticBaseTextStyle();
-		textStyle.fontSize = 90;
-		var text = 'タイム: aaaa';
-		var textSprite = this.M.S.genText(x,y,text,textStyle);
-		textSprite.setScale(0,0);
-		textSprite.addTween('popUpB',tweenOption);
+		textSprite.addTween('popUpB',{duration:800});
 		textSprite.startTween('popUpB');
 	},
 
@@ -444,14 +489,26 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
-		var quotes = [
-			'',
-		];
 		var emoji = '';
-		var text = this.rnd.pick(quotes)+'\n'
+		for (var i=0;i<6;i++) {
+			var rndNum = this.rnd.integerInRange(1,7);
+			switch (rndNum) {
+				case 1: emoji += '⏰'; break;
+				case 2: emoji += '🃏'; break;
+				case 3: emoji += '♠'; break;
+				case 4: emoji += '♣'; break;
+				case 5: emoji += '♦'; break;
+				case 6: emoji += '♥'; break;
+				case 7: emoji += '🐰'; break;
+			}
+		}
+		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+emoji+'\n'
-					+emoji+'\n'
-					+'『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n';
+					+'挑戦したモード: '+this.GM.currentMode+'\n'
+					+'投げたダーツ数: '+this.GM.throwCount+'投'+'\n'
+					+'所要ターン: '+this.GM.currentRoundCount+'\n'
+					+'結果: '+(this.GM.clearFlag?'クリア😆':'残念😰')+'\n'
+					+emoji+'\n';
 		var hashtags = 'アリスゲーム,有栖ゲーム';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
@@ -464,9 +521,6 @@ BasicGame.Play.prototype = {
 			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
 			multipleStrokeThickness: 10,
 		};
-	},
-
-	Trender: function () {
 	},
 
 	test: function () {

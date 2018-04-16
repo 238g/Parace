@@ -19,7 +19,7 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('GameIcons', 
 			'./images/public/sheets/GameIconsWhite.png', './images/public/sheets/GameIconsWhite.xml');
 		var imageAssets = {
-			'Dialog': './images/public/dialogs/Dialog_2.png',
+			'Dialog': './images/public/dialogs/Dialog_3.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Board': './images/AliceMononobe/Board.png',
 		};
