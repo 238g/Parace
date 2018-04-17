@@ -52,7 +52,8 @@ BasicGame.Play.prototype = {
 					MULTIPLE_SCORE: 5,
 				},
 			},
-			ENABLE_SET_CARDS_NUM: 6,
+			MAX_CARDS_COUNT: 6,
+			MAX_CARDS_PER_DARTS_COUNT: 3,
 			throwCount: 0,
 			throwTimer: null,
 			deckPos: {x:120,y:this.world.centerY+280},
@@ -109,10 +110,10 @@ BasicGame.Play.prototype = {
 			+'トランプとダーツを組み合わせた'+'\n'
 			+'新感覚のゲーム！'+'\n'
 			+'1本のダーツにトランプを'+'\n'
-			+'3枚までセットして投げます。'+'\n'
+			+this.GM.MAX_CARDS_PER_DARTS_COUNT+'枚までセットして投げます。'+'\n'
 			+'左上の点数を0にしたらクリア！'+'\n'
-			+'12ターン以内にクリアしてください。'+'\n'
-			+'1ターンに6枚まで'+'\n'
+			+this.GM.MAX_ROUND_COUNT+'ターン以内にクリアしてください。'+'\n'
+			+'1ターンに'+this.GM.MAX_CARDS_COUNT+'枚まで'+'\n'
 			+'山札からトランプを引けます。'+'\n'
 			+'ダーツは1本ずつ'+'\n'
 			+'倍率が変わるので注意！'+'\n'
@@ -159,7 +160,7 @@ BasicGame.Play.prototype = {
 	setCardToDart: function (sprite) {
 		if (this.GM.isPlaying && this.GM.inputEnabled) {
 			var dartFrameName = sprite.frameName;
-			if (this.GM.DartsInfos[dartFrameName].setCard==3) return;
+			if (this.GM.DartsInfos[dartFrameName].setCard>=this.GM.MAX_CARDS_PER_DARTS_COUNT) return;
 			this.GM.inputEnabled = false;
 			var addY=100+this.GM.DartsInfos[dartFrameName].setCard*70;
 			this.M.T.moveA(this.GM.Card,{xy:{x:sprite.x,y:sprite.y+addY}}).start();
@@ -168,7 +169,7 @@ BasicGame.Play.prototype = {
 			this.GM.Cards.push(this.GM.Card);
 			var cardFrameName = this.GM.Card.frameName;
 			this.GM.DartsInfos[dartFrameName].score += (cardFrameName.split('_')[1]*this.GM.DartsInfos[dartFrameName].MULTIPLE_SCORE);
-			if (this.GM.onDartsCardsCount==this.GM.ENABLE_SET_CARDS_NUM) return this.throwDart();
+			if (this.GM.onDartsCardsCount>=this.GM.MAX_CARDS_COUNT) return this.throwDart();
 			this.setNextCard();
 		}
 	},
@@ -390,7 +391,7 @@ BasicGame.Play.prototype = {
 
 	startRound: function () {
 		this.HUD.showRound();
-		this.GM.currentRoundDeckTrumps = this.M.H.getRndItemsFromArr(this.GM.TrumpInfos,this.GM.ENABLE_SET_CARDS_NUM);
+		this.GM.currentRoundDeckTrumps = this.M.H.getRndItemsFromArr(this.GM.TrumpInfos,this.GM.MAX_CARDS_COUNT);
 		this.GM.currentRoundDeckTrumps.push('BackCard_Red');
 		this.GM.currentCardNum = 0;
 		this.GM.onDartsCardsCount = 0;

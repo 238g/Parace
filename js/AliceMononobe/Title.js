@@ -39,6 +39,8 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
+		// TODO
+		this.add.sprite(this.world.centerX,this.world.centerY,'TEST').anchor.setTo(.5);
 	},
 
 	genTitleTextSprite: function () {

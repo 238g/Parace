@@ -22,6 +22,8 @@ BasicGame.Preloader.prototype = {
 			'Dialog': './images/public/dialogs/Dialog_3.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Board': './images/AliceMononobe/Board.png',
+			// TODO
+			'TEST': './images/AliceMononobe/Alice_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -33,6 +35,8 @@ BasicGame.Preloader.prototype = {
 				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.mp3',
 				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.wav',
 			],
+			// darts sound -> muffled bomb?
+			// casino card sound
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},
