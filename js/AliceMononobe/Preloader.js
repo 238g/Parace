@@ -22,8 +22,9 @@ BasicGame.Preloader.prototype = {
 			'Dialog': './images/public/dialogs/Dialog_3.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Board': './images/AliceMononobe/Board.png',
-			// TODO
-			'TEST': './images/AliceMononobe/Alice_1.png',
+			'TopBg': './images/AliceMononobe/TopBg.jpg',
+			'PlayBg': './images/AliceMononobe/PlayBg.jpg',
+			'Alice_1': './images/AliceMononobe/Alice_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -32,11 +33,33 @@ BasicGame.Preloader.prototype = {
 	loadAudio: function () {
 		this.sounds = {
 			'TitleBGM': [
-				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.mp3',
-				'./sounds/BGM/P/PerituneMaterial_Folk_Chinese.wav',
+				'./sounds/BGM/P/PerituneMaterial_Snowy_Day2.mp3',
+				'./sounds/BGM/P/PerituneMaterial_Snowy_Day2.wav',
 			],
-			// darts sound -> muffled bomb?
-			// casino card sound
+			'PlayBGM': [
+				'./sounds/BGM/J/JazzBrunch.mp3',
+				'./sounds/BGM/J/JazzBrunch.wav',
+			],
+			'CardSlide': [
+				'./sounds/SE/Casino/Pack_1/cardSlide7.mp3',
+				'./sounds/SE/Casino/Pack_1/cardSlide7.wav',
+			],
+			'HitDart': [
+				'./sounds/SE/Bang/nutfall.mp3',
+				'./sounds/SE/Bang/nutfall.wav',
+			],
+			'OpenDialog': [
+				'./sounds/SE/Casino/Pack_1/dieGrab1.mp3',
+				'./sounds/SE/Casino/Pack_1/dieGrab1.wav',
+			],
+			'Applause': [
+				'./sounds/SE/Success/WellDoneApplause.mp3',
+				'./sounds/SE/Success/WellDoneApplause.wav',
+			],
+			'GameOver': [
+				'./sounds/SE/Fantasy_2/PickedCoinEcho2.mp3',
+				'./sounds/SE/Fantasy_2/PickedCoinEcho2.wav',
+			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},

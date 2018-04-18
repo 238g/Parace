@@ -74,8 +74,28 @@ BasicGame.Play.prototype = {
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
+		this.genBgSprite();
 		this.genDeckSprite();
 		this.genBoardSprite();
+	},
+
+	genBgSprite: function () {
+		this.add.sprite(this.world.centerX,this.world.centerY,'PlayBg').anchor.setTo(.5);
+		this.M.S.genText(this.world.centerX+80,280,'●',{
+			fontSize:1630,
+			fill:this.M.getConst('WHITE_COLOR'),
+			stroke:this.M.getConst('MAIN_TEXT_COLOR'),
+			strokeThickness: 15,
+		});
+	},
+
+	genDeckSprite: function () {
+		this.add.sprite(this.GM.deckPos.x,this.GM.deckPos.y,'Trump','BackCard_Black').anchor.setTo(.5);
+	},
+
+	genBoardSprite: function () {
+		this.Board = this.add.sprite(this.world.centerX+80,380,'Board');
+		this.Board.anchor.setTo(.5);
 	},
 
 	RuleContainer: function () {
@@ -97,6 +117,7 @@ BasicGame.Play.prototype = {
 	genRuleBtnSprite: function () {
 		var label = this.M.S.BasicGrayLabel(120,this.world.centerY,function () {
 			if (this.GM.isPlaying) {
+				this.M.SE.play('OpenDialog',{volume:1.5});
 				this.GM.inputEnabled = false;
 				this.RuleDialog.bringToTop();
 				this.RuleDialog.show();
@@ -106,34 +127,31 @@ BasicGame.Play.prototype = {
 	},
 
 	genRuleTextSprite: function () {
+		var action = (this.game.device.touch) ? 'タッチ' : 'クリック';
 		var ruleText = ''
-			+'トランプとダーツを組み合わせた'+'\n'
-			+'新感覚のゲーム！'+'\n'
-			+'1本のダーツにトランプを'+'\n'
-			+this.GM.MAX_CARDS_PER_DARTS_COUNT+'枚までセットして投げます。'+'\n'
-			+'左上の点数を0にしたらクリア！'+'\n'
-			+this.GM.MAX_ROUND_COUNT+'ターン以内にクリアしてください。'+'\n'
-			+'1ターンに'+this.GM.MAX_CARDS_COUNT+'枚まで'+'\n'
-			+'山札からトランプを引けます。'+'\n'
-			+'ダーツは1本ずつ'+'\n'
-			+'倍率が変わるので注意！'+'\n'
-			+'説明難しいから！'+'\n'
-			+'とにかくやってみて！笑'+'\n'
+			+'トランプとダーツを組み合わせた\n'
+			+'新感覚のゲーム！\n'
+			+'\n'
+			+'1本のダーツにトランプを\n'
+			+this.GM.MAX_CARDS_PER_DARTS_COUNT+'枚までセットして投げます。\n'
+			+'\n'
+			+'左上の点数を0にしたらクリア！\n'
+			+this.GM.MAX_ROUND_COUNT+'ターン以内にクリアしてください。\n'
+			+'\n'
+			+'1ターンに'+this.GM.MAX_CARDS_COUNT+'枚まで\n'
+			+'山札からトランプを引けます。\n'
+			+'\n'
+			+'ダーツは1本ずつ\n'
+			+'倍率が変わるので注意！\n'
+			+'\n'
+			+'ダーツにカードをセットする時は\n'
+			+'ダーツを'+action+'してください。\n'
 			;
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 40;
-		var textSprite = this.M.S.genText(0,0,ruleText,textStyle);
+		var textSprite = this.M.S.genText(0,50,ruleText,textStyle);
 		this.RuleDialog.addChild(textSprite.multipleTextSprite);
 		this.RuleDialog.addChild(textSprite);
-	},
-
-	genDeckSprite: function () {
-		this.add.sprite(this.GM.deckPos.x,this.GM.deckPos.y,'Trump','BackCard_Black').anchor.setTo(.5);
-	},
-
-	genBoardSprite: function () {
-		this.Board = this.add.sprite(this.world.centerX+80,380,'Board');
-		this.Board.anchor.setTo(.5);
 	},
 
 	DartsContainer: function () {
@@ -161,6 +179,7 @@ BasicGame.Play.prototype = {
 		if (this.GM.isPlaying && this.GM.inputEnabled) {
 			var dartFrameName = sprite.frameName;
 			if (this.GM.DartsInfos[dartFrameName].setCard>=this.GM.MAX_CARDS_PER_DARTS_COUNT) return;
+			this.M.SE.play('CardSlide',{volume:1.5});
 			this.GM.inputEnabled = false;
 			var addY=100+this.GM.DartsInfos[dartFrameName].setCard*70;
 			this.M.T.moveA(this.GM.Card,{xy:{x:sprite.x,y:sprite.y+addY}}).start();
@@ -211,6 +230,7 @@ BasicGame.Play.prototype = {
 		this.GM.currentScore -= minusScore;
 		this.HUD.minusScoreEffect(minusScore);
 		this.HUD.changeScore(this.GM.currentScore);
+		this.M.SE.play('HitDart',{volume:3});
 		if (this.GM.currentScore==0) {
 			this.time.events.remove(this.GM.throwTimer);
 			this.GM.clearFlag = true;
@@ -235,7 +255,7 @@ BasicGame.Play.prototype = {
 	},
 
 	againRound: function () {
-		if (this.GM.currentRoundCount==this.GM.MAX_ROUND_COUNT) return this.gameOver();
+		if (this.GM.currentRoundCount>=this.GM.MAX_ROUND_COUNT) return this.gameOver();
 		this.GM.currentRoundCount++;
 		this.startRound();
 	},
@@ -335,14 +355,12 @@ BasicGame.Play.prototype = {
 	},
 
 	playBGM: function () {
-		return; // TODO
 		var s = this.M.SE;
 		if (s.isPlaying('PlayBGM')) return;
-		s.play('PlayBGM',{isBGM:true,loop:true,volume:1});
+		s.play('PlayBGM',{isBGM:true,loop:true,volume:2});
 	},
 
 	stopBGM: function () {
-		return; // TODO
 		var s = this.M.SE;
 		if (s.isPlaying('PlayBGM')) return;
 		s.stop('currentBGM');
@@ -418,6 +436,7 @@ BasicGame.Play.prototype = {
 			this.GM.inputEnabled = true;
 			this.GM.currentCardNum++;
 		});
+		this.M.SE.play('CardSlide',{volume:1.5});
 		tween.start();
 	},
 
@@ -425,10 +444,10 @@ BasicGame.Play.prototype = {
 		this.GM.isPlaying = false;
 		this.GM.inputEnabled = false;
 		this.HUD.showGameOver();
-		// this.M.SE.play('Gong'); // TODO
+		this.M.SE.play('GameOver');
 		this.time.events.add(1500, function () {
 			this.ResultContainer();
-			// this.M.SE.play('Gong'); // TODO
+			this.M.SE.play('Applause',{volume:2});
 		}, this);
 	},
 
@@ -527,6 +546,8 @@ BasicGame.Play.prototype = {
 	test: function () {
 		if (__ENV!='prod') {
 			if(this.M.H.getQuery('gameOver')) this.gameOver();
+			if(this.M.H.getQuery('success')) this.time.events.add(2000,function () {this.GM.currentScore=0;},this);
+			if(this.M.H.getQuery('failure')) this.GM.currentRoundCount=12;
 		}
 	},
 };

@@ -18,7 +18,6 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return; // TODO
 		var s = this.M.SE;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
@@ -39,15 +38,15 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
-		// TODO
-		this.add.sprite(this.world.centerX,this.world.centerY,'TEST').anchor.setTo(.5);
+		this.add.sprite(this.world.centerX,this.world.centerY,'TopBg').anchor.setTo(.5);
+		this.add.sprite(this.world.centerX,this.world.centerY,'Alice_1').anchor.setTo(.5);
 	},
 
 	genTitleTextSprite: function () {
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 80;
 		var textSprite = this.M.S.genText(
-			this.world.centerX-30,130,
+			this.world.centerX,130,
 			this.M.getConst('GAME_TITLE'),textStyle);
 		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
