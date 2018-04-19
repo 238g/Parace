@@ -41,7 +41,8 @@
 	<script src="js/public/Middleware.js"></script>
 
 	<script src="js/tiatia/Boot.js"></script>
-	<!-- <script src="js/tiatia/LevelInfo.js"></script> -->
+	<script src="js/tiatia/WaveInfo.js"></script>
+	<script src="js/tiatia/EnemyInfo.js"></script>
 	<script src="js/tiatia/Preloader.js"></script>
 	<script src="js/tiatia/Title.js"></script>
 	<script src="js/tiatia/Play.js"></script>
@@ -55,14 +56,33 @@
 		canvas {
 			margin: auto !important;
 		}
+
+		#orientation {
+			margin: 0 auto;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background-image: url('./images/public/orientation.png'); 
+			background-repeat: no-repeat;
+			background-position: center;
+			background-color: rgb(0, 0, 0);
+			z-index: 999;
+			display: none;
+		}
 	</style>
 </head>
 <body>
 
+	<div id="gameContainer">
+		<div id="orientation"></div> 
+	</div>
+
 	<script type="text/javascript">
 		window.onload = function() {
 			new Middleware(
-				new Phaser.Game(900, 1600, Phaser.AUTO), 
+				new Phaser.Game(1600, 900, Phaser.AUTO, 'gameContainer'), 
 				BasicGame, 
 				'Boot'
 			);

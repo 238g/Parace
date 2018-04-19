@@ -4,12 +4,17 @@ BasicGame.Play.prototype = {
 		this.GM = {};
 		this.HUD = {};
 		this.Player = {};
+		this.PlayerWeapon = {};
+		this.Enemys = {};
+		this.EnemysWeapon = {};
 	},
 
 	create: function () {
 		this.GameManager();
 		this.BgContainer();
+		this.PhysicsManager();
 		this.PlayerContainer();
+		this.EnemyContainer();
 		this.HUDContainer();
 		this.ready();
 		this.test();
@@ -18,60 +23,129 @@ BasicGame.Play.prototype = {
 	GameManager: function () {
 		this.GM = {
 			isPlaying: false,
-			respawnEnemyCountdown: 500,
+			respawnEnemyCountdown: 2000,
 			respawnEnemyCountdownTimer: 500,
 		};
 	},
 
 	update: function () {
-		this.respawnEnemy();
-		// this.collisionManager();
+		this.respawnEnemyManager();
+		this.collisionManager();
 	},
 
-	respawnEnemy: function () {
+	respawnEnemyManager: function () {
 		if (this.GM.respawnEnemyCountdownTimer<0) {
 			this.GM.respawnEnemyCountdownTimer = this.GM.respawnEnemyCountdown;
-			console.log('respawn from game level array');
+			this.respawnEnemy();
 		}
 		this.GM.respawnEnemyCountdownTimer-=this.time.elapsed;
 	},
 
-	collisionManager: function () {
-		// this.physics.arcade.overlap(this.Player.weapon.bullets, ---ENEMY---, this.hitBulletToEnemy);
+	respawnEnemy: function () {
+		// TODO foreach enemy count get wave info
+		var respawnEnemy = this.Enemys.getFirstDead();
+		console.log(respawnEnemy);
+		if (respawnEnemy) {
+			// var enemyNum = respawnEnemy.key.split('_')[1]; // TODO or Enemy_1 / search json
+			// TODO pos get enemy info
+			respawnEnemy.reset(this.world.width-300,this.world.randomY);
+			respawnEnemy.body.velocity.x = -50; // TODO speed get enemy info
+			respawnEnemy.health = 10; // TODO get enemy Info
+			// TODO set score get enemy info
+		}
 	},
 
-	hitBulletToEnemy: function (bullet/*, enemy*/) {
+	collisionManager: function () {
+		this.physics.arcade.overlap(this.PlayerWeapon.bullets, this.Enemys, this.hitBulletToEnemy);
+	},
+
+	hitBulletToEnemy: function (bullet, enemy) {
 		bullet.kill();
+		enemy.damage(1);
+		if (enemy.health<0) {
+			enemy.kill();
+			// TODO enemy.score
+		}
 	},
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
+		this.genBgTileSprite();
+	},
+
+	genBgTileSprite: function () {
+		// this.add.tileSprite(0,0,1600,900,'');
+	},
+
+	PhysicsManager: function () {
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		this.world.enableBody = true;
 	},
 
 	PlayerContainer: function () {
-		this.Player = this.add.sprite(this.world.centerX,this.world.centerY,'Player');
+		this.Player = this.add.sprite(100,this.world.centerY,'Player');
 		this.Player.inputEnabled = true;
 		this.Player.input.enableDrag(true);
-		this.Player.weapon = this.genWeapon();
-		/*
+		this.PlayerWeapon = this.genPlayerWeapon();
+		this.Player.tripleShot = false;
+		var weapon = this.PlayerWeapon;
 		this.Player.postUpdate = function () {
-			this.weapon.fire();
-			this.weapon.debug(50,50,true);
+			if (this.tripleShot) {
+				// this.weapon.fireOffset(0,-100);
+				// this.weapon.fireOffset(0,100);
+				weapon.fireMany([
+					{x:0,y:-100},
+					{x:0,y:100},
+					{x:0,y:0},
+				]);
+			} else {
+				weapon.fire();
+			}
+			weapon.debug(16,32,true); // TODO del
 		};
-		*/
 	},
 
-	genWeapon: function () {
-		var weapon = this.add.weapon(40, 'Player');
+	genPlayerWeapon: function () {
+		var weapon = this.add.weapon(40, 'Bullet');
 		// weapon.setBulletFrames(0, 80, true);
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 		weapon.bulletAngleOffset = 90;
 		// weapon.bulletAngleVariance = 10;
 		// weapon.bulletSpeedVariance = 200;
 		weapon.bulletSpeed = 1000;
+		// weapon.fireRate = 1000;
 		weapon.fireRate = 200;
-		weapon.autofire = true;
-		weapon.trackSprite(this.Player, this.Player.width/2, 0, false);
+		// weapon.autofire = true;
+		weapon.trackSprite(this.Player, this.Player.width, this.Player.height/2, true);
+		// weapon.trackSprite(this.Player, this.Player.width/2, 0, false);
+		weapon.multiFire = true;
+		console.log(weapon); // TODO del
+		return weapon;
+	},
+
+	EnemyContainer: function () {
+		this.Enemys = this.add.group();
+		this.Enemys.enableBody = true;
+		this.Enemys.physicsBodyType = Phaser.Physics.ARCADE;
+		// TODO adjustment for
+		var keys = [];
+		for (var i=1;i<=3;i++) {
+			keys.push('Enemy_'+i);
+		}
+		this.Enemys.createMultiple(100,keys);
+		this.Enemys.shuffle(); // TODO need?
+		this.respawnEnemy(); // TODO del
+		this.EnemysWeapon = this.genEnemyWeapon();
+	},
+
+	genEnemyWeapon: function () {
+		var weapon = this.add.weapon(40, 'Attack');
+		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+		weapon.bulletAngleOffset = 90;
+		weapon.bulletSpeed = 1000;
+		weapon.fireRate = 500;
+		weapon.multiFire = true;
+		console.log(weapon); // TODO del
 		return weapon;
 	},
 

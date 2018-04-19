@@ -33,7 +33,6 @@ Middleware.prototype = {
 		Scene.stage.disableVisibilityChange = true;
 		Scene.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL;
 		if (orientation) {
-			// TODO test
 			Scene.scale.fullScreenScaleMode = Phaser.ScaleManager.EXACT_FIT;
 			if (!Scene.game.device.desktop) {
 				Scene.scale.forceOrientation(true, false);

@@ -16,6 +16,13 @@ BasicGame.Preloader.prototype = {
 			'Dialog': './images/public/dialogs/Dialog_3.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Player': './images/eff/Tree.png',
+			'Bullet': './images/HimeTanaka/Nikuman_1.png',
+			'Attack': './images/AzlimBushi/BeefBowl.png',
+
+			// TODO get enemyInfo?
+			'Enemy_1': './images/HimeTanaka/Turtle_1.png',
+			'Enemy_2': './images/HimeTanaka/Pig_1.png',
+			'Enemy_3': './images/HimeTanaka/Chair_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
