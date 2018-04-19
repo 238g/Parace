@@ -2,7 +2,7 @@ BasicGame = {};
 BasicGame.Boot = function() {};
 BasicGame.Boot.prototype = {
 	init: function () {
-		this.M.BootInit(false);
+		this.M.BootInit(true);
 	},
 
 	preload: function () {
