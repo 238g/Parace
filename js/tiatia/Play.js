@@ -2,11 +2,11 @@ BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () {
 		this.GM = {};
-		this.HUD = {};
 		this.Player = {};
 		this.PlayerWeapon = {};
 		this.Enemys = {};
 		this.EnemysWeapon = {};
+		this.HUD = {};
 	},
 
 	create: function () {
@@ -23,49 +23,83 @@ BasicGame.Play.prototype = {
 	GameManager: function () {
 		this.GM = {
 			isPlaying: false,
-			respawnEnemyCountdown: 2000,
-			respawnEnemyCountdownTimer: 500,
+			RESPAWN_ENEMY_COUNTDOWN: 1000, // TODO if change this,, prepare other var, this->_FIRST
+			timeCounter: 500,
+			EnemyInfo: this.M.getConf('EnemyInfo'),
+
+			// TODO level info ? -> enemy bullet speed
 		};
 	},
 
 	update: function () {
-		this.respawnEnemyManager();
-		this.collisionManager();
+		if (this.GM.isPlaying) {
+			this.respawnEnemyManager();
+			this.collisionManager();
+		}
 	},
 
 	respawnEnemyManager: function () {
-		if (this.GM.respawnEnemyCountdownTimer<0) {
-			this.GM.respawnEnemyCountdownTimer = this.GM.respawnEnemyCountdown;
+		if (this.GM.timeCounter<0) {
+			this.GM.timeCounter = this.GM.RESPAWN_ENEMY_COUNTDOWN;
 			this.respawnEnemy();
 		}
-		this.GM.respawnEnemyCountdownTimer-=this.time.elapsed;
+		this.GM.timeCounter-=this.time.elapsed;
 	},
 
 	respawnEnemy: function () {
 		// TODO foreach enemy count get wave info
 		var respawnEnemy = this.Enemys.getFirstDead();
-		console.log(respawnEnemy);
+		// console.log(respawnEnemy);
 		if (respawnEnemy) {
 			// var enemyNum = respawnEnemy.key.split('_')[1]; // TODO or Enemy_1 / search json
 			// TODO pos get enemy info
-			respawnEnemy.reset(this.world.width-300,this.world.randomY);
-			respawnEnemy.body.velocity.x = -50; // TODO speed get enemy info
+			respawnEnemy.reset(this.world.width-300,this.world.randomY-100);
+			respawnEnemy.body.velocity.x = -200; // TODO speed get enemy info
+			// respawnEnemy.body.velocity.x = -50; // TODO speed get enemy info
 			respawnEnemy.health = 10; // TODO get enemy Info
 			// TODO set score get enemy info
+
+			respawnEnemy.events.onKilled.add(function (sprite) {
+				if (sprite.x < -sprite.width) return; // TODO fix because now anchor 0
+				// TODO score up because here is player kill enemy
+			}, this);
+
+			if (respawnEnemy.key == 'Enemy_2') {
+				this.physics.arcade.moveToObject(respawnEnemy,this.Player,120);
+			}
+			if (respawnEnemy.key == 'Enemy_3') {
+				var self = this;
+				respawnEnemy.update = function () {
+					if (this.alive) {
+						self.EnemysWeapon.fireFrom.x = this.x;
+						self.EnemysWeapon.fireFrom.y = this.y;
+						self.EnemysWeapon.fireAtSprite(self.Player);
+					}
+				};
+			}
 		}
 	},
 
 	collisionManager: function () {
+		this.physics.arcade.overlap(this.Player, this.Enemys, this.enemyHitsPlayer);
 		this.physics.arcade.overlap(this.PlayerWeapon.bullets, this.Enemys, this.hitBulletToEnemy);
+		this.physics.arcade.overlap(this.EnemysWeapon.bullets, this.Player, this.hitBulletToPlayer);
+	},
+
+	enemyHitsPlayer: function (player, enemy) {
+		// TODO player none damage time??
+		enemy.kill(); // TODO if were player none damage, enemy none kill
+		player.damage(1);
 	},
 
 	hitBulletToEnemy: function (bullet, enemy) {
 		bullet.kill();
 		enemy.damage(1);
-		if (enemy.health<0) {
-			enemy.kill();
-			// TODO enemy.score
-		}
+	},
+
+	hitBulletToPlayer: function (player, bullet) {
+		bullet.kill();
+		player.damage(1);
 	},
 
 	BgContainer: function () {
@@ -86,23 +120,35 @@ BasicGame.Play.prototype = {
 		this.Player = this.add.sprite(100,this.world.centerY,'Player');
 		this.Player.inputEnabled = true;
 		this.Player.input.enableDrag(true);
-		this.PlayerWeapon = this.genPlayerWeapon();
 		this.Player.tripleShot = false;
-		var weapon = this.PlayerWeapon;
-		this.Player.postUpdate = function () {
-			if (this.tripleShot) {
-				// this.weapon.fireOffset(0,-100);
-				// this.weapon.fireOffset(0,100);
-				weapon.fireMany([
-					{x:0,y:-100},
-					{x:0,y:100},
-					{x:0,y:0},
-				]);
-			} else {
-				weapon.fire();
+		// this.Player.health = 1;
+		this.Player.health = 10; // TODO Const
+		var radius = 30; // TODO Const
+		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
+		this.Player.events.onKilled.add(this.killedPlayer, this);
+		console.log(this.Player);
+		var weapon = this.genPlayerWeapon();
+		this.Player.update = function () {
+			if (this.alive) {
+				if (this.tripleShot) {
+					// this.weapon.fireOffset(0,-100);
+					// this.weapon.fireOffset(0,100);
+					weapon.fireMany([
+						{x:0,y:-100},
+						{x:0,y:100},
+						{x:0,y:0},
+					]);
+				} else {
+					weapon.fire();
+				}
+				weapon.debug(16,32,true); // TODO del
 			}
-			weapon.debug(16,32,true); // TODO del
 		};
+		this.PlayerWeapon = weapon;
+	},
+
+	killedPlayer: function () {
+		this.gameOver();
 	},
 
 	genPlayerWeapon: function () {
@@ -127,15 +173,27 @@ BasicGame.Play.prototype = {
 		this.Enemys = this.add.group();
 		this.Enemys.enableBody = true;
 		this.Enemys.physicsBodyType = Phaser.Physics.ARCADE;
-		// TODO adjustment for
 		var keys = [];
 		for (var i=1;i<=3;i++) {
+			// TODO adjustment for
 			keys.push('Enemy_'+i);
 		}
+		// this.Enemys.createMultiple(1,['Enemy_3']);
 		this.Enemys.createMultiple(100,keys);
+
+		// this.Enemys.setAll('anchor.x', .5);
+		// this.Enemys.setAll('anchor.y', .5);
+		this.Enemys.setAll('outOfBoundsKill', true);
+		this.Enemys.setAll('checkWorldBounds', true);
+
+
 		this.Enemys.shuffle(); // TODO need?
-		this.respawnEnemy(); // TODO del
 		this.EnemysWeapon = this.genEnemyWeapon();
+
+		// this.Enemys.createMultiple(1,['Enemy_1','Enemy_2']);
+		// this.Enemys.shuffle(); // TODO need?
+
+		// this.respawnEnemy(); // TODO test del
 	},
 
 	genEnemyWeapon: function () {
@@ -143,7 +201,7 @@ BasicGame.Play.prototype = {
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 		weapon.bulletAngleOffset = 90;
 		weapon.bulletSpeed = 1000;
-		weapon.fireRate = 500;
+		weapon.fireRate = 3000;
 		weapon.multiFire = true;
 		console.log(weapon); // TODO del
 		return weapon;
@@ -184,6 +242,8 @@ BasicGame.Play.prototype = {
 	ready: function () {
 		this.stopBGM();
 		this.playBGM();
+
+		this.start(); // TODO
 	},
 
 	playBGM: function () {
@@ -203,7 +263,6 @@ BasicGame.Play.prototype = {
 
 	start: function () {
 		this.GM.isPlaying = true;
-		this.startRound();
 	},
 
 	gameOver: function () {
@@ -217,11 +276,13 @@ BasicGame.Play.prototype = {
 	},
 
 	ResultContainer: function () {
+		// TODO lay
 		this.M.S.genDialog('Dialog',{
 			onComplete:this.openedResult,
 		}).tweenShow();
 	},
 
+	// TODO lay
 	openedResult: function () {
 		var y = this.world.centerY;
 		this.genResultTextSprite(y-500,'結果発表');
@@ -282,6 +343,12 @@ BasicGame.Play.prototype = {
 			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
 			multipleStrokeThickness: 10,
 		};
+	},
+
+	render: function () {
+		this.game.debug.body(this.Player);
+		for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
+		this.game.debug.pointer(this.game.input.activePointer);
 	},
 
 	test: function () {

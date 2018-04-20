@@ -18,14 +18,15 @@ BasicGame.Preloader.prototype = {
 			'Player': './images/eff/Tree.png',
 			'Bullet': './images/HimeTanaka/Nikuman_1.png',
 			'Attack': './images/AzlimBushi/BeefBowl.png',
-
-			// TODO get enemyInfo?
-			'Enemy_1': './images/HimeTanaka/Turtle_1.png',
-			'Enemy_2': './images/HimeTanaka/Pig_1.png',
-			'Enemy_3': './images/HimeTanaka/Chair_1.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		this.loadEnemyImgs();
 		this.loadAudio();
+	},
+
+	loadEnemyImgs: function () {
+		var EnemyInfo = this.M.getConf('EnemyInfo');
+		for (var key in EnemyInfo) this.load.image(key, EnemyInfo[key].imgPath);
 	},
 
 	loadAudio: function () {
