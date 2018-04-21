@@ -25,6 +25,10 @@ BasicGame.Preloader.prototype = {
 			'TopBg': './images/AliceMononobe/TopBg.jpg',
 			'PlayBg': './images/AliceMononobe/PlayBg.jpg',
 			'Alice_1': './images/AliceMononobe/Alice_1.png',
+			'Alice_2': './images/AliceMononobe/Alice_2.png',
+			'Alice_3': './images/AliceMononobe/Alice_3.png',
+			'Alice_4': './images/AliceMononobe/Alice_4.png',
+			'Giruzaren': './images/AliceMononobe/Giruzaren.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();

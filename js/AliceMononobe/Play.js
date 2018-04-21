@@ -130,22 +130,22 @@ BasicGame.Play.prototype = {
 		var action = (this.game.device.touch) ? 'タッチ' : 'クリック';
 		var ruleText = ''
 			+'トランプとダーツを組み合わせた\n'
-			+'新感覚のゲーム！\n'
+			+'新感覚のゲームよ✨\n'
 			+'\n'
 			+'1本のダーツにトランプを\n'
-			+this.GM.MAX_CARDS_PER_DARTS_COUNT+'枚までセットして投げます。\n'
+			+this.GM.MAX_CARDS_PER_DARTS_COUNT+'枚までセットして投げれるわっ❣\n'
 			+'\n'
 			+'左上の点数を0にしたらクリア！\n'
-			+this.GM.MAX_ROUND_COUNT+'ターン以内にクリアしてください。\n'
+			+'クリアは'+this.GM.MAX_ROUND_COUNT+'ターン以内にねっ💝\n'
 			+'\n'
-			+'1ターンに'+this.GM.MAX_CARDS_COUNT+'枚まで\n'
-			+'山札からトランプを引けます。\n'
+			+'1ターンに'+this.GM.MAX_CARDS_COUNT+'枚まで山札からトランプを\n'
+			+'引けるのよ✧*。ヾ(｡>﹏<｡)ﾉﾞ✧*。\n'
 			+'\n'
-			+'ダーツは1本ずつ\n'
-			+'倍率が変わるので注意！\n'
+			+'ダーツは1本ずつ倍率が変わるから\n'
+			+'注意しなきゃっ((o(｡•ω•｡)o))✨\n'
 			+'\n'
-			+'ダーツにカードをセットする時は\n'
-			+'ダーツを'+action+'してください。\n'
+			+'カードをセットする時はダーツを\n'
+			+action+'するんじゃいっヾﾉ｡ÒдÓ)ﾉｼ\n'
 			;
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 40;
@@ -377,13 +377,15 @@ BasicGame.Play.prototype = {
 		this.genModeTitleTextSprite(x,y);
 		for (var key in this.GM.ModeInfos) {
 			y+=170;
-			this.genModeLabel(x,y,this.GM.ModeInfos[key]);
+			this.genModeLabel(x-150,y,this.GM.ModeInfos[key]);
 		}
+		this.genModeCharSprite();
+		this.genModeRecommendTextSprite();
 	},
 
 	genModeTitleTextSprite: function (x,y) {
 		var textStyle = this.StaticBaseTextStyle();
-		var text = 'モードを選択してください';
+		var text = 'モードを選択して\nもらいたいわねっ💕';
 		var textSprite = this.M.S.genText(x,y,text,textStyle);
 		textSprite.addGroup(this.Dialog);
 	},
@@ -399,7 +401,23 @@ BasicGame.Play.prototype = {
 			this.Dialog.setAll('pendingDestroy',true);
 			this.start();
 		},text,textStyle,{tint:tint});
+		label.btnSprite.scale.setTo(1.5,2.2);
 		label.addGroup(this.Dialog);
+	},
+
+	genModeCharSprite: function () {
+		var charSprite = this.add.sprite(this.Dialog.right,this.Dialog.bottom,'Alice_1');
+		charSprite.scale.setTo(.7);
+		charSprite.anchor.setTo(1);
+		this.Dialog.add(charSprite);
+	},
+
+	genModeRecommendTextSprite: function () {
+		var textSprite = this.M.S.genText(this.Dialog.right-80,this.world.centerY-180,'←オススメ',this.StaticBaseTextStyle());
+		textSprite.setAnchor(1,.5);
+		this.M.T.pointingA(textSprite.multipleTextSprite,{xy:{x:'-50'}}).start();
+		this.M.T.pointingA(textSprite,{xy:{x:'-50'}}).start();
+		textSprite.addGroup(this.Dialog);
 	},
 
 	start: function () {
@@ -460,18 +478,27 @@ BasicGame.Play.prototype = {
 	openedResult: function () {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
+		this.genResultCharSprite(x,y+80);
 		var tint = this.M.getConst('MAIN_TINT');
 		var textStyle = this.StaticBaseTextStyle();
 		textStyle.fontSize = 80;
 		this.genResultTextSprite(x,y-500,'結果発表',textStyle);
-		this.genResultTextSprite(x,y-350,'モード: '+this.GM.currentMode,textStyle);
-		this.genResultTextSprite(x,y-220,'ダーツ: '+this.GM.throwCount+'投',textStyle);
-		this.genResultTextSprite(x,y-90,'ターン: '+this.GM.currentRoundCount,textStyle);
-		this.genResultTextSprite(x,y+40,'結果: '+(this.GM.clearFlag?'クリア':'残念'),textStyle);
-		textStyle = this.StaticBaseTextStyle();
+		textStyle.fontSize = 60;
+		this.genResultTextSprite(x-150,y-350,'モード: '+this.GM.currentMode,textStyle);
+		this.genResultTextSprite(x-150,y-220,'ダーツ: '+this.GM.throwCount+'投',textStyle);
+		this.genResultTextSprite(x-150,y-90,'ターン: '+this.GM.currentRoundCount,textStyle);
+		this.genResultTextSprite(x-150,y+40,'結果: '+(this.GM.clearFlag?'クリア':'残念'),textStyle);
+		textStyle.fontSize = 50;
 		this.genRestartLabel(x,y+200,textStyle,{duration:800,delay:600},tint);
 		this.genTweetLabel(x,y+350,textStyle,{duration:800,delay:800},tint);
 		this.genBackLabel(x,y+500,textStyle,{duration:800,delay:1000},tint);
+	},
+
+	genResultCharSprite: function (x,y) {
+		var clearArr = ['Giruzaren','Alice_3','Alice_4'];
+		var key = (this.GM.clearFlag?this.rnd.pick(clearArr):'Alice_2');
+		var charSprite = this.add.sprite(x,y,key);
+		charSprite.anchor.setTo(0,1);
 	},
 
 	genResultTextSprite: function (x,y,text,textStyle) {
@@ -548,6 +575,8 @@ BasicGame.Play.prototype = {
 			if(this.M.H.getQuery('gameOver')) this.gameOver();
 			if(this.M.H.getQuery('success')) this.time.events.add(2000,function () {this.GM.currentScore=0;},this);
 			if(this.M.H.getQuery('failure')) this.GM.currentRoundCount=12;
+			if(this.M.H.getQuery('mute')) this.sound.mute=true;
+			if(this.M.H.getQuery('clear')) this.GM.clearFlag = this.M.H.getQuery('clear');
 		}
 	},
 };
