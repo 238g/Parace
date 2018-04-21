@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.conf = function () {
-	var totalCount = 9;
+	var totalCount = 10;
 	return {
 		GamesInfo:{
 			1001: {
@@ -101,6 +101,16 @@ BasicGame.Boot.prototype.conf = function () {
 				order: totalCount-9,
 				textColor: '#e30c4f',
 				bgColor: '#fba4d1',
+			},
+			1011: {
+				id: 1011,
+				title: 'アリス・トラーツ',
+				url: 'https://238g.github.io/Parace/AliceMononobe.html',
+				slideImg: 'AliceMononobe_1',
+				slideImgUrl: './images/238Games/AliceMononobe_1.png',
+				order: totalCount-10,
+				textColor: '#89beff',
+				bgColor: '#fde5b1',
 			},
 			/*
 			1000: {

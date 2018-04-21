@@ -19,3 +19,5 @@
 まりちゃんばりん (https://238g.github.io/Parace/kashikomari.html) Release 4/1
 
 田中ヒメ中華街 (https://238g.github.io/Parace/HimeTanaka.html) Release 4/13
+
+アリス・トラーツ (https://238g.github.io/Parace/AliceMononobe.html) Release 4/21
