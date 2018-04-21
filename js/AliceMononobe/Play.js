@@ -81,12 +81,14 @@ BasicGame.Play.prototype = {
 
 	genBgSprite: function () {
 		this.add.sprite(this.world.centerX,this.world.centerY,'PlayBg').anchor.setTo(.5);
-		this.M.S.genText(this.world.centerX+80,280,'●',{
-			fontSize:1630,
-			fill:this.M.getConst('WHITE_COLOR'),
-			stroke:this.M.getConst('MAIN_TEXT_COLOR'),
-			strokeThickness: 15,
-		});
+		if (this.game.device.desktop) {
+			this.M.S.genText(this.world.centerX+80,280,'●',{
+				fontSize:1630,
+				fill:this.M.getConst('WHITE_COLOR'),
+				stroke:this.M.getConst('MAIN_TEXT_COLOR'),
+				strokeThickness: 15,
+			});
+		}
 	},
 
 	genDeckSprite: function () {
