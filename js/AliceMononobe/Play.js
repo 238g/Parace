@@ -7,6 +7,7 @@ BasicGame.Play.prototype = {
 		this.Board = {};
 		this.Dialog = {};
 		this.RuleDialog = {};
+		this.time.events.removeAll();
 	},
 
 	create: function () {

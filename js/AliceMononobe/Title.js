@@ -2,6 +2,7 @@ BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
 		this.inputEnabled = false;
+		this.time.events.removeAll();
 	},
 
 	create: function () {
