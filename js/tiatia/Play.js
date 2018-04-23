@@ -43,19 +43,24 @@ BasicGame.Play.prototype = {
 
 	genLevelInfo: function () {
 		return {
-			'Normal': { // 1-3
+			1:'Normal',2:'Normal',3:'Normal',
+			4:'Blue',5:'Blue',6:'Blue',
+			7:'Yellow',8:'Yellow',9:'Yellow',
+			10:'Red',
+			/////////////////////////////////
+			'Normal': {
 				enemyTint: 0xffffff,
 				magnification: 1,
 			},
-			'Blue': { // 4-6
+			'Blue': {
 				enemyTint: 0x3399ff,
 				magnification: 1.2,
 			},
-			'Yellow': { // 7-9
+			'Yellow': {
 				enemyTint: 0xffff66,
 				magnification: 1.5,
 			},
-			'Red': { // 10-
+			'Red': {
 				enemyTint: 0xff3300,
 				magnification: 2,
 			},
