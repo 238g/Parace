@@ -3,6 +3,7 @@ BasicGame.Title.prototype = {
 	init: function () {
 		this.inputEnabled = false;
 		this.Dialog = {};
+		this.time.events.removeAll();
 	},
 
 	create: function () {

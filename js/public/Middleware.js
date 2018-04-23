@@ -520,6 +520,14 @@ Middleware.prototype.TweenManager.prototype = {
 			{alpha:0}, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
 	},
+	// [alpha, duration, delay]
+	fadeOutB: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		return Scene.add.tween(target).to(
+			{alpha:option.alpha||0}, option.duration, 
+			Phaser.Easing.Exponential.Out, false, option.delay);
+	},
 	// [durations, delay]
 	stressA: function (target, option) {
 		var Scene = this.M.getScene();
