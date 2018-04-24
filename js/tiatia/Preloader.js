@@ -16,8 +16,10 @@ BasicGame.Preloader.prototype = {
 			'Dialog': './images/public/dialogs/Dialog_3.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Player': './images/eff/Tree.png',
-			'Bullet': './images/HimeTanaka/Nikuman_1.png',
-			'Attack': './images/AzlimBushi/BeefBowl.png',
+			'PlayerBullet': './images/tiatia/PlayerBullet.png',
+			'EnemyBullet': './images/tiatia/EnemyBullet.png',
+			'SkyBg_1': './images/sirorun/sky.png',
+			'MtBg_1': './images/sirorun/mountain.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadEnemyImgs();
@@ -26,7 +28,14 @@ BasicGame.Preloader.prototype = {
 
 	loadEnemyImgs: function () {
 		var EnemyInfo = this.M.getConf('EnemyInfo');
-		for (var key in EnemyInfo) this.load.image(key, EnemyInfo[key].imgPath);
+		for (var key in EnemyInfo) {
+			var info = EnemyInfo[key];
+			if (info.imgType == 'atlasJSONHash') {
+				this.load.atlasJSONHash(key, info.imgPath+'.png', info.imgPath+'.json');
+			} else {
+				this.load.image(key, info.imgPath);
+			}
+		}
 	},
 
 	loadAudio: function () {

@@ -25,53 +25,47 @@ BasicGame.Play.prototype = {
 		this.GM = {
 			isPlaying: false,
 			timeCounter: 500,
-			RESPAWN_ENEMY_COUNTDOWN: 1000,
+			respawnEnemyCountdown: 1000,
 			EnemyInfo: this.M.getConf('EnemyInfo'),
-			LevelInfo: this.genLevelInfo(),
-			PlayerInfo: this.genPlayerInfo(),
+			DifficultyInfo: this.genDifficultyInfo(),
 			EnemyKeys: this.setFirstEnemyKeys(),
-			currentLevel: 'Normal',
+			curDifficulty: 'Normal',
+			curLevel: 1,
 			score: 0,
+			MAX_PLAYER_HEALTH: 5,
+			// MAX_BULLET_POWER: 5,
+			bulletPower: 1,
 		};
 	},
 
 	setFirstEnemyKeys: function () {
 		var keys = [];
-		for (var i=1;i<=3;i++) keys.push('Enemy_'+i);
+		for (var i=1;i<=3;i++) keys.push('Enemy_'+i); // TODO 3->2
 		return keys;
 	},
 
-	genLevelInfo: function () {
+	genDifficultyInfo: function () {
 		return {
-			1:'Normal',2:'Normal',3:'Normal',
-			4:'Blue',5:'Blue',6:'Blue',
-			7:'Yellow',8:'Yellow',9:'Yellow',
-			10:'Red',
-			/////////////////////////////////
 			'Normal': {
 				enemyTint: 0xffffff,
 				magnification: 1,
+				RESPAWN_ENEMY_COUNTDOWN: 1000,
 			},
 			'Blue': {
 				enemyTint: 0x3399ff,
 				magnification: 1.2,
+				RESPAWN_ENEMY_COUNTDOWN: 1000,
 			},
 			'Yellow': {
 				enemyTint: 0xffff66,
 				magnification: 1.5,
+				RESPAWN_ENEMY_COUNTDOWN: 800,
 			},
 			'Red': {
 				enemyTint: 0xff3300,
 				magnification: 2,
+				RESPAWN_ENEMY_COUNTDOWN: 600,
 			},
-		};
-	},
-
-	genPlayerInfo: function () {
-		return {
-			MAX_HEALTH: 5,
-			FIRST_HEALTH: 3,
-			HIT_RANGE_RADIUS: 30,
 		};
 	},
 
@@ -84,7 +78,7 @@ BasicGame.Play.prototype = {
 
 	respawnEnemyManager: function () {
 		if (this.GM.timeCounter<0) {
-			this.GM.timeCounter = this.GM.RESPAWN_ENEMY_COUNTDOWN;
+			this.GM.timeCounter = this.GM.respawnEnemyCountdown;
 			this.respawnEnemy();
 		}
 		this.GM.timeCounter-=this.time.elapsed;
@@ -95,85 +89,146 @@ BasicGame.Play.prototype = {
 		var respawnEnemy = this.Enemys.getFirstDead();
 		// var respawnEnemy = this.Enemys.getRandom();
 
-		if (respawnEnemy) this.addPowerToEnemy(respawnEnemy);
+		if (respawnEnemy) this.givePowerToEnemy(respawnEnemy);
 	},
 
-	addPowerToEnemy: function (respawnEnemy) {
+	givePowerToEnemy: function (respawnEnemy) {
 		var EI = this.GM.EnemyInfo[respawnEnemy.key];
-		var LI = this.GM.LevelInfo[this.GM.currentLevel];
-		var m = LI.magnification;
-		var x = this.world.width-300;
-		var y = this.world.randomY-100; // TODO pos get enemy info 
+		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
+		var m = DI.magnification;
+		var x = this.world.width;
+		var y = this.world.randomY;
+		var self = this;
 		respawnEnemy.reset(x,y);
 		respawnEnemy.body.velocity.x = -EI.speed*m;
 		respawnEnemy.health = EI.health*m;
 		respawnEnemy.score = EI.score*m;
 		respawnEnemy.isBoss = EI.isBoss;
+		respawnEnemy.worldBoundsKill = function () {
+			if (this.x<-100) self.resetEnemyToGroup(this);
+		};
+		var updateFlag = false;
+		if (EI.imgAnim>0) {
+			respawnEnemy.animations.add('Moving');
+			respawnEnemy.play('Moving', EI.imgAnim, true);
+		}
 		if (EI.Waver) {
 			var waveRange = this.rnd.between(100,300);
 			respawnEnemy.update = function () {
 				this.y = waveRange*Math.sin(this.x/waveRange)+y;
+				this.worldBoundsKill();
 			};
+			updateFlag = true;
 		}
 		if (EI.Tracker) this.physics.arcade.moveToObject(respawnEnemy,this.Player,EI.speed);
 		if (EI.Shoter) {
-			var self = this;
+			if (EI.circleShot>0) {
+				respawnEnemy.update = function () {
+					if (this.alive) {
+						self.EnemysWeapon.fireFrom.x = this.x;
+						self.EnemysWeapon.fireFrom.y = this.y;
+						// self.EnemysWeapon.fireAtSprite(self.Player); // TODO circle
+					}
+					this.worldBoundsKill();
+				};
+			} else {
+				respawnEnemy.update = function () {
+					if (this.alive) {
+						self.EnemysWeapon.fireFrom.x = this.x;
+						self.EnemysWeapon.fireFrom.y = this.y;
+						self.EnemysWeapon.fireAtSprite(self.Player);
+					}
+					this.worldBoundsKill();
+				};
+			}
+			updateFlag = true;
+		}
+		if (!updateFlag) {
 			respawnEnemy.update = function () {
-				if (this.alive) {
-					self.EnemysWeapon.fireFrom.x = this.x;
-					self.EnemysWeapon.fireFrom.y = this.y;
-					self.EnemysWeapon.fireAtSprite(self.Player);
-				}
+				this.worldBoundsKill();
 			};
 		}
 	},
 
 	collisionManager: function () {
-		this.physics.arcade.overlap(this.Player, this.Enemys, this.enemyHitsPlayer);
+		this.physics.arcade.overlap(this.Player, this.Enemys, this.enemyHitsPlayer, null, this);
 		this.physics.arcade.overlap(this.PlayerWeapon.bullets, this.Enemys, this.hitBulletToEnemy, null, this);
-		this.physics.arcade.overlap(this.EnemysWeapon.bullets, this.Player, this.hitBulletToPlayer);
+		this.physics.arcade.overlap(this.EnemysWeapon.bullets, this.Player, this.hitBulletToPlayer, null, this);
 	},
 
 	enemyHitsPlayer: function (player, enemy) {
-		player.Udamage();
+		player.takeDamage();
 		if (enemy.isBoss) return;
-		enemy.kill();
+		this.resetEnemyToGroup(enemy);
 	},
 
 	hitBulletToEnemy: function (bullet, enemy) {
 		bullet.kill();
-		enemy.damage(1);
-		if (!enemy.alive) this.onKilledEnemy(enemy);
+		enemy.damage(this.GM.bulletPower);
+		if (!enemy.alive) {
+			this.GM.score += enemy.score;
+			this.HUD.changeScore(this.GM.score);
+			if (enemy.isBoss) this.levelUp();
+			this.resetEnemyToGroup(enemy);
+		}
 	},
 
-	onKilledEnemy: function (enemy) {
-		this.GM.score += enemy.score;
-		this.HUD.changeScore(this.GM.score);
+	resetEnemyToGroup: function (enemy) {
 		enemy.destroy();
+		this.genEnemySprite();
+	},
 
-		// TODO create?
-		var newEnemy = this.add.sprite(0,0,this.rnd.pick(this.GM.EnemyKeys));
-		newEnemy.kill();
-		newEnemy.outOfBoundsKill = true;
-		newEnemy.checkWorldBounds = true;
-		this.Enemys.add(newEnemy);
-		// this.Enemys.create(0,0,this.rnd.pick(this.GM.EnemyKeys),null,false);
-		// this.Enemys.setAll('outOfBoundsKill', true);
-		// this.Enemys.setAll('checkWorldBounds', true);
+	levelUp: function () {
+		this.GM.curLevel++;
+		this.setDifficultyFromLevel();
+		// TODO
+	},
+
+	setDifficultyFromLevel: function () {
+		switch (this.GM.curLevel) {
+			case 1:
+			case 2:
+			case 3: this.GM.curDifficulty = 'Normal'; break;
+			case 4:
+			case 5:
+			case 6: this.GM.curDifficulty = 'Blue'; break;
+			case 7:
+			case 8:
+			case 9: this.GM.curDifficulty = 'Yellow'; break;
+			default: this.GM.curDifficulty = 'Red'; break;
+		}
+	},
+
+	genEnemySprite: function () {
+		var enemy = this.add.sprite(0,0,this.rnd.pick(this.GM.EnemyKeys));
+		enemy.kill();
+		enemy.anchor.setTo(.5);
+		this.Enemys.add(enemy);
 	},
 
 	hitBulletToPlayer: function (player, bullet) {
 		bullet.kill();
-		player.Udamage();
+		player.takeDamage();
 	},
 
 	BgContainer: function () {
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
-		this.genBgTileSprite();
+		this.genSkyBgTileSprite();
+		this.genMtBgTileSprite();
 	},
 
-	genBgTileSprite: function () {
-		// this.add.tileSprite(0,0,1600,900,'');
+	genSkyBgTileSprite: function () {
+		var skyTileSprite = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'SkyBg_1');
+		skyTileSprite.update = function () {
+			this.tilePosition.x -= 1;
+		};
+	},
+
+	genMtBgTileSprite: function () {
+		var mtTileSprite = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'MtBg_1');
+		mtTileSprite.update = function () {
+			this.tilePosition.x -= 5;
+		};
 	},
 
 	PhysicsManager: function () {
@@ -182,27 +237,26 @@ BasicGame.Play.prototype = {
 	},
 
 	PlayerContainer: function () {
-		var PI = this.GM.PlayerInfo;
 		this.Player = this.add.sprite(100,this.world.centerY,'Player');
 		this.Player.inputEnabled = true;
 		this.Player.input.enableDrag(true);
 		this.Player.tripleShot = false;
-		this.Player.damaging = false;
-		this.Player.health = PI.FIRST_HEALTH;
-		this.Player.maxHealth = PI.MAX_HEALTH;
+		this.Player.takingDamage = false;
+		this.Player.health = 3;
+		this.Player.maxHealth = this.GM.MAX_PLAYER_HEALTH;
 		var tween = this.M.T.fadeOutB(this.Player,{alpha:.3,duration:100});
 		tween.repeat(5);
 		tween.yoyo(true);
 		this.M.T.onComplete(tween,function () {
-			this.Player.damaging = false;
+			this.Player.takingDamage = false;
 		});
-		this.Player.Udamage = function () {
-			if (this.damaging) return;
-			this.damaging = true;
+		this.Player.takeDamage = function () {
+			if (this.takingDamage) return;
+			this.takingDamage = true;
 			this.damage(1);
 			tween.start();
 		};
-		var radius = PI.HIT_RANGE_RADIUS;
+		var radius = 30;
 		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
 		this.Player.events.onKilled.add(this.onKilledPlayer, this);
 		var weapon = this.genPlayerWeapon();
@@ -217,9 +271,9 @@ BasicGame.Play.prototype = {
 				} else {
 					weapon.fire();
 				}
-				weapon.debug(16,32,true); // TODO del
 			}
 		};
+		// TODO addChild radius range sprite = white circle
 		this.PlayerWeapon = weapon;
 	},
 
@@ -228,20 +282,14 @@ BasicGame.Play.prototype = {
 	},
 
 	genPlayerWeapon: function () {
-		var weapon = this.add.weapon(40, 'Bullet');
-		// weapon.setBulletFrames(0, 80, true);
+		var weapon = this.add.weapon(40, 'PlayerBullet');
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-		weapon.bulletAngleOffset = 90;
 		// weapon.bulletAngleVariance = 10;
 		// weapon.bulletSpeedVariance = 200;
 		weapon.bulletSpeed = 1000;
-		// weapon.fireRate = 1000;
 		weapon.fireRate = 200;
-		// weapon.autofire = true;
 		weapon.trackSprite(this.Player, this.Player.width, this.Player.height/2, true);
-		// weapon.trackSprite(this.Player, this.Player.width/2, 0, false);
 		weapon.multiFire = true;
-		console.log(weapon); // TODO del
 		return weapon;
 	},
 
@@ -249,19 +297,17 @@ BasicGame.Play.prototype = {
 		this.Enemys = this.add.group();
 		this.Enemys.enableBody = true;
 		this.Enemys.physicsBodyType = Phaser.Physics.ARCADE;
-		// this.Enemys.createMultiple(1,'Enemy_1');
-		// this.Enemys.createMultiple(10,'Enemy_1');
+		// this.Enemys.createMultiple(1,'Enemy_5'); // TODO del
+		// this.Enemys.createMultiple(10,'Enemy_1'); // TODO del
 		this.Enemys.createMultiple(3,this.GM.EnemyKeys);
-		// this.Enemys.setAll('anchor.x', .5);
-		// this.Enemys.setAll('anchor.y', .5);
-		this.Enemys.setAll('outOfBoundsKill', true);
-		this.Enemys.setAll('checkWorldBounds', true);
+		this.Enemys.setAll('anchor.x', .5);
+		this.Enemys.setAll('anchor.y', .5);
 		this.Enemys.shuffle();
 		this.EnemysWeapon = this.genEnemyWeapon();
 	},
 
 	genEnemyWeapon: function () {
-		var weapon = this.add.weapon(40, 'Attack');
+		var weapon = this.add.weapon(40, 'EnemyBullet');
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 		weapon.bulletAngleOffset = 90;
 		weapon.bulletSpeed = 1000;
@@ -410,7 +456,7 @@ BasicGame.Play.prototype = {
 
 	render: function () {
 		this.game.debug.body(this.Player);
-		// for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
+		for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
 		this.game.debug.pointer(this.game.input.activePointer);
 	},
 
@@ -418,7 +464,8 @@ BasicGame.Play.prototype = {
 		if (__ENV!='prod') {
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
-			if(this.M.H.getQuery('gameOver')) this.gameOver();
+			this.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(this.gameOver, this);
+			if(this.M.H.getQuery('curDifficulty')) this.GM.curDifficulty = this.M.H.getQuery('curDifficulty');
 			this.stage.backgroundColor = '#333333';
 		}
 	},
