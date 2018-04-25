@@ -39,7 +39,7 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			imgType: 'atlasJSONHash',
 			imgAnim: 10,
 			health: 5,
-			score: 900,
+			score: 1000,
 			speed: 300,
 			Shoter: true,
 			circleShot: true,
@@ -49,7 +49,7 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			imgType: 'atlasJSONHash',
 			imgAnim: 16,
 			health: 4,
-			score: 1000,
+			score: 1500,
 			speed: 1500,
 			Tracker: true,
 		}),
@@ -97,5 +97,3 @@ BasicGame.Boot.prototype.makeEnemyInfo = function (option) {
 // level_1,2,5,8,10 Life++ item MAX5
 // per 20s_Item
 // item -> tripleShot,power up
-
-// boss logic

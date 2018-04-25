@@ -13,7 +13,7 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		var imageAssets = {
-			'Dialog': './images/public/dialogs/Dialog_3.png',
+			'Dialog': './images/public/dialogs/Dialog_4.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',
 			'Player': './images/eff/Tree.png',
 			'PlayerBullet': './images/tiatia/PlayerBullet.png',
@@ -22,6 +22,8 @@ BasicGame.Preloader.prototype = {
 			'MtBg_1': './images/sirorun/mountain.png',
 			'DamageEffect': './images/cafenozombiko/Shine.png',
 			'KillEffect': './images/tiatia/KillEffect.png',
+			'Ohepan': './images/tiatia/Ohepan.png',
+			'Oheneko': './images/tiatia/Oheneko.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadEnemyImgs();

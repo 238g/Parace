@@ -31,7 +31,7 @@ BasicGame.Play.prototype = {
 			isPlaying: false,
 			timer: 1000,
 			respawnEnemyTimer: 500,
-			respawnEnemyCountdown: 1000,
+			respawnEnemyCountdown: 1500,
 			EnemyInfo: this.M.getConf('EnemyInfo'),
 			EnemyInfoLength: this.M.getGlobal('EnemyInfoLength'),
 			DifficultyInfo: this.genDifficultyInfo(),
@@ -74,7 +74,7 @@ BasicGame.Play.prototype = {
 				enemyFireRate: 3500,
 			},
 			'Blue': {
-				enemyTint: 0x3399ff,
+				enemyTint: 0x00ffff,
 				magnification: 1.5,
 				respawnEnemyCountdown: 800,
 				enemyBulletSpeed: 800,
@@ -186,9 +186,7 @@ BasicGame.Play.prototype = {
 			if (respawnEnemy.x<-100) self.resetEnemyToGroup(respawnEnemy);
 		};
 		respawnEnemy.update = function () {
-			for (var key in this.updateList) {
-				this.updateList[key]();
-			}
+			for (var key in this.updateList) this.updateList[key]();
 		};
 	},
 
@@ -319,19 +317,16 @@ BasicGame.Play.prototype = {
 	},
 
 	setDifficultyFromLevel: function () {
-		switch (this.GM.curLevel) {
-			case 1:
-			case 2:
-			case 3:
-			case 4: this.GM.curDifficulty = 'Normal'; break;
-			case 5:
-			case 6:
-			case 7: this.GM.curDifficulty = 'Yellow'; break;
-			case 8:
-			case 9:
-			case 10: this.GM.curDifficulty = 'Blue'; break;
-			case 20: this.GM.curDifficulty = 'Purple'; break;
-			default: this.GM.curDifficulty = 'Red'; break;
+		if (this.GM.curLevel > 19) {
+			this.GM.curDifficulty = 'Purple';
+		} else if (this.GM.curLevel > 9) {
+			this.GM.curDifficulty = 'Red';
+		} else if (this.GM.curLevel > 6) {
+			this.GM.curDifficulty = 'Blue';
+		} else if (this.GM.curLevel > 3) {
+			this.GM.curDifficulty = 'Yellow';
+		} else {
+			this.GM.curDifficulty = 'Normal';
 		}
 	},
 
@@ -339,6 +334,7 @@ BasicGame.Play.prototype = {
 		var enemy = this.add.sprite(0,0,this.rnd.pick(this.GM.EnemyKeys));
 		enemy.kill();
 		enemy.anchor.setTo(.5);
+		enemy.body.setCircle(enemy.width/2);
 		this.Enemys.add(enemy);
 	},
 
@@ -456,10 +452,13 @@ BasicGame.Play.prototype = {
 		this.Enemys.enableBody = true;
 		this.Enemys.physicsBodyType = Phaser.Physics.ARCADE;
 		// this.Enemys.createMultiple(1,'Enemy_7'); // TODO del
-		this.Enemys.createMultiple(5,'Enemy_7'); // TODO del
+		var arr=[];for (var i=1;i<=7;i++) {arr.push('Enemy_'+i);}this.Enemys.createMultiple(1,arr); // TODO del
 		// this.Enemys.createMultiple(3,this.GM.EnemyKeys);
 		this.Enemys.setAll('anchor.x', .5);
 		this.Enemys.setAll('anchor.y', .5);
+		this.Enemys.forEach(function (enemy) {
+			enemy.body.setCircle(enemy.width/2);
+		}, this);
 		this.Enemys.shuffle();
 		this.EnemysWeapon = this.genEnemyWeapon();
 	},
@@ -469,9 +468,7 @@ BasicGame.Play.prototype = {
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 		weapon.bulletAngleOffset = 90;
 		weapon.bulletSpeed = 500;
-		// weapon.bulletSpeed = 1000;
 		weapon.fireRate = 4000;
-		// weapon.fireRate = 3000;
 		weapon.multiFire = true;
 		return weapon;
 	},
@@ -547,8 +544,8 @@ BasicGame.Play.prototype = {
 	genScoreTextSprite: function () {
 		var baseText = 'スコア: ';
 		var textStyle = this.BaseTextStyle();
-		textStyle.fontSize = 60;
-		var textSprite = this.M.S.genText(150,600,baseText+0,textStyle);
+		var textSprite = this.M.S.genText(10,10,baseText+0,textStyle);
+		textSprite.setAnchor(0,0);
 		this.HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
 		};
@@ -556,7 +553,9 @@ BasicGame.Play.prototype = {
 
 	genGameOverTextSprite: function () {
 		var baseText = '終了！！';
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,this.BaseTextStyle());
+		var textStyle = this.BaseTextStyle();
+		textStyle.fontSize = 120;
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,textStyle);
 		textSprite.setAnchor(.5);
 		textSprite.setScale(0,0);
 		this.HUD.showGameOver = function () {
@@ -635,38 +634,36 @@ BasicGame.Play.prototype = {
 	},
 
 	ResultContainer: function () {
-		// TODO lay
 		this.M.S.genDialog('Dialog',{
 			onComplete:this.openedResult,
 		}).tweenShow();
 	},
 
-	// TODO lay
 	openedResult: function () {
+		var x = this.world.centerX;
 		var y = this.world.centerY;
-		this.genResultTextSprite(y-500,'結果発表');
-		this.genResultTextSprite(y-350,'モード: ');
-		this.genResultTextSprite(y-220,'ダーツ: ');
-		this.genResultTextSprite(y-90,'ターン: ');
-		this.genResultTextSprite(y+40,'結果: ');
-		this.genResultLabel(y+200,'もう一度プレイ',function () {
+		this.genResultTextSprite(x,y-90,'結果発表');
+		this.genResultTextSprite(x,y+40,'レベル: '+this.GM.curLevel); // -300
+		this.genResultTextSprite(x,y+140,'スコア: '+this.GM.score); // -300
+		var marginX = 500;
+		this.genResultLabel(x-marginX,y+350,'もう一度プレイ',function () {
 			this.M.NextScene('Play');
 		},600);
-		this.genResultLabel(y+350,'結果をツイート',this.tweet,800);
-		this.genResultLabel(y+500,'タイトルにもどる',function () {
+		this.genResultLabel(x,y+350,'結果をツイート',this.tweet,800);
+		this.genResultLabel(x+marginX,y+350,'タイトルにもどる',function () {
 			this.M.NextScene('Title');
 		},1000);
 	},
 
-	genResultTextSprite: function (y,text) {
-		var textSprite = this.M.S.genText(this.world.centerX,y,text,this.BaseTextStyle(80));
+	genResultTextSprite: function (x,y,text) {
+		var textSprite = this.M.S.genText(x,y,text,this.BaseTextStyle(80));
 		textSprite.setScale(0,0);
 		textSprite.addTween('popUpB',{duration:800});
 		textSprite.startTween('popUpB');
 	},
 
-	genResultLabel: function (y,text,func,delay) {
-		var label = this.M.S.BasicGrayLabel(this.world.centerX,y,func,text,this.BaseTextStyle(50),{tint:this.M.getConst('MAIN_TINT')});
+	genResultLabel: function (x,y,text,func,delay) {
+		var label = this.M.S.BasicGrayLabel(x,y,func,text,this.BaseTextStyle(50),{tint:this.M.getConst('MAIN_TINT')});
 		label.setScale(0,0);
 		label.addTween('popUpB',{duration:800,delay:delay});
 		label.startTween('popUpB');
@@ -686,7 +683,8 @@ BasicGame.Play.prototype = {
 				case 7: emoji += '🐰'; break;
 			}
 		}
-		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
+		var text = '背負ってんだよぁ人生…' // words...???
+					'『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+emoji+'\n'
 					+emoji+'\n';
 		var hashtags = ',';
@@ -706,16 +704,20 @@ BasicGame.Play.prototype = {
 
 	render: function () {
 		this.game.debug.body(this.Player);
-		// for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
-		this.game.debug.pointer(this.game.input.activePointer);
+		for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
+		// for (var key in this.EnemysWeapon.bullets.children) this.game.debug.body(this.EnemysWeapon.bullets.children[key]);
+		// this.game.debug.pointer(this.game.input.activePointer);
 	},
 
 	test: function () {
 		if (__ENV!='prod') {
+			this.stage.disableVisibilityChange = false;
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
 			this.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(this.gameOver, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(this.levelUp, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {this.GM.curLevel=20;this.levelUp();}, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(this.addNewEnemyKey, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(function () {this.GM.bossTimeCounter=29;}, this);
 			if(this.M.H.getQuery('curDifficulty')) this.GM.curDifficulty = this.M.H.getQuery('curDifficulty');
 			this.stage.backgroundColor = '#333333';
