@@ -20,6 +20,8 @@ BasicGame.Preloader.prototype = {
 			'EnemyBullet': './images/tiatia/EnemyBullet.png',
 			'SkyBg_1': './images/sirorun/sky.png',
 			'MtBg_1': './images/sirorun/mountain.png',
+			'DamageEffect': './images/cafenozombiko/Shine.png',
+			'KillEffect': './images/tiatia/KillEffect.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadEnemyImgs();
@@ -28,6 +30,7 @@ BasicGame.Preloader.prototype = {
 
 	loadEnemyImgs: function () {
 		var EnemyInfo = this.M.getConf('EnemyInfo');
+		var EnemyInfoLength = 0;
 		for (var key in EnemyInfo) {
 			var info = EnemyInfo[key];
 			if (info.imgType == 'atlasJSONHash') {
@@ -35,7 +38,9 @@ BasicGame.Preloader.prototype = {
 			} else {
 				this.load.image(key, info.imgPath);
 			}
+			EnemyInfoLength++;
 		}
+		this.M.setGlobal('EnemyInfoLength', EnemyInfoLength);
 	},
 
 	loadAudio: function () {

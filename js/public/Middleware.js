@@ -520,13 +520,16 @@ Middleware.prototype.TweenManager.prototype = {
 			{alpha:0}, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
 	},
-	// [alpha, duration, delay]
+	// [alpha, duration, delay, yoyo, repeat]
 	fadeOutB: function (target, option) {
 		var Scene = this.M.getScene();
 		option = option || {};
-		return Scene.add.tween(target).to(
+		var tween =  Scene.add.tween(target).to(
 			{alpha:option.alpha||0}, option.duration, 
 			Phaser.Easing.Exponential.Out, false, option.delay);
+		if (option.yoyo) tween.yoyo(true);
+		if (option.repeat) tween.repeat(option.repeat);
+		return tween;
 	},
 	// [durations, delay]
 	stressA: function (target, option) {

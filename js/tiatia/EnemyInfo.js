@@ -1,13 +1,13 @@
 BasicGame.Boot.prototype.genEnemyInfo = function () {
 	return {
-		'Enemy_1': this.setEnemyInfo({
+		'Enemy_1': this.makeEnemyInfo({
 			imgPath: './images/tiatia/Enemy_1.png',
 			health: 3,
 			score: 100,
 			speed: 500,
 			Waver: true,
 		}),
-		'Enemy_2': this.setEnemyInfo({
+		'Enemy_2': this.makeEnemyInfo({
 			imgPath: './images/tiatia/Enemy_2/Enemy_2',
 			imgType: 'atlasJSONHash',
 			imgAnim: 12,
@@ -16,7 +16,7 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			speed: 1000,
 			Tracker: true,
 		}),
-		'Enemy_3': this.setEnemyInfo({
+		'Enemy_3': this.makeEnemyInfo({
 			imgPath: './images/tiatia/Enemy_3/Enemy_3',
 			imgType: 'atlasJSONHash',
 			imgAnim: 12,
@@ -25,7 +25,7 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			speed: 200,
 			Shoter: true,
 		}),
-		'Enemy_4': this.setEnemyInfo({
+		'Enemy_4': this.makeEnemyInfo({
 			imgPath: './images/tiatia/Enemy_4/Enemy_4',
 			imgType: 'atlasJSONHash',
 			imgAnim: 12,
@@ -34,27 +34,48 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			speed: 100,
 			Tracker: true,
 		}),
-		'Enemy_5': this.setEnemyInfo({
+		'Enemy_5': this.makeEnemyInfo({
 			imgPath: './images/tiatia/Enemy_5/Enemy_5',
 			imgType: 'atlasJSONHash',
 			imgAnim: 10,
 			health: 5,
-			score: 1000,
+			score: 900,
 			speed: 300,
 			Shoter: true,
-			circleShot: 5,
+			circleShot: true,
 		}),
-		'Boss': this.setEnemyInfo({
+		'Enemy_6': this.makeEnemyInfo({
+			imgPath: './images/tiatia/Enemy_6/Enemy_6',
+			imgType: 'atlasJSONHash',
+			imgAnim: 16,
+			health: 4,
+			score: 1000,
+			speed: 1500,
+			Tracker: true,
+		}),
+		'Enemy_7': this.makeEnemyInfo({
+			imgPath: './images/tiatia/Enemy_7/Enemy_7',
+			imgType: 'atlasJSONHash',
+			imgAnim: 12,
+			health: 6,
+			score: 1300,
+			speed: 300,
+			Waver: true,
+			Tracker: true,
+			Shoter: true,
+			circleShot: true,
+		}),
+		'Boss': this.makeEnemyInfo({
 			imgPath: './images/ankimo_drrrr/player.png',
 			health: 50,
 			score: 10000,
-			speed: 0,
+			speed: 3,
 			isBoss: true,
 		}),
 	};
 };
 
-BasicGame.Boot.prototype.setEnemyInfo = function (option) {
+BasicGame.Boot.prototype.makeEnemyInfo = function (option) {
 	var EnemyInfo = {
 		imgPath: './images/tiatia/Enemy_1.png',
 		imgType: 'image',
@@ -65,22 +86,16 @@ BasicGame.Boot.prototype.setEnemyInfo = function (option) {
 		Waver: false,
 		Tracker: false,
 		Shoter: false,
-		circleShot: 0,
+		circleShot: false,
 		isBoss: false,
 	};
 	for (var key in option) EnemyInfo[key] = option[key];
 	return EnemyInfo;
 };
 
-// game system
-// Level 1~10
-// enemy++ per 10s
-// Boss first 30 . After per 30 from killed
-// level_1,2,5,8,10 Life++ MAX5
-// per 20s_Item
-// item -> tripleShot[,spread]
-
 // bg change
-// particles
-// circle shot
+// level_1,2,5,8,10 Life++ item MAX5
+// per 20s_Item
+// item -> tripleShot,power up
+
 // boss logic
