@@ -310,10 +310,11 @@ BasicGame.Play.prototype = {
 	},
 
 	enemyHitsPlayer: function (player, enemy) {
-		player.takeDamage();
-		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
-		if (enemy.isBoss) return;
-		this.resetEnemyToGroup(enemy);
+		if (player.takeDamage()) {
+			this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
+			if (enemy.isBoss) return;
+			this.resetEnemyToGroup(enemy);
+		}
 	},
 
 	getItem: function (player, item) {
@@ -381,9 +382,10 @@ BasicGame.Play.prototype = {
 	},
 
 	hitBulletToPlayer: function (player, bullet) {
-		bullet.kill();
-		player.takeDamage();
-		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
+		if (player.takeDamage()) {
+			bullet.kill();
+			this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
+		}
 	},
 
 	BgContainer: function () {
@@ -456,11 +458,12 @@ BasicGame.Play.prototype = {
 			this.Player.takingDamage = false;
 		});
 		this.Player.takeDamage = function () {
-			if (this.takingDamage) return;
+			if (this.takingDamage) return false;
 			this.takingDamage = true;
 			this.damage(1);
 			tween.start();
 			this.bulletPower = 1;
+			return true;
 		};
 	},
 
