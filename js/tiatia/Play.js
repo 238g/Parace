@@ -47,6 +47,9 @@ BasicGame.Play.prototype = {
 			existingBoss: false,
 			bossTimeCounter: 0,
 			ADD_BOSS_TIMING: 30,
+			itemTimeCounter: 0,
+			ADD_ITEM_TIMING: 20,
+			ItemKeys: ['Ohepan','Oheneko'],
 		};
 	},
 
@@ -117,6 +120,7 @@ BasicGame.Play.prototype = {
 			this.GM.timer = 1000;
 			this.addNewEnemyKey();
 			this.checkSpawnBoss();
+			this.checkAddItem();
 		}
 		this.GM.timer-=this.time.elapsed;
 	},
@@ -256,7 +260,7 @@ BasicGame.Play.prototype = {
 		boss.score = EI.score*m;
 		boss.isBoss = EI.isBoss;
 		boss.tint = DI.enemyTint;
-		boss.speed = EI.speed*m;
+		boss.speed = EI.speed;
 		boss.baseHealth = EI.health*m;
 		this.Enemys.add(boss);
 		this.BG.showWarning();
@@ -301,9 +305,39 @@ BasicGame.Play.prototype = {
 		};
 	},
 
+	checkAddItem: function () {
+		this.GM.itemTimeCounter++;
+		if (this.GM.itemTimeCounter >= this.GM.ADD_ITEM_TIMING) {
+			this.GM.itemTimeCounter = 0;
+			this.addItemToWorld();
+		}
+	},
+
+	addItemToWorld: function () {
+		var addItem = this.Items.getRandom();
+		if (addItem) {
+			var x = this.world.width;
+			var y = this.world.randomY;
+			addItem.reset(x,y);
+			addItem.body.velocity.x = -200;
+			var self = this;
+			addItem.update = function () {
+				if (addItem.x<-100) self.resetItemsToGroup(addItem);
+			};
+		}
+	},
+
+	resetItemsToGroup: function (item) {
+		item.destroy();
+		var newItem = this.add.sprite(0,0,this.rnd.pick(this.GM.ItemKeys));
+		newItem.kill();
+		newItem.anchor.setTo(.5);
+		this.Items.add(newItem);
+	},
+
 	collisionManager: function () {
 		this.physics.arcade.overlap(this.Player, this.Enemys, this.enemyHitsPlayer, null, this);
-		this.physics.arcade.overlap(this.Player, this.Items, this.getItem);
+		this.physics.arcade.overlap(this.Player, this.Items, this.getItem, null, this);
 		this.physics.arcade.overlap(this.PlayerWeapon.bullets, this.Enemys, this.hitBulletToEnemy, null, this);
 		this.physics.arcade.overlap(this.EnemysWeapon.bullets, this.Player, this.hitBulletToPlayer, null, this);
 		this.physics.arcade.overlap(this.SpecialEnemysWeapon.bullets, this.Player, this.hitBulletToPlayer, null, this);
@@ -318,7 +352,8 @@ BasicGame.Play.prototype = {
 	},
 
 	getItem: function (player, item) {
-		// TODO
+		this.resetItemsToGroup(item);
+		// TODO player power up
 	},
 
 	hitBulletToEnemy: function (bullet, enemy) {
@@ -435,7 +470,6 @@ BasicGame.Play.prototype = {
 		this.Player.anchor.setTo(.5);
 		this.Player.inputEnabled = true;
 		this.Player.input.enableDrag(true);
-		// TODO doubleShot?
 		this.Player.tripleShot = false;
 		this.Player.takingDamage = false;
 		this.Player.health = 30; // TODO del
@@ -448,6 +482,7 @@ BasicGame.Play.prototype = {
 		var radius = 30;
 		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
 		this.Player.events.onKilled.add(this.onKilledPlayer, this);
+		this.genPlayerHitCoreSprite(radius);
 	},
 
 	setDamageEffectToPlayer: function () {
@@ -483,11 +518,19 @@ BasicGame.Play.prototype = {
 			}
 		};
 		this.PlayerWeapon = weapon;
-		// TODO addChild radius range sprite = white circle
 	},
 
 	onKilledPlayer: function () {
 		this.gameOver();
+	},
+
+	genPlayerHitCoreSprite: function (radius) {
+		var circleSprite = this.M.S.genBmpCircleSprite(0,0,radius*2-10,radius*2-10,'#ffffff');
+		var circleFrameSprite = this.M.S.genBmpCircleSprite(0,0,radius*2,radius*2,'#000000');
+		circleSprite.anchor.setTo(.5);
+		circleFrameSprite.anchor.setTo(.5);
+		this.Player.addChild(circleFrameSprite);
+		this.Player.addChild(circleSprite);
 	},
 
 	genPlayerWeapon: function () {
@@ -544,14 +587,13 @@ BasicGame.Play.prototype = {
 	},
 
 	ItemContainer: function () {
-		this.Itmes = this.add.group();
-		this.Itmes.enableBody = true;
-		this.Itmes.physicsBodyType = Phaser.Physics.ARCADE;
-		// this.Itmes.createMultiple(1,[]);
-		// this.Itmes.setAll('anchor.x', .5);
-		// this.Itmes.setAll('anchor.y', .5);
-		// this.Itmes.shuffle();
-		// TODO expand item bounds
+		this.Items = this.add.group();
+		this.Items.enableBody = true;
+		this.Items.physicsBodyType = Phaser.Physics.ARCADE;
+		this.Items.createMultiple(1,this.GM.ItemKeys);
+		this.Items.setAll('anchor.x', .5);
+		this.Items.setAll('anchor.y', .5);
+		this.Items.shuffle();
 	},
 
 	EffectContainer: function () {
@@ -782,9 +824,9 @@ BasicGame.Play.prototype = {
 
 	render: function () {
 		this.game.debug.body(this.Player);
-		for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
+		// for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
 		// for (var key in this.EnemysWeapon.bullets.children) this.game.debug.body(this.EnemysWeapon.bullets.children[key]);
-		for (var key in this.SpecialEnemysWeapon.bullets.children) this.game.debug.body(this.SpecialEnemysWeapon.bullets.children[key]);
+		// for (var key in this.SpecialEnemysWeapon.bullets.children) this.game.debug.body(this.SpecialEnemysWeapon.bullets.children[key]);
 		// this.game.debug.pointer(this.game.input.activePointer);
 	},
 
@@ -796,6 +838,7 @@ BasicGame.Play.prototype = {
 			this.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(this.levelUp, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {this.GM.curLevel=20;this.levelUp();}, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(this.addNewEnemyKey, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.I).onDown.add(this.addItemToWorld, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(function () {this.GM.bossTimeCounter=29;}, this);
 			if(this.M.H.getQuery('curDifficulty')) this.GM.curDifficulty = this.M.H.getQuery('curDifficulty');
 			this.stage.backgroundColor = '#333333';
