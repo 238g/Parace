@@ -63,7 +63,7 @@ BasicGame.Boot.prototype.genEnemyInfo = function () {
 			Waver: true,
 			Tracker: true,
 			Shoter: true,
-			circleShot: true,
+			specialShot: true,
 		}),
 		'Boss': this.makeEnemyInfo({
 			imgPath: './images/ankimo_drrrr/player.png',
@@ -87,6 +87,7 @@ BasicGame.Boot.prototype.makeEnemyInfo = function (option) {
 		Tracker: false,
 		Shoter: false,
 		circleShot: false,
+		specialShot: false,
 		isBoss: false,
 	};
 	for (var key in option) EnemyInfo[key] = option[key];

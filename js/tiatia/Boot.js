@@ -3,6 +3,7 @@ BasicGame.Boot = function() {};
 BasicGame.Boot.prototype = {
 	init: function () {
 		this.M.BootInit(true);
+		this.stage.disableVisibilityChange = false;
 	},
 
 	preload: function () {

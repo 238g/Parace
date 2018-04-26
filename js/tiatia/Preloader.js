@@ -12,6 +12,8 @@ BasicGame.Preloader.prototype = {
 	loadAssets: function () {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+		this.load.atlasJSONHash('FireBall', 
+			'./images/tiatia/FireBall/FireBall.png', './images/tiatia/FireBall/FireBall.json');
 		var imageAssets = {
 			'Dialog': './images/public/dialogs/Dialog_4.png',
 			'Logo': './images/AliceMononobe/Logo.jpg',

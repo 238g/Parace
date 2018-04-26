@@ -7,6 +7,8 @@ BasicGame.Play.prototype = {
 		this.PlayerWeapon = {};
 		this.Enemys = {};
 		this.EnemysWeapon = {};
+		this.SpecialEnemysWeapon = {};
+		this.Boss = {};
 		this.Items = {};
 		this.Effect = {};
 		this.HUD = {};
@@ -42,9 +44,6 @@ BasicGame.Play.prototype = {
 			curDifficulty: 'Normal',
 			curLevel: 1,
 			score: 0,
-			MAX_PLAYER_HEALTH: 5,
-			// MAX_BULLET_POWER: 5,
-			bulletPower: 1,
 			existingBoss: false,
 			bossTimeCounter: 0,
 			ADD_BOSS_TIMING: 30,
@@ -124,10 +123,10 @@ BasicGame.Play.prototype = {
 
 	respawnEnemy: function () {
 		var respawnEnemy = this.Enemys.getFirstDead();
-		if (respawnEnemy) this.givePowerToEnemy(respawnEnemy);
+		if (respawnEnemy) this.giveAbilitiesToEnemy(respawnEnemy);
 	},
 
-	givePowerToEnemy: function (respawnEnemy) {
+	giveAbilitiesToEnemy: function (respawnEnemy) {
 		var EI = this.GM.EnemyInfo[respawnEnemy.key];
 		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
 		var m = DI.magnification;
@@ -145,48 +144,74 @@ BasicGame.Play.prototype = {
 			respawnEnemy.animations.add('Moving');
 			respawnEnemy.play('Moving', EI.imgAnim, true);
 		}
-		if (EI.Waver) {
-			var waveRange = this.rnd.between(100,300);
-			respawnEnemy.updateList.Waver = function () {
-				respawnEnemy.y = waveRange*Math.sin(respawnEnemy.x/waveRange)+y;
-			};
-		}
+		if (EI.Waver) this.giveAbilityWaver(respawnEnemy,y);
 		if (EI.Tracker) this.physics.arcade.moveToObject(respawnEnemy,this.Player,EI.speed);
 		if (EI.Shoter) {
 			respawnEnemy.body.maxVelocity.x = 300;
 			if (EI.circleShot) {
-				respawnEnemy.updateList.Shoter = function () {
-					if (respawnEnemy.alive) {
-						var maxDis = self.world.width;
-						var ex = respawnEnemy.x;
-						var ey = respawnEnemy.y;
-						self.EnemysWeapon.fireFrom.x = ex;
-						self.EnemysWeapon.fireFrom.y = ey;
-						self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
-						self.EnemysWeapon.fireAtXY(ex+maxDis,ey); // East
-						self.EnemysWeapon.fireAtXY(ex,ey-maxDis); // North
-						self.EnemysWeapon.fireAtXY(ex,ey+maxDis); // South
-						self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
-						self.EnemysWeapon.fireAtXY(ex+maxDis,ey-maxDis); // NorthEast
-						self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
-						self.EnemysWeapon.fireAtXY(ex+maxDis,ey+maxDis); // SouthEast
-					}
-				};
+				this.giveAbilityCircleShoter(respawnEnemy);
+			} else if (EI.specialShot) {
+				this.giveAbilitySpecialShoter(respawnEnemy);
 			} else {
-				respawnEnemy.updateList.Shoter = function () {
-					if (respawnEnemy.alive) {
-						self.EnemysWeapon.fireFrom.x = respawnEnemy.x;
-						self.EnemysWeapon.fireFrom.y = respawnEnemy.y;
-						self.EnemysWeapon.fireAtSprite(self.Player);
-					}
-				};
+				this.giveAbilityShoter(respawnEnemy);
 			}
 		}
+		var self = this;
 		respawnEnemy.updateList.worldBoundsKill = function () {
 			if (respawnEnemy.x<-100) self.resetEnemyToGroup(respawnEnemy);
 		};
 		respawnEnemy.update = function () {
 			for (var key in this.updateList) this.updateList[key]();
+		};
+	},
+
+	giveAbilityWaver: function (respawnEnemy,y) {
+		var waveRange = this.rnd.between(100,300);
+		respawnEnemy.updateList.Waver = function () {
+			respawnEnemy.y = waveRange*Math.sin(respawnEnemy.x/waveRange)+y;
+		};
+	},
+
+	giveAbilityCircleShoter: function (respawnEnemy) {
+		var self = this;
+		var maxDis = this.world.width;
+		respawnEnemy.updateList.Shoter = function () {
+			if (respawnEnemy.alive) {
+				var ex = respawnEnemy.x;
+				var ey = respawnEnemy.y;
+				self.EnemysWeapon.fireFrom.x = ex;
+				self.EnemysWeapon.fireFrom.y = ey;
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
+				self.EnemysWeapon.fireAtXY(ex+maxDis,ey); // East
+				self.EnemysWeapon.fireAtXY(ex,ey-maxDis); // North
+				self.EnemysWeapon.fireAtXY(ex,ey+maxDis); // South
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
+				self.EnemysWeapon.fireAtXY(ex+maxDis,ey-maxDis); // NorthEast
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
+				self.EnemysWeapon.fireAtXY(ex+maxDis,ey+maxDis); // SouthEast
+			}
+		};
+	},
+
+	giveAbilitySpecialShoter: function (respawnEnemy) {
+		var self = this;
+		respawnEnemy.updateList.Shoter = function () {
+			if (respawnEnemy.alive) {
+				self.SpecialEnemysWeapon.fireFrom.x = respawnEnemy.x;
+				self.SpecialEnemysWeapon.fireFrom.y = respawnEnemy.y;
+				self.SpecialEnemysWeapon.fireAtSprite(self.Player);
+			}
+		};
+	},
+
+	giveAbilityShoter: function (respawnEnemy) {
+		var self = this;
+		respawnEnemy.updateList.Shoter = function () {
+			if (respawnEnemy.alive) {
+				self.EnemysWeapon.fireFrom.x = respawnEnemy.x;
+				self.EnemysWeapon.fireFrom.y = respawnEnemy.y;
+				self.EnemysWeapon.fireAtSprite(self.Player);
+			}
 		};
 	},
 
@@ -226,40 +251,54 @@ BasicGame.Play.prototype = {
 		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
 		var m = DI.magnification;
 		var tween = this.M.T.moveB(boss,{xy:{x:'-500'},duration:4000});
-		this.M.T.onComplete(tween,function () {
-			this.HUD.hideWarningBoss();
-			boss.reset(boss.x,boss.y);
-			boss.health = 3; // TODO del
-			// boss.health = EI.health*m;
-			var bottomMargin = this.world.height-100;
-			var speed = EI.speed;
-			var self = this;
-			boss.update = function () {
-				if (boss.alive) {
-					boss.y += speed;
-					if (boss.y<100||boss.y>bottomMargin) speed *= -1;
-					var maxDis = self.world.width;
-					var ex = boss.x;
-					var ey = boss.y;
-					self.EnemysWeapon.fireFrom.x = ex;
-					self.EnemysWeapon.fireFrom.y = ey;
-					self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
-					self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
-					self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis/2); // NorthWestWest
-					self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
-					self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis/2); // SouthWestWest
-					self.EnemysWeapon.fireAtSprite(self.Player);
-				}
-			};
-		});
+		this.M.T.onComplete(tween,this.onSpawnedBoss);
 		tween.start();
 		boss.score = EI.score*m;
 		boss.isBoss = EI.isBoss;
 		boss.tint = DI.enemyTint;
+		boss.speed = EI.speed*m;
+		boss.baseHealth = EI.health*m;
 		this.Enemys.add(boss);
 		this.BG.showWarning();
 		this.HUD.showWarningBoss();
+		this.Boss = boss;
 		// TODO child HP gage
+	},
+
+	onSpawnedBoss: function () {
+		var boss = this.Boss;
+		this.HUD.hideWarningBoss();
+		boss.reset(boss.x,boss.y);
+		// boss.health = 100; // TODO del
+		// boss.health = 3; // TODO del
+		boss.health = boss.baseHealth;
+		this.setFiringToBoss();
+	},
+
+	setFiringToBoss: function () {
+		var boss = this.Boss;
+		var bottomMargin = this.world.height-100;
+		var self = this;
+		boss.update = function () {
+			if (boss.alive) {
+				boss.y += boss.speed;
+				if (boss.y<100||boss.y>bottomMargin) boss.speed *= -1;
+				var maxDis = self.world.width;
+				var ex = boss.x;
+				var ey = boss.y;
+				self.EnemysWeapon.fireFrom.x = ex;
+				self.EnemysWeapon.fireFrom.y = ey;
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis/2); // NorthWestWest
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
+				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis/2); // SouthWestWest
+				// self.EnemysWeapon.fireAtSprite(self.Player);
+				self.SpecialEnemysWeapon.fireFrom.x = ex;
+				self.SpecialEnemysWeapon.fireFrom.y = ey;
+				self.SpecialEnemysWeapon.fireAtSprite(self.Player);
+			}
+		};
 	},
 
 	collisionManager: function () {
@@ -267,10 +306,12 @@ BasicGame.Play.prototype = {
 		this.physics.arcade.overlap(this.Player, this.Items, this.getItem);
 		this.physics.arcade.overlap(this.PlayerWeapon.bullets, this.Enemys, this.hitBulletToEnemy, null, this);
 		this.physics.arcade.overlap(this.EnemysWeapon.bullets, this.Player, this.hitBulletToPlayer, null, this);
+		this.physics.arcade.overlap(this.SpecialEnemysWeapon.bullets, this.Player, this.hitBulletToPlayer, null, this);
 	},
 
 	enemyHitsPlayer: function (player, enemy) {
 		player.takeDamage();
+		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 		if (enemy.isBoss) return;
 		this.resetEnemyToGroup(enemy);
 	},
@@ -281,7 +322,7 @@ BasicGame.Play.prototype = {
 
 	hitBulletToEnemy: function (bullet, enemy) {
 		bullet.kill();
-		enemy.damage(this.GM.bulletPower);
+		enemy.damage(this.Player.bulletPower);
 		this.Effect.fireDamageEffect(bullet.right,bullet.y);
 		if (!enemy.alive) {
 			this.GM.score += enemy.score;
@@ -306,10 +347,11 @@ BasicGame.Play.prototype = {
 		this.GM.curLevel++;
 		this.setDifficultyFromLevel();
 		this.HUD.showLevelUp();
-		this.difficultySetting();
+		this.HUD.changeLevel(this.GM.curLevel);
+		this.setDifficultyValues();
 	},
 
-	difficultySetting: function () {
+	setDifficultyValues: function () {
 		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
 		this.GM.respawnEnemyCountdown = DI.respawnEnemyCountdown;
 		this.EnemysWeapon.bulletSpeed = DI.enemyBulletSpeed;
@@ -341,6 +383,7 @@ BasicGame.Play.prototype = {
 	hitBulletToPlayer: function (player, bullet) {
 		bullet.kill();
 		player.takeDamage();
+		this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 	},
 
 	BgContainer: function () {
@@ -393,26 +436,35 @@ BasicGame.Play.prototype = {
 		// TODO doubleShot?
 		this.Player.tripleShot = false;
 		this.Player.takingDamage = false;
-		this.Player.health = 3;
-		this.Player.maxHealth = this.GM.MAX_PLAYER_HEALTH;
+		this.Player.health = 30; // TODO del
+		// this.Player.health = 3;
+		this.Player.maxHealth = 5;
+		this.Player.bulletPower = 1;
+		this.Player.maxBulletPower = 5;
+		this.setDamageEffectToPlayer();
+		this.setWeaponToPlayer();
+		var radius = 30;
+		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
+		this.Player.events.onKilled.add(this.onKilledPlayer, this);
+	},
+
+	setDamageEffectToPlayer: function () {
 		var tween = this.M.T.fadeOutB(this.Player,{alpha:.3,duration:100});
 		tween.repeat(5);
 		tween.yoyo(true);
 		this.M.T.onComplete(tween,function () {
 			this.Player.takingDamage = false;
 		});
-		var self = this;
 		this.Player.takeDamage = function () {
 			if (this.takingDamage) return;
 			this.takingDamage = true;
 			this.damage(1);
 			tween.start();
-			self.GM.bulletPower = 1;
-			self.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
+			this.bulletPower = 1;
 		};
-		var radius = 30;
-		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
-		this.Player.events.onKilled.add(this.onKilledPlayer, this);
+	},
+
+	setWeaponToPlayer: function () {
 		var weapon = this.genPlayerWeapon();
 		this.Player.update = function () {
 			if (this.alive) {
@@ -427,8 +479,8 @@ BasicGame.Play.prototype = {
 				}
 			}
 		};
-		// TODO addChild radius range sprite = white circle
 		this.PlayerWeapon = weapon;
+		// TODO addChild radius range sprite = white circle
 	},
 
 	onKilledPlayer: function () {
@@ -451,7 +503,7 @@ BasicGame.Play.prototype = {
 		this.Enemys = this.add.group();
 		this.Enemys.enableBody = true;
 		this.Enemys.physicsBodyType = Phaser.Physics.ARCADE;
-		// this.Enemys.createMultiple(1,'Enemy_7'); // TODO del
+		// this.Enemys.createMultiple(10,'Enemy_7'); // TODO del
 		var arr=[];for (var i=1;i<=7;i++) {arr.push('Enemy_'+i);}this.Enemys.createMultiple(1,arr); // TODO del
 		// this.Enemys.createMultiple(3,this.GM.EnemyKeys);
 		this.Enemys.setAll('anchor.x', .5);
@@ -461,15 +513,30 @@ BasicGame.Play.prototype = {
 		}, this);
 		this.Enemys.shuffle();
 		this.EnemysWeapon = this.genEnemyWeapon();
+		this.SpecialEnemysWeapon = this.genSpecialEnemyWeapon();
 	},
 
 	genEnemyWeapon: function () {
-		var weapon = this.add.weapon(40, 'EnemyBullet');
+		var weapon = this.add.weapon(80, 'EnemyBullet');
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
 		weapon.bulletAngleOffset = 90;
 		weapon.bulletSpeed = 500;
 		weapon.fireRate = 4000;
 		weapon.multiFire = true;
+		return weapon;
+	},
+
+	genSpecialEnemyWeapon: function () {
+		var weapon = this.add.weapon(20, 'FireBall');
+		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
+		weapon.bulletAngleOffset = 180;
+		weapon.bulletSpeed = 1000;
+		weapon.fireRate = 3000;
+		weapon.multiFire = true;
+		weapon.onFire.add(function (bullet) {
+			bullet.animations.add('Moving');
+			bullet.play('Moving', 12, true);
+		}, this);
 		return weapon;
 	},
 
@@ -523,7 +590,6 @@ BasicGame.Play.prototype = {
 				particle.explode(500,5);
 			}
 		};
-
 	},
 
 	HUDContainer: function () {
@@ -531,11 +597,13 @@ BasicGame.Play.prototype = {
 			self: this,
 			showGameOver: null,
 			changeScore: null,
+			changeLevel: null,
 			showWarningBoss: null,
 			hideWarningBoss: null,
 			showLevelUp: null,
 		};
 		this.genScoreTextSprite();
+		this.genLevelTextSprite();
 		this.genGameOverTextSprite();
 		this.genLevelUpTextSprite();
 		this.genWarningBossTextSprite();
@@ -543,18 +611,27 @@ BasicGame.Play.prototype = {
 
 	genScoreTextSprite: function () {
 		var baseText = 'スコア: ';
-		var textStyle = this.BaseTextStyle();
-		var textSprite = this.M.S.genText(10,10,baseText+0,textStyle);
+		var textStyle = this.BaseTextStyle(60);
+		var textSprite = this.M.S.genText(10,10,baseText+this.GM.score,textStyle);
 		textSprite.setAnchor(0,0);
 		this.HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
 		};
 	},
 
+	genLevelTextSprite: function () {
+		var baseText = 'レベル: ';
+		var textStyle = this.BaseTextStyle(60);
+		var textSprite = this.M.S.genText(10,this.world.height,baseText+this.GM.curLevel,textStyle);
+		textSprite.setAnchor(0,1);
+		this.HUD.changeLevel = function (val) {
+			textSprite.changeText(baseText+val);
+		};
+	},
+
 	genGameOverTextSprite: function () {
 		var baseText = '終了！！';
-		var textStyle = this.BaseTextStyle();
-		textStyle.fontSize = 120;
+		var textStyle = this.BaseTextStyle(120);
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,textStyle);
 		textSprite.setAnchor(.5);
 		textSprite.setScale(0,0);
@@ -565,8 +642,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genLevelUpTextSprite: function () {
-		var textStyle = this.BaseTextStyle();
-		textStyle.fontSize = 150;
+		var textStyle = this.BaseTextStyle(150);
 		var baseText = 'LEVEL ';
 		var x = this.world.width+500;
 		var y = this.world.centerY-200;
@@ -587,8 +663,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genWarningBossTextSprite: function () {
-		var textStyle = this.BaseTextStyle();
-		textStyle.fontSize = 200;
+		var textStyle = this.BaseTextStyle(200);
 		var baseText = 'BOSS';
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,textStyle);
 		textSprite.setAnchor(.5);
@@ -706,12 +781,12 @@ BasicGame.Play.prototype = {
 		this.game.debug.body(this.Player);
 		for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
 		// for (var key in this.EnemysWeapon.bullets.children) this.game.debug.body(this.EnemysWeapon.bullets.children[key]);
+		for (var key in this.SpecialEnemysWeapon.bullets.children) this.game.debug.body(this.SpecialEnemysWeapon.bullets.children[key]);
 		// this.game.debug.pointer(this.game.input.activePointer);
 	},
 
 	test: function () {
 		if (__ENV!='prod') {
-			this.stage.disableVisibilityChange = false;
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
 			this.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(this.gameOver, this);
