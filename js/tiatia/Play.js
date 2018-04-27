@@ -23,6 +23,7 @@ BasicGame.Play.prototype = {
 		this.EnemyContainer();
 		this.ItemContainer();
 		this.EffectContainer();
+		this.PlayerHealthHeartsContainer();
 		this.HUDContainer();
 		this.ready();
 		this.test();
@@ -39,7 +40,7 @@ BasicGame.Play.prototype = {
 			DifficultyInfo: this.genDifficultyInfo(),
 			EnemyKeys: this.setFirstEnemyKeys(),
 			EnemyKeyTimeCounter: 0,
-			ADD_ENEMY_KEY_TIMING: 20,
+			ADD_ENEMY_KEY_TIMING: 18,
 			fulfillEnemyKeys: false,
 			curDifficulty: 'Normal',
 			curLevel: 1,
@@ -48,8 +49,9 @@ BasicGame.Play.prototype = {
 			bossTimeCounter: 0,
 			ADD_BOSS_TIMING: 30,
 			itemTimeCounter: 0,
-			ADD_ITEM_TIMING: 20,
-			ItemKeys: ['Ohepan','Oheneko'],
+			ADD_ITEM_TIMING: 21,
+			ItemKeys: ['Ohepan','Oheneko','HealItem'],
+			playerSpecialWeaponTimeCounter: 0,
 		};
 	},
 
@@ -67,6 +69,7 @@ BasicGame.Play.prototype = {
 				respawnEnemyCountdown: 1000,
 				enemyBulletSpeed: 500,
 				enemyFireRate: 4000,
+				changeBgNum: 1,
 			},
 			'Yellow': {
 				enemyTint: 0xffff66,
@@ -74,6 +77,7 @@ BasicGame.Play.prototype = {
 				respawnEnemyCountdown: 1000,
 				enemyBulletSpeed: 700,
 				enemyFireRate: 3500,
+				changeBgNum: 2,
 			},
 			'Blue': {
 				enemyTint: 0x00ffff,
@@ -81,6 +85,7 @@ BasicGame.Play.prototype = {
 				respawnEnemyCountdown: 800,
 				enemyBulletSpeed: 800,
 				enemyFireRate: 3000,
+				changeBgNum: null,
 			},
 			'Red': {
 				enemyTint: 0xff3300,
@@ -88,6 +93,7 @@ BasicGame.Play.prototype = {
 				respawnEnemyCountdown: 600,
 				enemyBulletSpeed: 1000,
 				enemyFireRate: 2000,
+				changeBgNum: 3,
 			},
 			'Purple': {
 				enemyTint: 0x9900FF,
@@ -95,6 +101,7 @@ BasicGame.Play.prototype = {
 				respawnEnemyCountdown: 500,
 				enemyBulletSpeed: 1500,
 				enemyFireRate: 1000,
+				changeBgNum: null,
 			},
 		};
 	},
@@ -121,6 +128,7 @@ BasicGame.Play.prototype = {
 			this.addNewEnemyKey();
 			this.checkSpawnBoss();
 			this.checkAddItem();
+			this.checkPlayerSpecialWeapon();
 		}
 		this.GM.timer-=this.time.elapsed;
 	},
@@ -183,16 +191,20 @@ BasicGame.Play.prototype = {
 			if (respawnEnemy.alive) {
 				var ex = respawnEnemy.x;
 				var ey = respawnEnemy.y;
+				var WestDir = ex-maxDis;
+				var EastDir = ex+maxDis;
+				var NorthDir = ey-maxDis;
+				var SouthDir = ey+maxDis;
 				self.EnemysWeapon.fireFrom.x = ex;
 				self.EnemysWeapon.fireFrom.y = ey;
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
-				self.EnemysWeapon.fireAtXY(ex+maxDis,ey); // East
-				self.EnemysWeapon.fireAtXY(ex,ey-maxDis); // North
-				self.EnemysWeapon.fireAtXY(ex,ey+maxDis); // South
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
-				self.EnemysWeapon.fireAtXY(ex+maxDis,ey-maxDis); // NorthEast
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
-				self.EnemysWeapon.fireAtXY(ex+maxDis,ey+maxDis); // SouthEast
+				self.EnemysWeapon.fireAtXY(WestDir,ey); // West
+				self.EnemysWeapon.fireAtXY(EastDir,ey); // East
+				self.EnemysWeapon.fireAtXY(ex,NorthDir); // North
+				self.EnemysWeapon.fireAtXY(ex,SouthDir); // South
+				self.EnemysWeapon.fireAtXY(WestDir,NorthDir); // NorthWest
+				self.EnemysWeapon.fireAtXY(EastDir,NorthDir); // NorthEast
+				self.EnemysWeapon.fireAtXY(WestDir,SouthDir); // SouthWest
+				self.EnemysWeapon.fireAtXY(EastDir,SouthDir); // SouthEast
 			}
 		};
 	},
@@ -266,7 +278,7 @@ BasicGame.Play.prototype = {
 		this.BG.showWarning();
 		this.HUD.showWarningBoss();
 		this.Boss = boss;
-		// TODO child HP gage
+		this.genGaugeOfBossHealth();
 	},
 
 	onSpawnedBoss: function () {
@@ -282,27 +294,57 @@ BasicGame.Play.prototype = {
 	setFiringToBoss: function () {
 		var boss = this.Boss;
 		var bottomMargin = this.world.height-100;
+		var maxDis = this.world.width;
+		var maxDisHalf = maxDis*.5;
 		var self = this;
 		boss.update = function () {
 			if (boss.alive) {
 				boss.y += boss.speed;
 				if (boss.y<100||boss.y>bottomMargin) boss.speed *= -1;
-				var maxDis = self.world.width;
 				var ex = boss.x;
 				var ey = boss.y;
+				var WestDir = ex-maxDis;
+				var NorthDir = ey-maxDis;
+				var SouthDir = ey+maxDis;
 				self.EnemysWeapon.fireFrom.x = ex;
 				self.EnemysWeapon.fireFrom.y = ey;
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey); // West
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis); // NorthWest
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey-maxDis/2); // NorthWestWest
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis); // SouthWest
-				self.EnemysWeapon.fireAtXY(ex-maxDis,ey+maxDis/2); // SouthWestWest
-				// self.EnemysWeapon.fireAtSprite(self.Player);
+				self.EnemysWeapon.fireAtXY(WestDir,ey); // West
+				self.EnemysWeapon.fireAtXY(WestDir,NorthDir); // NorthWest
+				self.EnemysWeapon.fireAtXY(WestDir,ey-maxDisHalf); // NorthWestWest
+				self.EnemysWeapon.fireAtXY(WestDir,SouthDir); // SouthWest
+				self.EnemysWeapon.fireAtXY(WestDir,ey+maxDisHalf); // SouthWestWest
 				self.SpecialEnemysWeapon.fireFrom.x = ex;
 				self.SpecialEnemysWeapon.fireFrom.y = ey;
 				self.SpecialEnemysWeapon.fireAtSprite(self.Player);
 			}
 		};
+	},
+
+	genGaugeOfBossHealth: function () {
+		var x = 0;
+		var y = this.Player.height*.5;
+		var w = this.Boss.width;
+		var h = 40;
+		this.genGaugeSprite(x,y,w+20,h+20,'#000000');
+		this.genGaugeSprite(x,y,w+10,h+10,'#dcdcdc');
+		this.genGaugeSprite(x,y,w+5,h+5,'#000000');
+		var backGaugeSprite = this.genGaugeSprite(x,y,w,h,'#dc143c');
+		var frontGaugeSprite = this.M.S.genBmpSprite(x-backGaugeSprite.width*.5,y,w,h,'#ffff00');
+		frontGaugeSprite.anchor.setTo(0,.5);
+		var cropRect = new Phaser.Rectangle(0,0,w,h);
+		frontGaugeSprite.crop(cropRect);
+		this.Boss.addChild(frontGaugeSprite);
+		this.Boss.changeGauge = function () {
+			cropRect.width = w * this.health / this.baseHealth;
+			frontGaugeSprite.updateCrop();
+		};
+	},
+
+	genGaugeSprite: function (x,y,w,h,fillStyle) {
+		var sprite = this.M.S.genBmpSprite(x,y,w,h,fillStyle);
+		sprite.anchor.setTo(.5);
+		this.Boss.addChild(sprite);
+		return sprite;
 	},
 
 	checkAddItem: function () {
@@ -315,24 +357,36 @@ BasicGame.Play.prototype = {
 
 	addItemToWorld: function () {
 		var addItem = this.Items.getRandom();
-		if (addItem) {
-			var x = this.world.width;
-			var y = this.world.randomY;
-			addItem.reset(x,y);
-			addItem.body.velocity.x = -200;
-			var self = this;
-			addItem.update = function () {
-				if (addItem.x<-100) self.resetItemsToGroup(addItem);
-			};
-		}
+		if (addItem) this.giveAbilitiesToItem(addItem);
 	},
 
-	resetItemsToGroup: function (item) {
+	giveAbilitiesToItem: function (item) {
+		var x = this.world.width;
+		var y = this.world.randomY;
+		item.reset(x,y);
+		item.body.velocity.x = -300;
+		var self = this;
+		item.update = function () {
+			if (this.x<-100) self.resetItemToGroup(this);
+		};
+	},
+
+	resetItemToGroup: function (item) {
 		item.destroy();
 		var newItem = this.add.sprite(0,0,this.rnd.pick(this.GM.ItemKeys));
 		newItem.kill();
 		newItem.anchor.setTo(.5);
 		this.Items.add(newItem);
+	},
+
+	checkPlayerSpecialWeapon: function () {
+		if (this.Player.tripleShot) {
+			if (this.GM.playerSpecialWeaponTimeCounter>=this.Player.TRIPLE_SHOT_LIMIT_TIMING) {
+				this.GM.playerSpecialWeaponTimeCounter = 0;
+				this.Player.tripleShot = false;
+			}
+			this.GM.playerSpecialWeaponTimeCounter++;
+		}
 	},
 
 	collisionManager: function () {
@@ -352,13 +406,25 @@ BasicGame.Play.prototype = {
 	},
 
 	getItem: function (player, item) {
-		this.resetItemsToGroup(item);
-		// TODO player power up
+		this.resetItemToGroup(item);
+		this.giveAbilityToPlayer(item.key);
+	},
+
+	giveAbilityToPlayer: function (key) {
+		if (key == 'Ohepan') {
+			if (this.Player.bulletPower<this.Player.maxBulletPower)
+				this.Player.bulletPower++;
+		} else if (key == 'Oheneko') {
+			this.Player.tripleShot = true;
+		} else if (key == 'HealItem') {
+			this.Player.UHeal();
+		}
 	},
 
 	hitBulletToEnemy: function (bullet, enemy) {
 		bullet.kill();
 		enemy.damage(this.Player.bulletPower);
+		if (enemy.isBoss) enemy.changeGauge();
 		this.Effect.fireDamageEffect(bullet.right,bullet.y);
 		if (!enemy.alive) {
 			this.GM.score += enemy.score;
@@ -376,7 +442,15 @@ BasicGame.Play.prototype = {
 
 	onKilledBoss: function () {
 		this.GM.existingBoss = false;
+		this.addHealItemToWorld();
 		this.levelUp();
+	},
+
+	addHealItemToWorld: function () {
+		var healItem = this.add.sprite(0,0,'HealItem');
+		healItem.anchor.setTo(.5);
+		this.Items.add(healItem);
+		this.giveAbilitiesToItem(healItem);
 	},
 
 	levelUp: function () {
@@ -385,13 +459,7 @@ BasicGame.Play.prototype = {
 		this.HUD.showLevelUp();
 		this.HUD.changeLevel(this.GM.curLevel);
 		this.setDifficultyValues();
-	},
-
-	setDifficultyValues: function () {
-		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
-		this.GM.respawnEnemyCountdown = DI.respawnEnemyCountdown;
-		this.EnemysWeapon.bulletSpeed = DI.enemyBulletSpeed;
-		this.EnemysWeapon.fireRate = DI.enemyFireRate;
+		this.changeBg();
 	},
 
 	setDifficultyFromLevel: function () {
@@ -408,11 +476,34 @@ BasicGame.Play.prototype = {
 		}
 	},
 
+	setDifficultyValues: function () {
+		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
+		this.GM.respawnEnemyCountdown = DI.respawnEnemyCountdown;
+		this.EnemysWeapon.bulletSpeed = DI.enemyBulletSpeed;
+		this.EnemysWeapon.fireRate = DI.enemyFireRate;
+	},
+
+	changeBg: function () {
+		var DI = this.GM.DifficultyInfo[this.GM.curDifficulty];
+		if (DI.changeBgNum) {
+			if (this.BG.curBgNum != DI.changeBgNum) {
+				var group = this.BG.Bgs;
+				if (group.getAt(group.length-4) != -1) {
+					this.setBgMove(group.getAt(group.length-3),5);
+					this.setBgMove(group.getAt(group.length-4),1);
+					group.getAt(group.length-1).tween.start();
+					group.getAt(group.length-2).tween.start();
+					this.BG.curBgNum = DI.changeBgNum;
+				}
+			}
+		}
+	},
+
 	genEnemySprite: function () {
 		var enemy = this.add.sprite(0,0,this.rnd.pick(this.GM.EnemyKeys));
 		enemy.kill();
 		enemy.anchor.setTo(.5);
-		enemy.body.setCircle(enemy.width/2);
+		enemy.body.setCircle(enemy.width*.5);
 		this.Enemys.add(enemy);
 	},
 
@@ -425,28 +516,45 @@ BasicGame.Play.prototype = {
 
 	BgContainer: function () {
 		this.BG = {
-			curMtBg: null,
+			curBgNum: 1,
+			Bgs: this.add.group(),
 			showWarning: null,
 		};
 		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
-		this.genSkyBgTileSprite();
-		this.genMtBgTileSprite();
+		this.genBgTileSprite();
 		this.genWarningSprite();
 	},
 
-	genSkyBgTileSprite: function () {
-		var skyTileSprite = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'SkyBg_1');
-		skyTileSprite.update = function () {
-			this.tilePosition.x -= 1;
-		};
+	genBgTileSprite: function () {
+		var DI = this.GM.DifficultyInfo;
+		var w = this.world.width;
+		var h = this.world.height;
+		var group = this.BG.Bgs;
+		for (var key in DI) {
+			var changeBgNum = DI[key].changeBgNum;
+			if (changeBgNum) {
+				var mtTileSprite = this.add.tileSprite(0,0,w,h,'MtBg_'+changeBgNum);
+				var skyTileSprite = this.add.tileSprite(0,0,w,h,'SkyBg_'+changeBgNum);
+				mtTileSprite.tween = this.M.T.fadeOutA(mtTileSprite);
+				this.M.T.onComplete(mtTileSprite.tween,function (sprite) {
+					sprite.destroy();
+				});
+				skyTileSprite.tween = this.M.T.fadeOutA(skyTileSprite);
+				this.M.T.onComplete(skyTileSprite.tween,function (sprite) {
+					sprite.destroy();
+				});
+				group.addChildAt(mtTileSprite,0);
+				group.addChildAt(skyTileSprite,0);
+			}
+		}
+		this.setBgMove(group.getAt(group.length-1),5);
+		this.setBgMove(group.getAt(group.length-2),1);
 	},
 
-	genMtBgTileSprite: function () {
-		this.BG.curMtBg = this.add.tileSprite(0, 0, this.world.width, this.world.height, 'MtBg_1');
-		this.BG.curMtBg.update = function () {
-			this.tilePosition.x -= 5;
+	setBgMove: function (target, mvVal) {
+		target.update = function () {
+			this.tilePosition.x -= mvVal;
 		};
-		// TODO changebg...
 	},
 
 	genWarningSprite: function () {
@@ -471,18 +579,23 @@ BasicGame.Play.prototype = {
 		this.Player.inputEnabled = true;
 		this.Player.input.enableDrag(true);
 		this.Player.tripleShot = false;
+		this.Player.TRIPLE_SHOT_LIMIT_TIMING = 8;
 		this.Player.takingDamage = false;
-		this.Player.health = 30; // TODO del
-		// this.Player.health = 3;
+		// this.Player.health = 30; // TODO del
+		this.Player.health = 3;
 		this.Player.maxHealth = 5;
 		this.Player.bulletPower = 1;
 		this.Player.maxBulletPower = 5;
 		this.setDamageEffectToPlayer();
+		this.Player.UHeal = function () {
+			this.heal(1);
+			this.increaseHearts();
+		};
 		this.setWeaponToPlayer();
 		var radius = 30;
-		this.Player.body.setCircle(radius,this.Player.width/2-radius,this.Player.height/2-radius);
-		this.Player.events.onKilled.add(this.onKilledPlayer, this);
-		this.genPlayerHitCoreSprite(radius);
+		this.Player.body.setCircle(radius,this.Player.width*.5-radius,this.Player.height*.5-radius);
+		this.Player.events.onKilled.add(this.gameOver, this);
+		this.genPlayerHitRangeViewSprite(radius);
 	},
 
 	setDamageEffectToPlayer: function () {
@@ -497,6 +610,7 @@ BasicGame.Play.prototype = {
 			this.takingDamage = true;
 			this.damage(1);
 			tween.start();
+			this.reduceHearts();
 			this.bulletPower = 1;
 			return true;
 		};
@@ -508,8 +622,8 @@ BasicGame.Play.prototype = {
 			if (this.alive) {
 				if (this.tripleShot) {
 					weapon.fireMany([
-						{x:0,y:-50},
-						{x:0,y:50},
+						{x:0,y:-80},
+						{x:0,y:80},
 						{x:0,y:0},
 					]);
 				} else {
@@ -520,13 +634,9 @@ BasicGame.Play.prototype = {
 		this.PlayerWeapon = weapon;
 	},
 
-	onKilledPlayer: function () {
-		this.gameOver();
-	},
-
-	genPlayerHitCoreSprite: function (radius) {
-		var circleSprite = this.M.S.genBmpCircleSprite(0,0,radius*2-10,radius*2-10,'#ffffff');
-		var circleFrameSprite = this.M.S.genBmpCircleSprite(0,0,radius*2,radius*2,'#000000');
+	genPlayerHitRangeViewSprite: function (radius) {
+		var circleSprite = this.M.S.genBmpCircleSprite(0,0,radius*2-10,'#ffffff');
+		var circleFrameSprite = this.M.S.genBmpCircleSprite(0,0,radius*2,'#000000');
 		circleSprite.anchor.setTo(.5);
 		circleFrameSprite.anchor.setTo(.5);
 		this.Player.addChild(circleFrameSprite);
@@ -536,8 +646,6 @@ BasicGame.Play.prototype = {
 	genPlayerWeapon: function () {
 		var weapon = this.add.weapon(40, 'PlayerBullet');
 		weapon.bulletKillType = Phaser.Weapon.KILL_WORLD_BOUNDS;
-		// weapon.bulletAngleVariance = 10;
-		// weapon.bulletSpeedVariance = 200;
 		weapon.bulletSpeed = 1000;
 		weapon.fireRate = 200;
 		weapon.trackSprite(this.Player, this.Player.centerX, 0, true);
@@ -555,7 +663,7 @@ BasicGame.Play.prototype = {
 		this.Enemys.setAll('anchor.x', .5);
 		this.Enemys.setAll('anchor.y', .5);
 		this.Enemys.forEach(function (enemy) {
-			enemy.body.setCircle(enemy.width/2);
+			enemy.body.setCircle(enemy.width*.5);
 		}, this);
 		this.Enemys.shuffle();
 		this.EnemysWeapon = this.genEnemyWeapon();
@@ -634,6 +742,25 @@ BasicGame.Play.prototype = {
 				particle.gravity.y = -2000;
 				particle.explode(500,5);
 			}
+		};
+	},
+
+	PlayerHealthHeartsContainer: function () {
+		var breakAlpha = .3;
+		var playerHealthHearts = this.add.group();
+		for (var i=0;i<this.Player.maxHealth;i++) {
+			var heartSprite = this.add.sprite(0,0,'HealthHeart');
+			heartSprite.scale.setTo(.6); // TODO adjust size
+			if (i>=this.Player.health) heartSprite.alpha = breakAlpha;
+			playerHealthHearts.addChild(heartSprite);
+		}
+		playerHealthHearts.align(-1,1,heartSprite.width,heartSprite.height);
+		playerHealthHearts.alignIn(this.world.bounds,Phaser.BOTTOM_RIGHT,-20,-20);
+		this.Player.increaseHearts = function () {
+			playerHealthHearts.children[this.health-1].alpha = 1;
+		};
+		this.Player.reduceHearts = function () {
+			playerHealthHearts.children[this.health].alpha = breakAlpha;
 		};
 	},
 

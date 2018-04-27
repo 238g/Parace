@@ -21,11 +21,17 @@ BasicGame.Preloader.prototype = {
 			'PlayerBullet': './images/tiatia/PlayerBullet.png',
 			'EnemyBullet': './images/tiatia/EnemyBullet.png',
 			'SkyBg_1': './images/sirorun/sky.png',
+			'SkyBg_2': './images/tiatia/SkyBg_2.png',
+			'SkyBg_3': './images/sirorun/sky.png',
 			'MtBg_1': './images/sirorun/mountain.png',
+			'MtBg_2': './images/tiatia/MtBg_2.png',
+			'MtBg_3': './images/sirorun/mountain.png',
 			'DamageEffect': './images/cafenozombiko/Shine.png',
 			'KillEffect': './images/tiatia/KillEffect.png',
 			'Ohepan': './images/tiatia/Ohepan.png',
 			'Oheneko': './images/tiatia/Oheneko.png',
+			'HealthHeart': './images/tiatia/HealthHeart.png',
+			'HealItem': './images/tiatia/HealthHeart.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadEnemyImgs();

@@ -93,8 +93,3 @@ BasicGame.Boot.prototype.makeEnemyInfo = function (option) {
 	for (var key in option) EnemyInfo[key] = option[key];
 	return EnemyInfo;
 };
-
-// bg change
-// level_1,2,5,8,10 Life++ item MAX5
-// per 20s_Item
-// item -> tripleShot,power up

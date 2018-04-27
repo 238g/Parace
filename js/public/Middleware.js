@@ -244,10 +244,11 @@ Middleware.prototype.SpriteManager.prototype = {
 		bmp.update();
 		return this.genSprite(x,y,bmp);
 	},
-	genBmpCircleSprite: function (x,y,w,h,fillStyle) {
+	genBmpCircleSprite: function (x,y,radius,fillStyle) {
 		var Scene = this.M.getScene();
-		var bmp = Scene.add.bitmapData(w,h);
-		bmp.circle(w/2,h/2,w/2,fillStyle);
+		var bmp = Scene.add.bitmapData(radius,radius);
+		var halfRadius = radius * .5;
+		bmp.circle(halfRadius,halfRadius,halfRadius,fillStyle);
 		return this.genSprite(x,y,bmp);
 	},
 	BasicGrayLabel: function (x,y,func,text,textStyle,option) {
