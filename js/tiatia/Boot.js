@@ -20,13 +20,13 @@ BasicGame.Boot.prototype = {
 
 	defineConst: function () {
 		this.M.defineConst({
-			// TODO color
 			GAME_TITLE: document.title,
 			MAIN_COLOR: '#9dddef',
 			MAIN_TINT:  0x9dddef,
 			MAIN_TEXT_COLOR: '#ff94fc',
 			WHITE_COLOR: '#fdfaf5',
 			YOUTUBE_URL: 'https://www.youtube.com/channel/UCk7UMlCJ6dlluad9GLKhHzg',
+			ALBUM_COUNT: 16,
 		});
 	},
 
