@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.conf = function () {
-	var totalCount = 10;
+	var totalCount = 11;
 	return {
 		GamesInfo:{
 			1001: {
@@ -111,6 +111,16 @@ BasicGame.Boot.prototype.conf = function () {
 				order: totalCount-10,
 				textColor: '#89beff',
 				bgColor: '#fde5b1',
+			},
+			1012: {
+				id: 1012,
+				title: 'ちあは魔法少女',
+				url: 'https://238g.github.io/Parace/tiatia.html',
+				slideImg: 'Tiatia_1',
+				slideImgUrl: './images/238Games/Tiatia_1.png',
+				order: totalCount-11,
+				textColor: '#ff94fc',
+				bgColor: '#9dddef',
 			},
 			/*
 			1000: {

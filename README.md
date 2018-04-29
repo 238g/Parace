@@ -21,3 +21,5 @@
 田中ヒメ中華街 (https://238g.github.io/Parace/HimeTanaka.html) Release 4/13
 
 アリス・トラーツ (https://238g.github.io/Parace/AliceMononobe.html) Release 4/21
+
+ちあは魔法少女 (https://238g.github.io/Parace/tiatia.html) Release 4/29
