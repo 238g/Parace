@@ -53,6 +53,8 @@ BasicGame.Play.prototype = {
 			ADD_ITEM_TIMING: 19,
 			ItemKeys: ['Ohepan','Oheneko'],
 			playerSpecialWeaponTimeCounter: 0,
+			clearLevel: 14,
+			clearFlag: false,
 		};
 	},
 
@@ -460,6 +462,7 @@ BasicGame.Play.prototype = {
 	levelUp: function () {
 		this.GM.curLevel++;
 		this.setDifficultyFromLevel();
+		if (this.GM.curLevel >= this.GM.clearLevel) return this.clear();
 		this.HUD.showLevelUp();
 		this.HUD.changeLevel(this.GM.curLevel);
 		this.setDifficultyValues();
@@ -811,11 +814,13 @@ BasicGame.Play.prototype = {
 			showWarningBoss: null,
 			hideWarningBoss: null,
 			showLevelUp: null,
+			showClear: null,
 		};
 		this.genStartTextSprite();
 		this.genScoreTextSprite();
 		this.genLevelTextSprite();
 		this.genGameOverTextSprite();
+		this.genClearTextSprite();
 		this.genLevelUpTextSprite();
 		this.genWarningBossTextSprite();
 	},
@@ -863,6 +868,18 @@ BasicGame.Play.prototype = {
 		textSprite.setAnchor(.5);
 		textSprite.setScale(0,0);
 		this.HUD.showGameOver = function () {
+			textSprite.addTween('popUpB',{});
+			textSprite.startTween('popUpB');
+		};
+	},
+
+	genClearTextSprite: function () {
+		var baseText = 'クリアー！！';
+		var textStyle = this.BaseTextStyle(200);
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.centerY,baseText,textStyle);
+		textSprite.setAnchor(.5);
+		textSprite.setScale(0,0);
+		this.HUD.showClear = function () {
 			textSprite.addTween('popUpB',{});
 			textSprite.startTween('popUpB');
 		};
@@ -924,6 +941,17 @@ BasicGame.Play.prototype = {
 		this.GM.isPlaying = true;
 	},
 
+	clear: function () {
+		this.GM.isPlaying = false;
+		this.HUD.showClear();
+		this.GM.clearFlag = true;
+		this.M.SE.play('CloseSE');
+		this.time.events.add(1500, function () {
+			this.M.SE.play('OpenSE');
+			this.ResultContainer();
+		}, this);
+	},
+
 	gameOver: function () {
 		this.GM.isPlaying = false;
 		this.HUD.showGameOver();
@@ -944,7 +972,10 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
 		this.genResultTextSprite(x,y-90,'結果発表');
-		this.genResultTextSprite(x,y+40,'レベル: '+this.GM.curLevel); // -300
+		this.genResultTextSprite(x,y+40,
+			'レベル: '+this.GM.curLevel
+			+(this.GM.clearFlag ? ' クリア！🎉' : '')
+		); // -300
 		this.genResultTextSprite(x,y+140,'スコア: '+this.GM.score); // -300
 		var marginX = 500;
 		this.genResultLabel(x-marginX,y+350,'もう一度プレイ',function () {
@@ -976,6 +1007,7 @@ BasicGame.Play.prototype = {
 					+emoji+'\n'
 					+'到達レベル： '+this.GM.curLevel+'\n'
 					+'スコア： '+this.GM.score+'\n'
+					+(this.GM.clearFlag ? 'クリアおめでとう！🎉🎉🎉\n' : '')
 					+emoji+'\n';
 		var hashtags = 'ちあゲーム';
 		this.M.H.tweet(text,hashtags,location.href);
