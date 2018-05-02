@@ -25,7 +25,7 @@ BasicGame.Boot.prototype = {
 			MAIN_TINT:  0x9dddef,
 			MAIN_TEXT_COLOR: '#ff94fc',
 			WHITE_COLOR: '#fdfaf5',
-			// YOUTUBE_URL: 'https://www.youtube.com/channel/UCk7UMlCJ6dlluad9GLKhHzg',
+			YOUTUBE_URL: '',
 		});
 	},
 

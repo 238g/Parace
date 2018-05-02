@@ -2,12 +2,17 @@ BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () {
 		this.GM = {};
+		this.HUD = {};
+		this.Bricks = {};
+		this.Paddle = {};
 	},
 
 	create: function () {
 		this.GameManager();
 		this.BgContainer();
 		this.PhysicsManager();
+		this.BrickContainer();
+		this.PaddleContainer();
 		this.HUDContainer();
 		this.ready();
 		this.test();
@@ -16,6 +21,7 @@ BasicGame.Play.prototype = {
 	GameManager: function () {
 		this.GM = {
 			isPlaying: false,
+			score: 0,
 		};
 	},
 
@@ -24,22 +30,39 @@ BasicGame.Play.prototype = {
 		}
 	},
 
+	/*
 	timeManager: function () {
 		if (this.GM.timer<0) {
 			this.GM.timer = 1000;
 		}
 		this.GM.timer-=this.time.elapsed;
 	},
+	*/
 
+	/*
 	collisionManager: function () {
 	},
+	*/
 
 	BgContainer: function () {
+		// TODO
 	},
 
 	PhysicsManager: function () {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-		this.world.enableBody = true;
+		this.physics.arcade.checkCollision.down = false;
+		// this.world.enableBody = true;
+	},
+
+	BrickContainer: function () {
+		this.Bricks = this.add.group();
+		this.Bricks.enableBody = true;
+		this.Bricks.physicsBodyType = Phaser.Physics.ARCADE;
+		// TODO https://phaser.io/examples/v2/games/breakout
+	},
+
+	PaddleContainer: function () {
+		// this.Paddle;
 	},
 
 	HUDContainer: function () {
@@ -54,10 +77,10 @@ BasicGame.Play.prototype = {
 		};
 		this.genStartTextSprite();
 		this.genScoreTextSprite();
-		this.genLevelTextSprite();
+		// this.genLevelTextSprite(); // TODO
 		this.genGameOverTextSprite();
-		this.genLevelUpTextSprite();
-		this.genWarningBossTextSprite();
+		// this.genLevelUpTextSprite(); // TODO
+		// this.genWarningBossTextSprite(); // TODO
 	},
 
 	genStartTextSprite: function () {
@@ -140,6 +163,7 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
+		return; // TODO
 		this.stopBGM();
 		this.playBGM();
 	},
@@ -164,9 +188,9 @@ BasicGame.Play.prototype = {
 	gameOver: function () {
 		this.GM.isPlaying = false;
 		this.HUD.showGameOver();
-		this.M.SE.play('CloseSE');
+		// this.M.SE.play('CloseSE'); // TODO
 		this.time.events.add(1500, function () {
-			this.M.SE.play('OpenSE');
+			// this.M.SE.play('OpenSE'); // TODO
 			this.ResultContainer();
 		}, this);
 	},
@@ -208,13 +232,12 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
+		// TODO
 		var emoji = '🌟❤🌟❤🌟';
 		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
 					+emoji+'\n'
-					+'到達レベル： '+this.GM.curLevel+'\n'
-					+'スコア： '+this.GM.score+'\n'
 					+emoji+'\n';
-		var hashtags = 'ちあゲーム';
+		var hashtags = ',';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
 
@@ -241,12 +264,7 @@ BasicGame.Play.prototype = {
 		if (__ENV!='prod') {
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
-			this.input.keyboard.addKey(Phaser.Keyboard.D).onDown.add(this.gameOver, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.L).onDown.add(this.levelUp, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.P).onDown.add(function() {this.GM.curLevel=20;this.levelUp();}, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.K).onDown.add(this.addNewEnemyKey, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.I).onDown.add(this.addItemToWorld, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(function () {this.GM.bossTimeCounter=29;}, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(function () {}, this);
 			if(this.M.H.getQuery('curDifficulty')) this.GM.curDifficulty = this.M.H.getQuery('curDifficulty');
 			this.stage.backgroundColor = '#333333';
 		}

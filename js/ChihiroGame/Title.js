@@ -21,7 +21,7 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return;
+		return; // TODO
 		var s = this.M.SE;
 		s.stop('currentBGM');
 		this.time.events.add(500, function () {
@@ -42,11 +42,12 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
+		// TODO
 	},
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(
-			this.world.centerX*.42,this.world.centerY-100,
+			this.world.centerX,100,
 			this.M.getConst('GAME_TITLE'),this.BaseTextStyle(80));
 		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
@@ -54,16 +55,16 @@ BasicGame.Title.prototype = {
 
 	BtnContainer: function () {
 		var textStyle = this.BaseTextStyle(50);
-		var x = this.world.centerX;
-		var lineY_1 = this.world.centerY+200;
-		var lineY_2 = lineY_1+150;
+		var leftX = this.world.width*.25;
+		var rightX = leftX*3;
+		var y = this.world.centerY+400;
 		var tint = this.M.getConst('MAIN_TINT');
-		this.genStartBtnSprite(x*.4,lineY_1,textStyle,tint);
-		this.genMuteBtnSprite(x,lineY_1,textStyle,tint);
-		this.genFullScreenBtnSprite(x*1.6,lineY_1,textStyle,tint);
-		this.genOtherGameBtnSprite(x*.4,lineY_2,textStyle,tint);
-		this.genHowtoBtnSprite(x,lineY_2,textStyle,tint);
-		this.genLogoBtnSprite(x*1.6,lineY_2);
+		this.genStartBtnSprite(leftX,y,textStyle,tint);
+		this.genMuteBtnSprite(rightX,y,textStyle,tint);
+		this.genFullScreenBtnSprite(leftX,y+150,textStyle,tint);
+		this.genOtherGameBtnSprite(rightX,y+150,textStyle,tint);
+		this.genHowtoBtnSprite(leftX,y+300,textStyle,tint);
+		this.genLogoBtnSprite(rightX,y+300);
 	},
 
 	genStartBtnSprite: function (x,y,textStyle,tint) {
@@ -71,7 +72,7 @@ BasicGame.Title.prototype = {
 		this.M.S.BasicGrayLabel(x,y,function () {
 			if (this.inputEnabled) {
 				this.M.NextScene('Play');
-				this.M.SE.play('Start',{volume:1});
+				// this.M.SE.play('Start',{volume:1}); // TODO
 			}
 		},text,textStyle,{tint:tint});
 	},
@@ -121,7 +122,7 @@ BasicGame.Title.prototype = {
 	genHowtoBtnSprite: function (x,y,textStyle,tint) {
 		var text = '遊び方';
 		this.M.S.BasicGrayLabel(x,y,function () {
-			this.M.SE.play('OpenSE',{volume:1});
+			// this.M.SE.play('OpenSE',{volume:1}); // TODO
 			this.Dialog.bringToTop();
 			this.Dialog.tweenShow();
 		},text,textStyle,{tint:tint});
@@ -154,12 +155,14 @@ BasicGame.Title.prototype = {
 	},
 
 	genDialogCharSprite: function () {
+		return; // TODO
 		var charSprite = this.add.sprite(-600,0,'OhepanOrigin');
 		charSprite.scale.setTo(2);
 		this.Dialog.addChild(charSprite);
 	},
 
 	genHowtoTextSprite: function () {
+		// TODO
 		var text = ''
 			+'シューティングゲームまろ～\n'
 			+'まろとおへねこは頼りになる仲間まろ～\n'
