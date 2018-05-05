@@ -60,51 +60,63 @@ BasicGame.Title.prototype = {
 		var y = this.world.centerY+400;
 		var tint = this.M.getConst('MAIN_TINT');
 		this.genStartBtnSprite(leftX,y,textStyle,tint);
-		this.genMuteBtnSprite(rightX,y,textStyle,tint);
-		this.genFullScreenBtnSprite(leftX,y+150,textStyle,tint);
-		this.genOtherGameBtnSprite(rightX,y+150,textStyle,tint);
-		this.genHowtoBtnSprite(leftX,y+300,textStyle,tint);
-		this.genLogoBtnSprite(rightX,y+300);
+		this.genHowtoBtnSprite(rightX,y,textStyle,tint);
+		this.genLogoBtnSprite(this.world.centerX,y+150);
+		this.genOtherGameBtnSprite(this.world.centerX,y+300,textStyle,tint);
+		this.genVolumeBtnSprite(leftX-100,y+300,tint);
+		this.genFullScreenBtnSprite(rightX+100,y+300,tint);
 	},
 
 	genStartBtnSprite: function (x,y,textStyle,tint) {
 		var text = 'スタート';
 		this.M.S.BasicGrayLabel(x,y,function () {
 			if (this.inputEnabled) {
-				this.M.NextScene('Play');
+				this.M.NextScene('CharSelect');
 				// this.M.SE.play('Start',{volume:1}); // TODO
 			}
 		},text,textStyle,{tint:tint});
 	},
 
-	genMuteBtnSprite: function (x,y,textStyle,tint) {
-		var offText = 'ミュートOFF';
-		var onText = 'ミュートON';
-		var text = this.sound.mute ? offText : onText;
-		var label = this.M.S.BasicGrayLabel(x,y,function (pointer) {
+	genVolumeBtnSprite: function (x,y,tint) {
+		var maxImg = 'VolumeMax';
+		var halfImg = 'VolumeHalf';
+		var muteImg = 'VolumeMute';
+		var curImg = this.sound.mute ? muteImg : (this.sound.volume==1) ? maxImg : halfImg;
+		var volumeSprite = this.M.S.genSprite(x,y,'VolumeIcon',curImg);
+		volumeSprite.anchor.setTo(.5);
+		volumeSprite.UonInputDown(function (sprite) {
 			if (this.sound.mute) {
-				pointer.textSprite.changeText(onText);
+				sprite.frameName = maxImg;
 				this.sound.mute = false;
+				this.sound.volume = 1;
 			} else {
-				pointer.textSprite.changeText(offText);
-				this.sound.mute = true;
+				if (this.sound.volume == 1) {
+					sprite.frameName = halfImg;
+					this.sound.volume = .5;
+				} else {
+					sprite.frameName = muteImg;
+					this.sound.volume = 0;
+					this.sound.mute = true;
+				}
 			}
-		},text,textStyle,{tint:tint});
+		});
 	},
 
-	genFullScreenBtnSprite: function (x,y,textStyle,tint) {
-		var offText = 'フルスクリーンOFF';
-		var onText = 'フルスクリーンON';
-		var text = this.scale.isFullScreen ? offText : onText;
-		var label = this.M.S.BasicGrayLabel(x,y,function (pointer) {
+	genFullScreenBtnSprite: function (x,y,tint) {
+		var offImg = 'smaller';
+		var onImg = 'larger';
+		var curImg = this.scale.isFullScreen ? offImg : onImg;
+		var fullScreenSprite = this.M.S.genSprite(x,y,'GameIconsBlack',curImg);
+		fullScreenSprite.anchor.setTo(.5);
+		fullScreenSprite.UonInputDown(function (sprite) {
 			if (this.scale.isFullScreen) {
-				pointer.textSprite.changeText(onText);
+				sprite.frameName = onImg;
 				this.scale.stopFullScreen(false);
 			} else {
-				pointer.textSprite.changeText(offText);
+				sprite.frameName = offImg;
 				this.scale.startFullScreen(false);
 			}
-		},text,textStyle,{tint:tint});
+		});
 	},
 
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {

@@ -12,12 +12,29 @@ BasicGame.Preloader.prototype = {
 	loadAssets: function () {
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+		this.load.atlasXML('GameIconsBlack', 
+			'./images/public/sheets/GameIconsBlack.png', './images/public/sheets/GameIconsBlack.xml');
+		this.load.atlasJSONHash('VolumeIcon', 
+			'./images/public/VolumeIcon/VolumeIcon.png', './images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Dialog': './images/public/dialogs/Dialog_4.png',
+			'Dialog': './images/public/dialogs/Dialog_1.png',
 			'Logo': './images/tiatia/Logo.jpg',
 		};
+		this.loadCharInfo();
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
+	},
+
+	loadCharInfo: function () {
+		var CharInfo = this.M.getConf('CharInfo');
+		var CharInfoLength = 0;
+		for (var key in CharInfo) {
+			var info = CharInfo[key];
+			this.load.spritesheet(key,info.imgPath,info.width,info.height);
+			this.load.spritesheet(info.backKey,info.bgImgPath,info.width,info.height);
+			CharInfoLength++;
+		}
+		this.M.setGlobal('CharInfoLength', CharInfoLength);
 	},
 
 	loadAudio: function () {
