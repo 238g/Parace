@@ -17,11 +17,13 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasJSONHash('VolumeIcon', 
 			'./images/public/VolumeIcon/VolumeIcon.png', './images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Dialog': './images/public/dialogs/Dialog_1.png',
-			'Logo': './images/tiatia/Logo.jpg',
+			'Dialog': './images/public/dialogs/Dialog_5.jpg',
+			'Logo': './images/ChihiroGame/Logo.jpg',
+			'Chihiro_1': './images/ChihiroGame/Chihiro_1.png',
 		};
 		this.loadCharInfo();
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		for (var i=1;i<=this.M.getConst('ALBUM_COUNT');i++) this.load.image('Album_'+i, './images/ChihiroGame/Albums/Album_'+i+'.jpg');
 		this.loadAudio();
 	},
 
@@ -32,6 +34,7 @@ BasicGame.Preloader.prototype = {
 			var info = CharInfo[key];
 			this.load.spritesheet(key,info.imgPath,info.width,info.height);
 			this.load.spritesheet(info.backKey,info.bgImgPath,info.width,info.height);
+			this.load.image(info.panelKey,info.bgImgPath);
 			CharInfoLength++;
 		}
 		this.M.setGlobal('CharInfoLength', CharInfoLength);

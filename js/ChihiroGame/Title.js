@@ -42,19 +42,29 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
-		// TODO
+		var bgGroup = this.add.group();
+		var x = this.world.centerX;
+		var y = this.world.centerY;
+		for (var i=1;i<=this.M.getConst('ALBUM_COUNT');i++) {
+			var sprite = this.add.sprite(x,y,'Album_'+i);
+			sprite.anchor.setTo(.5);
+			sprite.alpha = 0;
+			bgGroup.add(sprite);
+		}
+		bgGroup.shuffle();
+		this.M.T.slideshow(bgGroup,{duration:2000,delay:2000});
 	},
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(
 			this.world.centerX,100,
-			this.M.getConst('GAME_TITLE'),this.BaseTextStyle(80));
+			this.M.getConst('GAME_TITLE'),this.M.S.BaseTextStyle(80));
 		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
 	},
 
 	BtnContainer: function () {
-		var textStyle = this.BaseTextStyle(50);
+		var textStyle = this.M.S.BaseTextStyle(50);
 		var leftX = this.world.width*.25;
 		var rightX = leftX*3;
 		var y = this.world.centerY+400;
@@ -174,25 +184,25 @@ BasicGame.Title.prototype = {
 	},
 
 	genHowtoTextSprite: function () {
-		// TODO
-		var text = ''
-			+'シューティングゲームまろ～\n'
-			+'まろとおへねこは頼りになる仲間まろ～\n'
-			+'左下はパワー・右下はHPまろ！\n'
-			+'どこまで行けるか挑戦してみるまろ～';
-		var textSprite = this.M.S.genText(0,0,text,this.BaseTextStyle(40));
+		var text = 
+			'ピーンコーン。\n'
+			+'ちゅうい：こちらのゲームは\n'
+			+'ぜんねんれいむけゲームです\n'
+			+'けんぜんです\n'
+			+'いたってけんぜんです\n'
+			+'\n'
+			+'ほんだい：\n'
+			+'このゲームはブロックくずしです\n'
+			+'とくべつなアイテムは\n'
+			+'よういしていません\n'
+			+'\n'
+			+'パドル（バー）の\n'
+			+'ちょうどまんなかに\n'
+			+'あてると\n'
+			+'かんつうする\n'
+			+'こうかがあります';
+		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyle(50));
 		this.Dialog.addChild(textSprite.multipleTextSprite);
 		this.Dialog.addChild(textSprite);
-	},
-
-	BaseTextStyle: function (fontSize) {
-		return {
-			fontSize: fontSize||50,
-			fill: this.M.getConst('MAIN_TEXT_COLOR'),
-			stroke: this.M.getConst('WHITE_COLOR'),
-			strokeThickness: 15,
-			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
-			multipleStrokeThickness: 10,
-		};
 	},
 };

@@ -404,6 +404,16 @@ Middleware.prototype.SpriteManager.prototype = {
 			textSprite.setText(progress+'%');
 		}, Scene);
 	},
+	BaseTextStyle: function (fontSize) {
+		return {
+			fontSize: fontSize || 50,
+			fill: this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF',
+			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
+			strokeThickness: 15,
+			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF',
+			multipleStrokeThickness: 10,
+		};
+	},
 };
 
 /////////////////////////////////////////////////////////////////////

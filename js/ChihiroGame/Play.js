@@ -26,14 +26,6 @@ BasicGame.Play.prototype = {
 			score: 0,
 			CharInfo: this.M.getConf('CharInfo')[this.M.getGlobal('curCharKey')],
 			ballPenetrateRange: 10,
-			BallInfo: {
-				standardSpeedY: -400,
-				standardSpeedRangeX: 100,
-				maxSpeedX: 1200,
-				minSpeedX: -1200,
-				penetrateMaxSpeedY: -1200,
-				penetrateMinSpeedY: -800,
-			},
 			life: 6,
 		};
 		this.GM.paddleRange = { left: 24, right: this.world.width-24 };
@@ -68,43 +60,46 @@ BasicGame.Play.prototype = {
 
 	ballHitPaddle: function (ball, paddle) {
 		var diff = 0;
-		var speed = 0;
-		var penetrateRange = this.GM.ballPenetrateRange*.5;
-		var BallInfo = this.GM.BallInfo;
+		var speedX = 0;
+		var speedY = 0;
+		var penetrateRange = this.GM.ballPenetrateRange*.3;
 		if (ball.x < paddle.x-penetrateRange) {
 			ball.penetrate = false;
 			diff = paddle.x - ball.x;
-			speed = -10 * diff;
-			ball.body.velocity.x = Phaser.Math.clamp(speed,BallInfo.minSpeedX,BallInfo.maxSpeedX);
-			var speedY = (ball.body.velocity.y + BallInfo.standardSpeedY) * .5;
+			speedX = -10 * diff;
+			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
+			speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
 			ball.body.velocity.y = speedY;
 		} else if (ball.x > paddle.x+penetrateRange) {
 			ball.penetrate = false;
 			diff = ball.x - paddle.x;
-			speed = 10 * diff;
-			ball.body.velocity.x = Phaser.Math.clamp(speed,BallInfo.minSpeedX,BallInfo.maxSpeedX);
-			var speedY = (ball.body.velocity.y + BallInfo.standardSpeedY) * .5;
+			speedX = 10 * diff;
+			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
+			speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
 			ball.body.velocity.y = speedY;
 		} else {
 			ball.penetrate = true;
-			var rangeX = BallInfo.standardSpeedRangeX;
-			ball.body.velocity.x = this.rnd.between(-rangeX, rangeX);
-			ball.body.velocity.y = this.rnd.between(BallInfo.penetrateMinSpeedY, BallInfo.penetrateMaxSpeedY);
+			if (ball.body.velocity.x >= 0) {
+				speedX = (ball.body.velocity.x + ball.standardSpeedRangeX) * .5;
+			} else {
+				speedX = (ball.body.velocity.x - ball.standardSpeedRangeX) * .5;
+			}
+			ball.body.velocity.x = speedX;
+			ball.body.velocity.y = this.rnd.between(ball.penetrateMinSpeedY, ball.penetrateMaxSpeedY);
 		}
 	},
 
 	ballHitBrick: function (ball, brick) {
 		brick.kill();
-		var lives = this.Bricks.countLiving();
-		this.HUD.changeLives(lives);
-		if (lives <= 250) { // TODO del
-		// if (this.Bricks.countLiving() <= this.GM.CharInfo.clearCount) {
+		if (this.Bricks.countLiving() <= this.GM.CharInfo.clearCount) {
 			console.log("Clear");
 		}
 	},
 
 	BgContainer: function () {
-		// TODO
+		var bgSprite = this.add.sprite(this.world.centerX,this.world.centerY,'Dialog');
+		bgSprite.anchor.setTo(.5);
+		bgSprite.scale.setTo(1.2);
 	},
 
 	PhysicsManager: function () {
@@ -117,8 +112,7 @@ BasicGame.Play.prototype = {
 		// TODO
 		// this.stopBGM();
 		// this.playBGM();
-		// this.HUD.startGame();
-		this.start(); // TODO del
+		this.HUD.startGame();
 	},
 
 	playBGM: function () {
@@ -138,87 +132,44 @@ BasicGame.Play.prototype = {
 		this.GM.isPlaying = true;
 	},
 
+	clear: function () {
+		this.GM.isPlaying = false;
+		this.HUD.showClear();
+		// this.M.SE.play('CloseSE'); // TODO
+		this.time.events.add(1500, function () {
+			this.HUD.showToResult();
+			this.endInput('Result');
+		}, this);
+	},
+
 	gameOver: function () {
 		this.GM.isPlaying = false;
 		this.HUD.showGameOver();
 		// this.M.SE.play('CloseSE'); // TODO
 		this.time.events.add(1500, function () {
-			// this.M.SE.play('OpenSE'); // TODO
-			this.ResultContainer();
+			this.HUD.showToBack();
+			this.endInput('Title');
 		}, this);
 	},
 
-	//////////////////////////////////////////////////////////////////////////////////
-	ResultContainer: function () {
-		this.M.S.genDialog('Dialog',{
-			onComplete:this.openedResult,
-		}).tweenShow();
-	},
-
-	openedResult: function () {
-		var x = this.world.centerX;
-		var y = this.world.centerY;
-		this.genResultTextSprite(x,y-90,'結果発表');
-		this.genResultTextSprite(x,y+40,'レベル: '+this.GM.curLevel); // -300
-		this.genResultTextSprite(x,y+140,'スコア: '+this.GM.score); // -300
-		var marginX = 500;
-		this.genResultLabel(x-marginX,y+350,'もう一度プレイ',function () {
-			this.M.NextScene('Play');
-		},600);
-		this.genResultLabel(x,y+350,'結果をツイート',this.tweet,800);
-		this.genResultLabel(x+marginX,y+350,'タイトルにもどる',function () {
-			this.M.NextScene('Title');
-		},1000);
-	},
-
-	genResultTextSprite: function (x,y,text) {
-		var textSprite = this.M.S.genText(x,y,text,this.BaseTextStyle(80));
-		textSprite.setScale(0,0);
-		textSprite.addTween('popUpB',{duration:800});
-		textSprite.startTween('popUpB');
-	},
-
-	genResultLabel: function (x,y,text,func,delay) {
-		var label = this.M.S.BasicGrayLabel(x,y,func,text,this.BaseTextStyle(50),{tint:this.M.getConst('MAIN_TINT')});
-		label.setScale(0,0);
-		label.addTween('popUpB',{duration:800,delay:delay});
-		label.startTween('popUpB');
-	},
-
-	tweet: function () {
-		// TODO
-		var emoji = '🌟❤🌟❤🌟';
-		var text = '『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
-					+emoji+'\n'
-					+emoji+'\n';
-		var hashtags = ',';
-		this.M.H.tweet(text,hashtags,location.href);
-	},
-	//////////////////////////////////////////////////////////////////////////////////
-
-	BaseTextStyle: function (fontSize) {
-		return {
-			fontSize: fontSize||50,
-			fill: this.M.getConst('MAIN_TEXT_COLOR'),
-			stroke: this.M.getConst('WHITE_COLOR'),
-			strokeThickness: 15,
-			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
-			multipleStrokeThickness: 10,
-		};
+	endInput: function (nextScene) {
+		this.game.input.onDown.add(function () {
+			this.M.NextScene(nextScene);
+		}, this);
 	},
 
 	render: function () {
-		this.game.debug.body(this.Paddle);
-		this.game.debug.body(this.Ball);
-		// for (var key in this.Enemys.children) this.game.debug.body(this.Enemys.children[key]);
+		// this.game.debug.body(this.Paddle);
+		// this.game.debug.body(this.Ball);
 	},
 
 	test: function () {
 		if (__ENV!='prod') {
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
-			// this.input.keyboard.addKey(Phaser.Keyboard.B).onDown.add(function () {}, this);
-			// if(this.M.H.getQuery('curDifficulty')) this.GM.curDifficulty = this.M.H.getQuery('curDifficulty');
+			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear, this);
+			this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
 		}
 	},
 };
