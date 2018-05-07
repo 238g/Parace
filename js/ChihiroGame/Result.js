@@ -73,7 +73,7 @@ BasicGame.Result.prototype = {
 			'草だよー！バカタレー！',
 			'((＾ω＾≡＾ω＜ｷﾞｬｱｱｱｱｱｱｱ',
 			'ばーん！それだけ？それだけなの？',
-			'マニュアルを読んでいるような謝罪は誰も求めていないんだよぉ！わかるか？！'
+			'マニュアルを読んでいるような謝罪は誰も求めていないんだよぉ！わかるか？！',
 			'にじさんじどうなってるんだよぉー！',
 			'見えないんだったら感じて',
 			'きたねぇなぁ！',
@@ -98,7 +98,7 @@ BasicGame.Result.prototype = {
 					+emoji+'\n'
 					+'今日の名言： 「'+this.rnd.pick(quotes)+'」\n'
 					+emoji+'\n';
-		var hashtags = ',';
+		var hashtags = 'ちひろゲーム';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
 

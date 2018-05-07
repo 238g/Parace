@@ -1,3 +1,24 @@
+BasicGame.Play.prototype.BgContainer = function () {
+	var bgSprite = this.add.sprite(this.world.centerX,this.world.centerY,'Dialog');
+	bgSprite.anchor.setTo(.5);
+	bgSprite.scale.setTo(1.2);
+};
+
+BasicGame.Play.prototype.genCutInSprite = function () {
+	var x = this.world.width*2;
+	var toX = this.world.width;
+	var y = this.world.height;
+	var sprite = this.add.sprite(x,y,'Chihiro_1'); // TODO change img
+	sprite.anchor.setTo(1);
+	var tween = this.M.T.moveA(sprite,{xy:{x:toX},tweenName:'move1',duration:800});
+	var tween2 = this.M.T.moveA(sprite,{xy:{x:x},tweenName:'move2',delay:500,duration:800});
+	tween.chain(tween2);
+	sprite.startTween = function () {
+		tween.start();
+	};
+	this.CutInSprite = sprite;
+};
+
 BasicGame.Play.prototype.BrickContainer = function () {
 	this.BgBricks = this.add.group();
 	this.Bricks = this.add.group();
@@ -90,3 +111,11 @@ BasicGame.Play.prototype.releaseBall = function () {
 		ball.body.velocity.y = ball.standardSpeedY;
 	}
 };
+
+BasicGame.Play.prototype.ParticleContainer = function () {
+	var emitter = this.add.emitter(0,0,600);
+	emitter.makeParticles('Particle');
+	emitter.gravity = 200;
+	this.Particles = emitter;
+};
+

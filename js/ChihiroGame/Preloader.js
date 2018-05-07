@@ -20,6 +20,7 @@ BasicGame.Preloader.prototype = {
 			'Dialog': './images/public/dialogs/Dialog_5.jpg',
 			'Logo': './images/ChihiroGame/Logo.jpg',
 			'Chihiro_1': './images/ChihiroGame/Chihiro_1.png',
+			'Particle': './images/ChihiroGame/Particle.png',
 		};
 		this.loadCharInfo();
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);

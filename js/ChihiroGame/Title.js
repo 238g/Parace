@@ -165,7 +165,6 @@ BasicGame.Title.prototype = {
 
 	DialogContainer: function () {
 		this.genDialogSprite();
-		this.genDialogCharSprite();
 		this.genHowtoTextSprite();
 	},
 
@@ -174,13 +173,6 @@ BasicGame.Title.prototype = {
 		this.Dialog.UonInputDown(function (sprite) {
 			sprite.scale.setTo(0);
 		});
-	},
-
-	genDialogCharSprite: function () {
-		return; // TODO
-		var charSprite = this.add.sprite(-600,0,'OhepanOrigin');
-		charSprite.scale.setTo(2);
-		this.Dialog.addChild(charSprite);
 	},
 
 	genHowtoTextSprite: function () {
@@ -197,10 +189,10 @@ BasicGame.Title.prototype = {
 			+'よういしていません\n'
 			+'\n'
 			+'パドル（バー）の\n'
-			+'ちょうどまんなかに\n'
-			+'あてると\n'
-			+'かんつうする\n'
-			+'こうかがあります';
+			+'まんなかに\n'
+			+'ピッタリあてると\n'
+			+'かんつうこうかが\n'
+			+'くわわります';
 		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyle(50));
 		this.Dialog.addChild(textSprite.multipleTextSprite);
 		this.Dialog.addChild(textSprite);

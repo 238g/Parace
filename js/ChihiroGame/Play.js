@@ -2,19 +2,23 @@ BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () {
 		this.GM = {};
-		this.HUD = {}; // HUD.js
+		this.CutInSprite = {}; // PlayContents.js
 		this.Bricks = {}; // PlayContents.js
 		this.Paddle = {}; // PlayContents.js
 		this.Ball = {}; // PlayContents.js
+		this.Particles = {}; // PlayContents.js
+		this.HUD = {}; // HUD.js
 	},
 
 	create: function () {
 		this.GameManager();
-		this.BgContainer();
 		this.PhysicsManager();
+		this.BgContainer(); // PlayContents.js
 		this.BrickContainer(); // PlayContents.js
 		this.PaddleContainer(); // PlayContents.js
 		this.BallContainer(); // PlayContents.js
+		this.ParticleContainer(); // PlayContents.js
+		this.genCutInSprite(); // PlayContents.js
 		this.HUDContainer(); // HUD.js
 		this.ready();
 		this.test();
@@ -65,6 +69,7 @@ BasicGame.Play.prototype = {
 		var penetrateRange = this.GM.ballPenetrateRange*.3;
 		if (ball.x < paddle.x-penetrateRange) {
 			ball.penetrate = false;
+			ball.tint = 0xffffff;
 			diff = paddle.x - ball.x;
 			speedX = -10 * diff;
 			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
@@ -72,6 +77,7 @@ BasicGame.Play.prototype = {
 			ball.body.velocity.y = speedY;
 		} else if (ball.x > paddle.x+penetrateRange) {
 			ball.penetrate = false;
+			ball.tint = 0xffffff;
 			diff = ball.x - paddle.x;
 			speedX = 10 * diff;
 			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
@@ -79,6 +85,7 @@ BasicGame.Play.prototype = {
 			ball.body.velocity.y = speedY;
 		} else {
 			ball.penetrate = true;
+			ball.tint = 0xff0000;
 			if (ball.body.velocity.x >= 0) {
 				speedX = (ball.body.velocity.x + ball.standardSpeedRangeX) * .5;
 			} else {
@@ -86,20 +93,16 @@ BasicGame.Play.prototype = {
 			}
 			ball.body.velocity.x = speedX;
 			ball.body.velocity.y = this.rnd.between(ball.penetrateMinSpeedY, ball.penetrateMaxSpeedY);
+			this.CutInSprite.startTween();
 		}
 	},
 
 	ballHitBrick: function (ball, brick) {
 		brick.kill();
-		if (this.Bricks.countLiving() <= this.GM.CharInfo.clearCount) {
-			console.log("Clear");
-		}
-	},
-
-	BgContainer: function () {
-		var bgSprite = this.add.sprite(this.world.centerX,this.world.centerY,'Dialog');
-		bgSprite.anchor.setTo(.5);
-		bgSprite.scale.setTo(1.2);
+		if (this.Bricks.countLiving() <= this.GM.CharInfo.clearCount) this.clear();
+		this.Particles.x = ball.x;
+		this.Particles.y = ball.y;
+		this.Particles.explode(1000,10);
 	},
 
 	PhysicsManager: function () {
@@ -137,6 +140,7 @@ BasicGame.Play.prototype = {
 		this.HUD.showClear();
 		// this.M.SE.play('CloseSE'); // TODO
 		this.time.events.add(1500, function () {
+			this.game.paused = true;
 			this.HUD.showToResult();
 			this.endInput('Result');
 		}, this);
@@ -147,6 +151,7 @@ BasicGame.Play.prototype = {
 		this.HUD.showGameOver();
 		// this.M.SE.play('CloseSE'); // TODO
 		this.time.events.add(1500, function () {
+			this.game.paused = true;
 			this.HUD.showToBack();
 			this.endInput('Title');
 		}, this);
@@ -154,6 +159,7 @@ BasicGame.Play.prototype = {
 
 	endInput: function (nextScene) {
 		this.game.input.onDown.add(function () {
+			this.game.paused = false;
 			this.M.NextScene(nextScene);
 		}, this);
 	},
