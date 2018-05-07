@@ -9,6 +9,7 @@ BasicGame.Title.prototype = {
 		this.GC = this.GameController();
 		this.ScrollContainer();
 		this.BtnContainer();
+		this.genTitleTextSprite();
 		this.start();
 	},
 
@@ -171,6 +172,13 @@ BasicGame.Title.prototype = {
 		this.M.S.BasicGrayLabel(250,100,function () {
 			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
 		}, '開発者', textStyle);
+	},
+
+	genTitleTextSprite: function () {
+		var textStyle = {
+			fontSize: 70
+		};
+		this.M.S.genText(this.world.width-200,50,'238Games',textStyle);
 	},
 
 	start: function () {
