@@ -199,6 +199,10 @@ Middleware.prototype.SpriteManager.prototype = {
 			if (multipleTextSprite.SExist) group.add(multipleTextSprite);
 			group.add(textSprite);
 		};
+		textSprite.addToChild = function (parent) {
+			if (multipleTextSprite.SExist) parent.addChild(multipleTextSprite);
+			parent.addChild(textSprite);
+		};
 		textSprite.UonInputOver = function (func) {
 			textSprite.inputEnabled = true;
 			textSprite.events.onInputOver.add(func,Scene);
@@ -299,6 +303,16 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
+	},
+	BasicWhiteLabelS: function (x,y,func,text,textStyle,option) {
+		option = option||{};
+		var btnSprite = this.genButton(x,y,'WhiteBtnS',func);
+		btnSprite.anchor.setTo(.5);
+		btnSprite.setFrames(0,0,1,0);
+		btnSprite.tint = option.tint||0xffffff;
+		var textSprite = this.genText(0,0,text,textStyle);
+		textSprite.addToChild(btnSprite);
+		return btnSprite;
 	},
 	// [x,y,tint,tween,duration,scale,onCompFunc]
 	BasicGrayDialog: function (option) {
@@ -414,6 +428,18 @@ Middleware.prototype.SpriteManager.prototype = {
 			strokeThickness: 15,
 			multipleStroke: mainStrokeColor,
 			multipleStrokeThickness: 10,
+		};
+	},
+	BaseTextStyleS: function (fontSize) {
+		var mainTextColor = this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
+		var mainStrokeColor = this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
+		return {
+			fontSize: fontSize || 25,
+			fill: mainTextColor,
+			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
+			strokeThickness: 8,
+			multipleStroke: mainStrokeColor,
+			multipleStrokeThickness: 5,
 		};
 	},
 };

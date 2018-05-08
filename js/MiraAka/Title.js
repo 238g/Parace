@@ -47,29 +47,29 @@ BasicGame.Title.prototype = {
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(
-			this.world.centerX,100,
-			this.M.getConst('GAME_TITLE'),this.M.S.BaseTextStyle(80));
+			this.world.centerX,50,
+			this.M.getConst('GAME_TITLE'),this.M.S.BaseTextStyle(40));
 		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
 	},
 
 	BtnContainer: function () {
-		var textStyle = this.M.S.BaseTextStyle(50);
+		var textStyle = this.M.S.BaseTextStyleS(25);
 		var leftX = this.world.width*.25;
 		var rightX = leftX*3;
-		var y = this.world.centerY+400;
+		var y = this.world.centerY+200;
 		var tint = this.M.getConst('MAIN_TINT');
 		this.genStartBtnSprite(leftX,y,textStyle,tint);
 		this.genHowtoBtnSprite(rightX,y,textStyle,tint);
-		this.genLogoBtnSprite(this.world.centerX,y+150);
-		this.genOtherGameBtnSprite(this.world.centerX,y+300,textStyle,tint);
-		this.genVolumeBtnSprite(leftX-100,y+300,tint);
-		this.genFullScreenBtnSprite(rightX+100,y+300,tint);
+		// this.genLogoBtnSprite(this.world.centerX,y+75); // TODO make img
+		this.genOtherGameBtnSprite(this.world.centerX,y+150,textStyle,tint);
+		this.genVolumeBtnSprite(leftX-50,y+150,tint);
+		this.genFullScreenBtnSprite(rightX+50,y+150,tint);
 	},
 
 	genStartBtnSprite: function (x,y,textStyle,tint) {
 		var text = 'プレイ！';
-		this.M.S.BasicGrayLabel(x,y,function () {
+		this.M.S.BasicWhiteLabelS(x,y,function () {
 			if (this.inputEnabled) {
 				this.M.NextScene('Play');
 				// this.M.SE.play('Start',{volume:1}); // TODO
@@ -84,6 +84,7 @@ BasicGame.Title.prototype = {
 		var curImg = this.sound.mute ? muteImg : (this.sound.volume==1) ? maxImg : halfImg;
 		var volumeSprite = this.M.S.genSprite(x,y,'VolumeIcon',curImg);
 		volumeSprite.anchor.setTo(.5);
+		volumeSprite.scale.setTo(.5);
 		volumeSprite.UonInputDown(function (sprite) {
 			if (this.sound.mute) {
 				sprite.frameName = maxImg;
@@ -108,6 +109,7 @@ BasicGame.Title.prototype = {
 		var curImg = this.scale.isFullScreen ? offImg : onImg;
 		var fullScreenSprite = this.M.S.genSprite(x,y,'GameIconsBlack',curImg);
 		fullScreenSprite.anchor.setTo(.5);
+		fullScreenSprite.scale.setTo(.5);
 		fullScreenSprite.UonInputDown(function (sprite) {
 			if (this.scale.isFullScreen) {
 				sprite.frameName = onImg;
@@ -121,7 +123,7 @@ BasicGame.Title.prototype = {
 
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
 		var text = '他のゲームを遊ぶ';
-		var label = this.M.S.BasicGrayLabel(x,y,function () {
+		var label = this.M.S.BasicWhiteLabelS(x,y,function () {
 			var url = 'https://238g.github.io/Parace/238Games.html';
 			if (this.game.device.desktop) {
 				window.open(url,'_blank');
@@ -133,7 +135,7 @@ BasicGame.Title.prototype = {
 
 	genHowtoBtnSprite: function (x,y,textStyle,tint) {
 		var text = '遊び方';
-		this.M.S.BasicGrayLabel(x,y,function () {
+		this.M.S.BasicWhiteLabelS(x,y,function () {
 			// this.M.SE.play('OpenSE',{volume:1}); // TODO
 			this.Dialog.bringToTop();
 			this.Dialog.tweenShow();

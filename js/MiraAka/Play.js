@@ -6,6 +6,7 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.GameManager();
+		this.genStartBtnSprite();
 		this.ready();
 		this.test();
 	},
@@ -19,6 +20,20 @@ BasicGame.Play.prototype = {
 	updateT: function () {
 		if (this.GM.isPlaying) {
 		}
+	},
+
+	genStartBtnSprite: function () {
+		var textStyle = this.M.S.BaseTextStyleS(25);
+		var btnSprite = this.add.button(
+			this.world.centerX,this.world.centerY,
+			'CircleBtns',function () {
+
+			}, this,'Hover','Normal','Push','Normal'
+		);
+		btnSprite.anchor.setTo(.5);
+		var textSprite = this.M.S.genText(0,0,'スタート',textStyle);
+		textSprite.addToChild(btnSprite);
+		// TODO this. -> changeText...
 	},
 
 	ready: function () {

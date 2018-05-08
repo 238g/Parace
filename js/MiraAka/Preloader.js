@@ -10,17 +10,16 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
-		this.load.atlasXML('greySheet', 
-			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+		this.load.spritesheet('WhiteBtnS','./images/public/Btns/WhiteBtnsS.png',215,50);
 		this.load.atlasXML('GameIconsBlack', 
 			'./images/public/sheets/GameIconsBlack.png', './images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon', 
 			'./images/public/VolumeIcon/VolumeIcon.png', './images/public/VolumeIcon/VolumeIcon.json');
+		this.load.atlasJSONHash('CircleBtns', 
+			'./images/MiraAka/CircleBtns/CircleBtns.png', './images/MiraAka/CircleBtns/CircleBtns.json');
 		var imageAssets = {
-			'Dialog': './images/public/dialogs/Dialog_5.jpg',
-			'Logo': './images/ChihiroGame/Logo.jpg',
-			'Chihiro_1': './images/ChihiroGame/Chihiro_1.png',
-			'Particle': './images/ChihiroGame/Particle.png',
+			'Dialog': './images/public/dialogs/Dialog_5.jpg', // TODO
+			'Logo': './images/ChihiroGame/Logo.jpg', // TODO
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -28,6 +27,7 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
+			// TODO
 			'TitleBGM': [
 				'./sounds/BGM/R/retrogamecenter3.mp3',
 				'./sounds/BGM/R/retrogamecenter3.wav',
