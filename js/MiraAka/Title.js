@@ -61,8 +61,9 @@ BasicGame.Title.prototype = {
 		var tint = this.M.getConst('MAIN_TINT');
 		this.genStartBtnSprite(leftX,y,textStyle,tint);
 		this.genHowtoBtnSprite(rightX,y,textStyle,tint);
-		// this.genLogoBtnSprite(this.world.centerX,y+75); // TODO make img
-		this.genOtherGameBtnSprite(this.world.centerX,y+150,textStyle,tint);
+		this.genOtherGameBtnSprite(leftX,y+75,textStyle,tint);
+		this.genOtherGameBtnSprite(rightX,y+75,textStyle,tint); // TODO inquery
+		// this.genLogoBtnSprite(this.world.centerX,y+150); // TODO make img
 		this.genVolumeBtnSprite(leftX-50,y+150,tint);
 		this.genFullScreenBtnSprite(rightX+50,y+150,tint);
 	},

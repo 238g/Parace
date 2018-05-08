@@ -38,6 +38,7 @@ BasicGame.Boot.prototype = {
 
 	defineConf: function () {
 		this.M.defineConf({
+			QuestionInfo: this.genQuestionInfo(),
 		});
 	},
 };
