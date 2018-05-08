@@ -405,12 +405,14 @@ Middleware.prototype.SpriteManager.prototype = {
 		}, Scene);
 	},
 	BaseTextStyle: function (fontSize) {
+		var mainTextColor = this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
+		var mainStrokeColor = this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
 		return {
 			fontSize: fontSize || 50,
-			fill: this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF',
+			fill: mainTextColor,
 			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
 			strokeThickness: 15,
-			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF',
+			multipleStroke: mainStrokeColor,
 			multipleStrokeThickness: 10,
 		};
 	},
