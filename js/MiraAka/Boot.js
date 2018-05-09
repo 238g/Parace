@@ -32,7 +32,6 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.M.defineGlobal({
-			loadedOnlyFirst: false,
 		});
 	},
 
