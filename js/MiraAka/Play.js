@@ -7,6 +7,7 @@ BasicGame.Play.prototype = {
 	},
 
 	create: function () {
+		this.time.events.removeAll();
 		this.GameManager();
 		this.BtnContainer();
 		this.QuizContainer();
