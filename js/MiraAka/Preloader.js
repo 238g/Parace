@@ -23,6 +23,8 @@ BasicGame.Preloader.prototype = {
 
 	loadAssets: function () {
 		this.load.spritesheet('WhiteBtnS','images/public/Btns/WhiteBtnsS.png',215,50);
+		this.load.spritesheet('RedBtns','images/MiraAka/RedBtns.png',100,100);
+		this.load.spritesheet('BlueBtns','images/MiraAka/BlueBtns.png',100,100);
 		this.load.atlasXML('GameIconsBlack', 
 			'images/public/sheets/GameIconsBlack.png', 'images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon', 
@@ -41,8 +43,10 @@ BasicGame.Preloader.prototype = {
 		this.sounds = {
 			// TODO
 			'TitleBGM': [
-				'sounds/BGM/R/retrogamecenter3.mp3',
-				'sounds/BGM/R/retrogamecenter3.wav',
+				// 'sounds/BGM/R/retrogamecenter3.mp3',
+				// 'sounds/BGM/R/retrogamecenter3.wav',
+				'sounds/SE/phaseJump1.mp3',
+				'sounds/SE/phaseJump1.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
@@ -53,7 +57,7 @@ BasicGame.Preloader.prototype = {
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(this.M.getConst('MAIN_COLOR'));
 		this.isChecking = true;
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'BGM読み込み中…',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
 	},
 
 	start: function () {
