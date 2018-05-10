@@ -16,8 +16,6 @@ BasicGame.Play.prototype = {
 		this.QUESTION_COUNT_BASE_TEXT = '出題数: ';
 		this.CORRECT_COUNT_BASE_TEXT = '正解: ';
 		this.WRONG_COUNT_BASE_TEXT = '不正解: ';
-		this.FULL_SCREEN_OFF_IMG = BasicGame.FULL_SCREEN_OFF_IMG;
-		this.FULL_SCREEN_ON_IMG = BasicGame.FULL_SCREEN_ON_IMG;
 	},
 
 	DeclearVal: function () {

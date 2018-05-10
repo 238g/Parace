@@ -5,6 +5,9 @@ BasicGame.Title.prototype = {
 		this.DeclearObj();
 	},
 
+	DeclearConst: function () {
+	},
+
 	DeclearVal: function () {
 		this.inputEnabled = false;
 	},
@@ -71,7 +74,7 @@ BasicGame.Title.prototype = {
 		this.genStartBtnSprite(leftX,y,textStyle,tint);
 		this.genHowtoBtnSprite(rightX,y,textStyle,tint);
 		this.genOtherGameBtnSprite(leftX,y+75,textStyle,tint);
-		this.genInqueryBtnSprite(rightX,y+75,textStyle,tint);
+		// this.genInqueryBtnSprite(rightX,y+75,textStyle,tint);
 		// this.genLogoBtnSprite(this.world.centerX,y+150); // TODO make img
 		this.genVolumeBtnSprite(leftX-50,y+150,tint);
 		this.genFullScreenBtnSprite(rightX+50,y+150,tint);
@@ -144,18 +147,6 @@ BasicGame.Title.prototype = {
 		var text = '他のゲームを遊ぶ';
 		var label = this.M.S.BasicWhiteLabelS(x,y,function () {
 			var url = BasicGame.MY_GAMES_URL;
-			if (this.game.device.desktop) {
-				window.open(url,'_blank');
-			} else {
-				location.href = url;
-			}
-		},text,textStyle,{tint:tint});
-	},
-
-	genInqueryBtnSprite: function (x,y,textStyle,tint) {
-		var text = '情報提供等';
-		var label = this.M.S.BasicWhiteLabelS(x,y,function () {
-			var url = 'https://twitter.com/'+__DEVELOPER_TWITTER_ID;
 			if (this.game.device.desktop) {
 				window.open(url,'_blank');
 			} else {
