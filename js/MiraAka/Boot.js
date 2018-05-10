@@ -1,4 +1,18 @@
-BasicGame = {};
+BasicGame = {
+	GAME_TITLE: document.title,
+	MAIN_COLOR: '#52deff',
+	MAIN_TINT:  0x52deff,
+	MAIN_TEXT_COLOR: '#52deff',
+	MAIN_STROKE_COLOR: '#f9d682',
+	WHITE_COLOR: '#f1f7fc',
+	YOUTUBE_URL: 'https://www.youtube.com/watch?v=f1zpkixJLmA', // 【ミラアカゲーム】オリジナルゲーム作ったった！
+	VOLUME_MAX_IMG: 'VolumeMax',
+	VOLUME_HALF_IMG: 'VolumeHalf',
+	VOLUME_MUTE_IMG: 'VolumeMute',
+	FULL_SCREEN_OFF_IMG: 'smaller',
+	FULL_SCREEN_ON_IMG: 'larger',
+	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
+};
 BasicGame.Boot = function() {};
 BasicGame.Boot.prototype = {
 	init: function () {
@@ -20,13 +34,10 @@ BasicGame.Boot.prototype = {
 
 	defineConst: function () {
 		this.M.defineConst({
-			GAME_TITLE: document.title,
-			MAIN_COLOR: '#52deff',
-			MAIN_TINT:  0x52deff,
-			MAIN_TEXT_COLOR: '#52deff',
-			MAIN_STROKE_COLOR: '#f9d682',
-			WHITE_COLOR: '#f1f7fc',
-			YOUTUBE_URL: 'https://www.youtube.com/watch?v=f1zpkixJLmA', // 【ミラアカゲーム】オリジナルゲーム作ったった！
+			MAIN_COLOR: BasicGame.MAIN_COLOR,
+			MAIN_TEXT_COLOR: BasicGame.MAIN_TEXT_COLOR,
+			MAIN_STROKE_COLOR: BasicGame.MAIN_STROKE_COLOR,
+			WHITE_COLOR: BasicGame.WHITE_COLOR,
 		});
 	},
 

@@ -55,7 +55,7 @@ BasicGame.Preloader.prototype = {
 	loadComplete: function () {
 		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 		this.M.SE.setSounds(this.sounds);
-		this.M.H.setSPBrowserColor(this.M.getConst('MAIN_COLOR'));
+		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.isChecking = true;
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
 	},

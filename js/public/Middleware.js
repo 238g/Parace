@@ -730,4 +730,13 @@ Middleware.prototype.Helper.prototype = {
 		);
 		return false;
 	},
+	splice1: function (arr,location) {
+		var l=arr.length;
+		if (l){
+			while (location<l){
+				arr[location++] = arr[location];
+			}
+			--arr.length;
+		}
+	},
 };
