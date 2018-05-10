@@ -32,6 +32,8 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Dialog': 'images/public/dialogs/Dialog_5.jpg', // TODO
 			'Logo': 'images/ChihiroGame/Logo.jpg', // TODO
+			'Player': 'images/tiatia/KillEffect.png', // TODO
+			'Enemy': 'images/tiatia/KillEffect.png', // TODO
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
