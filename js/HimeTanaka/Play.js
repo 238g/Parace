@@ -294,7 +294,8 @@ BasicGame.Play.prototype = {
 		var self = this;
 		playerSprite.jump = function () {
 			self.M.SE.play('Jump',{volume:2});
-			playerSprite.body.velocity.y = -1000;
+			var deltaTime = self.time.physicsElapsedMS;
+			playerSprite.body.velocity.y = -63*deltaTime;
 		};
 		this.Player = playerSprite;
 	},

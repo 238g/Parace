@@ -43,7 +43,9 @@ BasicGame.Play.prototype.PlayerContainer = function () {
 
 BasicGame.Play.prototype.jumpPlayer = function () {
 	if (this.isPlaying) {
-		this.Player.body.velocity.y = -350; // TODO per level? or adjust
+		var jumpPower = 20; // TODO per level? or adjust
+		var deltaTime = this.time.physicsElapsedMS;
+		this.Player.body.velocity.y = - jumpPower * deltaTime;
 		this.add.tween(this.Player).to({angle: -20}, 100).start();
 	}
 };
