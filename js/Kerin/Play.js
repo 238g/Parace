@@ -23,7 +23,7 @@ BasicGame.Play.prototype = {
 
 	DeclearObj: function () {
 		this.Player = null;
-		this.Enemys = null;
+		this.Enemies = null;
 		this.EnemyPool = null;
 	},
 
@@ -53,7 +53,7 @@ BasicGame.Play.prototype = {
 	TimeManager: function () {
 		if (this.secTimer<0) {
 			this.secTimer = this.spawnRate;
-			this.addRowOfEnemys(); // TODO
+			this.addRowOfEnemies(); // TODO
 		}
 		this.secTimer-=this.time.elapsed;
 	},
@@ -62,7 +62,7 @@ BasicGame.Play.prototype = {
 		this.Player.body.velocity.y = 0;
 		this.Player.body.gravity.y = 0;
 		this.isPlaying = false;
-		this.stopEnemys();
+		this.stopEnemies();
 	},
 
 	checkPlayerStatus: function () {
@@ -71,14 +71,14 @@ BasicGame.Play.prototype = {
 	},
 
 	collisionManager: function () {
-		this.physics.arcade.collide(this.Player,this.Enemys,this.hitEnemy,null,this);
+		this.physics.arcade.collide(this.Player,this.Enemies,this.hitEnemy,null,this);
 	},
 
 	hitEnemy: function () {
 		if (this.Player.alive == false) return;
 		this.Player.alive = false;
 		this.isPlaying = false;
-		this.stopEnemys();
+		this.stopEnemies();
 		this.Player.body.velocity.y = 0;
 		this.time.events.add(500, function () { // TODO del
 		// this.time.events.add(2000, function () {
@@ -87,8 +87,8 @@ BasicGame.Play.prototype = {
 		}, this);
 	},
 
-	stopEnemys: function () {
-		this.Enemys.setAll('body.velocity.x',0,true);
+	stopEnemies: function () {
+		this.Enemies.setAll('body.velocity.x',0,true);
 	},
 
 	ready: function () {
@@ -114,7 +114,7 @@ BasicGame.Play.prototype = {
 	start: function () {
 		if (this.isPlaying == false) {
 			this.isPlaying = true;
-			this.Enemys.killAll();
+			this.Enemies.killAll();
 			this.resetPlayer();
 		}
 	},

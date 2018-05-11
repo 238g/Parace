@@ -1,9 +1,9 @@
 BasicGame.Play.prototype.EnemyContainer = function () {
-	this.Enemys = this.add.group();
-	this.Enemys.createMultiple(100,'Enemy');
+	this.Enemies = this.add.group();
+	this.Enemies.createMultiple(100,'Enemy');
 };
 
-BasicGame.Play.prototype.addRowOfEnemys = function () {
+BasicGame.Play.prototype.addRowOfEnemies = function () {
 	var x = this.world.width;
 	var holeNum = this.rnd.integerInRange(1,this.enemyCount-this.holeCount-1);
 	for (var i=0;i<this.enemyCount;i++) {
@@ -19,7 +19,7 @@ BasicGame.Play.prototype.addRowOfEnemys = function () {
 };
 
 BasicGame.Play.prototype.addOneEnemy = function (x,y) {
-	this.EnemyPool = this.Enemys.getFirstDead();
+	this.EnemyPool = this.Enemies.getFirstDead();
 	this.EnemyPool.reset(x,y);
 	this.physics.arcade.enable(this.EnemyPool);
 	this.EnemyPool.body.velocity.x = - this.enemySpeed * this.time.physicsElapsedMS;
