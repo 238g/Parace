@@ -7,7 +7,7 @@ BasicGame.Play.prototype = {
 	},
 
 	DeclearConst: function () {
-		this.COUNTDOWN_COUNT = 6;
+		this.COUNTDOWN_COUNT = 4;
 		this.CORRECT = 1;
 		this.WRONG = 2;
 		this.NONE_SELECT = 3;
@@ -21,7 +21,7 @@ BasicGame.Play.prototype = {
 	DeclearVal: function () {
 		this.isPlaying = false;
 		this.isCounting = false;
-		this.secTimer = 1000;
+		this.secTimer = 800;
 		this.QuestionInfo = this.M.getConf('QuestionInfo');
 		this.countdownCount = this.COUNTDOWN_COUNT;
 		this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
@@ -43,6 +43,7 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.time.events.removeAll();
+		this.BgContainer();
 		this.BtnContainer(); // PlayBtn.js
 		this.QuizContainer();
 		this.HUDContainer(); // PlayHUD.js
@@ -77,11 +78,17 @@ BasicGame.Play.prototype = {
 		this.countdownCount = this.COUNTDOWN_COUNT;
 		this.setStartBtnText('回答時間', 40);
 		// TODO auto answer on off
-		this.time.events.add(500,function () { // TODO del
-		// this.time.events.add(3500,function () {
+		this.time.events.add(2000,function () {
 			this.startBtnActive(true);
 			this.setStartBtnText(this.touchOrClick+'で\n答えを確認', 30);
+			this.M.SE.setVolume('currentBGM',1);
 		}, this);
+	},
+
+	BgContainer: function () {
+		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		var sprite = this.add.sprite(this.world.centerX,this.world.centerY,'PlayBg');
+		sprite.anchor.setTo(.5);
 	},
 
 	QuizContainer: function () {
@@ -108,15 +115,14 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
-		// TODO
-		// this.stopBGM();
-		// this.playBGM();
+		this.stopBGM();
+		this.playBGM();
 	},
 
 	playBGM: function () {
 		var s = this.M.SE;
-		if (s.isPlaying('Stage_1')) return;
-		s.play('Stage_1',{isBGM:true,loop:true,volume:1});
+		if (s.isPlaying('PlayBGM')) return;
+		s.play('PlayBGM',{isBGM:true,loop:true,volume:1});
 	},
 
 	stopBGM: function () {
@@ -135,6 +141,9 @@ BasicGame.Play.prototype = {
 		this.hideCorrectBtn();
 		this.hideWrongBtn();
 		this.setQuestion();
+		this.M.SE.setVolume('currentBGM',0);
+		this.M.SE.play('QuizVoice',{volume:1});
+		if (this.HowtoTextSprite.visible) this.HowtoTextSprite.hide();
 	},
 
 	setQuestion: function () {
@@ -168,7 +177,7 @@ BasicGame.Play.prototype = {
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function () {
 				this.countdownCount = 1;
 			}, this);
-			this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+			if(this.M.H.getQuery('mute')) this.sound.mute=true;
 		}
 
 		/*

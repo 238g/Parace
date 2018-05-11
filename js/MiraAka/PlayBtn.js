@@ -125,7 +125,7 @@ BasicGame.Play.prototype.tweet = function () {
 		'罰ゲーム2',
 		'罰ゲーム3',
 		'罰ゲーム4',
-	]; // TODO
+	];
 	var emoji = '💣💣💣💣💣💣';
 	var text = 
 				'『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'

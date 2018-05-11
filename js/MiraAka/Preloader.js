@@ -32,8 +32,9 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasJSONHash('CircleBtns', 
 			'images/MiraAka/CircleBtns/CircleBtns.png', 'images/MiraAka/CircleBtns/CircleBtns.json');
 		var imageAssets = {
-			'Dialog': 'images/public/dialogs/Dialog_5.jpg', // TODO
-			'Logo': 'images/ChihiroGame/Logo.jpg', // TODO
+			'Logo': 'images/MiraAka/Logo.jpg',
+			'TitleBg': 'images/MiraAka/TitleBg.jpg',
+			'PlayBg': 'images/MiraAka/PlayBg.jpg',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
@@ -41,12 +42,17 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			// TODO
 			'TitleBGM': [
-				// 'sounds/BGM/R/retrogamecenter3.mp3',
-				// 'sounds/BGM/R/retrogamecenter3.wav',
-				'sounds/SE/phaseJump1.mp3',
-				'sounds/SE/phaseJump1.wav',
+				'sounds/BGM/B/CandyBouquet.mp3',
+				'sounds/BGM/B/CandyBouquet.wav',
+			],
+			'PlayBGM': [
+				'sounds/BGM/F/famipop2.mp3',
+				'sounds/BGM/F/famipop2.wav',
+			],
+			'QuizVoice': [
+				'sounds/VOICE/MiraAka/QuizVoice.mp3',
+				'sounds/VOICE/MiraAka/QuizVoice.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);

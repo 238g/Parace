@@ -3,6 +3,7 @@ BasicGame.Play.prototype.HUDContainer = function () {
 	this.genQuestionCountTextSprite(80,50,textStyle);
 	this.genCorrectCountTextSprite(this.world.centerX,50,textStyle);
 	this.genWrongCountTextSprite(this.world.width-80,50,textStyle);
+	this.genHowtoTextSprite(this.world.centerX,this.world.centerY*1.55,textStyle);
 };
 
 BasicGame.Play.prototype.genQuestionCountTextSprite = function (x,y,textStyle) {
@@ -27,4 +28,8 @@ BasicGame.Play.prototype.genWrongCountTextSprite = function (x,y,textStyle) {
 
 BasicGame.Play.prototype.setWrongCountText = function (val) {
 	this.WrongCountTextSprite.changeText(this.WRONG_COUNT_BASE_TEXT+val);
+};
+
+BasicGame.Play.prototype.genHowtoTextSprite = function (x,y,textStyle) {
+	this.HowtoTextSprite = this.M.S.genText(x,y,'罰ゲームを4種類\n用意してからやると良いかも！',textStyle);
 };

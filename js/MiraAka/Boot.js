@@ -2,10 +2,11 @@ BasicGame = {
 	GAME_TITLE: document.title,
 	MAIN_COLOR: '#52deff',
 	MAIN_TINT:  0x52deff,
-	MAIN_TEXT_COLOR: '#52deff',
+	MAIN_TEXT_COLOR: '#2ca0eb',
 	MAIN_STROKE_COLOR: '#f9d682',
 	WHITE_COLOR: '#f1f7fc',
-	YOUTUBE_URL: 'https://www.youtube.com/watch?v=f1zpkixJLmA', // 【ミラアカゲーム】オリジナルゲーム作ったった！
+	YOUTUBE_URL: 'https://www.youtube.com/channel/UCMYtONm441rBogWK_xPH9HA',
+	YOUTUBE_HOWTO_URL: 'https://www.youtube.com/watch?v=f1zpkixJLmA&t=67s', // 【ミラアカゲーム】オリジナルゲーム作ったった！
 	VOLUME_MAX_IMG: 'VolumeMax',
 	VOLUME_HALF_IMG: 'VolumeHalf',
 	VOLUME_MUTE_IMG: 'VolumeMute',
