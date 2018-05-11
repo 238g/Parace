@@ -7,17 +7,24 @@ BasicGame.Play.prototype = {
 	},
 
 	DeclearConst: function () {
+		this.PLAYER_FIRST_POS_X = 200;
+		this.PLAYER_FIRST_POS_Y = 200;
 	},
 
 	DeclearVal: function () {
 		this.isPlaying = false;
 		this.spawnRate = 1500; // TODO per level
-		this.secTimer = this.spawnRate;
+		this.secTimer = 500;
+		this.enemySpeed = 12;// TODO per level? or adjust
+		this.jumpSpeed = 20;// TODO per level? or adjust
+		this.holeCount = 5; // TODO per level
+		this.enemyCount = 10; // TODO adjust by size
 	},
 
 	DeclearObj: function () {
 		this.Player = null;
 		this.Enemys = null;
+		this.EnemyPool = null;
 	},
 
 	create: function () {
@@ -51,10 +58,16 @@ BasicGame.Play.prototype = {
 		this.secTimer-=this.time.elapsed;
 	},
 
+	endLevel: function () {
+		this.Player.body.velocity.y = 0;
+		this.Player.body.gravity.y = 0;
+		this.isPlaying = false;
+		this.stopEnemys();
+	},
+
 	checkPlayerStatus: function () {
-		var player = this.Player;
-		if (player.y < 0 || player.y > this.world.height) this.gameOver();
-		if (player.angle < 20) player.angle += 1;
+		if (this.Player.y < 0 || this.Player.y > this.world.height) this.gameOver();
+		if (this.Player.angle < 20) this.Player.angle += 1;
 	},
 
 	collisionManager: function () {
@@ -65,15 +78,17 @@ BasicGame.Play.prototype = {
 		if (this.Player.alive == false) return;
 		this.Player.alive = false;
 		this.isPlaying = false;
-		this.Enemys.forEach(function (enemy) {
-			enemy.body.velocity.x = 0;
-		}, this);
+		this.stopEnemys();
 		this.Player.body.velocity.y = 0;
 		this.time.events.add(500, function () { // TODO del
 		// this.time.events.add(2000, function () {
 			this.Player.kill();
 			this.gameOver();
 		}, this);
+	},
+
+	stopEnemys: function () {
+		this.Enemys.setAll('body.velocity.x',0,true);
 	},
 
 	ready: function () {
@@ -97,7 +112,11 @@ BasicGame.Play.prototype = {
 	},
 
 	start: function () {
-		this.isPlaying = true;
+		if (this.isPlaying == false) {
+			this.isPlaying = true;
+			this.Enemys.killAll();
+			this.resetPlayer();
+		}
 	},
 
 	gameOver: function () {
