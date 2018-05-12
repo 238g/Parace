@@ -5,11 +5,11 @@ BasicGame.Play.prototype.EnemyContainer = function () {
 
 BasicGame.Play.prototype.addRowOfEnemies = function () {
 	var x = this.world.width;
-	var holeNum = this.rnd.integerInRange(1,this.enemyCount-this.holeCount-1);
-	for (var i=0;i<this.enemyCount;i++) {
+	var holeTopNum = this.rnd.integerInRange(1,this.enemyRowCount-this.holeCount-1);
+	for (var i=0;i<this.enemyRowCount;i++) {
 		var addFlag = true;
 		for (var j=0;j<this.holeCount;j++) {
-			if (i == (holeNum + j)) {
+			if (i == (holeTopNum + j)) {
 				addFlag = false;
 				break;
 			}

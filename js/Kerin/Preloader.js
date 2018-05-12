@@ -2,7 +2,6 @@ BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
 	init: function () { 
 		this.sounds = null; 
-		this.isChecking = false;
 	},
 	create: function () {
 		this.M.S.BasicLoadingAnim();
@@ -10,15 +9,6 @@ BasicGame.Preloader.prototype = {
 		this.load.onLoadComplete.add(this.loadComplete, this);
 		this.loadAssets();
 		this.load.start();
-	},
-
-	update: function () {
-		if (this.isChecking) {
-			if (this.cache.isSoundDecoded('TitleBGM')) {
-				this.isChecking = false;
-				this.start();
-			}
-		}
 	},
 
 	loadAssets: function () {
@@ -56,8 +46,8 @@ BasicGame.Preloader.prototype = {
 		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
-		this.isChecking = true;
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',{fontSize:30});
+		this.game.input.onDown.add(this.start,this);
 	},
 
 	start: function () {

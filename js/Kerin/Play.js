@@ -18,7 +18,7 @@ BasicGame.Play.prototype = {
 		this.enemySpeed = 12;// TODO per level? or adjust
 		this.jumpSpeed = 20;// TODO per level? or adjust
 		this.holeCount = 5; // TODO per level
-		this.enemyCount = 10; // TODO adjust by size
+		this.enemyRowCount = 10; // TODO adjust by size
 	},
 
 	DeclearObj: function () {

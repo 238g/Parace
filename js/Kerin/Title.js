@@ -6,6 +6,7 @@ BasicGame.Title.prototype = {
 	},
 
 	DeclearConst: function () {
+		this.BEAT_DURATION = 500;
 	},
 
 	DeclearVal: function () {
@@ -26,25 +27,21 @@ BasicGame.Title.prototype = {
 	},
 
 	inputController: function () {
-		return this.inputEnabled = true; // TODO check
 		this.time.events.add(800,function () {
 			this.inputEnabled = true; 
 		},this);
 	},
 
 	soundController: function () {
-		return; // TODO
-		var s = this.M.SE;
-		s.stop('currentBGM');
-		this.time.events.add(500, function () {
-			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
-		}, this);
-		this.time.events.add(1200, function () {
-			if (s.isPlaying('TitleBGM')) return;
-			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
-		});
+		return;
+		this.M.SE.stop('currentBGM');
+		this.playBGM();
+	},
+
+	playBGM: function () {
+		if (this.M.SE.isPlaying('TitleBGM')) return;
+		this.M.SE.stop('currentBGM');
+		this.M.SE.play('TitleBGM',{isBGM:true,loop:true,volume:1});
 	},
 
 	BgContainer: function () {
@@ -58,10 +55,9 @@ BasicGame.Title.prototype = {
 	},
 
 	genTitleTextSprite: function () {
-		var textSprite = this.M.S.genText(
-			this.world.centerX,50,
+		var textSprite = this.M.S.genText(this.world.centerX,50,
 			BasicGame.GAME_TITLE,this.M.S.BaseTextStyle(40));
-		textSprite.addTween('beatA',{duration:508});
+		textSprite.addTween('beatA',{duration:this.BEAT_DURATION});
 		textSprite.startTween('beatA');
 	},
 
@@ -86,6 +82,9 @@ BasicGame.Title.prototype = {
 			if (this.inputEnabled) {
 				this.M.NextScene('Play');
 				// this.M.SE.play('Start',{volume:1}); // TODO
+			} else {
+				this.playBGM();
+				this.inputEnabled = true;
 			}
 		},text,textStyle,{tint:tint});
 	},
@@ -102,19 +101,16 @@ BasicGame.Title.prototype = {
 	},
 
 	onDownVolumeBtn: function (sprite) {
-		var maxImg = BasicGame.VOLUME_MAX_IMG;
-		var halfImg = BasicGame.VOLUME_HALF_IMG;
-		var muteImg = BasicGame.VOLUME_MUTE_IMG;
 		if (this.sound.mute) {
-			sprite.frameName = maxImg;
+			sprite.frameName = BasicGame.VOLUME_MAX_IMG;
 			this.sound.mute = false;
 			this.sound.volume = 1;
 		} else {
 			if (this.sound.volume == 1) {
-				sprite.frameName = halfImg;
+				sprite.frameName = BasicGame.VOLUME_HALF_IMG;
 				this.sound.volume = .5;
 			} else {
-				sprite.frameName = muteImg;
+				sprite.frameName = BasicGame.VOLUME_MUTE_IMG;
 				this.sound.volume = 0;
 				this.sound.mute = true;
 			}
@@ -132,13 +128,11 @@ BasicGame.Title.prototype = {
 	},
 
 	onDonwFullScreenBtn: function (sprite) {
-		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
-		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 		if (this.scale.isFullScreen) {
-			sprite.frameName = onImg;
+			sprite.frameName = BasicGame.FULL_SCREEN_OFF_IMG;
 			this.scale.stopFullScreen(false);
 		} else {
-			sprite.frameName = offImg;
+			sprite.frameName = BasicGame.FULL_SCREEN_ON_IMG;
 			this.scale.startFullScreen(false);
 		}
 	},
@@ -146,11 +140,10 @@ BasicGame.Title.prototype = {
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
 		var text = '他のゲームを遊ぶ';
 		var label = this.M.S.BasicWhiteLabelS(x,y,function () {
-			var url = BasicGame.MY_GAMES_URL;
 			if (this.game.device.desktop) {
-				window.open(url,'_blank');
+				window.open(BasicGame.MY_GAMES_URL,'_blank');
 			} else {
-				location.href = url;
+				location.href = BasicGame.MY_GAMES_URL;
 			}
 		},text,textStyle,{tint:tint});
 	},
@@ -168,9 +161,13 @@ BasicGame.Title.prototype = {
 		var logoSprite = this.M.S.genSprite(x,y,'Logo');
 		logoSprite.anchor.setTo(.5);
 		logoSprite.UonInputDown(function () {
-			window.open(BasicGame.YOUTUBE_URL,'_blank');
+			if (this.game.device.desktop) {
+				window.open(BasicGame.YOUTUBE_URL,'_blank');
+			} else {
+				location.href = BasicGame.YOUTUBE_URL;
+			}
 		});
-		this.M.T.beatA(logoSprite,{duration:508}).start();
+		this.M.T.beatA(logoSprite,{duration:this.BEAT_DURATION}).start();
 		var logoBgSprite = this.M.S.genBmpSprite(x,y,
 			logoSprite.width+50,logoSprite.height+20,BasicGame.MAIN_COLOR);
 		logoBgSprite.anchor.setTo(.5);
