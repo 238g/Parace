@@ -2,7 +2,8 @@ BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
 	init: function () { 
 		this.sounds = null; 
-		this.isChecking = false;
+		// this.isChecking = false;
+		this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
 	},
 	create: function () {
 		this.M.S.BasicLoadingAnim();
@@ -12,6 +13,7 @@ BasicGame.Preloader.prototype = {
 		this.load.start();
 	},
 
+	/*
 	update: function () {
 		if (this.isChecking) {
 			if (this.cache.isSoundDecoded('TitleBGM')) {
@@ -20,6 +22,7 @@ BasicGame.Preloader.prototype = {
 			}
 		}
 	},
+	*/
 
 	loadAssets: function () {
 		this.load.spritesheet('WhiteBtnS','images/public/Btns/WhiteBtnsS.png',215,50);
@@ -43,8 +46,8 @@ BasicGame.Preloader.prototype = {
 	loadAudio: function () {
 		this.sounds = {
 			'TitleBGM': [
-				'sounds/BGM/B/CandyBouquet.mp3',
-				'sounds/BGM/B/CandyBouquet.wav',
+				'sounds/BGM/C/CandyBouquet.mp3',
+				'sounds/BGM/C/CandyBouquet.wav',
 			],
 			'PlayBGM': [
 				'sounds/BGM/F/famipop2.mp3',
@@ -63,7 +66,9 @@ BasicGame.Preloader.prototype = {
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.isChecking = true;
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.touchOrClick+'してスタート',{fontSize:30});
+		this.game.input.onDown.add(this.start,this);
+		// this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
 	},
 
 	start: function () {

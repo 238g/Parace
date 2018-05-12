@@ -21,24 +21,21 @@ BasicGame.Title.prototype = {
 		this.inputController();
 	},
 
-	inputController: function () {
-		this.time.events.add(800,function () {
-			this.inputEnabled = true; 
-		},this);
+	soundController: function () {
+		this.M.SE.stop('currentBGM');
+		this.playBGM();
 	},
 
-	soundController: function () {
-		var s = this.M.SE;
-		s.stop('currentBGM');
-		this.time.events.add(500, function () {
-			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
+	playBGM: function () {
+		if (this.M.SE.isPlaying('TitleBGM')) return;
+		this.M.SE.stop('currentBGM');
+		this.M.SE.play('TitleBGM',{isBGM:true,loop:true,volume:1});
+	},
+
+	inputController: function () {
+		this.time.events.add(800, function () {
+			this.inputEnabled = true;
 		}, this);
-		this.time.events.add(1200, function () {
-			if (s.isPlaying('TitleBGM')) return;
-			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
-		});
 	},
 
 	BgContainer: function () {
@@ -76,6 +73,9 @@ BasicGame.Title.prototype = {
 		this.M.S.BasicWhiteLabelS(x,y,function () {
 			if (this.inputEnabled) {
 				this.M.NextScene('Play');
+			} else {
+				this.playBGM();
+				this.inputEnabled = true;
 			}
 		},text,textStyle,{tint:tint});
 	},
