@@ -57,7 +57,7 @@ BasicGame.Boot.prototype.conf = function () {
 				title: '天魔機忍ストーンズverG',
 				url: 'https://238g.github.io/Parace/TenMaKiNinVerG.html',
 				slideImg: 'CharStones',
-				slideImgUrl: './images/TenMaKiNinVerG/CharStones.png',
+				slideImgUrl: 'images/238Games/TenMaKiNinVerG.png',
 				order: totalCount-6,
 				textColor: '#000000',
 				bgColor: '#6298ff',
