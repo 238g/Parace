@@ -113,16 +113,15 @@ BasicGame.Play.prototype = {
 	},
 
 	ready: function () {
-		// TODO
-		// this.stopBGM();
-		// this.playBGM();
+		this.stopBGM();
+		this.playBGM();
 		this.HUD.startGame();
 	},
 
 	playBGM: function () {
 		var s = this.M.SE;
-		if (s.isPlaying('Stage_1')) return;
-		s.play('Stage_1',{isBGM:true,loop:true,volume:1});
+		if (s.isPlaying('PlayBGM')) return;
+		s.play('PlayBGM',{isBGM:true,loop:true,volume:1});
 	},
 
 	stopBGM: function () {
@@ -176,7 +175,7 @@ BasicGame.Play.prototype = {
 			this.game.debug.lineHeight=100;
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear, this);
-			this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
+			this.stage.backgroundColor = BasicGame.WHITE_COLOR;
 		}
 	},
 };

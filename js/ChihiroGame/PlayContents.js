@@ -66,7 +66,7 @@ BasicGame.Play.prototype.PaddleContainer = function () {
 
 BasicGame.Play.prototype.BallContainer = function () {
 	var radius = 30;
-	var ball = this.M.S.genBmpCircleSprite(this.Paddle.x,this.Paddle.y-radius,radius,this.M.getConst('MAIN_TEXT_COLOR'));
+	var ball = this.M.S.genBmpCircleSprite(this.Paddle.x,this.Paddle.y-radius,radius,BasicGame.MAIN_TEXT_COLOR);
 	this.Ball = ball;
 	ball.anchor.setTo(.5);
 	ball.checkWorldBounds = true;

@@ -1,6 +1,9 @@
 BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
-	init: function () { this.sounds = null; },
+	init: function () { 
+		this.sounds = null;
+		this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
+	},
 	create: function () {
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
@@ -24,7 +27,7 @@ BasicGame.Preloader.prototype = {
 		};
 		this.loadCharInfo();
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
-		for (var i=1;i<=this.M.getConst('ALBUM_COUNT');i++) this.load.image('Album_'+i, './images/ChihiroGame/Albums/Album_'+i+'.jpg');
+		this.loadAlbum();
 		this.loadAudio();
 	},
 
@@ -41,27 +44,35 @@ BasicGame.Preloader.prototype = {
 		this.M.setGlobal('CharInfoLength', CharInfoLength);
 	},
 
+	loadAlbum: function () {
+		var albumCount = BasicGame.ALBUM_COUNT;
+		for (var i=1;i<=albumCount;i++) 
+			this.load.image('Album_'+i, './images/ChihiroGame/Albums/Album_'+i+'.jpg');
+	},
+
 	loadAudio: function () {
 		this.sounds = {
 			'TitleBGM': [
-				'./sounds/BGM/R/retrogamecenter3.mp3',
-				'./sounds/BGM/R/retrogamecenter3.wav',
+				'sounds/BGM/L/lovelyflower.mp3',
+				'sounds/BGM/L/lovelyflower.wav',
+			],
+			'PlayBGM': [
+				'sounds/BGM/B/BirdAmaCha.mp3',
+				'sounds/BGM/B/BirdAmaCha.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},
 
-	loadOnlyFirst: function () {
-		if (!this.M.getGlobal('loadedOnlyFirst')) {
-			this.M.setGlobal('loadedOnlyFirst',true);
-			if (this.game.device.desktop) document.body.style.cursor = 'pointer';
-			this.M.SE.setSounds(this.sounds);
-			this.M.H.setSPBrowserColor(this.M.getConst('MAIN_COLOR'));
-		}
+	loadComplete: function () {
+		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
+		this.M.SE.setSounds(this.sounds);
+		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.touchOrClick+'してスタート',{fontSize:80});
+		this.game.input.onDown.add(this.start,this);
 	},
 
-	loadComplete: function () {
-		this.loadOnlyFirst();
+	start: function () {
 		this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');
 	},
 };

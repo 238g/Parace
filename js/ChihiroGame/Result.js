@@ -59,7 +59,7 @@ BasicGame.Result.prototype = {
 	},
 
 	genResultLabel: function (x,y,text,func,delay) {
-		var label = this.M.S.BasicGrayLabel(x,y,func,text,this.M.S.BaseTextStyle(50),{tint:this.M.getConst('MAIN_TINT')});
+		var label = this.M.S.BasicGrayLabel(x,y,func,text,this.M.S.BaseTextStyle(50),{tint:BasicGame.MAIN_TINT});
 		label.setScale(0,0);
 		label.addTween('popUpB',{duration:800,delay:delay});
 		label.startTween('popUpB');
@@ -94,7 +94,7 @@ BasicGame.Result.prototype = {
 		];
 		var emoji = '🎀💙🎀💙🎀💙🎀';
 		var text = 
-					'『'+this.M.getConst('GAME_TITLE')+'』で遊んだよ！\n'
+					'『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
 					+emoji+'\n'
 					+'今日の名言： 「'+this.rnd.pick(quotes)+'」\n'
 					+emoji+'\n';

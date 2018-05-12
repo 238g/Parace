@@ -17,7 +17,7 @@ BasicGame.CharSelect.prototype = {
 		var textStyle = this.M.S.BaseTextStyle(50);
 		var leftX = this.world.width*.25;
 		var rightX = leftX*3;
-		var tint = this.M.getConst('MAIN_TINT');
+		var tint = BasicGame.MAIN_TINT;
 		this.genChars(textStyle,tint);
 		this.genBackBtnSprite(this.world.centerX,this.world.centerY+700,textStyle,tint);
 		this.genVolumeBtnSprite(leftX-100,this.world.centerY+700,tint);
