@@ -1,11 +1,11 @@
 BasicGame = {
 	GAME_TITLE: document.title,
-	MAIN_COLOR: '#52deff', // TODO
-	MAIN_TINT:  0x52deff, // TODO
-	MAIN_TEXT_COLOR: '#52deff', // TODO
-	MAIN_STROKE_COLOR: '#f9d682', // TODO
-	WHITE_COLOR: '#f1f7fc', // TODO
-	YOUTUBE_URL: '', // TODO
+	MAIN_COLOR: '#dfc6a7',
+	MAIN_TINT:  0xdfc6a7,
+	MAIN_TEXT_COLOR: '#56665b',
+	MAIN_STROKE_COLOR: '#56665b',
+	WHITE_COLOR: '#e8e5e6',
+	YOUTUBE_URL: 'https://www.youtube.com/channel/UCeAfiVvEuyICYJW-f3GnQjQ',
 	VOLUME_MAX_IMG: 'VolumeMax',
 	VOLUME_HALF_IMG: 'VolumeHalf',
 	VOLUME_MUTE_IMG: 'VolumeMute',
@@ -44,11 +44,13 @@ BasicGame.Boot.prototype = {
 
 	defineGlobal: function () {
 		this.M.defineGlobal({
+			curLevelKey: 1,
 		});
 	},
 
 	defineConf: function () {
 		this.M.defineConf({
+			LevelInfo: this.genLevelInfo(),
 		});
 	},
 };

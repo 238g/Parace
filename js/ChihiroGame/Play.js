@@ -74,16 +74,18 @@ BasicGame.Play.prototype = {
 			diff = paddle.x - ball.x;
 			speedX = -10 * diff;
 			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
-			speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
-			ball.body.velocity.y = speedY;
+			// speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
+			// ball.body.velocity.y = speedY;
+			ball.body.velocity.y *= 1.05;
 		} else if (ball.x > paddle.x+penetrateRange) {
 			ball.penetrate = false;
 			ball.tint = 0xffffff;
 			diff = ball.x - paddle.x;
 			speedX = 10 * diff;
 			ball.body.velocity.x = Phaser.Math.clamp(speedX,ball.minSpeedX,ball.maxSpeedX);
-			speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
-			ball.body.velocity.y = speedY;
+			// speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
+			// ball.body.velocity.y = speedY;
+			ball.body.velocity.y *= 1.05;
 		} else {
 			ball.penetrate = true;
 			ball.tint = 0xff0000;
@@ -93,7 +95,8 @@ BasicGame.Play.prototype = {
 				speedX = (ball.body.velocity.x - ball.standardSpeedRangeX) * .5;
 			}
 			ball.body.velocity.x = speedX;
-			ball.body.velocity.y = this.rnd.between(ball.penetrateMinSpeedY, ball.penetrateMaxSpeedY);
+			// ball.body.velocity.y = this.rnd.between(ball.penetrateMinSpeedY, ball.penetrateMaxSpeedY);
+			ball.body.velocity.y *= 1.1;
 			this.CutInSprite.startTween();
 		}
 	},

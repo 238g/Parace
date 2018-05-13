@@ -33,7 +33,6 @@ BasicGame.CharSelect.prototype = {
 			var charLabel = this.genCharBtnSprite(key,CharInfo[key].name,textStyle,tint,margin);
 			charLabel.addGroup(charsGroup);
 		}
-		var bounds = charLabel.btnSprite;
 		charsGroup.alignIn(this.world.bounds,Phaser.CENTER,0,0);
 	},
 

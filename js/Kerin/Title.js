@@ -1,12 +1,13 @@
 BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
+		this.DeclearConst();
 		this.DeclearVal();
 		this.DeclearObj();
 	},
 
 	DeclearConst: function () {
-		this.BEAT_DURATION = 500;
+		this.BEAT_DURATION = 353;
 	},
 
 	DeclearVal: function () {
@@ -21,7 +22,6 @@ BasicGame.Title.prototype = {
 		this.time.events.removeAll();
 		this.BgContainer();
 		this.BtnContainer();
-		this.DialogContainer();
 		this.soundController();
 		this.inputController();
 	},
@@ -33,8 +33,6 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		return;
-		this.M.SE.stop('currentBGM');
 		this.playBGM();
 	},
 
@@ -51,12 +49,22 @@ BasicGame.Title.prototype = {
 	},
 
 	genBgCharSprite: function () {
-
+		var x = this.world.centerX;
+		var y = this.world.centerY;
+		var charSprite = this.add.sprite(x,y,'LaughKerin');
+		charSprite.anchor.setTo(.5);
+		charSprite.animations.add('laugh').play(18, true);
+		charSprite = this.add.sprite(x,y-charSprite.height,'LaughKerin');
+		charSprite.anchor.setTo(.5);
+		charSprite.animations.add('laugh').play(18, true);
+		charSprite = this.add.sprite(x,y+charSprite.height,'LaughKerin');
+		charSprite.anchor.setTo(.5);
+		charSprite.animations.add('laugh').play(18, true);
 	},
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(this.world.centerX,50,
-			BasicGame.GAME_TITLE,this.M.S.BaseTextStyle(40));
+			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
 		textSprite.addTween('beatA',{duration:this.BEAT_DURATION});
 		textSprite.startTween('beatA');
 	},
@@ -68,10 +76,8 @@ BasicGame.Title.prototype = {
 		var y = this.world.centerY+200;
 		var tint = BasicGame.MAIN_TINT;
 		this.genStartBtnSprite(leftX,y,textStyle,tint);
-		this.genHowtoBtnSprite(rightX,y,textStyle,tint);
 		this.genOtherGameBtnSprite(leftX,y+75,textStyle,tint);
-		// this.genInqueryBtnSprite(rightX,y+75,textStyle,tint);
-		// this.genLogoBtnSprite(this.world.centerX,y+150); // TODO make img
+		this.genLogoBtnSprite(10,this.world.centerY);
 		this.genVolumeBtnSprite(leftX-50,y+150,tint);
 		this.genFullScreenBtnSprite(rightX+50,y+150,tint);
 	},
@@ -80,8 +86,8 @@ BasicGame.Title.prototype = {
 		var text = 'プレイ！';
 		this.M.S.BasicWhiteLabelS(x,y,function () {
 			if (this.inputEnabled) {
-				this.M.NextScene('Play');
 				// this.M.SE.play('Start',{volume:1}); // TODO
+				this.M.NextScene('SelectLevel');
 			} else {
 				this.playBGM();
 				this.inputEnabled = true;
@@ -148,18 +154,9 @@ BasicGame.Title.prototype = {
 		},text,textStyle,{tint:tint});
 	},
 
-	genHowtoBtnSprite: function (x,y,textStyle,tint) {
-		var text = '遊び方';
-		this.M.S.BasicWhiteLabelS(x,y,function () {
-			// this.M.SE.play('OpenSE',{volume:1}); // TODO
-			this.DialogSprite.bringToTop();
-			this.DialogSprite.tweenShow();
-		},text,textStyle,{tint:tint});
-	},
-
 	genLogoBtnSprite: function (x,y) {
 		var logoSprite = this.M.S.genSprite(x,y,'Logo');
-		logoSprite.anchor.setTo(.5);
+		logoSprite.anchor.setTo(0,.5);
 		logoSprite.UonInputDown(function () {
 			if (this.game.device.desktop) {
 				window.open(BasicGame.YOUTUBE_URL,'_blank');
@@ -167,31 +164,5 @@ BasicGame.Title.prototype = {
 				location.href = BasicGame.YOUTUBE_URL;
 			}
 		});
-		this.M.T.beatA(logoSprite,{duration:this.BEAT_DURATION}).start();
-		var logoBgSprite = this.M.S.genBmpSprite(x,y,
-			logoSprite.width+50,logoSprite.height+20,BasicGame.MAIN_COLOR);
-		logoBgSprite.anchor.setTo(.5);
-		this.world.bringToTop(logoSprite);
-	},
-
-	DialogContainer: function () {
-		this.genDialogSprite();
-		this.genHowtoTextSprite();
-	},
-
-	genDialogSprite: function () {
-		this.DialogSprite = this.M.S.genDialog('Dialog',{});
-		this.DialogSprite.UonInputDown(function (sprite) {
-			sprite.scale.setTo(0);
-		});
-	},
-
-	genHowtoTextSprite: function () {
-		var text = 
-			'ピーンコーン。\n'
-			+'くわわります';
-		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyle(50));
-		this.DialogSprite.addChild(textSprite.multipleTextSprite);
-		this.DialogSprite.addChild(textSprite);
 	},
 };
