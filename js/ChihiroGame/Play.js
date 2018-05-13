@@ -167,7 +167,7 @@ BasicGame.Play.prototype = {
 		}, this);
 	},
 
-	render: function () {
+	renderT: function () {
 		// this.game.debug.body(this.Paddle);
 		// this.game.debug.body(this.Ball);
 	},

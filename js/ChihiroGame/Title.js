@@ -2,6 +2,7 @@ BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
 		this.inputEnabled = false;
+		this.BEAT_DURATION = 508;
 		this.Dialog = {};
 	},
 
@@ -54,7 +55,7 @@ BasicGame.Title.prototype = {
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(this.world.centerX,100,BasicGame.GAME_TITLE,this.M.S.BaseTextStyle(80));
-		textSprite.addTween('beatA',{duration:508});
+		textSprite.addTween('beatA',{duration:this.BEAT_DURATION});
 		textSprite.startTween('beatA');
 	},
 
@@ -134,11 +135,10 @@ BasicGame.Title.prototype = {
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
 		var text = '他のゲームを遊ぶ';
 		var label = this.M.S.BasicGrayLabel(x,y,function () {
-			var url = BasicGame.MY_GAMES_URL;
 			if (this.game.device.desktop) {
-				window.open(url,'_blank');
+				window.open(BasicGame.MY_GAMES_URL,'_blank');
 			} else {
-				location.href = url;
+				location.href = BasicGame.MY_GAMES_URL;
 			}
 		},text,textStyle,{tint:tint});
 	},
@@ -156,14 +156,13 @@ BasicGame.Title.prototype = {
 		var logoSprite = this.M.S.genSprite(x,y,'Logo');
 		logoSprite.anchor.setTo(.5);
 		logoSprite.UonInputDown(function () {
-			var url = BasicGame.YOUTUBE_URL;
 			if (this.game.device.desktop) {
-				window.open(url,'_blank');
+				window.open(BasicGame.YOUTUBE_URL,'_blank');
 			} else {
-				location.href = url;
+				location.href = BasicGame.YOUTUBE_URL;
 			}
 		});
-		this.M.T.beatA(logoSprite,{duration:508}).start();
+		this.M.T.beatA(logoSprite,{duration:this.BEAT_DURATION}).start();
 		var logoBgSprite = this.M.S.genBmpSprite(x,y,
 			logoSprite.width+50,logoSprite.height+20,BasicGame.MAIN_COLOR);
 		logoBgSprite.anchor.setTo(.5);

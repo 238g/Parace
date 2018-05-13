@@ -45,52 +45,55 @@ BasicGame.CharSelect.prototype = {
 	},
 
 	genBackBtnSprite: function (x,y,textStyle,tint) {
-		var text = 'もどる';
-		var label = this.M.S.BasicGrayLabel(x,y,function () {
+		this.M.S.BasicGrayLabel(x,y,function () {
 			this.M.NextScene('Title');
-		},text,textStyle,{tint:tint});
+		},'もどる',textStyle,{tint:tint});
 	},
 
 	genVolumeBtnSprite: function (x,y,tint) {
-		var maxImg = 'VolumeMax';
-		var halfImg = 'VolumeHalf';
-		var muteImg = 'VolumeMute';
+		var maxImg = BasicGame.VOLUME_MAX_IMG;
+		var halfImg = BasicGame.VOLUME_HALF_IMG;
+		var muteImg = BasicGame.VOLUME_MUTE_IMG;
 		var curImg = this.sound.mute ? muteImg : (this.sound.volume==1) ? maxImg : halfImg;
 		var volumeSprite = this.M.S.genSprite(x,y,'VolumeIcon',curImg);
 		volumeSprite.anchor.setTo(.5);
-		volumeSprite.UonInputDown(function (sprite) {
-			if (this.sound.mute) {
-				sprite.frameName = maxImg;
-				this.sound.mute = false;
-				this.sound.volume = 1;
+		volumeSprite.UonInputDown(this.onDownVolumeBtn);
+	},
+
+	onDownVolumeBtn: function (sprite) {
+		if (this.sound.mute) {
+			sprite.frameName = BasicGame.VOLUME_MAX_IMG;
+			this.sound.mute = false;
+			this.sound.volume = 1;
+		} else {
+			if (this.sound.volume == 1) {
+				sprite.frameName = BasicGame.VOLUME_HALF_IMG;
+				this.sound.volume = .5;
 			} else {
-				if (this.sound.volume == 1) {
-					sprite.frameName = halfImg;
-					this.sound.volume = .5;
-				} else {
-					sprite.frameName = muteImg;
-					this.sound.volume = 0;
-					this.sound.mute = true;
-				}
+				sprite.frameName = BasicGame.VOLUME_MUTE_IMG;
+				this.sound.volume = 0;
+				this.sound.mute = true;
 			}
-		});
+		}
 	},
 
 	genFullScreenBtnSprite: function (x,y,tint) {
-		var offImg = 'smaller';
-		var onImg = 'larger';
+		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
+		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 		var curImg = this.scale.isFullScreen ? offImg : onImg;
 		var fullScreenSprite = this.M.S.genSprite(x,y,'GameIconsBlack',curImg);
 		fullScreenSprite.anchor.setTo(.5);
-		fullScreenSprite.UonInputDown(function (sprite) {
-			if (this.scale.isFullScreen) {
-				sprite.frameName = onImg;
-				this.scale.stopFullScreen(false);
-			} else {
-				sprite.frameName = offImg;
-				this.scale.startFullScreen(false);
-			}
-		});
+		fullScreenSprite.UonInputDown(this.onDonwFullScreenBtn);
+	},
+
+	onDonwFullScreenBtn: function (sprite) {
+		if (this.scale.isFullScreen) {
+			sprite.frameName = BasicGame.FULL_SCREEN_ON_IMG;
+			this.scale.stopFullScreen(false);
+		} else {
+			sprite.frameName = BasicGame.FULL_SCREEN_OFF_IMG;
+			this.scale.startFullScreen(false);
+		}
 	},
 
 	HUDContainer: function () {
