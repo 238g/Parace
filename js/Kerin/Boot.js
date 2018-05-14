@@ -45,6 +45,8 @@ BasicGame.Boot.prototype = {
 	defineGlobal: function () {
 		this.M.defineGlobal({
 			curLevelKey: 1,
+			clearFlag: false,
+			spawnCount: 0,
 		});
 	},
 

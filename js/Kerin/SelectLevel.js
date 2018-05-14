@@ -8,12 +8,6 @@ BasicGame.SelectLevel.prototype = {
 		this.BEAT_DURATION = 353;
 	},
 
-	DeclearVal: function () {
-	},
-
-	DeclearObj: function () {
-	},
-
 	create: function () {
 		this.time.events.removeAll();
 		this.BgContainer();

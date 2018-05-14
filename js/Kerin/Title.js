@@ -3,7 +3,6 @@ BasicGame.Title.prototype = {
 	init: function () {
 		this.DeclearConst();
 		this.DeclearVal();
-		this.DeclearObj();
 	},
 
 	DeclearConst: function () {
@@ -12,10 +11,6 @@ BasicGame.Title.prototype = {
 
 	DeclearVal: function () {
 		this.inputEnabled = false;
-	},
-
-	DeclearObj: function () {
-		this.DialogSprite = null;
 	},
 
 	create: function () {

@@ -4,6 +4,8 @@ BasicGame.Play.prototype = {
 		this.DeclearConst();
 		this.DeclearVal();
 		this.DeclearObj();
+		this.M.setGlobal('clearFlag',false);
+		this.M.setGlobal('spawnCount',0);
 	},
 
 	DeclearConst: function () {
@@ -35,6 +37,7 @@ BasicGame.Play.prototype = {
 		this.SkyTileSprite = null;
 		this.StartTextSprite = null;
 		this.EndTextSprite = null;
+		this.SpawnCountTextSprite = null;
 	},
 
 	create: function () {
@@ -50,7 +53,6 @@ BasicGame.Play.prototype = {
 
 	PhysicsManager: function () {
 		this.physics.startSystem(Phaser.Physics.ARCADE);
-		// this.world.enableBody = true;
 	},
 
 	update: function () {
@@ -65,19 +67,12 @@ BasicGame.Play.prototype = {
 	TimeManager: function () {
 		if (this.secTimer<0) {
 			this.secTimer = this.SPAWN_RATE;
-			console.log(this.spawnCount); // TODO set text
 			if (this.spawnCount >= this.clearCount) return this.clear();
 			this.addRowOfEnemies();
 			this.spawnCount++;
+			this.setTextToSpawnCount(this.spawnCount);
 		}
 		this.secTimer-=this.time.elapsed;
-	},
-
-	endLevel: function () {
-		this.Player.body.velocity.y = 0;
-		this.Player.body.gravity.y = 0;
-		this.isPlaying = false;
-		this.stopEnemies();
 	},
 
 	checkPlayerStatus: function () {
@@ -132,21 +127,40 @@ BasicGame.Play.prototype = {
 
 	clear: function () {
 		this.isPlaying = false;
+		this.Player.alive = false;
 		this.Player.body.velocity.y = 0;
 		this.Player.body.gravity.y = 0;
+		this.M.setGlobal('clearFlag',true);
+		var tween = this.add.tween(this.Player).to({
+			x:this.world.width-this.GoalSprite.width*.3,
+			y:this.world.height-this.GoalSprite.height*.3
+		},1500,null,true,3000);
+		this.showGoalSprite();
+		this.M.T.onComplete(tween,function () {
+			if (this.LevelInfo.happyEnd) {
+				this.showHappyEnd();
+			} else {
+				this.showBadEnd();
+			}
+		});
 	},
 
 	gameOver: function () {
 		this.isPlaying = false;
-		this.Player.kill();
 		this.showBadEnd();
+		this.M.setGlobal('clearFlag',false);
 	},
 
 	nextScene: function () {
-		this.showEndText();
-		this.game.input.onDown.add(function () {
-			this.M.NextScene('Title');
-		}, this);
+		this.M.setGlobal('spawnCount',this.spawnCount);
+		if (this.M.getGlobal('clearFlag')) {
+			this.showEndText();
+			this.game.input.onDown.add(function () {
+				this.M.NextScene('Result');
+			}, this);
+		} else {
+			this.showEndBtns();
+		}
 	},
 
 	render: function () {
@@ -158,8 +172,9 @@ BasicGame.Play.prototype = {
 		if (__ENV!='prod') {
 			this.game.debug.font='40px Courier';
 			this.game.debug.lineHeight=100;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function () {}, this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear, this);
 			this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+			if(this.M.H.getQuery('mute')) this.sound.mute=true;
 		}
 	},
 };

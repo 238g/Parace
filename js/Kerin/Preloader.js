@@ -22,6 +22,7 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Logo': 'images/Kerin/Logo.png',
 			'Player': 'images/Kerin/KerinOnMissile.png',
+			'HappyEnd': 'images/Kerin/BadEnd.jpg', // TODO
 			'BadEnd': 'images/Kerin/BadEnd.jpg',
 			'Sky': 'images/tiatia/Bg/SkyBg_1.jpg',
 		};
@@ -34,7 +35,8 @@ BasicGame.Preloader.prototype = {
 		var LevelInfo = this.M.getConf('LevelInfo');
 		for (var key in LevelInfo) {
 			var info = LevelInfo[key];
-			if (info.imgPath) this.load.image(info.imgName,info.imgPath);
+			if (info.guardImgPath) this.load.image(info.guardImgName,info.guardImgPath);
+			if (info.goalImgPath) this.load.image(info.goalImg,info.goalImgPath);
 		}
 	},
 

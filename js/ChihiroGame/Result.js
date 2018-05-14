@@ -6,10 +6,6 @@ BasicGame.Result.prototype = {
 	},
 
 	create: function () {
-		this.BgContainer();
-	},
-
-	BgContainer: function () {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
 		this.genBgSprite(x,y);
