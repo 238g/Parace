@@ -89,22 +89,24 @@ BasicGame.Play.prototype.genFullScreenBtnSprite = function (x,y,tint) {
 	var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
 	var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 	var curImg = this.scale.isFullScreen ? offImg : onImg;
-	var fullScreenSprite = this.M.S.genSprite(x,y,'GameIconsBlack',curImg);
+	var fullScreenSprite = this.M.S.genButton(x,y,'GameIconsBlack',this.onDonwFullScreenBtn,this);
+	fullScreenSprite.setFrames(curImg,curImg,curImg,curImg);
 	fullScreenSprite.anchor.setTo(.5);
 	fullScreenSprite.scale.setTo(.5);
-	fullScreenSprite.UonInputDown(this.onDonwFullScreenBtn);
 };
 
 BasicGame.Play.prototype.onDonwFullScreenBtn = function (sprite) {
+	var curImg;
 	var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
 	var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 	if (this.scale.isFullScreen) {
-		sprite.frameName = onImg;
+		curImg = onImg;
 		this.scale.stopFullScreen(false);
 	} else {
-		sprite.frameName = offImg;
+		curImg = offImg;
 		this.scale.startFullScreen(false);
 	}
+	sprite.setFrames(curImg,curImg,curImg,curImg);
 };
 
 BasicGame.Play.prototype.genBackBtnSprite = function (x,y,tint,textStyle) {
