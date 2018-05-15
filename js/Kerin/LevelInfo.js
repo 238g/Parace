@@ -22,12 +22,11 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			happyEnd: false,
 			infinite: false,
 			goalImg: 'Level_2',
-			goalImgPath: 'images/Kerin/Level_1.jpg', // TODO
+			goalImgPath: 'images/Kerin/Level_2.jpg',
 		},
 		3: {
 			name: 'エルフの森',
-			clearCount: 1, // TODO del
-			// clearCount: 30,
+			clearCount: 30,
 			holeCount: 2,
 			guardImgName: 'GuardKaede',
 			guardImgPath: 'images/Kerin/GuardKaede.png',
@@ -35,7 +34,7 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			happyEnd: true,
 			infinite: false,
 			goalImg: 'Level_3',
-			goalImgPath: 'images/Kerin/Level_1.jpg', // TODO
+			goalImgPath: 'images/Kerin/Level_3.jpg',
 		},
 		4: {
 			name: '無限コンギョ',

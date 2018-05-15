@@ -163,7 +163,7 @@ BasicGame.Play.prototype = {
 		}
 	},
 
-	render: function () {
+	renderT: function () {
 		this.game.debug.body(this.Player);
 		for (var key in this.Enemies.children) this.game.debug.body(this.Enemies.children[key]);
 	},

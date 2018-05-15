@@ -59,7 +59,7 @@ BasicGame.Title.prototype = {
 
 	genTitleTextSprite: function () {
 		var textSprite = this.M.S.genText(this.world.centerX,50,
-			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
+			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(35));
 		textSprite.addTween('beatA',{duration:this.BEAT_DURATION});
 		textSprite.startTween('beatA');
 	},

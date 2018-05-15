@@ -16,12 +16,11 @@ BasicGame.Result.prototype = {
 		var x = this.world.centerX;
 		var y = this.world.centerY;
 		this.add.sprite(0,0,'Sky');
+		this.add.sprite(x,y,'Result_'+this.rnd.integerInRange(1,3)).anchor.setTo(.5);
 		this.genResultTextSprite(x,100,'結果発表！',0);
 		this.genResultTextSprite(x,200,(this.LevelInfo.infinite)?'回避数: '+this.spawnCount:this.clearText,800);
-		// TODO add char
-		// TODO adjust y
-		this.genResultBtnSprite(x,y+100,'結果をツイート',this.tweet,1100);
-		this.genResultBtnSprite(x,y+200,'タイトルにもどる',function () {
+		this.genResultBtnSprite(x,y+200,'結果をツイート',this.tweet,1100);
+		this.genResultBtnSprite(x,y+300,'タイトルにもどる',function () {
 			this.M.SE.play('OnBtn',{volume:1});
 			this.M.NextScene('Title');
 		},1300);

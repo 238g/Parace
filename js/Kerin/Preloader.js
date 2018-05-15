@@ -22,9 +22,12 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Logo': 'images/Kerin/Logo.png',
 			'Player': 'images/Kerin/KerinOnMissile.png',
-			'HappyEnd': 'images/Kerin/BadEnd.jpg', // TODO
+			'HappyEnd': 'images/Kerin/HappyEnd.jpg',
 			'BadEnd': 'images/Kerin/BadEnd.jpg',
 			'Sky': 'images/tiatia/Bg/SkyBg_1.jpg',
+			'Result_1': 'images/Kerin/Result_1.jpg',
+			'Result_2': 'images/Kerin/Result_2.jpg',
+			'Result_3': 'images/Kerin/Result_3.jpg',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadAudio();
