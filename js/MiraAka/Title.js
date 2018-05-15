@@ -152,7 +152,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genInqueryBtnSprite: function (x,y,textStyle,tint) {
-		var text = '情報提供等';
+		var text = '問題提供';
 		var label = this.M.S.BasicWhiteLabelS(x,y,function () {
 			var url = 'https://twitter.com/'+__DEVELOPER_TWITTER_ID;
 			if (this.game.device.desktop) {

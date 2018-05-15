@@ -71,6 +71,7 @@ BasicGame.SelectLevel.prototype = {
 
 	genLevelBtnSprite: function (key,text,textStyle,tint,margin) {
 		var label = this.M.S.BasicWhiteLabelS(0,margin,function () {
+			this.M.SE.play('OnBtn',{volume:1});
 			this.M.setGlobal('curLevelKey', key);
 			this.M.NextScene('Play');
 		},text,textStyle,{tint:tint});
@@ -80,7 +81,7 @@ BasicGame.SelectLevel.prototype = {
 	genBackBtnSprite: function (x,y,textStyle,tint) {
 		var text = '戻る';
 		this.M.S.BasicWhiteLabelS(x,y,function () {
-			// this.M.SE.play('Start',{volume:1}); // TODO
+			this.M.SE.play('OnBtn',{volume:1});
 			this.M.NextScene('Title');
 		},text,textStyle,{tint:tint});
 	},

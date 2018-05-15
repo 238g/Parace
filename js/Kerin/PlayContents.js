@@ -67,6 +67,7 @@ BasicGame.Play.prototype.jumpPlayer = function () {
 	if (this.isPlaying) {
 		this.Player.body.velocity.y = - this.JUMP_SPEED * this.time.physicsElapsedMS;
 		this.add.tween(this.Player).to({angle: -10}, 200).start();
+		this.M.SE.play('Jump',{volume:1.2});
 	}
 };
 
@@ -103,6 +104,7 @@ BasicGame.Play.prototype.showHappyEnd = function () {
 	var tween = this.add.tween(this.HappyEndSprige).to({x:-this.world.width*2}, 3000)
 	this.M.T.onComplete(tween, this.nextScene);
 	tween.start();
+	this.M.SE.play('Success',{volume:2});
 };
 
 BasicGame.Play.prototype.genBadEndSprige = function () {
@@ -122,7 +124,7 @@ BasicGame.Play.prototype.genEndTextSprite = function () {
 
 BasicGame.Play.prototype.showBadEnd = function () {
 	this.BadEndSprite.visible = true;
-	// this.M.SE.play('BombKerin',{volume:.5}); // TODO release
+	this.M.SE.play('BombKerin',{volume:.8});
 	var tween = this.add.tween(this.BadEndSprite).to({x:-this.world.width*2}, 3000)
 	this.M.T.onComplete(tween, this.nextScene);
 	tween.start();
@@ -143,6 +145,7 @@ BasicGame.Play.prototype.setTextToSpawnCount = function (val) {
 
 BasicGame.Play.prototype.genBtnSprite = function (x,y,text,nextScene,delay) {
 	var btnSprite = this.M.S.BasicWhiteLabelS(x,y,function () {
+		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene(nextScene);
 	},text,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 	btnSprite.scale.setTo(0);

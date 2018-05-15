@@ -12,14 +12,16 @@ BasicGame.Result.prototype = {
 		this.genResultCharSprite(x,y-100,300);
 		this.genMainCharSprite();
 		this.genResultTextSprite(x,120,'チャレンジせいこう！');
-		this.genResultLabel(x*1.5,y+250,'もういちど',function () {
-			this.M.NextScene('Play');
-		},900);
-		this.genResultLabel(x*1.5,y+400,'ツイートしちゃう',this.tweet,1100);
-		this.genResultLabel(x*1.5,y+550,'タイトルにもどる',function () {
+		// this.genResultLabel(x*1.5,y+250,'もういちど',function () {
+			// this.M.NextScene('Play');
+		// },900);
+		this.genResultLabel(x*1.5,y+400,'タイトルにもどる',function () {
+			this.M.SE.play('Back',{volume:1});
 			this.M.NextScene('Title');
-		},1300);
+		},1100);
+		this.genResultLabel(x*1.5,y+550,'ツイートしちゃう',this.tweet,1300);
 		this.genResultLabel(x*1.5,y+700,'ほぞんする…',function () {
+			this.M.SE.play('OnBtn',{volume:1});
 			var a = document.createElement('a');
 			a.href = this.CharInfo.bgImgPath;
 			a.target = '_blank';
@@ -62,6 +64,7 @@ BasicGame.Result.prototype = {
 	},
 
 	tweet: function () {
+		this.M.SE.play('OnBtn',{volume:1});
 		var quotes = [
 			'がっくんおにいちゃんは1人でたくさんパシるんだよ！',
 			'この世にえん罪なんてごまんとあるんだよぉ！！',

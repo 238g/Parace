@@ -38,6 +38,7 @@ BasicGame.CharSelect.prototype = {
 
 	genCharBtnSprite: function (key,text,textStyle,tint,margin) {
 		var label = this.M.S.BasicGrayLabel(0,margin,function () {
+			this.M.SE.play('Start',{volume:1});
 			this.M.setGlobal('curCharKey', key);
 			this.start();
 		},text,textStyle,{tint:tint});
@@ -46,6 +47,7 @@ BasicGame.CharSelect.prototype = {
 
 	genBackBtnSprite: function (x,y,textStyle,tint) {
 		this.M.S.BasicGrayLabel(x,y,function () {
+			this.M.SE.play('Back',{volume:1});
 			this.M.NextScene('Title');
 		},'もどる',textStyle,{tint:tint});
 	},

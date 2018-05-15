@@ -54,6 +54,18 @@ BasicGame.Preloader.prototype = {
 				'sounds/VOICE/Kerin/BombKerinVoice.mp3',
 				'sounds/VOICE/Kerin/BombKerinVoice.wav',
 			],
+			'Jump': [
+				'sounds/SE/Fire/Flame_1.mp3',
+				'sounds/SE/Fire/Flame_1.wav',
+			],
+			'Success': [
+				'sounds/SE/GUI_Sound_Effects/save.mp3',
+				'sounds/SE/GUI_Sound_Effects/save.wav',
+			],
+			'OnBtn': [
+				'sounds/SE/LabJP/Btn/decision15.mp3',
+				'sounds/SE/LabJP/Btn/decision15.wav',
+			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},

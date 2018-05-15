@@ -93,6 +93,7 @@ BasicGame.Play.prototype.ballLost = function () {
 	if (this.GM.isPlaying) {
 		this.GM.life--;
 		this.HUD.changeLives(this.GM.life);
+		this.M.SE.play('LostBall',{volume:5});
 		if (this.GM.life == 0) {
 			this.gameOver();
 		} else {

@@ -77,6 +77,7 @@ BasicGame.Play.prototype = {
 			// speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
 			// ball.body.velocity.y = speedY;
 			ball.body.velocity.y *= 1.05;
+			this.M.SE.play('HitPaddle');
 		} else if (ball.x > paddle.x+penetrateRange) {
 			ball.penetrate = false;
 			ball.tint = 0xffffff;
@@ -86,6 +87,7 @@ BasicGame.Play.prototype = {
 			// speedY = (ball.body.velocity.y + ball.standardSpeedY) * .5;
 			// ball.body.velocity.y = speedY;
 			ball.body.velocity.y *= 1.05;
+			this.M.SE.play('HitPaddle');
 		} else {
 			ball.penetrate = true;
 			ball.tint = 0xff0000;
@@ -98,6 +100,7 @@ BasicGame.Play.prototype = {
 			// ball.body.velocity.y = this.rnd.between(ball.penetrateMinSpeedY, ball.penetrateMaxSpeedY);
 			ball.body.velocity.y *= 1.1;
 			this.CutInSprite.startTween();
+			this.M.SE.play('BallPenetrate');
 		}
 	},
 
@@ -107,6 +110,7 @@ BasicGame.Play.prototype = {
 		this.Particles.x = ball.x;
 		this.Particles.y = ball.y;
 		this.Particles.explode(1000,10);
+		this.M.SE.play('BreakBlock');
 	},
 
 	PhysicsManager: function () {
@@ -141,7 +145,7 @@ BasicGame.Play.prototype = {
 	clear: function () {
 		this.GM.isPlaying = false;
 		this.HUD.showClear();
-		// this.M.SE.play('CloseSE'); // TODO
+		this.M.SE.play('Clear',{volume:1.5});
 		this.time.events.add(1500, function () {
 			this.game.paused = true;
 			this.HUD.showToResult();
@@ -152,7 +156,7 @@ BasicGame.Play.prototype = {
 	gameOver: function () {
 		this.GM.isPlaying = false;
 		this.HUD.showGameOver();
-		// this.M.SE.play('CloseSE'); // TODO
+		this.M.SE.play('GameOver',{volume:1.5});
 		this.time.events.add(1500, function () {
 			this.game.paused = true;
 			this.HUD.showToBack();
@@ -179,6 +183,7 @@ BasicGame.Play.prototype = {
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver, this);
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear, this);
 			this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+			if(this.M.H.getQuery('penetrate')) this.GM.ballPenetrateRange = 30;
 		}
 	},
 };

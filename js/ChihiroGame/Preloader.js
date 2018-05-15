@@ -60,6 +60,42 @@ BasicGame.Preloader.prototype = {
 				'sounds/BGM/B/BirdAmaCha.mp3',
 				'sounds/BGM/B/BirdAmaCha.wav',
 			],
+			'HitPaddle': [
+				'sounds/SE/LabJP/System/cursor1.mp3',
+				'sounds/SE/LabJP/System/cursor1.wav',
+			],
+			'BallPenetrate': [
+				'sounds/SE/LabJP/Btn/decision12.mp3',
+				'sounds/SE/LabJP/Btn/decision12.wav',
+			],
+			'BreakBlock': [
+				'sounds/SE/LabJP/System/cursor8.mp3',
+				'sounds/SE/LabJP/System/cursor8.wav',
+			],
+			'LostBall': [
+				'sounds/SE/Digital_SFX/laser2.mp3',
+				'sounds/SE/Digital_SFX/laser2.wav',
+			],
+			'Clear': [
+				'sounds/SE/JingleSet1/receive.mp3',
+				'sounds/SE/JingleSet1/receive.wav',
+			],
+			'GameOver': [
+				'sounds/SE/JingleSet1/lose.mp3',
+				'sounds/SE/JingleSet1/lose.wav',
+			],
+			'Start': [
+				'sounds/SE/LabJP/Btn/decision5.mp3',
+				'sounds/SE/LabJP/Btn/decision5.wav',
+			],
+			'Back': [
+				'sounds/SE/LabJP/Btn/decision6.mp3',
+				'sounds/SE/LabJP/Btn/decision6.wav',
+			],
+			'OnBtn': [
+				'sounds/SE/LabJP/Btn/decision7.mp3',
+				'sounds/SE/LabJP/Btn/decision7.wav',
+			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},

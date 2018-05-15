@@ -16,7 +16,6 @@ BasicGame.Title.prototype = {
 	},
 
 	soundController: function () {
-		this.M.SE.stop('currentBGM');
 		this.playBGM();
 	},
 
@@ -77,8 +76,8 @@ BasicGame.Title.prototype = {
 		var text = 'スタート';
 		this.M.S.BasicGrayLabel(x,y,function () {
 			if (this.inputEnabled) {
+				this.M.SE.play('Start',{volume:1});
 				this.M.NextScene('CharSelect');
-				// this.M.SE.play('Start',{volume:1}); // TODO
 			} else {
 				this.playBGM();
 				this.inputEnabled = true; 
@@ -135,6 +134,7 @@ BasicGame.Title.prototype = {
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
 		var text = '他のゲームを遊ぶ';
 		var label = this.M.S.BasicGrayLabel(x,y,function () {
+			this.M.SE.play('OnBtn',{volume:1});
 			if (this.game.device.desktop) {
 				window.open(BasicGame.MY_GAMES_URL,'_blank');
 			} else {
@@ -146,7 +146,7 @@ BasicGame.Title.prototype = {
 	genHowtoBtnSprite: function (x,y,textStyle,tint) {
 		var text = '遊び方';
 		this.M.S.BasicGrayLabel(x,y,function () {
-			// this.M.SE.play('OpenSE',{volume:1}); // TODO
+			this.M.SE.play('OnBtn',{volume:1});
 			this.Dialog.bringToTop();
 			this.Dialog.tweenShow();
 		},text,textStyle,{tint:tint});
@@ -156,6 +156,7 @@ BasicGame.Title.prototype = {
 		var logoSprite = this.M.S.genSprite(x,y,'Logo');
 		logoSprite.anchor.setTo(.5);
 		logoSprite.UonInputDown(function () {
+			this.M.SE.play('OnBtn',{volume:1});
 			if (this.game.device.desktop) {
 				window.open(BasicGame.YOUTUBE_URL,'_blank');
 			} else {

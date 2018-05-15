@@ -22,6 +22,7 @@ BasicGame.Result.prototype = {
 		// TODO adjust y
 		this.genResultBtnSprite(x,y+100,'結果をツイート',this.tweet,1100);
 		this.genResultBtnSprite(x,y+200,'タイトルにもどる',function () {
+			this.M.SE.play('OnBtn',{volume:1});
 			this.M.NextScene('Title');
 		},1300);
 	},
@@ -40,6 +41,7 @@ BasicGame.Result.prototype = {
 	},
 
 	tweet: function () {
+		this.M.SE.play('OnBtn',{volume:1});
 		var resultText = (this.LevelInfo.infinite) ? '回避数: '+this.spawnCount : '結果: '+this.clearText;
 		var emoji = '💥🚀💥🚀💥🚀';
 		var text =  '『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'

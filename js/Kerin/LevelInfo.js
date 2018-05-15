@@ -2,8 +2,7 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 	return {
 		1: {
 			name: 'ララガーデ◯春日部',
-			clearCount: 3, // TODO del
-			// clearCount: 30,
+			clearCount: 30,
 			holeCount: 4,
 			guardImgName: 'GuardTukushi',
 			guardImgPath: 'images/Kerin/GuardTukushi.png',
@@ -27,7 +26,8 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 		},
 		3: {
 			name: 'エルフの森',
-			clearCount: 30,
+			clearCount: 1, // TODO del
+			// clearCount: 30,
 			holeCount: 2,
 			guardImgName: 'GuardKaede',
 			guardImgPath: 'images/Kerin/GuardKaede.png',
