@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.conf = function () {
-	var totalCount = 13;
+	var totalCount = 14;
 	return {
 		GamesInfo:{
 			1001: {
@@ -131,6 +131,16 @@ BasicGame.Boot.prototype.conf = function () {
 				order: totalCount-13,
 				textColor: '#2ca0eb',
 				bgColor: '#52deff',
+			},
+			1014: {
+				id: 1014,
+				title: 'ぶちとば!💥🚀ケリンさん',
+				url: 'https://238g.github.io/Parace/Kerin.html',
+				slideImg: 'Kerin_1',
+				slideImgUrl: 'images/238Games/Kerin_1.jpg',
+				order: totalCount-14,
+				textColor: '#56665b',
+				bgColor: '#dfc6a7',
 			},
 			/*
 			1000: {

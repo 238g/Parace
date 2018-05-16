@@ -14,4 +14,5 @@
 |田中ヒメ中華街|https://238g.github.io/Parace/HimeTanaka.html|2018/4/13|
 |アリス・トラーツ|https://238g.github.io/Parace/AliceMononobe.html|2018/4/21|
 |ちあは魔法少女|https://238g.github.io/Parace/tiatia.html|2018/4/29|
-|ミラアカゲーム|https://238g.github.io/Parace/MiraAka.html|2018/5/12|
+|ミラアカゲーム(虹)|https://238g.github.io/Parace/MiraAka.html|2018/5/12|
+|ぶちとば!💥🚀ケリンさん|https://238g.github.io/Parace/Kerin.html|2018/5/16|
