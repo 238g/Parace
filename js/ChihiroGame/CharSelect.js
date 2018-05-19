@@ -27,17 +27,19 @@ BasicGame.CharSelect.prototype = {
 	genChars: function (textStyle,tint) {
 		var charsGroup = this.add.group();
 		var CharInfo = this.M.getConf('CharInfo');
-		var margin = 0;
+		var marginX = 0; // btn width 430
+		var marginY = 0;
 		for (var key in CharInfo) {
-			margin+=150;
-			var charLabel = this.genCharBtnSprite(key,CharInfo[key].name,textStyle,tint,margin);
+			marginY+=150;
+			var charLabel = this.genCharBtnSprite(key,CharInfo[key].name,textStyle,tint,marginX,marginY);
 			charLabel.addGroup(charsGroup);
+			// marginX+=430; // OK
 		}
 		charsGroup.alignIn(this.world.bounds,Phaser.CENTER,0,0);
 	},
 
-	genCharBtnSprite: function (key,text,textStyle,tint,margin) {
-		var label = this.M.S.BasicGrayLabel(0,margin,function () {
+	genCharBtnSprite: function (key,text,textStyle,tint,marginX,marginY) {
+		var label = this.M.S.BasicGrayLabel(marginX,marginY,function () {
 			this.M.SE.play('Start',{volume:1});
 			this.M.setGlobal('curCharKey', key);
 			this.start();
@@ -103,9 +105,12 @@ BasicGame.CharSelect.prototype = {
 	},
 
 	HUDContainer: function () {
-		var textStyle = this.M.S.BaseTextStyle(60);
-		var textSprite = this.M.S.genText(this.world.centerX,100,'ビキニにしたいひとを\nえらんでね💙',textStyle);
-		textSprite.setAnchor(.5,.5);
+		this.M.S.genText(this.world.centerX,100,'ビキニにしたいひとを\nえらんでね💙',this.M.S.BaseTextStyle(60));
+		this.M.S.genText(this.world.centerX,220,'ちゅうい: キャラほうかいが苦手な人は回れ右',this.M.S.BaseTextStyle(30));
+		this.M.S.genText(this.world.centerX-100,280,'ビキニ絵師ぼしゅうちゅう',this.M.S.BaseTextStyle(30));
+		this.M.S.BasicWhiteLabelS(this.world.centerX+200,280,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		},'ていきょうする',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 	},
 
 	start: function () {

@@ -13,6 +13,7 @@ BasicGame.Preloader.prototype = {
 	},
 
 	loadAssets: function () {
+		this.load.spritesheet('WhiteBtnS','images/public/Btns/WhiteBtnsS.png',215,50);
 		this.load.atlasXML('greySheet', 
 			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsBlack', 

@@ -8,7 +8,7 @@ BasicGame.Play.prototype.genCutInSprite = function () {
 	var x = this.world.width*2;
 	var toX = this.world.width;
 	var y = this.world.height;
-	var sprite = this.add.sprite(x,y,'Chihiro_1'); // TODO change img
+	var sprite = this.add.sprite(x,y,'Chihiro_1');
 	sprite.anchor.setTo(1);
 	var tween = this.M.T.moveA(sprite,{xy:{x:toX},tweenName:'move1',duration:800});
 	var tween2 = this.M.T.moveA(sprite,{xy:{x:x},tweenName:'move2',delay:500,duration:800});
@@ -82,6 +82,7 @@ BasicGame.Play.prototype.BallContainer = function () {
 	ball.minSpeedX = -1200;
 	ball.penetrateMaxSpeedY = -1200;
 	ball.penetrateMinSpeedY = -800;
+	ball.body.maxVelocity.y = 1000;
 	if (this.game.device.touch) {
 		this.input.onUp.add(this.releaseBall, this);
 	} else {

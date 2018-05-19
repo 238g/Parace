@@ -12,6 +12,7 @@ BasicGame.Result.prototype = {
 		this.genResultCharSprite(x,y-100,300);
 		this.genMainCharSprite();
 		this.genResultTextSprite(x,120,'チャレンジせいこう！');
+		this.genOfferTextSprite();
 		// this.genResultLabel(x*1.5,y+250,'もういちど',function () {
 			// this.M.NextScene('Play');
 		// },900);
@@ -41,6 +42,14 @@ BasicGame.Result.prototype = {
 		textSprite.setScale(0,0);
 		textSprite.addTween('popUpB',{duration:1300});
 		textSprite.startTween('popUpB');
+	},
+
+	genOfferTextSprite: function () {
+		if (this.CharInfo.offer) {
+			var text = '提供者様:\n'+this.CharInfo.offer;
+			var textSprite = this.M.S.genText(10,200,text,this.M.S.BaseTextStyle(40));
+			textSprite.setAnchor(0,0);
+		}
 	},
 
 	genResultCharSprite: function (x,y,delay) {

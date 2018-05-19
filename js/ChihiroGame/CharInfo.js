@@ -1,8 +1,8 @@
 BasicGame.Boot.prototype.genCharInfo = function () {
 	return {
 		'Char_1': {
-			name: '伏見ガク',
-			DLFile: 'ガクくんのビキニ.png',
+			name: 'がっくん',
+			DLFile: 'がっくんのビキニ.png',
 			key: 'Char_1',
 			imgPath: './images/ChihiroGame/Gaku_Before.jpg',
 			backKey: 'Char_1_b',
@@ -17,6 +17,26 @@ BasicGame.Boot.prototype.genCharInfo = function () {
 			clearCount: 8,
 			frameX: 0,
 			frameY: 200,
+			offer: null,
+		},
+		'Char_2': {
+			name: 'ハジメお兄ちゃん',
+			DLFile: 'ハジメお兄ちゃんのビキニ.png',
+			key: 'Char_2',
+			imgPath: './images/ChihiroGame/Hajime_Before.jpg',
+			backKey: 'Char_2_b',
+			bgImgPath: './images/ChihiroGame/Hajime_After.jpg',
+			panelKey: 'Char_2_All',
+			width: 70,
+			height: 40,
+			holizontal: 10,
+			vertical: 25,
+			imgWidth: 700,
+			imgHeight: 1000,
+			clearCount: 8,
+			frameX: 0,
+			frameY: 200,
+			offer: null,
 		},
 	};
 };

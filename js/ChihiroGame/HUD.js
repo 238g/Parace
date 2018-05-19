@@ -14,6 +14,7 @@ BasicGame.Play.prototype.HUDContainer = function () {
 	this.genClearTextSprite();
 	this.genToResultTextSprite();
 	this.genToBackTextSprite();
+	this.genOfferTextSprite();
 };
 
 BasicGame.Play.prototype.genStartTextSprite = function () {
@@ -88,4 +89,13 @@ BasicGame.Play.prototype.genToBackTextSprite = function () {
 	this.HUD.showToBack = function () {
 		textSprite.show();
 	};
+};
+
+BasicGame.Play.prototype.genOfferTextSprite = function () {
+	if (this.GM.CharInfo.offer) {
+		var baseText = '提供者様: ';
+		var textStyle = this.M.S.BaseTextStyle(45);
+		var textSprite = this.M.S.genText(10,this.world.height-10,baseText+this.GM.CharInfo.offer,textStyle);
+		textSprite.setAnchor(0,1);
+	}
 };
