@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.conf = function () {
-	var totalCount = 14;
+	var totalCount = 15;
 	return {
 		GamesInfo:{
 			1001: {
@@ -141,6 +141,16 @@ BasicGame.Boot.prototype.conf = function () {
 				order: totalCount-14,
 				textColor: '#56665b',
 				bgColor: '#dfc6a7',
+			},
+			1015: {
+				id: 1015,
+				title: '脱衣ちーちゃん',
+				url: 'https://238g.github.io/Parace/ChihiroGame.html',
+				slideImg: 'Chihiro_1',
+				slideImgUrl: 'images/ChihiroGame/Chihiro_1.png',
+				order: totalCount-15,
+				textColor: '#7169d9',
+				bgColor: '#a9aee5',
 			},
 			/*
 			1000: {
