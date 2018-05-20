@@ -104,6 +104,7 @@ BasicGame.Result.prototype = {
 		var text = 
 					'『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
 					+emoji+'\n'
+					+'ビキニにした人: '+this.CharInfo.name+'\n'
 					+'今日の名言： 「'+this.rnd.pick(quotes)+'」\n'
 					+emoji+'\n';
 		var hashtags = 'ちひろゲーム';

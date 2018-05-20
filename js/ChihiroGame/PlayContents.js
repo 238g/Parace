@@ -76,13 +76,13 @@ BasicGame.Play.prototype.BallContainer = function () {
 	ball.events.onOutOfBounds.add(this.ballLost, this);
 	ball.onPaddle = true;
 	ball.penetrate = false;
-	ball.standardSpeedY = -400;
+	ball.standardSpeedY = this.GM.CharInfo.ballStandardSpeedY;
 	ball.standardSpeedRangeX = 100;
 	ball.maxSpeedX = 1200;
 	ball.minSpeedX = -1200;
 	ball.penetrateMaxSpeedY = -1200;
 	ball.penetrateMinSpeedY = -800;
-	ball.body.maxVelocity.y = 1000;
+	ball.body.maxVelocity.y = this.GM.maxVelocityY;
 	if (this.game.device.touch) {
 		this.input.onUp.add(this.releaseBall, this);
 	} else {
