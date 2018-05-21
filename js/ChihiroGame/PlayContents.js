@@ -100,6 +100,8 @@ BasicGame.Play.prototype.ballLost = function () {
 		} else {
 			this.Ball.reset(this.Paddle.x, this.Paddle.y-this.Ball.height);
 			this.Ball.onPaddle = true;
+			this.Ball.penetrate = false;
+			this.Ball.tint = 0xffffff;
 		}
 	}
 };
