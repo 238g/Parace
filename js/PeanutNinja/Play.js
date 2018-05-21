@@ -1,23 +1,17 @@
 BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
-	init: function () {
-		this.DeclearConst();
-		this.DeclearVal();
-		this.DeclearObj();
-	},
-
+	init: function () { this.DeclearConst(); this.DeclearVal(); this.DeclearObj(); },
 	DeclearConst: function () {
 		this.WORLD_GRAVITY_Y = 300;
 	},
-
 	DeclearVal: function () {
 		this.isPlaying = false;
 		this.spawnRate = 1000;
-		this.spawnTimer = 1000;
+		this.spawnTimer = this.spawnRate;
 		this.bladePoints = [];
 		this.contactPoint = new Phaser.Point(0,0);
+		this.TargetInfo = this.M.getConf('TargetInfo');
 	},
-
 	DeclearObj: function () {
 		this.BladePaint = null;
 		this.BladeLine = null;
@@ -25,14 +19,16 @@ BasicGame.Play.prototype = {
 		this.TargetPool = null;
 		this.Obstarcles = null;
 		this.ObstarclePool = null;
+		this.Emitters = {};
+		this.ScoreTextSprite = null;
 	},
 
 	create: function () {
 		this.time.events.removeAll();
 		this.PhysicsManager();
 		this.BladePaint = this.add.graphics(0, 0);
-		this.ObstarclesContainer(); // PlayContents.js
 		this.TargetContainer(); // PlayContents.js
+		this.HUDContainer(); // PlayContents.js
 		this.ready();
 		this.test();
 	},
@@ -55,9 +51,9 @@ BasicGame.Play.prototype = {
 		if (this.spawnTimer<0) {
 			this.spawnTimer = this.spawnRate;
 			// for (var i=0;i<5;i++) 
-				this.genTarget();
+				this.genTarget(); // PlayContents.js
 			// for (var i=0;i<3;i++) 
-				this.genObstarcle();
+				this.genObstarcle(); // PlayContents.js
 		}
 		this.spawnTimer-=this.time.elapsed;
 	},
@@ -72,6 +68,9 @@ BasicGame.Play.prototype = {
 			var distance = Phaser.Point.distance(this.contactPoint, new Phaser.Point(target.x, target.y));
 			if (Phaser.Point.distance(this.contactPoint, new Phaser.Point(target.x, target.y)) > 110) return;
 			target.kill();
+			var targetSplitCount = 4;
+			for (var i=0;i<targetSplitCount;i++) 
+				this.Emitters[target.key].emitParticle(this.contactPoint.x,this.contactPoint.y,target.key+'_Cut',i);
 		}
 	},
 

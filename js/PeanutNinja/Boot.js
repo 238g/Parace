@@ -48,6 +48,7 @@ BasicGame.Boot.prototype = {
 
 	defineConf: function () {
 		this.M.defineConf({
+			TargetInfo: this.genTargetInfo(),
 		});
 	},
 };

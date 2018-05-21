@@ -19,11 +19,20 @@ BasicGame.Preloader.prototype = {
 			'images/public/VolumeIcon/VolumeIcon.png', 'images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
 			'Logo': 'images/Kerin/Logo.png',
-			'Target': 'images/cafenozombiko/Shine.png', // TODO
 			'Obstarcle': 'images/ChihiroGame/Particle.png', // TODO
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		this.loadTargetInfo();
 		this.loadAudio();
+	},
+
+	loadTargetInfo: function () {
+		var TargetInfo = this.M.getConf('TargetInfo');
+		for (var key in TargetInfo) {
+			var info = TargetInfo[key];
+			this.load.spritesheet(info.name+'_Cut',info.imgPath,info.cutWidth,info.cutHeight);
+			this.load.image(info.name,info.imgPath);
+		}
 	},
 
 	loadAudio: function () {
