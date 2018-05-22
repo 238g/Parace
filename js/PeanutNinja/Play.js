@@ -1,18 +1,25 @@
 BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
-	init: function () { this.DeclearConst(); this.DeclearVal(); this.DeclearObj(); },
-	DeclearConst: function () {
-		this.WORLD_GRAVITY_Y = 300;
-	},
-	DeclearVal: function () {
+	init: function () { 
+		////////// Const
+		////////// Val
 		this.isPlaying = false;
-		this.spawnRate = 1000;
-		this.spawnTimer = this.spawnRate;
 		this.bladePoints = [];
 		this.contactPoint = new Phaser.Point(0,0);
 		this.TargetInfo = this.M.getConf('TargetInfo');
-	},
-	DeclearObj: function () {
+		this.curLevel = this.M.getGlobal('curLevel');
+		this.LevelInfo = this.M.getConf('LevelInfo')[this.curLevel];
+		this.targetSpawnRate = this.LevelInfo.targetSpawnRate;
+		this.obstarcleSpawnRate = this.LevelInfo.obstacleSpawnRate;
+		this.targetSpawnTimer = this.targetSpawnRate;
+		this.obstarcleSpawnTimer = this.obstarcleSpawnRate;
+		this.countdown = this.curLevel;
+		this.countdownTimer = 1000;
+		this.goalScore = this.LevelInfo.goalScore;
+		this.curScore = 0;
+		this.leftScore = this.goalScore;
+		this.life = this.LevelInfo.life;
+		////////// Obj
 		this.BladePaint = null;
 		this.BladeLine = null;
 		this.Targets = null;
@@ -20,26 +27,26 @@ BasicGame.Play.prototype = {
 		this.Obstarcles = null;
 		this.ObstarclePool = null;
 		this.Emitters = {};
-		this.ScoreTextSprite = null;
+		this.GoalScoreTextSprite = null;
+		this.CurScoreTextSprite = null;
+		this.LeftScoreTextSprite = null;
 	},
 
 	create: function () {
 		this.time.events.removeAll();
-		this.PhysicsManager();
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		this.physics.arcade.gravity.y = 300;
 		this.BladePaint = this.add.graphics(0, 0);
 		this.TargetContainer(); // PlayContents.js
 		this.HUDContainer(); // PlayContents.js
-		this.ready();
+		this.playBGM();
+		this.start(); // TODO del
 		this.test();
-	},
-
-	PhysicsManager: function () {
-		this.physics.startSystem(Phaser.Physics.ARCADE);
-		this.physics.arcade.gravity.y = this.WORLD_GRAVITY_Y;
 	},
 
 	update: function () {
 		if (this.isPlaying) {
+			if (this.LevelInfo.TA) this.TimeManager();
 			this.Spawner();
 			this.BladeGenerator(); // PlayContents.js
 			this.Targets.forEachAlive(this.checkIntersects,this);
@@ -47,15 +54,28 @@ BasicGame.Play.prototype = {
 		}
 	},
 
-	Spawner: function () {
-		if (this.spawnTimer<0) {
-			this.spawnTimer = this.spawnRate;
-			// for (var i=0;i<5;i++) 
-				this.genTarget(); // PlayContents.js
-			// for (var i=0;i<3;i++) 
-				this.genObstarcle(); // PlayContents.js
+	TimeManager: function () {
+		if (this.countdownTimer<0) {
+			this.countdownTimer = 1000;
+			this.countdown--;
+			if (this.countdown<=0) this.gameOverTA();
+			// TODO set time text
 		}
-		this.spawnTimer-=this.time.elapsed;
+		this.countdownTimer-=this.time.elapsed;
+	},
+
+	Spawner: function () {
+		if (this.targetSpawnTimer<0) {
+			this.targetSpawnTimer = this.targetSpawnRate;
+			for (var i=0;i<2;i++) 
+				this.genTarget(); // PlayContents.js
+		}
+		this.targetSpawnTimer-=this.time.elapsed;
+		if (this.obstarcleSpawnTimer<0) {
+			this.obstarcleSpawnTimer = this.obstarcleSpawnRate;
+			this.genObstarcle(); // PlayContents.js
+		}
+		this.obstarcleSpawnTimer-=this.time.elapsed;
 	},
 
 	checkIntersects: function (target) {
@@ -65,18 +85,29 @@ BasicGame.Play.prototype = {
 		if (Phaser.Line.intersects(this.BladeLine,l1,true) || Phaser.Line.intersects(this.BladeLine, l2, true)) {
 			this.contactPoint.x = this.input.x;
 			this.contactPoint.y = this.input.y;
-			var distance = Phaser.Point.distance(this.contactPoint, new Phaser.Point(target.x, target.y));
 			if (Phaser.Point.distance(this.contactPoint, new Phaser.Point(target.x, target.y)) > 110) return;
 			target.kill();
-			var targetSplitCount = 4;
-			for (var i=0;i<targetSplitCount;i++) 
+			for (var i=0;i<4;i++) 
 				this.Emitters[target.key].emitParticle(this.contactPoint.x,this.contactPoint.y,target.key+'_Cut',i);
+			this.checkGameStatus(target);
 		}
 	},
 
-	ready: function () {
-		this.playBGM();
-		this.start(); // TODO del
+	checkGameStatus: function (target) {
+		if (this.LevelInfo.TA) {
+			// TODO damage
+		} else {
+			if (target.isTarget) {
+				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .1 * target.scoreRate);
+				this.curScore += score;
+				this.leftScore -= score;
+				if (this.leftScore<0) this.leftScore = 0;
+				this.setScores();
+				if (this.goalScore <= this.curScore) this.clear();
+			} else {
+				// TODO damage
+			}
+		}
 	},
 
 	playBGM: function () {
@@ -95,10 +126,17 @@ BasicGame.Play.prototype = {
 
 	clear: function () {
 		this.isPlaying = false;
+		console.log('clear');
 	},
 
 	gameOver: function () {
 		this.isPlaying = false;
+		console.log('gameOver');
+	},
+
+	gameOverTA: function () {
+		this.isPlaying = false;
+		console.log('gameOverTA');
 	},
 
 	renderT: function () {

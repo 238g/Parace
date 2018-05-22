@@ -304,6 +304,16 @@ Middleware.prototype.SpriteManager.prototype = {
 		labelContainer.changeText = textSprite.changeText;
 		return labelContainer;
 	},
+	BasicGrayLabelS: function (x,y,func,text,textStyle,option) {
+		option = option||{};
+		var btnSprite = this.genButton(x,y,'greySheet',func);
+		btnSprite.anchor.setTo(.5);
+		btnSprite.setFrames('grey_button00','grey_button00','grey_button01','grey_button00');
+		btnSprite.tint = option.tint||0xffffff;
+		var textSprite = this.genText(0,0,text,textStyle);
+		textSprite.addToChild(btnSprite);
+		return btnSprite;
+	},
 	BasicWhiteLabelS: function (x,y,func,text,textStyle,option) {
 		option = option||{};
 		var btnSprite = this.genButton(x,y,'WhiteBtnS',func);

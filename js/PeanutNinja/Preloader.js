@@ -1,25 +1,29 @@
 BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
-	init: function () { 
-		this.sounds = null; 
-	},
 	create: function () {
+		this.sounds = null; 
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
+		this.genAdviceTextSprite();
 		this.load.onLoadComplete.add(this.loadComplete, this);
 		this.loadAssets();
 		this.load.start();
 	},
 
+	genAdviceTextSprite: function () {
+		// TODO __ADVICE_WORDS
+	},
+
 	loadAssets: function () {
-		this.load.spritesheet('WhiteBtnS','images/public/Btns/WhiteBtnsS.png',215,50);
+		this.load.atlasXML('greySheet', 
+			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsBlack', 
 			'images/public/sheets/GameIconsBlack.png', 'images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon', 
 			'images/public/VolumeIcon/VolumeIcon.png', 'images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Logo': 'images/Kerin/Logo.png',
-			'Obstarcle': 'images/ChihiroGame/Particle.png', // TODO
+			'Logo': 'images/Kerin/KerinOnMissile.png',
+			'Logo2': 'images/Kerin/KerinOnMissile.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadTargetInfo();
@@ -30,8 +34,8 @@ BasicGame.Preloader.prototype = {
 		var TargetInfo = this.M.getConf('TargetInfo');
 		for (var key in TargetInfo) {
 			var info = TargetInfo[key];
-			this.load.spritesheet(info.name+'_Cut',info.imgPath,info.cutWidth,info.cutHeight);
-			this.load.image(info.name,info.imgPath);
+			this.load.spritesheet(info.name+'_Cut','images/PeanutNinja/Chars/'+info.name+'.png',info.halfWidth,info.halfHeight);
+			this.load.image(info.name,'images/PeanutNinja/Chars/'+info.name+'.png');
 		}
 	},
 

@@ -1,11 +1,12 @@
 BasicGame = {
 	GAME_TITLE: document.title,
-	MAIN_COLOR: '#dfc6a7', // TODO
-	MAIN_TINT:  0xdfc6a7, // TODO
-	MAIN_TEXT_COLOR: '#56665b', // TODO
-	MAIN_STROKE_COLOR: '#56665b', // TODO
-	WHITE_COLOR: '#e8e5e6', // TODO
-	YOUTUBE_URL: '', // TODO
+	MAIN_COLOR: '#fef106',
+	MAIN_TINT:  0xfef106,
+	MAIN_TEXT_COLOR: '#a17b63',
+	MAIN_STROKE_COLOR: '#8f8e8f',
+	WHITE_COLOR: '#ffffff',
+	YOUTUBE_URL: 'https://www.youtube.com/channel/UC1EB8moGYdkoZQfWHjh7Ivw', // ponpoko
+	YOUTUBE_URL_2: 'https://www.youtube.com/channel/UCmgWMQkenFc72QnYkdxdoKA', // peanutkun
 	VOLUME_MAX_IMG: 'VolumeMax',
 	VOLUME_HALF_IMG: 'VolumeHalf',
 	VOLUME_MUTE_IMG: 'VolumeMute',
@@ -25,13 +26,6 @@ BasicGame.Boot.prototype = {
 	},
 
 	create: function () {
-		this.defineConst();
-		this.defineGlobal();
-		this.defineConf();
-		this.M.NextScene('Preloader');
-	},
-
-	defineConst: function () {
 		this.M.defineConst({
 			MAIN_COLOR: BasicGame.MAIN_COLOR,
 			MAIN_TEXT_COLOR: BasicGame.MAIN_TEXT_COLOR,
@@ -39,16 +33,13 @@ BasicGame.Boot.prototype = {
 			WHITE_COLOR: BasicGame.WHITE_COLOR,
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 		});
-	},
-
-	defineGlobal: function () {
 		this.M.defineGlobal({
+			curLevel: 1,
 		});
-	},
-
-	defineConf: function () {
 		this.M.defineConf({
 			TargetInfo: this.genTargetInfo(),
+			LevelInfo: this.genLevelInfo(),
 		});
+		this.M.NextScene('Preloader');
 	},
 };
