@@ -21,7 +21,8 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Logo': 'images/Kerin/KerinOnMissile.png',
 			'Logo2': 'images/Kerin/KerinOnMissile.png',
-			'Life': 'images/tiatia/PlayerBullet.png',
+			'Life': 'images/tiatia/PlayerBullet.png', // TODO
+			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadTargetInfo();
