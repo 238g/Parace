@@ -5,7 +5,7 @@
 |238Games|https://238g.github.io/Parace/238Games.html|2018/4/8|
 |レッツ・あん肝！|https://238g.github.io/Parace/ankimo_drrrr.html|2018/2/18|
 |シロラン|https://238g.github.io/Parace/sirorun.html|2018/3/2|
-|燃やせ！エルフの森！|https://238g.github.io/Parace/eff.html| 2018/3/6|
+|燃やせ！エルフの森！|https://238g.github.io/Parace/eff.html|2018/3/6|
 |テンちょう🚫バスたーず|https://238g.github.io/Parace/cafenozombiko.html|2018/3/10|
 |天魔機忍ストーンズverG|https://238g.github.io/Parace/TenMaKiNinVerG.html|2018/3/17|
 |アズリム節|https://238g.github.io/Parace/AzlimBushi.html|2018/3/24|

@@ -11,19 +11,17 @@ BasicGame.Preloader.prototype = {
 	},
 
 	genAdviceTextSprite: function () {
-		// TODO __ADVICE_WORDS
+		this.M.S.genText(this.world.centerX, this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:30});
 	},
 
 	loadAssets: function () {
-		this.load.atlasXML('greySheet', 
-			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
-		this.load.atlasXML('GameIconsBlack', 
-			'images/public/sheets/GameIconsBlack.png', 'images/public/sheets/GameIconsBlack.xml');
-		this.load.atlasJSONHash('VolumeIcon', 
-			'images/public/VolumeIcon/VolumeIcon.png', 'images/public/VolumeIcon/VolumeIcon.json');
+		this.load.atlasXML('greySheet','./images/public/sheets/greySheet.png','./images/public/sheets/greySheet.xml');
+		this.load.atlasXML('GameIconsBlack','images/public/sheets/GameIconsBlack.png','images/public/sheets/GameIconsBlack.xml');
+		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
 			'Logo': 'images/Kerin/KerinOnMissile.png',
 			'Logo2': 'images/Kerin/KerinOnMissile.png',
+			'Life': 'images/tiatia/PlayerBullet.png',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadTargetInfo();
@@ -41,9 +39,9 @@ BasicGame.Preloader.prototype = {
 
 	loadAudio: function () {
 		this.sounds = {
-			'TitleBGM': [ // TODO
-				'sounds/BGM/P/Positive5.mp3',
-				'sounds/BGM/P/Positive5.wav',
+			'TitleBGM': [
+				'sounds/BGM/O/OnPatrol.mp3',
+				'sounds/BGM/O/OnPatrol.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);

@@ -34,7 +34,7 @@ BasicGame.Boot.prototype.genTargetInfo = function () {
 			halfWidth: 32.5,
 			halfHeight: 50,
 			isTarget: false,
-			scoreRate: 2,
+			scoreRate: 4,
 		},
 	};
 };

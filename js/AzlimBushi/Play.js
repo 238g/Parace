@@ -277,7 +277,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genFishEmitter: function (type) {
-		var fishArr = ['FishBlue','FishRed','FishOrange','FishPink','FishGreen', 'FishEel',　'FishBlowfish'];
+		var fishArr = ['FishBlue','FishRed','FishOrange','FishPink','FishGreen', 'FishEel', 'FishBlowfish'];
 		if (type == 'Left') {
 			var emitter = this.add.emitter(-100, this.world.centerY, 1000);
 			this.LeftFishGroup = emitter;
@@ -309,7 +309,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genEnemyFishEmitter: function () {
-		var fishArr = ['FishRedBoneS',　'FishBlueBoneS', 'FishGreenBoneS', 'FishOrangeBoneS', 'FishPinkBoneS'];
+		var fishArr = ['FishRedBoneS', 'FishBlueBoneS', 'FishGreenBoneS', 'FishOrangeBoneS', 'FishPinkBoneS'];
 		var emitter = this.add.emitter(this.world.width, this.world.centerY, 10);
 		this.EnemyFishGroup = emitter;
 		emitter.setScale(-1,-1,1,1);

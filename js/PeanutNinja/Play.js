@@ -3,7 +3,7 @@ BasicGame.Play.prototype = {
 	init: function () { 
 		////////// Const
 		////////// Val
-		this.isPlaying = false;
+		this.isPlaying=!1;
 		this.bladePoints = [];
 		this.contactPoint = new Phaser.Point(0,0);
 		this.TargetInfo = this.M.getConf('TargetInfo');
@@ -14,22 +14,16 @@ BasicGame.Play.prototype = {
 		this.targetSpawnTimer = this.targetSpawnRate;
 		this.obstarcleSpawnTimer = this.obstarcleSpawnRate;
 		this.countdown = this.curLevel;
-		this.countdownTimer = 1000;
+		this.countdownTimer=1E3;
 		this.goalScore = this.LevelInfo.goalScore;
 		this.curScore = 0;
 		this.leftScore = this.goalScore;
 		this.life = this.LevelInfo.life;
 		////////// Obj
-		this.BladePaint = null;
-		this.BladeLine = null;
-		this.Targets = null;
-		this.TargetPool = null;
-		this.Obstarcles = null;
-		this.ObstarclePool = null;
-		this.Emitters = {};
-		this.GoalScoreTextSprite = null;
-		this.CurScoreTextSprite = null;
-		this.LeftScoreTextSprite = null;
+		this.BladePaint=this.BladeLine=
+		this.Targets=this.Obstarcles=this.TargetPool=this.Emitters=
+		this.TimerTextSprite=this.GoalScoreTextSprite=this.CurScoreTextSprite=this.LeftScoreTextSprite=
+		this.LifeGroup=null;
 	},
 
 	create: function () {
@@ -46,7 +40,7 @@ BasicGame.Play.prototype = {
 
 	update: function () {
 		if (this.isPlaying) {
-			if (this.LevelInfo.TA) this.TimeManager();
+			this.LevelInfo.TA&&this.TimeManager();
 			this.Spawner();
 			this.BladeGenerator(); // PlayContents.js
 			this.Targets.forEachAlive(this.checkIntersects,this);
@@ -56,10 +50,10 @@ BasicGame.Play.prototype = {
 
 	TimeManager: function () {
 		if (this.countdownTimer<0) {
-			this.countdownTimer = 1000;
+			this.countdownTimer=1E3;
 			this.countdown--;
-			if (this.countdown<=0) this.gameOverTA();
-			// TODO set time text
+			0>=this.countdown&&this.endTA();
+			this.TimerTextSprite.changeText('残り時間:'+this.countdown);
 		}
 		this.countdownTimer-=this.time.elapsed;
 	},
@@ -68,12 +62,12 @@ BasicGame.Play.prototype = {
 		if (this.targetSpawnTimer<0) {
 			this.targetSpawnTimer = this.targetSpawnRate;
 			for (var i=0;i<2;i++) 
-				this.genTarget(); // PlayContents.js
+				this.genTarget('Targets'); // PlayContents.js
 		}
 		this.targetSpawnTimer-=this.time.elapsed;
 		if (this.obstarcleSpawnTimer<0) {
 			this.obstarcleSpawnTimer = this.obstarcleSpawnRate;
-			this.genObstarcle(); // PlayContents.js
+			this.genTarget('Obstarcles'); // PlayContents.js
 		}
 		this.obstarcleSpawnTimer-=this.time.elapsed;
 	},
@@ -82,7 +76,7 @@ BasicGame.Play.prototype = {
 		var l1 = new Phaser.Line(target.body.right-target.width,target.body.bottom-target.height,target.body.right,target.body.bottom);
 		var l2 = new Phaser.Line(target.body.right-target.width,target.body.bottom,target.body.right,target.body.bottom-target.height);
 		l2.angle = 90;
-		if (Phaser.Line.intersects(this.BladeLine,l1,true) || Phaser.Line.intersects(this.BladeLine, l2, true)) {
+		if (Phaser.Line.intersects(this.BladeLine,l1,true) || Phaser.Line.intersects(this.BladeLine,l2,true)) {
 			this.contactPoint.x = this.input.x;
 			this.contactPoint.y = this.input.y;
 			if (Phaser.Point.distance(this.contactPoint, new Phaser.Point(target.x, target.y)) > 110) return;
@@ -95,17 +89,21 @@ BasicGame.Play.prototype = {
 
 	checkGameStatus: function (target) {
 		if (this.LevelInfo.TA) {
-			// TODO damage
+			this.curScore+= target.score + parseInt((target.body.velocity.y*.01-30)*(target.body.velocity.y*.01-30)*target.scoreRate);
+			this.CurScoreTextSprite.changeText('スコア:'+this.curScore);
 		} else {
 			if (target.isTarget) {
 				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .1 * target.scoreRate);
 				this.curScore += score;
 				this.leftScore -= score;
-				if (this.leftScore<0) this.leftScore = 0;
+				this.leftScore<0&&(this.leftScore=0);
 				this.setScores();
-				if (this.goalScore <= this.curScore) this.clear();
+				this.goalScore<=this.curScore&&this.clear();
 			} else {
-				// TODO damage
+				this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
+				this.life--;
+				this.LifeGroup.removeChildAt(0);
+				this.life<=0&&this.gameOver();
 			}
 		}
 	},
@@ -115,28 +113,28 @@ BasicGame.Play.prototype = {
 		if (this.M.SE.isPlaying('PlayBGM')) return;
 		this.M.SE.stop('currentBGM');
 		this.M.SE.stop('TitleBGM');
-		this.M.SE.play('PlayBGM',{isBGM:true,loop:true,volume:1});
+		this.M.SE.play('PlayBGM',{isBGM:!0,loop:!0,volume:1});
 	},
 
 	start: function () {
-		if (this.isPlaying == false) {
-			this.isPlaying = true;
+		if (this.isPlaying==0) {
+			this.isPlaying=!0;
 		}
 	},
 
 	clear: function () {
-		this.isPlaying = false;
+		this.isPlaying=!1;
 		console.log('clear');
 	},
 
 	gameOver: function () {
-		this.isPlaying = false;
+		this.isPlaying=!1;
 		console.log('gameOver');
 	},
 
-	gameOverTA: function () {
-		this.isPlaying = false;
-		console.log('gameOverTA');
+	endTA: function () {
+		this.isPlaying=!1;
+		console.log('endTA'); 
 	},
 
 	renderT: function () {
@@ -145,13 +143,13 @@ BasicGame.Play.prototype = {
 	},
 
 	test: function () {
-		if (__ENV!='prod') {
-			this.game.debug.font='40px Courier';
-			this.game.debug.lineHeight=100;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear, this);
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver, this);
-			if(this.M.H.getQuery('mute')) this.sound.mute=true;
-			this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		if(__ENV!='prod'){
+			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
+			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(function(){this.countdown=2;},this);
+			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}
 	},
 };
