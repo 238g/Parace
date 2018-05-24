@@ -93,7 +93,7 @@ BasicGame.Play.prototype = {
 	checkGameStatus: function (target) {
 		if (this.LevelInfo.TA) {
 			this.curScore+= target.score + parseInt((target.body.velocity.y*.01-30)*(target.body.velocity.y*.01-30)*target.scoreRate);
-			this.CurScoreTextSprite.changeText('スコア:'+this.curScore);
+			this.CurScoreTextSprite.changeText('スコア:'+this.M.H.formatComma(this.curScore));
 		} else {
 			if (target.isTarget) {
 				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .1 * target.scoreRate);

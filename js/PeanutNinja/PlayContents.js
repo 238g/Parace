@@ -8,6 +8,7 @@ BasicGame.Play.prototype.TargetContainer = function () {
 		info.score = info.scoreRate * this.LevelInfo.leveScore * (info.isTarget?1:-1);
 		var emitter = this.add.emitter(0,0,100);
 		emitter.makeParticles(info.name+'_Cut');
+		emitter.setScale(.5,.5,.5,.5);
 		this.Emitters[info.name]=emitter;
 		emitter=null;
 	}
@@ -71,21 +72,22 @@ BasicGame.Play.prototype.HUDContainer = function () {
 		this.CurScoreTextSprite = this.M.S.genText(10,40,'スコア:'+this.curScore,textStyle);
 		this.CurScoreTextSprite.setAnchor(0,0);
 	} else {
-		this.GoalScoreTextSprite = this.M.S.genText(10,10,'目標:'+this.goalScore,textStyle);
+		this.GoalScoreTextSprite = this.M.S.genText(10,10,'',textStyle);
 		this.GoalScoreTextSprite.setAnchor(0,0);
-		this.CurScoreTextSprite = this.M.S.genText(10,40,'スコア:'+this.curScore,textStyle);
+		this.CurScoreTextSprite = this.M.S.genText(10,40,'',textStyle);
 		this.CurScoreTextSprite.setAnchor(0,0);
-		this.LeftScoreTextSprite = this.M.S.genText(10,70,'残り:'+this.leftScore,textStyle);
+		this.LeftScoreTextSprite = this.M.S.genText(10,70,'',textStyle);
 		this.LeftScoreTextSprite.setAnchor(0,0);
+		this.setScores();
 		this.genLifeSprite();
 	}
-	this.M.S.genText(this.world.width-10,10,this.curLevel+(this.LevelInfo.TA?'秒アタック':'レベル'),textStyle).setAnchor(1,0);
+	this.M.S.genText(this.world.width-10,10,(this.LevelInfo.TA?this.curLevel+'秒アタック':'レベル'+this.curLevel),textStyle).setAnchor(1,0);
 };
 
 BasicGame.Play.prototype.setScores = function () {
-	this.GoalScoreTextSprite.changeText('目標:'+this.goalScore);
-	this.CurScoreTextSprite.changeText('スコア:'+this.curScore);
-	this.LeftScoreTextSprite.changeText('残り:'+this.leftScore);
+	this.GoalScoreTextSprite.changeText('目標:'+this.M.H.formatComma(this.goalScore));
+	this.CurScoreTextSprite.changeText('スコア:'+this.M.H.formatComma(this.curScore));
+	this.LeftScoreTextSprite.changeText('残り:'+this.M.H.formatComma(this.leftScore));
 };
 
 BasicGame.Play.prototype.genLifeSprite = function () {
@@ -140,8 +142,8 @@ BasicGame.Play.prototype.genResultBtnSprite = function (x,y,func,text,textStyle,
 BasicGame.Play.prototype.tweet = function () {
 	// this.M.SE.play('OnBtn',{volume:1}); // TODO
 	var levelText = '挑戦レベル: '+this.curLevel+(this.LevelInfo.TA?'秒アタック':'レベル');
-	var resultText = this.LevelInfo.TA?'スコア: '+this.curScore:'結果: '+(this.clear?'クリア！':'残念！');
-	var emoji = '';
+	var resultText = this.LevelInfo.TA?'スコア: '+this.M.H.formatComma(this.curScore):'結果: '+(this.clear?'クリア！':'残念！');
+	var emoji = '🍃🍃🍃🍃🍃🍃';
 	var text =  '『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
 				+emoji+'\n'
 				+levelText+'\n'

@@ -163,6 +163,7 @@ BasicGame.Title.prototype = {
 			+'切って切って切りまくれ！\n'
 			+'ぽんぽこは切らないでね！\n'
 			+'';
+			// TODO char???
 		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(25));
 		this.Dialog.addChild(textSprite.multipleTextSprite);
 		this.Dialog.addChild(textSprite);

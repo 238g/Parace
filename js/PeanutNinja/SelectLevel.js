@@ -2,12 +2,20 @@ BasicGame.SelectLevel = function () {};
 BasicGame.SelectLevel.prototype = {
 	init: function () {
 		this.LevelInfo = this.M.getConf('LevelInfo');
+		this.targetImgKeys = [];
 	},
 
 	create: function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
-		// TODO bg char
+		var TargetInfo = this.M.getConf('TargetInfo');
+		for (var key in TargetInfo) this.targetImgKeys.push(key);
+		var charSprite=this.add.sprite(this.world.centerX*.5,this.world.height*1.5,this.rnd.pick(this.targetImgKeys));
+		charSprite.anchor.setTo(.5);
+		var tween=this.M.T.moveB(charSprite,{xy:{y:-this.world.centerY},duration:3000});
+		tween.onLoop.add(function(s){s.loadTexture(this.rnd.pick(this.targetImgKeys));},this);
+		tween.loop();
+		tween.start();
 		var textStyle = this.M.S.BaseTextStyleS(25);
 		var levelBtnGroup = this.add.group();
 		var btnSprite;
