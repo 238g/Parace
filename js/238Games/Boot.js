@@ -1,34 +1,28 @@
-BasicGame = {};
+BasicGame = {
+	GAME_TITLE: document.title,
+	MAIN_COLOR: '#ffffff',
+	MAIN_TINT:  0xffffff,
+	MAIN_TEXT_COLOR: '#000000',
+	MAIN_STROKE_COLOR: '#ffffff',
+	WHITE_COLOR: '#ffffff',
+};
 BasicGame.Boot = function() {};
 BasicGame.Boot.prototype = {
-	init: function () {
-		this.M.BootInit(false);
-	},
-
+	init:function(){this.M.BootInit(false);},
 	preload: function () {
 		this.load.crossOrigin = 'Anonymous';
 		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
 	},
-
 	create: function () {
-		this.defineConst();
-		this.defineGlobal();
-		this.defineConf();
-		this.M.NextScene('Preloader');
-	},
-
-	defineConst: function () {
 		this.M.defineConst({
-			GAME_TITLE: '238Games',
+			MAIN_COLOR: BasicGame.MAIN_COLOR,
+			MAIN_TEXT_COLOR: BasicGame.MAIN_TEXT_COLOR,
+			MAIN_STROKE_COLOR: BasicGame.MAIN_STROKE_COLOR,
+			WHITE_COLOR: BasicGame.WHITE_COLOR,
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 		});
-	},
-
-	defineGlobal: function () {
-		this.M.defineGlobal({
-		});
-	},
-
-	defineConf: function () {
-		this.M.defineConf(this.conf());
+		this.M.defineGlobal({});
+		this.M.defineConf(this.genGamesInfo());
+		this.M.NextScene('Preloader');
 	},
 };

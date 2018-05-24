@@ -1,39 +1,23 @@
 BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
 	init: function () {
-		this.GC = null;
+		this.GamesInfo=this.M.getConf('GamesInfo');
+		this.GamesInfoLength=Object.keys(this.GamesInfo).length;
+		this.canChangePage=!0;
+		this.mapOfPageAndId=[];
 		this.ScrollingMap = null;
+		this.currentPage=0;
+		this.currentUrl='#';
 	},
 
 	create: function () {
-		this.GC = this.GameController();
 		this.ScrollContainer();
-		this.BtnContainer();
-		this.genTitleTextSprite();
-		this.start();
-	},
-
-	GameController: function () {
-		var GamesInfo = this.M.getConf('GamesInfo');
-		return {
-			inputEnabled: false,
-			canChangePage: true,
-			currentPage: 0,
-			mapOfPageAndId: [],
-			GamesInfo: GamesInfo,
-			GamesInfoLength: Object.keys(GamesInfo).length,
-			currentUrl: '#',
-		};
+		this.HUDContainer();
 	},
 
 	ScrollContainer: function () {
-		this.genScrollingMap();
-		this.setContentsToMap();
-	},
-
-	genScrollingMap: function () {
 		this.ScrollingMap = this.add.tileSprite(
-			0, 0, this.GC.GamesInfoLength * this.world.width, this.world.height, "transp");
+			0, 0, this.GamesInfoLength * this.world.width, this.world.height, "transp");
 		this.ScrollingMap.inputEnabled = true;
 		this.ScrollingMap.input.enableDrag(false);
 		this.ScrollingMap.input.allowVerticalDrag = false;
@@ -44,6 +28,7 @@ BasicGame.Title.prototype = {
 			this.ScrollingMap.height * 2 - this.world.height);
 		this.ScrollingMap.events.onDragStart.add(this.scrollOnDragStart, this);
 		this.ScrollingMap.events.onDragStop.add(this.scrollOnDragStop, this);
+		this.setContentsToMap();
 	},
 
 	scrollOnDragStart: function (sprite, pointer) {
@@ -68,58 +53,56 @@ BasicGame.Title.prototype = {
 	},
 
 	changePage: function (page) {
-		if (this.GC.canChangePage) {
-			this.GC.canChangePage = false;
-			this.GC.currentPage += page;
-			var tween = this.M.T.moveX(this.ScrollingMap,{xy:{x:this.GC.currentPage*-this.world.width},duration:300,easing:Phaser.Easing.Cubic.Out});
+		if (this.canChangePage) {
+			this.canChangePage = false;
+			this.currentPage += page;
+			var tween = this.M.T.moveX(this.ScrollingMap,{xy:{x:this.currentPage*-this.world.width},duration:300,easing:Phaser.Easing.Cubic.Out});
 			this.M.T.onComplete(tween, this.changePageOnComp);
 			tween.start();
 		}
 	},
 
 	changePageOnComp: function () {
-		this.GC.canChangePage = true;
+		this.canChangePage = true;
 		this.changeOrnament();
 	},
 
 	setContentsToMap: function () {
-		var GamesInfo = this.GC.GamesInfo;
 		var orderGamesInfo = [];
-		for (var id in GamesInfo) {
-			var order = GamesInfo[id].order;
-			orderGamesInfo[order] = GamesInfo[id];
-		}
 		var pageNum = 0;
+		for (var id in this.GamesInfo)orderGamesInfo[this.GamesInfo[id].order] = this.GamesInfo[id];
 		for (var key in orderGamesInfo) {
 			var gameInfo = orderGamesInfo[key];
 			var x = pageNum * this.world.width + this.world.centerX;
 			this.genPanelSprite(x);
 			this.genSlideImg(x,gameInfo);
 			this.genSlideTitle(x,gameInfo);
-			this.GC.mapOfPageAndId[pageNum] = gameInfo.id;
+			this.mapOfPageAndId[pageNum] = gameInfo.id;
 			pageNum++;
 		}
 		this.changeOrnament();
 	},
 
 	genPanelSprite: function (x) {
-		var panelSprite = this.M.S.genSprite(x,this.world.centerY-100,'greySheet','grey_panel');
+		var panelSprite = this.M.S.genSprite(x,this.world.centerY,'greySheet','grey_panel');
 		panelSprite.anchor.setTo(.5);
-		panelSprite.scale.setTo(6,10);
+		panelSprite.scale.setTo(2.4,4);
 		this.ScrollingMap.addChild(panelSprite);
 	},
 
 	genSlideImg: function (x,gameInfo) {
-		var imgSprite = this.M.S.genSprite(x,this.world.centerY-100,gameInfo.slideImg);
+		var imgSprite = this.M.S.genSprite(x,this.world.centerY,gameInfo.slideImg);
 		imgSprite.anchor.setTo(.5);
+		imgSprite.scale.setTo(gameInfo.scale);
 		this.ScrollingMap.addChild(imgSprite);
 	},
 
 	genSlideTitle: function (x,gameInfo) {
 		var textStyle = {
+			fontSize: 25,
 			fill: gameInfo.textColor,
 			stroke: '#FFFFFF',
-			strokeThickness: 15,
+			strokeThickness: 10,
 			multipleStroke: gameInfo.textColor,
 			multipleStrokeThickness: 10,
 		};
@@ -129,59 +112,46 @@ BasicGame.Title.prototype = {
 	},
 
 	changeOrnament: function () {
-		var id = this.GC.mapOfPageAndId[this.GC.currentPage];
-		var gameInfo = this.GC.GamesInfo[id];
-		this.GC.currentUrl = gameInfo.url;
+		var id = this.mapOfPageAndId[this.currentPage];
+		var gameInfo = this.GamesInfo[id];
+		this.currentUrl = gameInfo.url;
 		this.stage.backgroundColor = gameInfo.bgColor;
 	},
 
 	leftSlide: function () {
-		if (this.GC.currentPage==this.GC.GamesInfoLength-1) return;
+		if (this.currentPage==this.GamesInfoLength-1) return;
 		this.changePage(1);
 	},
 
 	rightSlide: function () {
-		if (this.GC.currentPage==0) return;
+		if (this.currentPage==0) return;
 		this.changePage(-1);
 	},
 
-	BtnContainer: function () {
-		var textStyle = {};
-		var y = this.world.height-100;
-		var leftBtn = this.M.S.BasicGrayLabel(130,y,this.rightSlide,'←',textStyle);
-		leftBtn.setScale(1,2.2);
-		var rightBtn = this.M.S.BasicGrayLabel(this.world.width-130,y,this.leftSlide,'→',textStyle);
-		rightBtn.setScale(1,2.2);
-		this.genStartBtnSprite(y);
-		this.genInquiryBtnSprite(textStyle);
-	},
-
-	genStartBtnSprite: function (y, textStyle) {
-		this.M.S.BasicGrayLabel(this.world.centerX,y,function () {
-			if (this.GC.inputEnabled) {
-				if (this.game.device.desktop) {
-					window.open(this.GC.currentUrl,'_blank');
-				} else {
-					location.href = this.GC.currentUrl;
-				}
-			}
-		}, 'スタート', textStyle);
-	},
-
-	genInquiryBtnSprite: function (textStyle) {
-		this.M.S.BasicGrayLabel(250,100,function () {
-			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
-		}, '開発者', textStyle);
-	},
-
-	genTitleTextSprite: function () {
+	HUDContainer: function () {
 		var textStyle = {
-			fontSize: 70
+			fontSize: 25,
+			fill: '#FFFFFF',
+			stroke: '#000000',
+			strokeThickness: 5,
 		};
-		this.M.S.genText(this.world.width-200,50,'238Games',textStyle);
+		var bottomY = this.world.height-40;
+		var leftBtn = this.M.S.BasicGrayLabelS(50,bottomY,this.rightSlide,'←',textStyle);
+		var rightBtn = this.M.S.BasicGrayLabelS(this.world.width-50,bottomY,this.leftSlide,'→',textStyle);
+		this.genStartBtnSprite(bottomY,textStyle);
+		this.M.S.BasicGrayLabelS(100,40,function () {
+			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
+		},'開発者',textStyle);
+		this.M.S.genText(this.world.width-80,20,'238Games',textStyle);
 	},
 
-	start: function () {
-		this.GC.inputEnabled = true;
+	genStartBtnSprite: function (bottomY,textStyle) {
+		this.M.S.BasicGrayLabelS(this.world.centerX,bottomY,function () {
+			if (this.game.device.desktop) {
+				window.open(this.currentUrl,'_blank');
+			} else {
+				location.href = this.currentUrl;
+			}
+		},'スタート',textStyle);
 	},
 };

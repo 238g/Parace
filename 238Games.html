@@ -35,16 +35,14 @@
 	<meta name="msapplication-TileImage" content="images/238Games/favicons/ms-icon-144x144.png">
 	<link rel="shortcut icon" type="image/x-icon" href="images/238Games/favicons/favicon.ico">
 
-	<!-- <script src="./js/public/phaser2.10.1.js"></script> -->
-	<script src="./js/public/phaser2.10.5.min.js"></script>
+	<script src="js/public/phaser2.10.5.min.js"></script>
 
 	<script src="js/public/Env.js"></script>
-	<script src="js/public/Middleware.js"></script>
-	<script src="js/238Games/Boot.js"></script>
-	<script src="js/238Games/GamesInfo.js?180520"></script>
-	<script src="js/238Games/Preloader.js"></script>
-	<script src="js/238Games/Title_2.js"></script>
-	<!-- <script src="js/238Games/Play.js"></script> -->
+	<script src="js/public/Middleware.js?180524"></script>
+	<script src="js/238Games/Boot.js?180524"></script>
+	<script src="js/238Games/GamesInfo.js?180524"></script>
+	<script src="js/238Games/Preloader.js?180524"></script>
+	<script src="js/238Games/Title_2.js?180524"></script>
 
 	<style type="text/css">
 		body {
@@ -62,7 +60,7 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			new Middleware(
-				new Phaser.Game(900, 1600, Phaser.AUTO), 
+				new Phaser.Game(360, 640, Phaser.AUTO), 
 				BasicGame, 
 				'Boot'
 			);
