@@ -564,7 +564,7 @@ Middleware.prototype.TweenManager.prototype = {
 		var Scene = this.M.getScene();
 		option = option || {};
 		return Scene.add.tween(target).to(
-			{alpha:1}, option.duration, 
+			{alpha:option.alpha||1}, option.duration, 
 			Phaser.Easing.Linear.None, false, option.delay);
 	},
 	// [duration, delay]

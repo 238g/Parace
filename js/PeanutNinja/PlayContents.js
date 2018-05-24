@@ -43,6 +43,7 @@ BasicGame.Play.prototype.genGroup = function (keys,createCount) {
 		c.score = this.TargetInfo[c.key].score;
 		c.scoreRate = this.TargetInfo[c.key].scoreRate;
 		c.isTarget = this.TargetInfo[c.key].isTarget;
+		c.scale.setTo(.5);
 	},this);
 	return g;
 };
@@ -63,7 +64,7 @@ BasicGame.Play.prototype.BladeGenerator = function () {
 };
 
 BasicGame.Play.prototype.HUDContainer = function () {
-	var textStyle = this.M.S.BaseTextStyleS(25);
+	var textStyle = this.M.S.BaseTextStyleS(20);
 	if (this.LevelInfo.TA) {
 		this.TimerTextSprite = this.M.S.genText(10,10,'残り時間:'+this.countdown,textStyle);
 		this.TimerTextSprite.setAnchor(0,0);
@@ -78,6 +79,13 @@ BasicGame.Play.prototype.HUDContainer = function () {
 		this.LeftScoreTextSprite.setAnchor(0,0);
 		this.genLifeSprite();
 	}
+	this.M.S.genText(this.world.width-10,10,this.curLevel+(this.LevelInfo.TA?'秒アタック':'レベル'),textStyle).setAnchor(1,0);
+};
+
+BasicGame.Play.prototype.setScores = function () {
+	this.GoalScoreTextSprite.changeText('目標:'+this.goalScore);
+	this.CurScoreTextSprite.changeText('スコア:'+this.curScore);
+	this.LeftScoreTextSprite.changeText('残り:'+this.leftScore);
 };
 
 BasicGame.Play.prototype.genLifeSprite = function () {
@@ -87,8 +95,60 @@ BasicGame.Play.prototype.genLifeSprite = function () {
 	this.LifeGroup.alignIn(this.world.bounds,Phaser.BOTTOM_CENTER,0,-20);
 };
 
-BasicGame.Play.prototype.setScores = function () {
-	this.GoalScoreTextSprite.changeText('目標:'+this.goalScore);
-	this.CurScoreTextSprite.changeText('スコア:'+this.curScore);
-	this.LeftScoreTextSprite.changeText('残り:'+this.leftScore);
+BasicGame.Play.prototype.makeResult = function () {
+	var bgSprite = this.add.sprite(this.world.centerX,this.world.centerY,'WhitePaper');
+	bgSprite.anchor.setTo(.5);
+	bgSprite.tint = 0x000000;
+	bgSprite.alpha = 0;
+	var tween = this.M.T.fadeInA(bgSprite,{delay:500,duration:800,alpha:.5});
+	this.M.T.onComplete(tween,this.genResultBtns);
+	tween.start();
 };
+
+BasicGame.Play.prototype.genResultBtns = function () {
+	var textStyle = this.M.S.BaseTextStyleS(25);
+	if (this.LevelInfo.TA) {
+		this.M.S.genText(this.world.centerX,200,'終了！',this.M.S.BaseTextStyleS(50));
+		this.genResultBtnSprite(this.world.centerX,300,function(){this.M.NextScene('Play');},'もう一度',textStyle,200);
+	} else {
+		if (this.clear) {
+			this.M.S.genText(this.world.centerX,200,'クリア！',this.M.S.BaseTextStyleS(50));
+			if (this.curLevel<6) {
+				this.genResultBtnSprite(this.world.centerX,300,function(){
+					this.M.setGlobal('curLevel',++this.curLevel);
+					this.M.NextScene('Play');
+				},'次のレベル',textStyle,200);
+			} else {
+				this.genResultBtnSprite(this.world.centerX,300,function(){this.M.NextScene('Play');},'もう一度',textStyle,200);
+			}
+		} else {
+			this.M.S.genText(this.world.centerX,200,'ゲームオーバー！',this.M.S.BaseTextStyleS(40));
+			this.genResultBtnSprite(this.world.centerX,300,function(){this.M.NextScene('Play');},'もう一度',textStyle,200);
+		}
+	}
+	this.genResultBtnSprite(this.world.centerX,380,this.tweet,'結果をツイート',textStyle,400);
+	this.genResultBtnSprite(this.world.centerX,460,function(){this.M.NextScene('SelectLevel');},'レベル選択に戻る',textStyle,600);
+	this.genResultBtnSprite(this.world.centerX,540,function(){this.M.NextScene('Title');},'タイトルに戻る',textStyle,800);
+};
+
+BasicGame.Play.prototype.genResultBtnSprite = function (x,y,func,text,textStyle,delay) {
+	var btnSprite = this.M.S.BasicGrayLabelS(x,y,func,text,textStyle,{tint:BasicGame.MAIN_TINT});
+	btnSprite.scale.setTo(0);
+	this.M.T.popUpB(btnSprite,{duration:800,delay:delay}).start();
+};
+
+BasicGame.Play.prototype.tweet = function () {
+	// this.M.SE.play('OnBtn',{volume:1}); // TODO
+	var levelText = '挑戦レベル: '+this.curLevel+(this.LevelInfo.TA?'秒アタック':'レベル');
+	var resultText = this.LevelInfo.TA?'スコア: '+this.curScore:'結果: '+(this.clear?'クリア！':'残念！');
+	var emoji = '';
+	var text =  '『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
+				+emoji+'\n'
+				+levelText+'\n'
+				+resultText+'\n'
+				+emoji+'\n';
+	var hashtags = 'ぽんぽこゲーム,ピーナッツくんゲーム';
+	this.M.H.tweet(text,hashtags,location.href);
+};
+
+

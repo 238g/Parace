@@ -19,10 +19,15 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('GameIconsBlack','images/public/sheets/GameIconsBlack.png','images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Logo': 'images/Kerin/KerinOnMissile.png',
-			'Logo2': 'images/Kerin/KerinOnMissile.png',
+			'Logo': 'images/Kerin/KerinOnMissile.png', // TODO
+			'Logo2': 'images/Kerin/KerinOnMissile.png', // TODO
 			'Life': 'images/tiatia/PlayerBullet.png', // TODO
 			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
+			'Dialog': 'images/PeanutNinja/WhitePaper.jpg', // TODO
+			'Peanutkun_Face': 'images/PeanutNinja/Peanutkun_Face.png',
+			'PlayBg_1': 'images/PeanutNinja/CartoonBg/1.jpg',
+			'PlayBg_2': 'images/PeanutNinja/CartoonBg/2.jpg',
+			'PlayBg_3': 'images/PeanutNinja/CartoonBg/3.jpg',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
 		this.loadTargetInfo();

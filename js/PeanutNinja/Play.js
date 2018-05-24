@@ -19,6 +19,7 @@ BasicGame.Play.prototype = {
 		this.curScore = 0;
 		this.leftScore = this.goalScore;
 		this.life = this.LevelInfo.life;
+		this.clear = false;
 		////////// Obj
 		this.BladePaint=this.BladeLine=
 		this.Targets=this.Obstarcles=this.TargetPool=this.Emitters=
@@ -30,6 +31,8 @@ BasicGame.Play.prototype = {
 		this.time.events.removeAll();
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.physics.arcade.gravity.y = 300;
+		this.add.sprite(this.world.centerX,this.world.centerY,
+			this.LevelInfo.TA?'PlayBg_2':(this.curLevel<5?'PlayBg_1':'PlayBg_3')).anchor.setTo(.5);
 		this.BladePaint = this.add.graphics(0, 0);
 		this.TargetContainer(); // PlayContents.js
 		this.HUDContainer(); // PlayContents.js
@@ -52,7 +55,7 @@ BasicGame.Play.prototype = {
 		if (this.countdownTimer<0) {
 			this.countdownTimer=1E3;
 			this.countdown--;
-			0>=this.countdown&&this.endTA();
+			0>=this.countdown&&this.end('TA');
 			this.TimerTextSprite.changeText('残り時間:'+this.countdown);
 		}
 		this.countdownTimer-=this.time.elapsed;
@@ -61,8 +64,8 @@ BasicGame.Play.prototype = {
 	Spawner: function () {
 		if (this.targetSpawnTimer<0) {
 			this.targetSpawnTimer = this.targetSpawnRate;
-			for (var i=0;i<2;i++) 
-				this.genTarget('Targets'); // PlayContents.js
+			this.genTarget('Targets'); // PlayContents.js
+			this.genTarget('Targets'); // PlayContents.js
 		}
 		this.targetSpawnTimer-=this.time.elapsed;
 		if (this.obstarcleSpawnTimer<0) {
@@ -98,12 +101,12 @@ BasicGame.Play.prototype = {
 				this.leftScore -= score;
 				this.leftScore<0&&(this.leftScore=0);
 				this.setScores();
-				this.goalScore<=this.curScore&&this.clear();
+				this.goalScore<=this.curScore&&this.end('clear');
 			} else {
 				this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 				this.life--;
 				this.LifeGroup.removeChildAt(0);
-				this.life<=0&&this.gameOver();
+				this.life<=0&&this.end('gameOver');
 			}
 		}
 	},
@@ -122,19 +125,10 @@ BasicGame.Play.prototype = {
 		}
 	},
 
-	clear: function () {
+	end: function (type) {
 		this.isPlaying=!1;
-		console.log('clear');
-	},
-
-	gameOver: function () {
-		this.isPlaying=!1;
-		console.log('gameOver');
-	},
-
-	endTA: function () {
-		this.isPlaying=!1;
-		console.log('endTA'); 
+		type=='clear'&&(this.clear=true);
+		this.makeResult();
 	},
 
 	renderT: function () {
@@ -146,8 +140,9 @@ BasicGame.Play.prototype = {
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
 			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear,this);
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameOver');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end('TA');},this);
 			this.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(function(){this.countdown=2;},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}

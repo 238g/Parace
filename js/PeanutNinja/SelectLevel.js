@@ -7,6 +7,7 @@ BasicGame.SelectLevel.prototype = {
 	create: function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		// TODO bg char
 		var textStyle = this.M.S.BaseTextStyleS(25);
 		var levelBtnGroup = this.add.group();
 		var btnSprite;
@@ -30,6 +31,7 @@ BasicGame.SelectLevel.prototype = {
 		var bottomY = this.world.height*.95;
 		this.genVolumeBtnSprite(this.world.width*.1,bottomY,BasicGame.MAIN_TINT);
 		this.genFullScreenBtnSprite(this.world.width*.9,bottomY,BasicGame.MAIN_TINT);
+		this.M.S.genText(this.world.centerX,50,'レベルを選択してください',textStyle);
 	},
 
 	selectLevel: function (btnSprite) {

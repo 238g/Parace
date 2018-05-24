@@ -1,48 +1,45 @@
 BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
-	init: function () {
-		////////// Const
-		this.BEAT_DURATION = 353;
-		///////// Val
-		this.inputEnabled = false;
-	},
-
+	init: function(){this.inputEnabled=!1;this.Dialog=null;},
 	create: function () {
 		this.time.events.removeAll();
 		this.playBGM();
 		this.BgContainer();
 		this.BtnContainer();
-		this.time.events.add(800,function () { this.inputEnabled = true; },this);
+		this.DialogContainer();
+		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 
 	playBGM: function () {
 		return; // TODO
 		if (this.M.SE.isPlaying('TitleBGM')) return;
 		this.M.SE.stop('currentBGM');
-		this.M.SE.play('TitleBGM',{isBGM:true,loop:true,volume:1});
+		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1});
 	},
 
 	BgContainer: function () {
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
-		this.genBgCharSprite();
-		this.genTitleTextSprite();
-	},
-
-	genBgCharSprite: function () {
-		// TODO
-	},
-
-	genTitleTextSprite: function () {
+		var emitter = this.add.emitter(this.world.centerX,0,100);
+		emitter.width = this.world.width;
+		emitter.makeParticles('Peanutkun_Face');
+		emitter.minParticleScale = .1;
+		emitter.maxParticleScale = .5;
+		emitter.setYSpeed(300, 500);
+		emitter.setXSpeed(-5, 5);
+		emitter.minRotation = 0;
+		emitter.maxRotation = 0;
+		emitter.start(false,1500,this.time.physicsElapsedMS,0);
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.height*.7,
 			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
-		textSprite.addTween('stressA',{duration:this.BEAT_DURATION});
+		textSprite.addTween('stressA',null);
 		textSprite.startTween('stressA');
 	},
 
 	BtnContainer: function () {
 		var textStyle = this.M.S.BaseTextStyleS(25);
 		var tint = BasicGame.MAIN_TINT;
-		this.genStartBtnSprite(this.world.centerX,this.world.height*.85,textStyle,tint);
+		this.genHowToSprite(this.world.centerX*1.6,this.world.height*.85,textStyle,tint);
+		this.genStartBtnSprite(this.world.centerX*.4,this.world.height*.85,textStyle,tint);
 		this.genOtherGameBtnSprite(this.world.centerX,this.world.height*.95,textStyle,tint);
 		this.genLogoBtnSprite(10,10);
 		this.genLogo2BtnSprite(this.world.width-10,10);
@@ -61,6 +58,14 @@ BasicGame.Title.prototype = {
 				this.inputEnabled = true;
 			}
 		},'プレイ！',textStyle,{tint:tint});
+	},
+
+	genHowToSprite: function (x,y,textStyle,tint) {
+		this.M.S.BasicGrayLabelS(x,y,function () {
+			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.Dialog.bringToTop();
+			this.Dialog.tweenShow();
+		},'遊び方',textStyle,{tint:tint});
 	},
 
 	genVolumeBtnSprite: function (x,y,tint) {
@@ -138,14 +143,28 @@ BasicGame.Title.prototype = {
 	},
 
 	genLogo2BtnSprite: function (x,y) {
-		var logoSprite = this.M.S.genButton(x,y,'Logo2',function () {
+		this.M.S.genButton(x,y,'Logo2',function () {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
 			if (this.game.device.desktop) {
 				window.open(BasicGame.YOUTUBE_URL_2,'_blank');
 			} else {
 				location.href = BasicGame.YOUTUBE_URL_2;
 			}
-		});
-		logoSprite.anchor.setTo(1,0);
+		}).anchor.setTo(1,0);
+	},
+
+	DialogContainer: function () {
+		this.Dialog = this.M.S.genDialog('Dialog');
+		this.Dialog.UonInputDown(function(s){s.scale.setTo(0);});
+		var action = (this.game.device.touch)?'画面をスワイプさせて\n（画面をこすって）':'マウスをドラッグさせて';
+		var text = 
+			action+'\n'
+			+'飛んでくるピーナッツくんを\n'
+			+'切って切って切りまくれ！\n'
+			+'ぽんぽこは切らないでね！\n'
+			+'';
+		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(25));
+		this.Dialog.addChild(textSprite.multipleTextSprite);
+		this.Dialog.addChild(textSprite);
 	},
 };
