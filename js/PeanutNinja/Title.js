@@ -11,10 +11,9 @@ BasicGame.Title.prototype = {
 	},
 
 	playBGM: function () {
-		return; // TODO
 		if (this.M.SE.isPlaying('TitleBGM')) return;
 		this.M.SE.stop('currentBGM');
-		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1});
+		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1.5});
 	},
 
 	BgContainer: function () {
@@ -162,9 +161,18 @@ BasicGame.Title.prototype = {
 			+'飛んでくるピーナッツくんを\n'
 			+'切って切って切りまくれ！\n'
 			+'ぽんぽこは切らないでね！\n'
-			+'';
+			+'\n'
+			+'レベルモードでは\n'
+			+'ライフがなくなったら\n'
+			+'ゲームオーバー！\n'
+			+'◯秒チャレンジは切り放題！！\n'
+			+'素早いピーナッツくんは\n'
+			+'高得点！？\n'
+			+'\n'
+			+'みんなも Let\'s 切る切る〜!'
+			;
 			// TODO char???
-		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(25));
+		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(20));
 		this.Dialog.addChild(textSprite.multipleTextSprite);
 		this.Dialog.addChild(textSprite);
 	},

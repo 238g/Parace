@@ -8,6 +8,7 @@ BasicGame.SelectLevel.prototype = {
 	create: function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		this.playBGM();
 		var TargetInfo = this.M.getConf('TargetInfo');
 		for (var key in TargetInfo) this.targetImgKeys.push(key);
 		var charSprite=this.add.sprite(this.world.centerX*.5,this.world.height*1.5,this.rnd.pick(this.targetImgKeys));
@@ -40,6 +41,12 @@ BasicGame.SelectLevel.prototype = {
 		this.genVolumeBtnSprite(this.world.width*.1,bottomY,BasicGame.MAIN_TINT);
 		this.genFullScreenBtnSprite(this.world.width*.9,bottomY,BasicGame.MAIN_TINT);
 		this.M.S.genText(this.world.centerX,50,'レベルを選択してください',textStyle);
+	},
+
+	playBGM: function () {
+		if (this.M.SE.isPlaying('TitleBGM')) return;
+		this.M.SE.stop('currentBGM');
+		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1.5});
 	},
 
 	selectLevel: function (btnSprite) {

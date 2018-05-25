@@ -46,8 +46,12 @@ BasicGame.Preloader.prototype = {
 	loadAudio: function () {
 		this.sounds = {
 			'TitleBGM': [
-				'sounds/BGM/O/OnPatrol.mp3',
-				'sounds/BGM/O/OnPatrol.wav',
+				'sounds/BGM/H/hiyokonokakekko.mp3',
+				'sounds/BGM/H/hiyokonokakekko.wav',
+			],
+			'PlayBGM': [
+				'sounds/BGM/S/ShootingStair.mp3',
+				'sounds/BGM/S/ShootingStair.wav',
 			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);

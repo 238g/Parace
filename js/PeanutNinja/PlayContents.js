@@ -82,6 +82,16 @@ BasicGame.Play.prototype.HUDContainer = function () {
 		this.genLifeSprite();
 	}
 	this.M.S.genText(this.world.width-10,10,(this.LevelInfo.TA?this.curLevel+'秒アタック':'レベル'+this.curLevel),textStyle).setAnchor(1,0);
+	this.StartTextSprite = this.M.S.genText(this.world.centerX,this.world.centerY,'スタート',this.M.S.BaseTextStyleS(60));
+	this.StartTextSprite.setScale(0,0);
+	this.StartTextSprite.addTween('popUpB',{delay:300});
+	this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function(){
+		this.time.events.add(500,function(){
+			this.StartTextSprite.Udestroy();
+		},this);
+		this.start();
+	});
+	this.StartTextSprite.startTween('popUpB');
 };
 
 BasicGame.Play.prototype.setScores = function () {

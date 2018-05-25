@@ -3,9 +3,7 @@ BasicGame.Play.prototype={
 	init:function () { 
 		////////// Val
 		this.isPlaying=!1;
-		this.curSimonFrame=null;
 		////////// Obj
-		this.Btns=null;
 	},
 
 	create:function () {

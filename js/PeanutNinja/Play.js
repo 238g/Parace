@@ -1,8 +1,6 @@
 BasicGame.Play = function () {};
 BasicGame.Play.prototype = {
 	init: function () { 
-		////////// Const
-		////////// Val
 		this.isPlaying=!1;
 		this.bladePoints = [];
 		this.contactPoint = new Phaser.Point(0,0);
@@ -23,7 +21,7 @@ BasicGame.Play.prototype = {
 		////////// Obj
 		this.BladePaint=this.BladeLine=
 		this.Targets=this.Obstarcles=this.TargetPool=this.Emitters=
-		this.TimerTextSprite=this.GoalScoreTextSprite=this.CurScoreTextSprite=this.LeftScoreTextSprite=
+		this.TimerTextSprite=this.GoalScoreTextSprite=this.CurScoreTextSprite=this.LeftScoreTextSprite=this.StartTextSprite=
 		this.LifeGroup=null;
 	},
 
@@ -37,7 +35,6 @@ BasicGame.Play.prototype = {
 		this.TargetContainer(); // PlayContents.js
 		this.HUDContainer(); // PlayContents.js
 		this.playBGM();
-		this.start(); // TODO del
 		this.test();
 	},
 
@@ -112,7 +109,6 @@ BasicGame.Play.prototype = {
 	},
 
 	playBGM: function () {
-		return; // TODO
 		if (this.M.SE.isPlaying('PlayBGM')) return;
 		this.M.SE.stop('currentBGM');
 		this.M.SE.stop('TitleBGM');
@@ -120,9 +116,7 @@ BasicGame.Play.prototype = {
 	},
 
 	start: function () {
-		if (this.isPlaying==0) {
-			this.isPlaying=!0;
-		}
+		this.isPlaying==0&&(this.isPlaying=!0);
 	},
 
 	end: function (type) {
