@@ -27,10 +27,11 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.time.events.removeAll();
+		this.stage.backgroundColor='#000000';
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.physics.arcade.gravity.y = 300;
 		this.add.sprite(this.world.centerX,this.world.centerY,
-			this.LevelInfo.TA?'PlayBg_2':(this.curLevel<5?'PlayBg_1':'PlayBg_3')).anchor.setTo(.5);
+			this.LevelInfo.TA?'Bg_1':(this.curLevel<5?this.curLevel<3?'PlayBg_1':'PlayBg_2':'PlayBg_3')).anchor.setTo(.5);
 		this.BladePaint = this.add.graphics(0, 0);
 		this.TargetContainer(); // PlayContents.js
 		this.HUDContainer(); // PlayContents.js
@@ -133,7 +134,6 @@ BasicGame.Play.prototype = {
 	test: function () {
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
-			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameOver');},this);
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end('TA');},this);

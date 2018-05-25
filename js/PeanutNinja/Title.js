@@ -18,6 +18,7 @@ BasicGame.Title.prototype = {
 
 	BgContainer: function () {
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		this.add.sprite(this.world.centerX,this.world.centerY,'Bg_1').anchor.setTo(.5);
 		var emitter = this.add.emitter(this.world.centerX,0,100);
 		emitter.width = this.world.width;
 		emitter.makeParticles('Peanutkun_Face');
@@ -28,10 +29,15 @@ BasicGame.Title.prototype = {
 		emitter.minRotation = 0;
 		emitter.maxRotation = 0;
 		emitter.start(false,1500,this.time.physicsElapsedMS,0);
+		/*
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.height*.7,
 			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
 		textSprite.addTween('stressA',null);
 		textSprite.startTween('stressA');
+		*/
+		var titleSprite = this.add.sprite(this.world.centerX,this.world.centerX,'Title');
+		titleSprite.anchor.setTo(.5);
+		this.M.T.stressA(titleSprite).start();
 	},
 
 	BtnContainer: function () {
@@ -40,8 +46,8 @@ BasicGame.Title.prototype = {
 		this.genHowToSprite(this.world.centerX*1.6,this.world.height*.85,textStyle,tint);
 		this.genStartBtnSprite(this.world.centerX*.4,this.world.height*.85,textStyle,tint);
 		this.genOtherGameBtnSprite(this.world.centerX,this.world.height*.95,textStyle,tint);
-		this.genLogoBtnSprite(10,10);
-		this.genLogo2BtnSprite(this.world.width-10,10);
+		this.genLogoBtnSprite(0,0);
+		this.genLogo2BtnSprite(this.world.width,0);
 		var bottomY = this.world.height*.95;
 		this.genVolumeBtnSprite(this.world.width*.1,bottomY,tint);
 		this.genFullScreenBtnSprite(this.world.width*.9,bottomY,tint);
@@ -127,7 +133,7 @@ BasicGame.Title.prototype = {
 			} else {
 				location.href = BasicGame.MY_GAMES_URL;
 			}
-		},'他ゲームを遊ぶ',textStyle,{tint:tint});
+		},'他ゲーム',textStyle,{tint:tint});
 	},
 
 	genLogoBtnSprite: function (x,y) {
@@ -138,7 +144,7 @@ BasicGame.Title.prototype = {
 			} else {
 				location.href = BasicGame.YOUTUBE_URL;
 			}
-		});
+		}).anchor.setTo(0,0);
 	},
 
 	genLogo2BtnSprite: function (x,y) {
@@ -165,14 +171,16 @@ BasicGame.Title.prototype = {
 			+'レベルモードでは\n'
 			+'ライフがなくなったら\n'
 			+'ゲームオーバー！\n'
-			+'◯秒チャレンジは切り放題！！\n'
+			+'◯◯秒チャレンジは切り放題！！\n'
 			+'素早いピーナッツくんは\n'
 			+'高得点！？\n'
 			+'\n'
-			+'みんなも Let\'s 切る切る〜!'
-			;
-			// TODO char???
-		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(20));
+			+'みんなも Let\'s 切る切る〜!';
+		var charSprite = this.add.sprite(this.Dialog.width*.5,this.Dialog.height*.5,this.rnd.pick(this.M.getConst('SUB_CHARS')));
+		charSprite.anchor.setTo(.5);
+		charSprite.scale.setTo(2);
+		this.Dialog.addChild(charSprite);
+		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(18));
 		this.Dialog.addChild(textSprite.multipleTextSprite);
 		this.Dialog.addChild(textSprite);
 	},

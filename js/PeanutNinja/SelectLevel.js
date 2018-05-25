@@ -8,8 +8,10 @@ BasicGame.SelectLevel.prototype = {
 	create: function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		this.add.sprite(this.world.centerX,this.world.centerY,'Bg_2').anchor.setTo(.5);
 		this.playBGM();
 		var TargetInfo = this.M.getConf('TargetInfo');
+		this.targetImgKeys = this.M.getConst('SUB_CHARS');
 		for (var key in TargetInfo) this.targetImgKeys.push(key);
 		var charSprite=this.add.sprite(this.world.centerX*.5,this.world.height*1.5,this.rnd.pick(this.targetImgKeys));
 		charSprite.anchor.setTo(.5);

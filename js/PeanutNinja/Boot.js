@@ -32,6 +32,7 @@ BasicGame.Boot.prototype = {
 			MAIN_STROKE_COLOR: BasicGame.MAIN_STROKE_COLOR,
 			WHITE_COLOR: BasicGame.WHITE_COLOR,
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			SUB_CHARS: ['MajiManjiMan_1','Chancho_1','Denimkun_1','YanderuUsagi_1'],
 		});
 		this.M.defineGlobal({
 			curLevel: 1,

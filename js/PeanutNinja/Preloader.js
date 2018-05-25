@@ -1,7 +1,8 @@
 BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
 	create: function () {
-		this.sounds = null; 
+		this.sounds = null;
+		this.chars = null;
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
 		this.genAdviceTextSprite();
@@ -19,19 +20,31 @@ BasicGame.Preloader.prototype = {
 		this.load.atlasXML('GameIconsBlack','images/public/sheets/GameIconsBlack.png','images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Logo': 'images/Kerin/KerinOnMissile.png', // TODO
-			'Logo2': 'images/Kerin/KerinOnMissile.png', // TODO
-			'Life': 'images/tiatia/PlayerBullet.png', // TODO
+			'Logo': 'images/PeanutNinja/Logo.png',
+			'Logo2': 'images/PeanutNinja/Logo2.png',
+			'Title': 'images/PeanutNinja/Title.png',
+			'Life': 'images/PeanutNinja/Life.png',
 			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
-			'Dialog': 'images/PeanutNinja/WhitePaper.jpg', // TODO
+			'Dialog': 'images/PeanutNinja/Dialog.png',
 			'Peanutkun_Face': 'images/PeanutNinja/Peanutkun_Face.png',
 			'PlayBg_1': 'images/PeanutNinja/CartoonBg/1.jpg',
 			'PlayBg_2': 'images/PeanutNinja/CartoonBg/2.jpg',
 			'PlayBg_3': 'images/PeanutNinja/CartoonBg/3.jpg',
+			'Bg_1': 'images/PeanutNinja/Bg_1.jpg',
+			'Bg_2': 'images/PeanutNinja/Bg_2.jpg',
 		};
 		for (var key in imageAssets) this.load.image(key, imageAssets[key]);
+		this.loadSubChars();
 		this.loadTargetInfo();
 		this.loadAudio();
+	},
+
+	loadSubChars: function () {
+		this.chars = this.M.getConst('SUB_CHARS');
+		for (var key in this.chars) {
+			var char = this.chars[key];
+			this.load.image(char,'images/PeanutNinja/Chars/'+char+'.png');
+		}
 	},
 
 	loadTargetInfo: function () {
@@ -61,6 +74,8 @@ BasicGame.Preloader.prototype = {
 		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
+		this.add.sprite(0,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(0,1);
+		this.add.sprite(this.world.width,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(1,1);
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',{fontSize:30});
 		this.game.input.onDown.add(this.start,this);
 	},

@@ -102,7 +102,10 @@ BasicGame.Play.prototype.setScores = function () {
 
 BasicGame.Play.prototype.genLifeSprite = function () {
 	this.LifeGroup = this.add.group();
-	for (var i=0;i<this.LevelInfo.life;i++) var lifeSprite = this.add.sprite(0,0,'Life',0,this.LifeGroup);
+	for (var i=0;i<this.LevelInfo.life;i++) {
+		var lifeSprite = this.add.sprite(0,0,'Life',0,this.LifeGroup);
+		lifeSprite.scale.setTo(.33);
+	}
 	this.LifeGroup.align(-1,1,lifeSprite.width,lifeSprite.height);
 	this.LifeGroup.alignIn(this.world.bounds,Phaser.BOTTOM_CENTER,0,-20);
 };
