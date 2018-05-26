@@ -100,7 +100,7 @@ BasicGame.Play.prototype = {
 			}
 		} else {
 			if (target.isTarget) {
-				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .1 * target.scoreRate);
+				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .2 * target.scoreRate);
 				this.curScore += score;
 				this.leftScore -= score;
 				this.leftScore<0&&(this.leftScore=0);

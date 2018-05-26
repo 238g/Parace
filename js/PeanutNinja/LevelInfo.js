@@ -48,11 +48,11 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			TA: false,
 			goalScore: 100000,
 			life: 2,
-			targetSpawnRate: 500,
+			targetSpawnRate: 600,
 			obstacleSpawnRate: 1000,
 			spawnPointSwitchRate: 50,
-			leveScore: 200,
-			maxSpeedX: 20,
+			leveScore: 235,
+			maxSpeedX: 30,
 			maxSpeedY: 60,
 		},
 		6: {
@@ -68,11 +68,11 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 		},
 		60: {
 			TA: true,
-			targetSpawnRate: 500,
+			targetSpawnRate: 600,
 			obstacleSpawnRate: 1000,
 			spawnPointSwitchRate: 50,
 			leveScore: 2000,
-			maxSpeedX: 20,
+			maxSpeedX: 30,
 			maxSpeedY: 60,
 		},
 		120: {
