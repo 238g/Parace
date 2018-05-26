@@ -107,7 +107,7 @@ BasicGame.Play.prototype.genLifeSprite = function () {
 		lifeSprite.scale.setTo(.33);
 	}
 	this.LifeGroup.align(-1,1,lifeSprite.width,lifeSprite.height);
-	this.LifeGroup.alignIn(this.world.bounds,Phaser.BOTTOM_CENTER,0,-20);
+	this.LifeGroup.alignIn(this.world.bounds,Phaser.BOTTOM_CENTER,0,-5);
 };
 
 BasicGame.Play.prototype.makeResult = function () {
@@ -142,8 +142,20 @@ BasicGame.Play.prototype.genResultBtns = function () {
 		}
 	}
 	this.genResultBtnSprite(this.world.centerX,380,this.tweet,'結果をツイート',textStyle,400);
-	this.genResultBtnSprite(this.world.centerX,460,function(){this.M.NextScene('SelectLevel');},'レベル選択に戻る',textStyle,600);
-	this.genResultBtnSprite(this.world.centerX,540,function(){this.M.NextScene('Title');},'タイトルに戻る',textStyle,800);
+	this.genResultBtnSprite(this.world.centerX,460,function(){
+		this.M.SE.play('MajiManjiVoice_1',{volume:1});
+		this.M.NextScene('SelectLevel');
+	},'レベル選択に戻る',textStyle,600);
+	this.genResultBtnSprite(this.world.centerX,540,function(){
+		this.M.SE.play('MajiManjiVoice_1',{volume:1});
+		this.M.NextScene('Title');
+	},'タイトルに戻る',textStyle,800);
+	this.add.sprite(0,300,'Chancho_1').scale.setTo(.5);
+	this.add.sprite(this.world.width,300,'Chancho_1').scale.setTo(-.5,.5);
+	this.add.sprite(0,380,'Chancho_1').scale.setTo(.5);
+	this.add.sprite(this.world.width,380,'Chancho_1').scale.setTo(-.5,.5);
+	this.add.sprite(0,460,'Chancho_1').scale.setTo(.5);
+	this.add.sprite(this.world.width,460,'Chancho_1').scale.setTo(-.5,.5);
 };
 
 BasicGame.Play.prototype.genResultBtnSprite = function (x,y,func,text,textStyle,delay) {
@@ -153,7 +165,7 @@ BasicGame.Play.prototype.genResultBtnSprite = function (x,y,func,text,textStyle,
 };
 
 BasicGame.Play.prototype.tweet = function () {
-	// this.M.SE.play('OnBtn',{volume:1}); // TODO
+	this.M.SE.play('MajiManjiVoice_1',{volume:1});
 	var levelText = '挑戦レベル: '+this.curLevel+(this.LevelInfo.TA?'秒アタック':'レベル');
 	var resultText = this.LevelInfo.TA?'スコア: '+this.M.H.formatComma(this.curScore):'結果: '+(this.clear?'クリア！':'残念！');
 	var emoji = '🍃🍃🍃🍃🍃🍃';

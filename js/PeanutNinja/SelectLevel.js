@@ -57,6 +57,7 @@ BasicGame.SelectLevel.prototype = {
 	},
 
 	backToTitle: function () {
+		this.M.SE.play('MajiManjiVoice_1',{volume:1});
 		this.M.NextScene('Title');
 	},
 

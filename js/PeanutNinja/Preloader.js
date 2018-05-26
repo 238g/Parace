@@ -66,6 +66,42 @@ BasicGame.Preloader.prototype = {
 				'sounds/BGM/S/ShootingStair.mp3',
 				'sounds/BGM/S/ShootingStair.wav',
 			],
+			'PeanutkunVoice_1': [
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_1.mp3',
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_1.wav',
+			],
+			'PeanutkunVoice_2': [
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_2.mp3',
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_2.wav',
+			],
+			'PeanutkunVoice_3': [
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_3.mp3',
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_3.wav',
+			],
+			'PeanutkunVoice_4': [
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_4.mp3',
+				'sounds/VOICE/PeanutNinja/PeanutkunVoice_4.wav',
+			],
+			'MajiManjiVoice_1': [
+				'sounds/VOICE/PeanutNinja/MajiManjiVoice_1.mp3',
+				'sounds/VOICE/PeanutNinja/MajiManjiVoice_1.wav',
+			],
+			'ChanchoVoice_1': [
+				'sounds/VOICE/PeanutNinja/ChanchoVoice_1.mp3',
+				'sounds/VOICE/PeanutNinja/ChanchoVoice_1.wav',
+			],
+			'PonpokoVoice_1': [
+				'sounds/VOICE/PeanutNinja/PonpokoVoice_1.mp3',
+				'sounds/VOICE/PeanutNinja/PonpokoVoice_1.wav',
+			],
+			'Whistle_1': [
+				'sounds/SE/LabJP/Life/Other/police-whistle1.mp3',
+				'sounds/SE/LabJP/Life/Other/police-whistle1.wav',
+			],
+			'Whistle_2': [
+				'sounds/SE/LabJP/Life/Other/police-whistle2.mp3',
+				'sounds/SE/LabJP/Life/Other/police-whistle2.wav',
+			],
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},

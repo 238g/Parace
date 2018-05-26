@@ -56,7 +56,7 @@ BasicGame.Title.prototype = {
 	genStartBtnSprite: function (x,y,textStyle,tint) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
 			if (this.inputEnabled) {
-				// this.M.SE.play('OnBtn',{volume:1}); // TODO
+				this.M.SE.play('MajiManjiVoice_1',{volume:1});
 				this.M.NextScene('SelectLevel');
 			} else {
 				this.playBGM();
@@ -67,7 +67,7 @@ BasicGame.Title.prototype = {
 
 	genHowToSprite: function (x,y,textStyle,tint) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('MajiManjiVoice_1',{volume:1});
 			this.Dialog.bringToTop();
 			this.Dialog.tweenShow();
 		},'遊び方',textStyle,{tint:tint});
@@ -127,7 +127,7 @@ BasicGame.Title.prototype = {
 
 	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('MajiManjiVoice_1',{volume:1});
 			if (this.game.device.desktop) {
 				window.open(BasicGame.MY_GAMES_URL,'_blank');
 			} else {
@@ -138,7 +138,7 @@ BasicGame.Title.prototype = {
 
 	genLogoBtnSprite: function (x,y) {
 		this.M.S.genButton(x,y,'Logo',function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('MajiManjiVoice_1',{volume:1});
 			if (this.game.device.desktop) {
 				window.open(BasicGame.YOUTUBE_URL,'_blank');
 			} else {
@@ -149,7 +149,7 @@ BasicGame.Title.prototype = {
 
 	genLogo2BtnSprite: function (x,y) {
 		this.M.S.genButton(x,y,'Logo2',function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('MajiManjiVoice_1',{volume:1});
 			if (this.game.device.desktop) {
 				window.open(BasicGame.YOUTUBE_URL_2,'_blank');
 			} else {

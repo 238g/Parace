@@ -36,6 +36,7 @@ BasicGame.Play.prototype = {
 		this.TargetContainer(); // PlayContents.js
 		this.HUDContainer(); // PlayContents.js
 		this.playBGM();
+		this.M.SE.play('Whistle_2',{volume:1});
 		this.test();
 	},
 
@@ -92,6 +93,11 @@ BasicGame.Play.prototype = {
 		if (this.LevelInfo.TA) {
 			this.curScore+= target.score + parseInt((target.body.velocity.y*.01-30)*(target.body.velocity.y*.01-30)*target.scoreRate);
 			this.CurScoreTextSprite.changeText('スコア:'+this.M.H.formatComma(this.curScore));
+			if (target.isTarget) {
+				this.M.SE.play('PeanutkunVoice_'+this.rnd.integerInRange(1,3),{volume:1});
+			} else {
+				this.M.SE.play('PonpokoVoice_1',{volume:.5});
+			}
 		} else {
 			if (target.isTarget) {
 				var score = target.score + parseInt((target.body.velocity.y*.01 - 30) * (target.body.velocity.y*.01 - 30) * .1 * target.scoreRate);
@@ -100,11 +106,13 @@ BasicGame.Play.prototype = {
 				this.leftScore<0&&(this.leftScore=0);
 				this.setScores();
 				this.goalScore<=this.curScore&&this.end('clear');
+				this.M.SE.play('PeanutkunVoice_'+this.rnd.integerInRange(1,3),{volume:1});
 			} else {
 				this.camera.shake(.05,200,true,Phaser.Camera.SHAKE_HORIZONTAL);
 				this.life--;
 				this.LifeGroup.removeChildAt(0);
 				this.life<=0&&this.end('gameOver');
+				this.M.SE.play('PonpokoVoice_1',{volume:.5});
 			}
 		}
 	},
@@ -123,6 +131,7 @@ BasicGame.Play.prototype = {
 	end: function (type) {
 		this.isPlaying=!1;
 		type=='clear'&&(this.clear=true);
+		this.M.SE.play('ChanchoVoice_1',{volume:1});
 		this.makeResult();
 	},
 
