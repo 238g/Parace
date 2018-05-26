@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 15;
+	var totalCount = 16;
 	return {
 		GamesInfo:{
 			1001: {
@@ -167,18 +167,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				bgColor: '#a9aee5',
 				scale: .4,
 			},
-			/*
-			1000: {
-				id: 1000,
-				title: 'title5',
-				url: '55555abcdefg',
-				slideImg: 'BeefBowl',
-				slideImgUrl: './images/AzlimBushi/BeefBowl.png',
-				order: 1,
-				// color? sub,text
-				// list thumbnail?
+			1016: {
+				id: 1016,
+				title: 'ピーナッツ忍者',
+				url: 'https://238g.github.io/Parace/PeanutNinja.html',
+				slideImg: 'Peanutkun_Face',
+				slideImgUrl: 'images/PeanutNinja/Peanutkun_Face.png',
+				order: totalCount-16,
+				textColor: '#a17b63',
+				bgColor: '#fef106',
+				scale: 1,
 			},
-			*/
 		},
 	};
 };

@@ -17,3 +17,4 @@
 |ミラアカゲーム(虹)|https://238g.github.io/Parace/MiraAka.html|2018/5/12|
 |ぶちとば!💥🚀ケリンさん|https://238g.github.io/Parace/Kerin.html|2018/5/16|
 |脱衣ちーちゃん|https://238g.github.io/Parace/ChihiroGame.html|2018/5/20|
+|ピーナッツ忍者|https://238g.github.io/Parace/PeanutNinja.html|2018/5/26|
