@@ -1,21 +1,57 @@
-BasicGame.Play=function(){};
-BasicGame.Play.prototype={
+BasicGame.Stage2=function(){};
+BasicGame.Stage2.prototype={
 	init:function () { 
 		////////// Val
 		this.isPlaying=!1;
+		this.isMovingPointer=!1;
 		////////// Obj
 	},
 
 	create:function () {
 		this.time.events.removeAll();
 		this.playBGM();
-		// this.BtnContainer();
+		
+		this.gaugeRight = this.world.centerX*1.5;
+		this.gaugeLeft = this.world.centerX*.5;
+		this.gaugeLength = this.gaugeRight-this.gaugeLeft;
+		this.gaugeHalfLength = this.gaugeLength*.5;
+
+		/////
+		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength,100,'#00ff00');
+		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength*.5,100,'#ff0000');
+		/////
+		this.isMovingPointer=!0;
+
+
+		this.GaugePointer = this.add.sprite(this.world.centerX,this.world.centerY,'Particle');
+		this.GaugePointer.anchor.setTo(.5);
+		this.movePointerX = 1;
+
+		this.input.onDown.add(function(){
+			if(this.isMovingPointer) {
+				var x = Math.abs(this.GaugePointer.x-this.world.centerX);
+				// OR (this.gaugeRight+this.gaugeLeft)*.5
+				this.isMovingPointer=!1;
+				console.log(this.gaugeHalfLength-x);
+			}
+		},this);
+
+
 		this.start(); // TODO del
 		this.test();
 	},
 
-	updateT: function () {
+	update: function () {
 		if (this.isPlaying) {
+			if (this.isMovingPointer) {
+				this.GaugePointer.x+=this.movePointerX;
+				if (this.GaugePointer.x>this.gaugeRight) {
+					this.movePointerX=-1;
+				}
+				if (this.GaugePointer.x<this.gaugeLeft) {
+					this.movePointerX=1;
+				}
+			}
 		}
 	},
 

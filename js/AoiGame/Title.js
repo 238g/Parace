@@ -41,8 +41,7 @@ BasicGame.Title.prototype = {
 		this.M.S.BasicGrayLabelS(x,y,function () {
 			if (this.inputEnabled) {
 				// this.M.SE.play('OnBtn',{volume:1}); // TODO
-				this.M.NextScene('Play');
-				// this.M.NextScene('SelectLevel');
+				this.M.NextScene('Stage1');
 			} else {
 				this.playBGM();
 				this.inputEnabled = true;

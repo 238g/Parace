@@ -102,9 +102,9 @@ BasicGame.Title.prototype = {
 			fontSize: 25,
 			fill: gameInfo.textColor,
 			stroke: '#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 8,
 			multipleStroke: gameInfo.textColor,
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 5,
 		};
 		var textSprite = this.M.S.genText(x,this.world.centerY/2,gameInfo.title,textStyle);
 		this.ScrollingMap.addChild(textSprite.multipleTextSprite);

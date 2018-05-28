@@ -21,6 +21,8 @@ BasicGame.Preloader.prototype = {
 		var imageAssets = {
 			'Logo': 'images/Kerin/KerinOnMissile.png',
 			'Dialog': 'images/PeanutNinja/WhitePaper.jpg', // TODO
+			'Particle': 'images/ChihiroGame/Particle.png',
+			'Target': 'images/eff/DeadTree.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
