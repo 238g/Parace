@@ -12,7 +12,7 @@ BasicGame.Preloader.prototype = {
 	},
 
 	genAdviceTextSprite: function () {
-		this.M.S.genText(this.world.centerX, this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
 	},
 
 	loadAssets: function () {

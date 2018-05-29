@@ -14,14 +14,10 @@ BasicGame = {
 	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};
-BasicGame.Boot.prototype = {
+BasicGame.Boot.prototype={
 	init:function(){this.M.BootInit(false);},
-	preload: function () {
-		this.load.crossOrigin = 'Anonymous';
-		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
-	},
-
-	create: function () {
+	preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+	create:function(){
 		this.M.defineConst({
 			MAIN_COLOR: BasicGame.MAIN_COLOR,
 			MAIN_TEXT_COLOR: BasicGame.MAIN_TEXT_COLOR,
@@ -30,9 +26,10 @@ BasicGame.Boot.prototype = {
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 		});
 		this.M.defineGlobal({
+			stage1Score: 0,
+			stage2Score: 0,
 		});
-		this.M.defineConf({
-		});
+		this.M.defineConf({});
 		this.M.NextScene('Preloader');
 	},
 };

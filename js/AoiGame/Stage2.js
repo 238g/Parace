@@ -1,66 +1,54 @@
 BasicGame.Stage2=function(){};
 BasicGame.Stage2.prototype={
 	init:function () { 
-		////////// Val
 		this.isPlaying=!1;
-		this.isMovingPointer=!1;
-		////////// Obj
+		this.startTime=this.getTargetCount=0;
+		this.goalCount=30;
+		this.CounterTextSprite=this.StartTextSprite=null;
 	},
 
 	create:function () {
 		this.time.events.removeAll();
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.M.setGlobal('stage1Score',0);
 		this.playBGM();
-		
-		this.gaugeRight = this.world.centerX*1.5;
-		this.gaugeLeft = this.world.centerX*.5;
-		this.gaugeLength = this.gaugeRight-this.gaugeLeft;
-		this.gaugeHalfLength = this.gaugeLength*.5;
-
-		/////
-		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength,100,'#00ff00');
-		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength*.5,100,'#ff0000');
-		/////
-		this.isMovingPointer=!0;
-
-
-		this.GaugePointer = this.add.sprite(this.world.centerX,this.world.centerY,'Particle');
-		this.GaugePointer.anchor.setTo(.5);
-		this.movePointerX = 1;
-
-		this.input.onDown.add(function(){
-			if(this.isMovingPointer) {
-				var x = Math.abs(this.GaugePointer.x-this.world.centerX);
-				// OR (this.gaugeRight+this.gaugeLeft)*.5
-				this.isMovingPointer=!1;
-				console.log(this.gaugeHalfLength-x);
-			}
-		},this);
-
-
-		this.start(); // TODO del
+		this.CounterTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,0,this.M.S.BaseTextStyle(250));
+		this.CounterTextSprite.hide();
+		this.genTargetContainer();
+		// TODO グンパワー?
+		this.StartTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'キクノパワー集め\nスタート',this.M.S.BaseTextStyleS(60));
+		this.StartTextSprite.setScale(0,0);
+		this.StartTextSprite.addTween('popUpB',{delay:300});
+		this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,this.start);
+		this.StartTextSprite.startTween('popUpB');
 		this.test();
 	},
 
-	update: function () {
-		if (this.isPlaying) {
-			if (this.isMovingPointer) {
-				this.GaugePointer.x+=this.movePointerX;
-				if (this.GaugePointer.x>this.gaugeRight) {
-					this.movePointerX=-1;
-				}
-				if (this.GaugePointer.x<this.gaugeLeft) {
-					this.movePointerX=1;
-				}
-			}
+	genTargetContainer: function () {
+		for (var i=0;i<5;i++) {
+			var btnSprite=this.add.button(
+				this.world.randomX*.8+this.world.centerX*.1,
+				this.world.randomY*.8+this.world.centerY*.1,
+				'Target',this.catch,this);
+			btnSprite.anchor.setTo(.5);
+			btnSprite.scale.setTo(0);
+			this.M.T.popUpB(btnSprite,{duration:500,delay:i*360}).start();
 		}
 	},
 
-	TimeManager: function () {
-		if (this.countdownTimer<0) {
-			this.countdownTimer=1E3;
-			this.countdown--;
+	catch: function (btnSprite) {
+		if (this.isPlaying&&btnSprite.scale.x==1) {
+			this.getTargetCount++;
+			this.CounterTextSprite.changeText(this.getTargetCount);
+			btnSprite.scale.setTo(0);
+			btnSprite.x=this.world.randomX*.8+this.world.centerX*.1;
+			btnSprite.y=this.world.randomY*.8+this.world.centerY*.1;
+			btnSprite.inputEnabled=!1;
+			if (this.getTargetCount>=this.goalCount) return this.end();
+			var tween=this.M.T.popUpB(btnSprite,{duration:500});
+			tween.onComplete.add(function(){this.inputEnabled=!0;},btnSprite);
+			tween.start();
 		}
-		this.countdownTimer-=this.time.elapsed;
 	},
 
 	playBGM: function () {
@@ -72,22 +60,33 @@ BasicGame.Stage2.prototype={
 	},
 
 	start: function () {
-		if (this.isPlaying==0) {
+		this.time.events.add(500,function(){
 			this.isPlaying=!0;
-		}
+			this.StartTextSprite.Udestroy();
+			this.CounterTextSprite.show();
+			this.startTime=this.time.time;
+		},this);
 	},
 
-	renderT: function () {
-		// this.game.debug.geom(this.BladeLine);
-		// for (var key in this.Targets.children) this.game.debug.body(this.Targets.children[key]);
+	end: function () {
+		this.isPlaying=!1;
+		var score=90000-(this.time.time-this.startTime);//Limit90s
+		score<=0&&(score=0);
+		this.M.setGlobal('stage1Score',score);
+		//TODO dialog?
+		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'キクノパワーが\n集まった！\n次へ進む',this.M.S.BaseTextStyleS(50));
+		textSprite.setScale(0,0);
+		textSprite.addTween('popUpB',{delay:300});
+		this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){
+			this.input.onDown.add(function(){this.M.NextScene('Stage3');},this);
+		});
+		textSprite.startTween('popUpB');
 	},
 
 	test: function () {
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
-			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameOver');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end();},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}
 	},
