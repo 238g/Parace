@@ -21,7 +21,9 @@ BasicGame.Boot.prototype = {
 			WHITE_COLOR: BasicGame.WHITE_COLOR,
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 		});
-		this.M.defineGlobal({});
+		this.M.defineGlobal({
+			isEn:(this.M.H.getQuery('lang')=='en')?true:false,
+		});
 		this.M.defineConf(this.genGamesInfo());
 		this.M.NextScene('Preloader');
 	},

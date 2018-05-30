@@ -8,16 +8,18 @@ BasicGame.Title.prototype = {
 		this.ScrollingMap = null;
 		this.currentPage=0;
 		this.currentUrl='#';
+		this.isEn=this.M.getGlobal('isEn');
 	},
 
 	create: function () {
 		this.ScrollContainer();
 		this.HUDContainer();
+		this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT).onDown.add(this.rightSlide,this);
+		this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT).onDown.add(this.leftSlide,this);
 	},
 
 	ScrollContainer: function () {
-		this.ScrollingMap = this.add.tileSprite(
-			0, 0, this.GamesInfoLength * this.world.width, this.world.height, "transp");
+		this.ScrollingMap=this.add.tileSprite(0,0,this.GamesInfoLength*this.world.width,this.world.height,'transp');
 		this.ScrollingMap.inputEnabled = true;
 		this.ScrollingMap.input.enableDrag(false);
 		this.ScrollingMap.input.allowVerticalDrag = false;
@@ -141,7 +143,7 @@ BasicGame.Title.prototype = {
 		this.genStartBtnSprite(bottomY,textStyle);
 		this.M.S.BasicGrayLabelS(100,40,function () {
 			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
-		},'開発者',textStyle);
+		},this.isEn?'Developer':'開発者',textStyle);
 		this.M.S.genText(this.world.width-80,20,'238Games',textStyle);
 	},
 
@@ -152,6 +154,6 @@ BasicGame.Title.prototype = {
 			} else {
 				location.href = this.currentUrl;
 			}
-		},'スタート',textStyle);
+		},this.isEn?'START':'スタート',textStyle);
 	},
 };
