@@ -6,14 +6,14 @@ BasicGame = {
 	MAIN_STROKE_COLOR: '#ffffff',
 	WHITE_COLOR: '#ffffff',
 };
-BasicGame.Boot = function() {};
-BasicGame.Boot.prototype = {
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
 	init:function(){this.M.BootInit(false);},
-	preload: function () {
+	preload:function(){
 		this.load.crossOrigin = 'Anonymous';
 		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
 	},
-	create: function () {
+	create:function(){
 		this.M.defineConst({
 			MAIN_COLOR: BasicGame.MAIN_COLOR,
 			MAIN_TEXT_COLOR: BasicGame.MAIN_TEXT_COLOR,

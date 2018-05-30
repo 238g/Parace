@@ -36,7 +36,6 @@
 	<link rel="shortcut icon" type="image/x-icon" href="images/238Games/favicons/favicon.ico">
 
 	<script src="js/public/phaser2.10.5.min.js"></script>
-
 	<script src="js/public/Env.js"></script>
 	<script src="js/public/Middleware.js?180524"></script>
 	<script src="js/238Games/Boot.js?180524"></script>
@@ -49,24 +48,11 @@
 			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
 			background: #000;
 		}
-
-		canvas {
-			margin: auto !important;
-		}
+		canvas {margin: auto !important;}
 	</style>
 </head>
 <body>
-
-	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(360, 640, Phaser.AUTO), 
-				BasicGame, 
-				'Boot'
-			);
-		};
-	</script>
-
+	<script>window.onload=function(){new Middleware(new Phaser.Game(360, 640, Phaser.AUTO),BasicGame,'Boot');};</script>
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->
 		<script async src="https://www.googletagmanager.com/gtag/js?id=UA-106767228-2"></script>
@@ -78,6 +64,5 @@
 			gtag('config', 'UA-106767228-2');
 		</script>
 	</div>
-
 </body>
 </html>
