@@ -3,69 +3,57 @@ BasicGame.Stage3.prototype={
 	init:function () { 
 		this.isPlaying=this.isMovingPointer=!1;
 		this.gaugeQuantity=5;
-		this.pointerSpeed=3;
+		this.score=0;
+		this.ModeInfo=this.M.getConf('ModeInfo')[0]; // TODO del
+		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
+		this.pointerSpeed=this.ModeInfo.st3Speed;
+		this.GaugeBgSprite=null;
 	},
 
 	create:function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.M.setGlobal('stage3Score',0);
 		this.playBGM();
-		
-		this.gaugeRight=this.world.centerX*1.5;
-		this.gaugeLeft=this.world.centerX*.5;
-		this.gaugeLength=this.gaugeRight-this.gaugeLeft;
-		this.gaugeHalfLength=this.gaugeLength*.5;
-		console.log(this.gaugeHalfLength);
-
-		/////
-		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength,100,'#00ff00');
-		this.M.S.genBmpSprite(this.gaugeLeft,this.world.centerY-50,this.gaugeLength*.5,100,'#ff0000');
-		/////
-
-
-		this.GaugePointer = this.add.sprite(this.gaugeLeft+20,this.world.centerY,'Particle');
+		this.M.S.genText(this.world.centerX,90,'キクノジョーを\nゲージの真ん中で止めて\n力をたくわえよう！',this.M.S.BaseTextStyleS(30));
+		this.GaugeBgSprite=this.add.sprite(this.world.centerX,this.world.centerY,'GaugeBg');
+		this.GaugeBgSprite.anchor.setTo(.5);
+		this.M.S.genBmpSprite(this.world.centerX-2,this.world.centerY,4,this.GaugeBgSprite.height+10,'#ff0000').anchor.setTo(.5);
+		this.GaugePointer = this.add.sprite(this.GaugeBgSprite.left+20,this.world.centerY,'Pointer');
 		this.GaugePointer.anchor.setTo(.5);
-		this.movePointerX = this.time.physicsElapsedMS*.0625*this.pointerSpeed;
-
-		this.input.onDown.add(function(){
-			if(this.isMovingPointer) {
-				var x = Math.abs(this.GaugePointer.x-this.world.centerX);
-				// OR (this.gaugeRight+this.gaugeLeft)*.5
-				this.isMovingPointer=!1;
-				var score = this.gaugeHalfLength-x;
-				console.log('score '+score);
-				console.log('percent '+(this.gaugeLength/score));
-
-				this.gaugeQuantity--;
-				if (this.gaugeQuantity==0) {
-					return this.end();
-				} else {
-					// TODO text animation
-					this.time.events.add(500,function () {
-						this.isMovingPointer=!0;
-					}, this);
-				}
-			}
-		},this);
-
-
-
-		this.start(); // TODO del
+		this.movePointerX=this.time.physicsElapsedMS*.0625*this.pointerSpeed;
+		this.start();
 		this.test();
+	},
+
+	stopPointer: function () {
+		if(this.isMovingPointer) {
+			var x = Math.abs(this.GaugePointer.x-this.world.centerX);
+			this.isMovingPointer=!1;
+			var addScore=this.GaugeBgSprite.width-x;
+			this.score+=addScore*this.ModeInfo.scoreRate;
+			this.gaugeQuantity--;
+			if (this.gaugeQuantity==0) {
+				return this.end();
+			} else {
+				// TODO text animation
+				this.time.events.add(500,function () {
+					this.isMovingPointer=!0;
+				}, this);
+			}
+		}
 	},
 
 	update: function () {
 		if (this.isPlaying) {
 			if (this.isMovingPointer) {
-				this.GaugePointer.x+=this.movePointerX;
-				if (this.GaugePointer.x>this.gaugeRight) {
+				if (this.GaugePointer.x>=this.GaugeBgSprite.right-this.movePointerX) {
 					this.movePointerX=-this.time.physicsElapsedMS*.0625*this.pointerSpeed;
-					// this.movePointerX=-1;
 				}
-				if (this.GaugePointer.x<this.gaugeLeft) {
+				if (this.GaugePointer.x<=this.GaugeBgSprite.left-this.movePointerX) {
 					this.movePointerX=this.time.physicsElapsedMS*.0625*this.pointerSpeed;
-					// this.movePointerX=1;
 				}
+				this.GaugePointer.x+=this.movePointerX;
 			}
 		}
 	},
@@ -81,10 +69,19 @@ BasicGame.Stage3.prototype={
 	start: function () {
 		this.isPlaying=!0;
 		this.isMovingPointer=!0;
+		this.input.onDown.add(this.stopPointer,this);
 	},
 
 	end: function () {
-
+		this.isPlaying=!1;
+		this.M.setGlobal('stage3Score',this.score);
+		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY*1.7,'力をたくわえた！\n次へ進む',this.M.S.BaseTextStyleS(40));
+		textSprite.setScale(0,0);
+		textSprite.addTween('popUpB',{delay:300});
+		this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){
+			this.input.onDown.addOnce(function(){this.M.NextScene('Stage4');},this);
+		});
+		textSprite.startTween('popUpB');
 	},
 
 	test: function () {

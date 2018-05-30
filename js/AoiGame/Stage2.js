@@ -2,7 +2,9 @@ BasicGame.Stage2=function(){};
 BasicGame.Stage2.prototype={
 	init:function () { 
 		this.isPlaying=!1;
-		this.startTime=this.getTargetCount=0;
+		this.beforeTime=this.getTargetCount=this.score=0;
+		this.ModeInfo=this.M.getConf('ModeInfo')[1]; // TODO del
+		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
 		this.goalCount=30;
 		this.CounterTextSprite=this.StartTextSprite=null;
 	},
@@ -10,17 +12,17 @@ BasicGame.Stage2.prototype={
 	create:function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.setGlobal('stage1Score',0);
+		this.M.setGlobal('stage2Score',0);
 		this.playBGM();
 		this.CounterTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,0,this.M.S.BaseTextStyle(250));
 		this.CounterTextSprite.hide();
 		this.genTargetContainer();
-		// TODO グンパワー?
-		this.StartTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'キクノパワー集め\nスタート',this.M.S.BaseTextStyleS(60));
+		this.M.S.genText(this.world.centerX,60,'キクノジョーを\n30体集めろ！',this.M.S.BaseTextStyleS(30));
+		this.StartClickTextSprite=this.M.S.genText(this.world.centerX, this.world.centerY,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',this.M.S.BaseTextStyleS(30));
+		this.StartTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'スタート',this.M.S.BaseTextStyleS(60));
 		this.StartTextSprite.setScale(0,0);
 		this.StartTextSprite.addTween('popUpB',{delay:300});
-		this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,this.start);
-		this.StartTextSprite.startTween('popUpB');
+		this.input.onDown.addOnce(this.start,this);
 		this.test();
 	},
 
@@ -31,23 +33,26 @@ BasicGame.Stage2.prototype={
 				this.world.randomY*.8+this.world.centerY*.1,
 				'Target',this.catch,this);
 			btnSprite.anchor.setTo(.5);
-			btnSprite.scale.setTo(0);
-			this.M.T.popUpB(btnSprite,{duration:500,delay:i*360}).start();
+			btnSprite.scale.setTo(this.ModeInfo.st2Scale);
 		}
 	},
 
 	catch: function (btnSprite) {
-		if (this.isPlaying&&btnSprite.scale.x==1) {
+		if (this.isPlaying&&btnSprite.scale.x==this.ModeInfo.st2Scale) {
 			this.getTargetCount++;
 			this.CounterTextSprite.changeText(this.getTargetCount);
 			btnSprite.scale.setTo(0);
+			if (this.getTargetCount>=this.goalCount) return this.end();
 			btnSprite.x=this.world.randomX*.8+this.world.centerX*.1;
 			btnSprite.y=this.world.randomY*.8+this.world.centerY*.1;
 			btnSprite.inputEnabled=!1;
-			if (this.getTargetCount>=this.goalCount) return this.end();
-			var tween=this.M.T.popUpB(btnSprite,{duration:500});
+			var tween=this.M.T.popUpB(btnSprite,{duration:500,scale:{x:this.ModeInfo.st2Scale,y:this.ModeInfo.st2Scale}});
 			tween.onComplete.add(function(){this.inputEnabled=!0;},btnSprite);
 			tween.start();
+			var addScore=3000-(this.time.time-this.beforeTime);
+			addScore<=300&&(addScore=300);
+			this.score+=(addScore*this.ModeInfo.scoreRate);
+			this.beforeTime=this.time.time;
 		}
 	},
 
@@ -60,25 +65,26 @@ BasicGame.Stage2.prototype={
 	},
 
 	start: function () {
-		this.time.events.add(500,function(){
-			this.isPlaying=!0;
-			this.StartTextSprite.Udestroy();
-			this.CounterTextSprite.show();
-			this.startTime=this.time.time;
-		},this);
+		this.StartClickTextSprite.hide();
+		this.StartTextSprite.startTween('popUpB');
+		this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function(){
+			this.time.events.add(500,function(){
+				this.isPlaying=!0;
+				this.StartTextSprite.Udestroy();
+				this.CounterTextSprite.show();
+				this.beforeTime=this.time.time;
+			},this);
+		});
 	},
 
 	end: function () {
 		this.isPlaying=!1;
-		var score=90000-(this.time.time-this.startTime);//Limit90s
-		score<=0&&(score=0);
-		this.M.setGlobal('stage1Score',score);
-		//TODO dialog?
-		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'キクノパワーが\n集まった！\n次へ進む',this.M.S.BaseTextStyleS(50));
+		this.M.setGlobal('stage2Score',this.score);
+		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY*1.7,'キクノジョーが\n集まった！\n次へ進む',this.M.S.BaseTextStyleS(40));
 		textSprite.setScale(0,0);
 		textSprite.addTween('popUpB',{delay:300});
 		this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){
-			this.input.onDown.add(function(){this.M.NextScene('Stage3');},this);
+			this.input.onDown.addOnce(function(){this.M.NextScene('Stage3');},this);
 		});
 		textSprite.startTween('popUpB');
 	},

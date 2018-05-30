@@ -4,16 +4,15 @@ BasicGame.Stage1.prototype={
 		this.isPlaying=this.canSpin=!1;
 		this.spinQuantity=3;
 		this.slicePrizes=[
-			"A KEY!!!",
-			"50 STARS",
-			"500 STARS",
-			"BAD LUCK!!!",
-			"200 STARS",
-			"100 STARS",
-			"150 STARS",
-			"BAD LUCK!!!",
+			'ハズレ',
+			'Easyモード',
+			'Hardモード\nスコア2倍',
+			'スコア1.5倍',
+			'ハズレ',
+			'Easyモード',
+			'Hardモード\nスコア2倍',
+			'スコア1.5倍',
 		];
-		// 1,2:None //3,4:stage2UP //5,6:stage3UP //7,8:stage4UP
 		this.slices=this.slicePrizes.length;
 		this.curPrizeNum=
 		this.Wheel=this.Pin=this.PrizeTextSprite=
@@ -25,7 +24,7 @@ BasicGame.Stage1.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.setGlobal('stage2Score',0);
 		this.playBGM();
-		// TODO upper text ルーレットを回してボーナスアイテムを選ぼう
+		this.M.S.genText(this.world.centerX,80,'ルーレットを回して\nボーナスアイテムを選ぼう',this.M.S.BaseTextStyleS(22));
 		this.Wheel=this.add.sprite(this.world.centerX,this.world.centerY,'Wheel');
 		this.Wheel.anchor.setTo(.5);
 		this.Wheel.scale.setTo(.6);
@@ -33,8 +32,7 @@ BasicGame.Stage1.prototype={
 		this.Pin.anchor.setTo(.5);
 		this.Pin.scale.setTo(.6);
 		this.PrizeTextSprite=this.M.S.genText(this.world.centerX,this.world.height-140,'【アイテム名】',this.M.S.BaseTextStyleS(25));
-		this.SpinCountTextSprite=this.M.S.genText(20,20,'回せる回数: 3',this.M.S.BaseTextStyleS(25));
-		this.SpinCountTextSprite.setAnchor(0,0);
+		this.SpinCountTextSprite=this.M.S.genText(this.world.centerX,150,'回せる回数: 3',this.M.S.BaseTextStyleS(25));
 		this.start();
 		this.test();
 	},
@@ -75,11 +73,11 @@ BasicGame.Stage1.prototype={
 	},
 
 	start: function () {
-		this.time.events.add(500,function(){
+		this.time.events.add(300,function(){
 			this.isPlaying=!0;
 			this.canSpin=!0;
 			this.SpinBtnSprite=this.M.S.BasicGrayLabelS(
-				this.world.centerX,this.world.height-80,this.spinWheel,
+				this.world.centerX,this.world.height-90,this.spinWheel,
 				'回す',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}
 			);
 		},this);
@@ -88,12 +86,26 @@ BasicGame.Stage1.prototype={
 	goEnd: function () {
 		if (this.isPlaying) {
 			// TODO dialog Y/N Y->end
+			this.end();
 		}
 	},
 
 	end: function () {
 		this.isPlaying=!1;
-		// TODO ..アイテムに決定！500->next stage
+		this.PrizeTextSprite.move(this.world.centerX,this.world.centerY);
+		this.PrizeTextSprite.setScale(0,0);
+		this.PrizeTextSprite.changeText(this.PrizeTextSprite.text+'に決定！\n次へ進む');
+		this.PrizeTextSprite.addTween('popUpB');
+		this.M.T.onComplete(this.PrizeTextSprite.multipleTextTween.popUpB,function(){
+			this.input.onDown.addOnce(function(){this.M.NextScene('Stage2');},this);
+		});
+		this.PrizeTextSprite.startTween('popUpB');
+		switch(this.curPrizeNum){
+			case 1: case 5: this.M.setGlobal('curMode',1); break;
+			case 2: case 6: this.M.setGlobal('curMode',2); break;
+			case 3: case 7: this.M.setGlobal('curMode',3); break;
+			default: this.M.setGlobal('curMode',0);
+		}
 	},
 
 	test: function () {

@@ -17,10 +17,9 @@ BasicGame.Preloader.prototype={
 		var imageAssets = {
 			'Logo': 'images/Kerin/KerinOnMissile.png',
 			'Dialog': 'images/PeanutNinja/WhitePaper.jpg', // TODO
-			'Particle': 'images/ChihiroGame/Particle.png', // TODO
+			'Pointer': 'images/ChihiroGame/Particle.png', // TODO
 			'Target': 'images/tiatia/PlayerBullet.png', // TODO
-
-
+			'GaugeBg': 'images/AoiGame/GaugeBg.png',
 			'Wheel': '../../test/wheel.png', // TODO
 			'Pin': '../../test/pin.png', // TODO
 		};
