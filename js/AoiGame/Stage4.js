@@ -2,7 +2,7 @@ BasicGame.Stage4=function(){};
 BasicGame.Stage4.prototype={
 	init:function () { 
 		this.isPlaying=!1;
-		this.targetMoveTimer=0;
+		this.targetMoveTimer=this.score=this.beforeTime=this.mashCount=0;
 		this.ModeInfo=this.M.getConf('ModeInfo')[0]; // TODO del
 		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
 	},
@@ -11,9 +11,9 @@ BasicGame.Stage4.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.playBGM();
-		this.TargetBtnSprite=this.add.button(0,0,'Target');
+		this.TargetBtnSprite=this.add.button(0,0,'Target',this.mash,this);
 		this.TargetBtnSprite.anchor.setTo(.5);
-		this.TargetBtnSprite.kill();
+		// this.TargetBtnSprite.kill();
 		this.start(); // TODO del
 		this.test();
 	},
@@ -24,6 +24,7 @@ BasicGame.Stage4.prototype={
 				this.targetMoveTimer=this.ModeInfo.st4TimerInterval;
 				this.TargetBtnSprite.x=this.world.randomX*.8+this.world.centerX*.1;
 				this.TargetBtnSprite.y=this.world.randomY*.8+this.world.centerY*.1;
+				console.log(this.score);
 			}
 			this.targetMoveTimer-=this.time.elapsed;
 		}
@@ -37,12 +38,24 @@ BasicGame.Stage4.prototype={
 		this.M.SE.play('PlayBGM',{isBGM:!0,loop:!0,volume:1});
 	},
 
+	mash: function (btnSprite,pointer) {
+		if (this.isPlaying) {
+			this.mashCount++;
+			if(this.mashCount>=100) return this.end();
+			var addScore=800-(this.time.time-this.beforeTime);
+			addScore<=100&&(addScore=100);
+			this.score+=(addScore*this.ModeInfo.scoreRate);
+			this.beforeTime=this.time.time;
+		}
+	},
+
 	start: function () {
 		this.isPlaying=!0;
+		this.beforeTime=this.time.time;
 	},
 
 	end: function () {
-
+		this.isPlaying=!1;
 	},
 
 	test: function () {
