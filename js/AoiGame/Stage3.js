@@ -7,7 +7,7 @@ BasicGame.Stage3.prototype={
 		this.ModeInfo=this.M.getConf('ModeInfo')[0]; // TODO del
 		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
 		this.pointerSpeed=this.ModeInfo.st3Speed;
-		this.GaugeBgSprite=null;
+		this.GaugeBgSprite=this.StartClickTextSprite=this.StartTextSprite=null;
 	},
 
 	create:function () {
@@ -22,7 +22,11 @@ BasicGame.Stage3.prototype={
 		this.GaugePointer = this.add.sprite(this.GaugeBgSprite.left+20,this.world.centerY,'Pointer');
 		this.GaugePointer.anchor.setTo(.5);
 		this.movePointerX=this.time.physicsElapsedMS*.0625*this.pointerSpeed;
-		this.start();
+		this.StartClickTextSprite=this.M.S.genText(this.world.centerX, this.world.centerY,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',this.M.S.BaseTextStyleS(30));
+		this.StartTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'スタート',this.M.S.BaseTextStyleS(60));
+		this.StartTextSprite.setScale(0,0);
+		this.StartTextSprite.addTween('popUpB',{delay:300});
+		this.input.onDown.addOnce(this.start,this);
 		this.test();
 	},
 
@@ -67,9 +71,16 @@ BasicGame.Stage3.prototype={
 	},
 
 	start: function () {
-		this.isPlaying=!0;
-		this.isMovingPointer=!0;
-		this.input.onDown.add(this.stopPointer,this);
+		this.StartClickTextSprite.hide();
+		this.StartTextSprite.startTween('popUpB');
+		this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function(){
+			this.time.events.add(500,function(){
+				this.isPlaying=!0;
+				this.isMovingPointer=!0;
+				this.StartTextSprite.Udestroy();
+				this.input.onDown.add(this.stopPointer,this);
+			},this);
+		});
 	},
 
 	end: function () {
