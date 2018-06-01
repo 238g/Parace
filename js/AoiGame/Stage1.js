@@ -15,24 +15,24 @@ BasicGame.Stage1.prototype={
 		];
 		this.slices=this.slicePrizes.length;
 		this.curPrizeNum=
-		this.Wheel=this.Pin=this.PrizeTextSprite=
+		this.Wheel=this.Pin=this.PrizeTextSprite=this.SpinCountTextSprite=
 		this.SpinBtnSprite=this.EndBtnSprite=null;
 	},
 
 	create:function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.setGlobal('stage2Score',0);
+		this.M.setGlobal('curMode',0);
 		this.playBGM();
-		this.M.S.genText(this.world.centerX,80,'ルーレットを回して\nボーナスアイテムを選ぼう',this.M.S.BaseTextStyleS(22));
-		this.Wheel=this.add.sprite(this.world.centerX,this.world.centerY,'Wheel');
+		this.M.S.genText(this.world.centerX,50,'ルーレットを回して\nボーナスアイテムを選ぼう',this.M.S.BaseTextStyleS(20));
+		this.Wheel=this.add.sprite(this.world.centerX,this.world.centerY-50,'Wheel');
 		this.Wheel.anchor.setTo(.5);
 		this.Wheel.scale.setTo(.6);
-		this.Pin=this.add.sprite(this.world.centerX,this.world.centerY,'Pin');
+		this.Pin=this.add.sprite(this.world.centerX,this.world.centerY-50,'Pin');
 		this.Pin.anchor.setTo(.5);
 		this.Pin.scale.setTo(.6);
-		this.PrizeTextSprite=this.M.S.genText(this.world.centerX,this.world.height-140,'【アイテム名】',this.M.S.BaseTextStyleS(25));
-		this.SpinCountTextSprite=this.M.S.genText(this.world.centerX,150,'回せる回数: 3',this.M.S.BaseTextStyleS(25));
+		this.PrizeTextSprite=this.M.S.genText(this.world.centerX,this.world.height-170,'【アイテム名】',this.M.S.BaseTextStyleS(25));
+		this.SpinCountTextSprite=this.M.S.genText(this.world.centerX,110,'回せる回数: 3',this.M.S.BaseTextStyleS(25));
 		this.start();
 		this.test();
 	},
@@ -58,7 +58,7 @@ BasicGame.Stage1.prototype={
 		this.canSpin=!0;
 		if(!this.EndBtnSprite){
 			this.EndBtnSprite=this.M.S.BasicGrayLabelS(
-				this.world.centerX,this.world.height-30,this.goEnd,
+				this.world.centerX,this.world.height-30,this.end,
 				'これにする',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}
 			);
 		}
@@ -83,28 +83,22 @@ BasicGame.Stage1.prototype={
 		},this);
 	},
 
-	goEnd: function () {
-		if (this.isPlaying) {
-			// TODO dialog Y/N Y->end
-			this.end();
-		}
-	},
-
 	end: function () {
-		this.isPlaying=!1;
-		this.PrizeTextSprite.move(this.world.centerX,this.world.centerY);
-		this.PrizeTextSprite.setScale(0,0);
-		this.PrizeTextSprite.changeText(this.PrizeTextSprite.text+'に決定！\n次へ進む');
-		this.PrizeTextSprite.addTween('popUpB');
-		this.M.T.onComplete(this.PrizeTextSprite.multipleTextTween.popUpB,function(){
-			this.input.onDown.addOnce(function(){this.M.NextScene('Stage2');},this);
-		});
-		this.PrizeTextSprite.startTween('popUpB');
-		switch(this.curPrizeNum){
-			case 1: case 5: this.M.setGlobal('curMode',1); break;
-			case 2: case 6: this.M.setGlobal('curMode',2); break;
-			case 3: case 7: this.M.setGlobal('curMode',3); break;
-			default: this.M.setGlobal('curMode',0);
+		if (this.isPlaying) {
+			this.isPlaying=!1;
+			var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY,this.PrizeTextSprite.text+'に決定！\n次へ進む',this.M.S.BaseTextStyleS(30));
+			textSprite.setScale(0,0);
+			textSprite.addTween('popUpB');
+			this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){
+				this.input.onDown.addOnce(function(){this.M.NextScene('Stage2');},this);
+			});
+			textSprite.startTween('popUpB');
+			switch(this.curPrizeNum){
+				case 1: case 5: this.M.setGlobal('curMode',1); break;
+				case 2: case 6: this.M.setGlobal('curMode',2); break;
+				case 3: case 7: this.M.setGlobal('curMode',3); break;
+				default: this.M.setGlobal('curMode',0);
+			}
 		}
 	},
 

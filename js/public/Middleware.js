@@ -452,6 +452,18 @@ Middleware.prototype.SpriteManager.prototype = {
 			multipleStrokeThickness: 5,
 		};
 	},
+	BaseTextStyleSS: function (fontSize) {
+		var mainTextColor = this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
+		var mainStrokeColor = this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
+		return {
+			fontSize: fontSize || 18,
+			fill: mainTextColor,
+			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
+			strokeThickness: 5,
+			multipleStroke: mainStrokeColor,
+			multipleStrokeThickness: 3,
+		};
+	},
 };
 
 /////////////////////////////////////////////////////////////////////

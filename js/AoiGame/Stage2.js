@@ -6,7 +6,8 @@ BasicGame.Stage2.prototype={
 		this.ModeInfo=this.M.getConf('ModeInfo')[1]; // TODO del
 		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
 		this.goalCount=30;
-		this.CounterTextSprite=this.StartTextSprite=null;
+		this.CounterTextSprite=this.HowToTextSprite=
+		this.StartClickTextSprite=this.StartTextSprite=this.ScoreTextSprite=null;
 	},
 
 	create:function () {
@@ -14,14 +15,16 @@ BasicGame.Stage2.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.setGlobal('stage2Score',0);
 		this.playBGM();
-		this.CounterTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,0,this.M.S.BaseTextStyle(250));
+		this.CounterTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY-30,0,this.M.S.BaseTextStyle(250));
 		this.CounterTextSprite.hide();
 		this.genTargetContainer();
-		this.M.S.genText(this.world.centerX,60,'キクノジョーを\n30体集めろ！',this.M.S.BaseTextStyleS(30));
+		this.HowToTextSprite=this.M.S.genText(this.world.centerX,60,'キクノジョーを\n30体集めろ！',this.M.S.BaseTextStyleS(30));
 		this.StartClickTextSprite=this.M.S.genText(this.world.centerX, this.world.centerY,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',this.M.S.BaseTextStyleS(30));
 		this.StartTextSprite=this.M.S.genText(this.world.centerX,this.world.centerY,'スタート',this.M.S.BaseTextStyleS(60));
 		this.StartTextSprite.setScale(0,0);
 		this.StartTextSprite.addTween('popUpB',{delay:300});
+		this.ScoreTextSprite=this.M.S.genText(this.world.centerX,this.world.height-50,'スコア: 0',this.M.S.BaseTextStyleS(25));
+		this.ScoreTextSprite.hide();
 		this.input.onDown.addOnce(this.start,this);
 		this.test();
 	},
@@ -51,7 +54,8 @@ BasicGame.Stage2.prototype={
 			tween.start();
 			var addScore=3000-(this.time.time-this.beforeTime);
 			addScore<=300&&(addScore=300);
-			this.score+=(addScore*this.ModeInfo.scoreRate);
+			this.score+=Math.floor(addScore*this.ModeInfo.scoreRate);
+			this.ScoreTextSprite.changeText('スコア: '+this.score);
 			this.beforeTime=this.time.time;
 		}
 	},
@@ -71,8 +75,11 @@ BasicGame.Stage2.prototype={
 			this.time.events.add(500,function(){
 				this.isPlaying=!0;
 				this.StartTextSprite.Udestroy();
+				this.HowToTextSprite.addTween('fadeOutA',{duration:2000});
+				this.HowToTextSprite.startTween('fadeOutA');
 				this.CounterTextSprite.show();
 				this.beforeTime=this.time.time;
+				this.ScoreTextSprite.show();
 			},this);
 		});
 	},
@@ -80,7 +87,7 @@ BasicGame.Stage2.prototype={
 	end: function () {
 		this.isPlaying=!1;
 		this.M.setGlobal('stage2Score',this.score);
-		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY*1.7,'キクノジョーが\n集まった！\n次へ進む',this.M.S.BaseTextStyleS(40));
+		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY*1.5,'キクノジョーが\n集まった！\n次へ進む',this.M.S.BaseTextStyleS(40));
 		textSprite.setScale(0,0);
 		textSprite.addTween('popUpB',{delay:300});
 		this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){

@@ -1,12 +1,11 @@
 BasicGame.Title = function () {};
 BasicGame.Title.prototype = {
-	init: function(){this.inputEnabled=!1;this.Dialog=null;},
+	init: function(){this.inputEnabled=!1;},
 	create: function () {
 		this.time.events.removeAll();
 		this.playBGM();
 		this.BgContainer();
 		this.BtnContainer();
-		this.DialogContainer();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 
@@ -19,42 +18,31 @@ BasicGame.Title.prototype = {
 
 	BgContainer: function () {
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
-		var textSprite = this.M.S.genText(this.world.centerX,this.world.height*.7,
+		var textSprite = this.M.S.genText(this.world.centerX,this.world.height*.2,
 			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
-		textSprite.addTween('stressA',null);
-		textSprite.startTween('stressA');
 	},
 
 	BtnContainer: function () {
-		var textStyle = this.M.S.BaseTextStyleS(25);
 		var tint = BasicGame.MAIN_TINT;
-		this.genHowToSprite(this.world.centerX*1.6,this.world.height*.85,textStyle,tint);
-		this.genStartBtnSprite(this.world.centerX*.4,this.world.height*.85,textStyle,tint);
-		this.genOtherGameBtnSprite(this.world.centerX,this.world.height*.95,textStyle,tint);
-		this.genLogoBtnSprite(10,10);
-		var bottomY = this.world.height*.95;
-		this.genVolumeBtnSprite(this.world.width*.1,bottomY,tint);
-		this.genFullScreenBtnSprite(this.world.width*.9,bottomY,tint);
+		this.genStartBtnSprite(this.world.centerX,this.world.height*.75);
+		this.genLogoBtnSprite(this.world.centerX,this.world.height);
+		this.genVolumeBtnSprite(this.world.width*.1,30,tint);
+		this.genFullScreenBtnSprite(this.world.width*.9,30,tint);
 	},
 
-	genStartBtnSprite: function (x,y,textStyle,tint) {
-		this.M.S.BasicGrayLabelS(x,y,function () {
-			if (this.inputEnabled) {
-				// this.M.SE.play('OnBtn',{volume:1}); // TODO
-				this.M.NextScene('Stage1');
-			} else {
-				this.playBGM();
-				this.inputEnabled = true;
-			}
-		},'プレイ！',textStyle,{tint:tint});
+	genStartBtnSprite: function (x,y,tint) {
+		this.add.button(x,y,'CircleBtn',this.start,this,0,0,1,0).anchor.setTo(.5);
+		this.M.S.genText(x,y,'スタート',this.M.S.BaseTextStyleSS(18),tint);
 	},
 
-	genHowToSprite: function (x,y,textStyle,tint) {
-		this.M.S.BasicGrayLabelS(x,y,function () {
+	start: function () {
+		if (this.inputEnabled) {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
-			this.Dialog.bringToTop();
-			this.Dialog.tweenShow();
-		},'遊び方',textStyle,{tint:tint});
+			this.M.NextScene('Stage1');
+		} else {
+			this.playBGM();
+			this.inputEnabled=!0;
+		}
 	},
 
 	genVolumeBtnSprite: function (x,y,tint) {
@@ -110,17 +98,6 @@ BasicGame.Title.prototype = {
 		sprite.setFrames(curImg,curImg,curImg,curImg);
 	},
 
-	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
-		this.M.S.BasicGrayLabelS(x,y,function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
-			if (this.game.device.desktop) {
-				window.open(BasicGame.MY_GAMES_URL,'_blank');
-			} else {
-				location.href = BasicGame.MY_GAMES_URL;
-			}
-		},'他ゲームを遊ぶ',textStyle,{tint:tint});
-	},
-
 	genLogoBtnSprite: function (x,y) {
 		this.M.S.genButton(x,y,'Logo',function () {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
@@ -129,22 +106,6 @@ BasicGame.Title.prototype = {
 			} else {
 				location.href = BasicGame.YOUTUBE_URL;
 			}
-		});
-	},
-
-	DialogContainer: function () {
-		this.Dialog = this.M.S.genDialog('Dialog');
-		this.Dialog.UonInputDown(function(s){s.scale.setTo(0);});
-		var action = (this.game.device.touch)?'画面をスワイプさせて\n（画面をこすって）':'マウスをドラッグさせて';
-		var text = 
-			action+'\n'
-			+'飛んでくるピーナッツくんを\n'
-			+'切って切って切りまくれ！\n'
-			+'ぽんぽこは切らないでね！\n'
-			+'';
-			// TODO char???
-		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(25));
-		this.Dialog.addChild(textSprite.multipleTextSprite);
-		this.Dialog.addChild(textSprite);
+		}).anchor.setTo(.5,1);
 	},
 };

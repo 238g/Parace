@@ -11,12 +11,13 @@ BasicGame.Preloader.prototype={
 	},
 
 	loadAssets:function(){
+		this.load.spritesheet('CircleBtn','images/AoiGame/CircleBtn/CircleBtn.png',100,100);
 		this.load.atlasXML('greySheet','./images/public/sheets/greySheet.png','./images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
 			'Logo': 'images/Kerin/KerinOnMissile.png',
-			'Dialog': 'images/PeanutNinja/WhitePaper.jpg', // TODO
+			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg', // TODO
 			'Pointer': 'images/ChihiroGame/Particle.png', // TODO
 			'Target': 'images/tiatia/PlayerBullet.png', // TODO
 			'GaugeBg': 'images/AoiGame/GaugeBg.png',
