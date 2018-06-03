@@ -11,28 +11,99 @@ BasicGame.Preloader.prototype={
 	},
 
 	loadAssets:function(){
-		this.load.spritesheet('CircleBtn','images/AoiGame/CircleBtn/CircleBtn.png',100,100);
+		this.load.spritesheet('CircleBtn','images/AoiGame/CircleBtn.png',200,200);
+		this.load.spritesheet('Aoi_Title','images/AoiGame/Aoi_Title.png',360,640);
 		this.load.atlasXML('greySheet','./images/public/sheets/greySheet.png','./images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
+		this.load.atlasJSONHash('PushAnim','images/AoiGame/PushAnim/PushAnim.png','images/AoiGame/PushAnim/PushAnim.json');
 		var imageAssets = {
-			'Logo': 'images/Kerin/KerinOnMissile.png',
-			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg', // TODO
-			'Pointer': 'images/ChihiroGame/Particle.png', // TODO
-			'Target': 'images/tiatia/PlayerBullet.png', // TODO
+			'Title': 'images/AoiGame/Title.png',
+			'Logo': 'images/AoiGame/Logo.png',
+			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
+			'Target': 'images/AoiGame/Kikunojo.png',
 			'GaugeBg': 'images/AoiGame/GaugeBg.png',
-			'Wheel': '../../test/wheel.png', // TODO
-			'Pin': '../../test/pin.png', // TODO
+			'Wheel': 'images/AoiGame/Wheel.png',
+			'Pin': 'images/AoiGame/Pin.png',
+			'Flower': 'images/AoiGame/Flower.png',
+			'Tutorial_Bg': 'images/AoiGame/Tutorial_Bg.png',
+			'Aoi_1': 'images/AoiGame/Aoi_1.png',
+			'Aoi_2': 'images/AoiGame/Aoi_2.png',
+			'Underground': 'images/AoiGame/Underground.jpg',
+			'OnTheGround': 'images/AoiGame/OnTheGround.jpg',
+			'Sky': 'images/AoiGame/Sky.jpg',
+			'Hiyoko': 'images/AoiGame/Hiyoko.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
+		for(var i=0;i<=this.M.getConst('BG_COUNT');i++)this.load.image('Bg_'+i,'images/AoiGame/Bg/Bg_'+i+'.jpg');
 		this.loadAudio();
 	},
 
 	loadAudio:function(){
 		this.sounds = {
 			'TitleBGM': [
-				'sounds/BGM/O/OnPatrol.mp3',
-				'sounds/BGM/O/OnPatrol.wav',
+				'sounds/BGM/H/Hanagoyomi.mp3',
+				'sounds/BGM/H/Hanagoyomi.wav',
+			],
+			'PlayBGM': [
+				'sounds/BGM/M/Michikusa2.mp3',
+				'sounds/BGM/M/Michikusa2.wav',
+			],
+			'OnBtn': [
+				'sounds/SE/LabJP/Performance/Japan/hyoushigi1.mp3',
+				'sounds/SE/LabJP/Performance/Japan/hyoushigi1.wav',
+			],
+			'OnBtn2': [
+				'sounds/SE/LabJP/Performance/Japan/hyoushigi2.mp3',
+				'sounds/SE/LabJP/Performance/Japan/hyoushigi2.wav',
+			],
+			'GetItem': [
+				'sounds/SE/LabJP/Performance/Japan/kotsudumi1.mp3',
+				'sounds/SE/LabJP/Performance/Japan/kotsudumi1.wav',
+			],
+			'RouletteSE': [
+				'sounds/VOICE/USL/Mouth_00.mp3',
+				'sounds/VOICE/USL/Mouth_00.wav',
+			],
+			'PushAnim': [
+				'sounds/SE/AoiGame/PushAnim.mp3',
+				'sounds/SE/AoiGame/PushAnim.wav',
+			],
+			'WhistleStart': [
+				'sounds/SE/LabJP/Life/Other/police-whistle2.mp3',
+				'sounds/SE/LabJP/Life/Other/police-whistle2.wav',
+			],
+			'WhistleEnd': [
+				'sounds/SE/LabJP/Life/Other/police-whistle1.mp3',
+				'sounds/SE/LabJP/Life/Other/police-whistle1.wav',
+			],
+			'Fall': [
+				'sounds/SE/LabJP/Performance/Anime/hyun1.mp3',
+				'sounds/SE/LabJP/Performance/Anime/hyun1.wav',
+			],
+			'Fly': [
+				'sounds/SE/LabJP/Performance/Anime/flee1.mp3',
+				'sounds/SE/LabJP/Performance/Anime/flee1.wav',
+			],
+			'FlyAway': [
+				'sounds/SE/LabJP/Performance/Anime/eye-shine1.mp3',
+				'sounds/SE/LabJP/Performance/Anime/eye-shine1.wav',
+			],
+			'DonPafu': [
+				'sounds/SE/LabJP/Performance/Other/dondonpafupafu1.mp3',
+				'sounds/SE/LabJP/Performance/Other/dondonpafupafu1.wav',
+			],
+			'Catch': [
+				'sounds/SE/LabJP/System/cancel1.mp3',
+				'sounds/SE/LabJP/System/cancel1.wav',
+			],
+			'StopPointer': [
+				'sounds/SE/LabJP/System/menu2.mp3',
+				'sounds/SE/LabJP/System/menu2.wav',
+			],
+			'Mash': [
+				'sounds/SE/LabJP/Btn/decision1.mp3',
+				'sounds/SE/LabJP/Btn/decision1.wav',
 			],
 		};
 		for(var k in this.sounds)this.load.audio(k,this.sounds[k]);

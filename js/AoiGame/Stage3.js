@@ -5,10 +5,9 @@ BasicGame.Stage3.prototype={
 		this.gaugeQuantity=5;
 		this.stopCount=this.movePointerX=0;
 		this.score=this.M.getGlobal('stage2Score');
-		this.ModeInfo=this.M.getConf('ModeInfo')[0]; // TODO del
-		// this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
+		this.ModeInfo=this.M.getConf('ModeInfo')[this.M.getGlobal('curMode')];
 		this.pointerSpeed=this.ModeInfo.st3Speed;
-		this.GaugeBgSprite=this.GaugePointer=
+		this.GaugeBgSprite=this.GaugePointer=this.GaugeCenter=
 		this.StartClickTextSprite=this.ScoreTextSprite=this.StartTextSprite=this.SpinCountTextSprite=
 		this.TargetGroup1=this.TargetGroup2=null;
 	},
@@ -17,14 +16,16 @@ BasicGame.Stage3.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.setGlobal('stage3Score',0);
-		this.playBGM();
-		this.M.S.genText(this.world.centerX,90,'ゲージの真ん中で\nキクノジョーを止めよう！',this.M.S.BaseTextStyleS(25));
+		this.add.sprite(0,0,'Bg_'+this.rnd.integerInRange(1,this.M.getConst('BG_COUNT')));
+		this.M.S.genText(this.world.centerX,90,'ゲージの真ん中で\nキクノジョーを止めよう！',this.M.S.BaseTextStyleS(28));
 		this.GaugeBgSprite=this.add.sprite(this.world.centerX,this.world.height*.85,'GaugeBg');
 		this.GaugeBgSprite.anchor.setTo(.5);
-		this.M.S.genBmpSprite(this.world.centerX-2,this.world.height*.85,4,this.GaugeBgSprite.height+10,'#ff0000').anchor.setTo(.5);
 		this.GaugePointer=this.add.sprite(this.GaugeBgSprite.left+20,this.world.height*.85,'Target');
 		this.GaugePointer.anchor.setTo(.5);
-		// TODO poiner center bmp
+		this.GaugeCenter=this.M.S.genBmpSprite(0,0,2,this.GaugeBgSprite.height,'#00ff00');
+		this.GaugeCenter.anchor.setTo(.5);
+		this.GaugePointer.addChild(this.GaugeCenter);
+		this.M.S.genBmpSprite(this.world.centerX-2,this.world.height*.85,4,this.GaugeBgSprite.height-9,'#ff0000').anchor.setTo(.5);
 		this.movePointerX=this.time.physicsElapsedMS*.0625*this.pointerSpeed;
 		this.genTargetGroup();
 		this.SpinCountTextSprite=this.M.S.genText(this.world.centerX,this.world.height*.73,'残り回数: 5',this.M.S.BaseTextStyleS(25));
@@ -41,14 +42,10 @@ BasicGame.Stage3.prototype={
 	genTargetGroup:function(){
 		this.TargetGroup1=this.add.group();
 		this.TargetGroup2=this.add.group();
-		// TODO
-		// var spriteWidth=64;
-		// var spriteHalfWidth=32;
-		// var spriteMargin=8;
 		for (var i=0;i<4;i++) {
 			for (var j=0;j<4;j++) {
 				if(i*j==9)break;
-				var sprite=this.add.sprite(j*40,i*40,'Target');
+				var sprite=this.add.sprite(j*50,i*50,'Target');
 				sprite.scale.setTo(.5);
 				this.TargetGroup1.add(sprite);
 			}
@@ -56,25 +53,26 @@ BasicGame.Stage3.prototype={
 		for (var i=0;i<4;i++) {
 			for (var j=0;j<4;j++) {
 				if(i*j==9)break;
-				var sprite=this.add.sprite(j*40,i*40,'Target');
+				var sprite=this.add.sprite(j*50,i*50,'Target');
 				sprite.scale.setTo(.5);
 				this.TargetGroup2.add(sprite);
 			}
 		}
 		var leftMargin=(this.world.width-(this.TargetGroup1.width+this.TargetGroup2.width))*.5;
 		this.TargetGroup1.x=leftMargin;
-		this.TargetGroup2.x=this.TargetGroup1.width+8+leftMargin;
+		this.TargetGroup2.x=this.TargetGroup1.width+leftMargin;
 		this.TargetGroup1.y=this.TargetGroup2.y=200;
 	},
 
 	stopPointer: function () {
 		if(this.isMovingPointer&&this.inputEnabled) {
+			this.M.SE.play('StopPointer',{volume:1});
 			var x = Math.abs(this.GaugePointer.x-this.world.centerX);
 			this.isMovingPointer=!1;
 			this.inputEnabled=!1;
 			var addScore=this.GaugeBgSprite.width-x;
-			this.score+=Math.floor(addScore*this.ModeInfo.scoreRate);
-			this.ScoreTextSprite.changeText('スコア: '+this.score);
+			this.score+=Math.floor(addScore*addScore*.2*this.ModeInfo.scoreRate);
+			this.ScoreTextSprite.changeText('スコア: '+this.M.H.formatComma(this.score));
 			this.gaugeQuantity--;
 			this.SpinCountTextSprite.changeText('残り回数: '+this.gaugeQuantity);
 			if (this.gaugeQuantity==0) {
@@ -100,15 +98,8 @@ BasicGame.Stage3.prototype={
 		}
 	},
 
-	playBGM: function () {
-		return; // TODO
-		if (this.M.SE.isPlaying('PlayBGM')) return;
-		this.M.SE.stop('currentBGM');
-		this.M.SE.stop('TitleBGM');
-		this.M.SE.play('PlayBGM',{isBGM:!0,loop:!0,volume:1});
-	},
-
 	start: function () {
+		this.M.SE.play('WhistleStart',{volume:1});
 		this.StartClickTextSprite.hide();
 		this.StartTextSprite.startTween('popUpB');
 		this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function(){
@@ -125,12 +116,16 @@ BasicGame.Stage3.prototype={
 
 	end: function () {
 		this.isPlaying=!1;
+		this.M.SE.play('WhistleEnd',{volume:1});
 		this.M.setGlobal('stage3Score',this.score);
 		var textSprite=this.M.S.genText(this.world.centerX,this.world.centerY-30,'キクノジョーを\n合成させた！\n次へ進む',this.M.S.BaseTextStyleS(40));
 		textSprite.setScale(0,0);
 		textSprite.addTween('popUpB',{delay:300});
 		this.M.T.onComplete(textSprite.multipleTextTween.popUpB,function(){
-			this.input.onDown.addOnce(function(){this.M.NextScene('Stage4');},this);
+			this.input.onDown.addOnce(function(){
+				this.M.SE.play('GetItem',{volume:1});
+				this.M.NextScene('Stage4');
+			},this);
 		});
 		textSprite.startTween('popUpB');
 	},
@@ -142,7 +137,7 @@ BasicGame.Stage3.prototype={
 
 	step1:function(){
 		this.M.T.moveB(this.TargetGroup1,{xy:{x:'+'+(this.TargetGroup1.width*.5)}}).start();
-		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.width*.5+8)}});
+		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.width*.5)}});
 		this.M.T.onComplete(tween,function(){
 			this.TargetGroup2.removeAll(true);
 			var halfLength=Math.floor(this.TargetGroup1.length*.5);
@@ -154,7 +149,7 @@ BasicGame.Stage3.prototype={
 
 	step2:function(){
 		this.M.T.moveB(this.TargetGroup1,{xy:{y:'+'+(this.TargetGroup1.height*.5)}}).start();
-		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{y:'-'+(this.TargetGroup2.height*.5+8)}});
+		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{y:'-'+(this.TargetGroup2.height*.5)}});
 		this.M.T.onComplete(tween,function(){
 			this.TargetGroup2.removeAll(true);
 			for(var i=this.TargetGroup1.length-1;i>0;i--)if(i%4==2||i%4==3)this.TargetGroup2.add(this.TargetGroup1.children[i]);
@@ -166,7 +161,7 @@ BasicGame.Stage3.prototype={
 
 	step3:function(){
 		this.M.T.moveB(this.TargetGroup1,{xy:{x:'+'+(this.TargetGroup1.height*.5)}}).start();
-		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.height*.5+8)}});
+		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.height*.5)}});
 		this.M.T.onComplete(tween,function(){
 			this.TargetGroup2.removeAll(true);
 			var halfLength=Math.floor(this.TargetGroup1.length*.5);
@@ -179,7 +174,7 @@ BasicGame.Stage3.prototype={
 
 	step4:function(){
 		this.M.T.moveB(this.TargetGroup1,{xy:{y:'+'+(this.TargetGroup1.height*.5)}}).start();
-		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{y:'-'+(this.TargetGroup2.height*.5+8)}});
+		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{y:'-'+(this.TargetGroup2.height*.5)}});
 		this.M.T.onComplete(tween,function(){
 			this.TargetGroup2.removeAll(true);
 			this.TargetGroup2.add(this.TargetGroup1.children[1]);
@@ -191,7 +186,7 @@ BasicGame.Stage3.prototype={
 
 	step5:function(){
 		this.M.T.moveB(this.TargetGroup1,{xy:{x:'+'+(this.TargetGroup1.height*.5)}}).start();
-		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.height*.5+8)}});
+		var tween=this.M.T.moveB(this.TargetGroup2,{xy:{x:'-'+(this.TargetGroup2.height*.5)}});
 		this.M.T.onComplete(tween,this.end);
 		tween.start();
 	},

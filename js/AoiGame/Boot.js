@@ -1,11 +1,11 @@
 BasicGame = {
 	GAME_TITLE: document.title,
-	MAIN_COLOR: '#fef106', // TODO
-	MAIN_TINT:  0xfef106, // TODO
-	MAIN_TEXT_COLOR: '#a17b63', // TODO
-	MAIN_STROKE_COLOR: '#8f8e8f', // TODO
-	WHITE_COLOR: '#ffffff', // TODO
-	YOUTUBE_URL: '', // TODO
+	MAIN_COLOR: '#6aa3d9',
+	MAIN_TINT:  0x6aa3d9,
+	MAIN_TEXT_COLOR: '#106ab7',
+	MAIN_STROKE_COLOR: '#0b69b6',
+	WHITE_COLOR: '#ffffff',
+	YOUTUBE_URL: 'https://www.youtube.com/channel/UC3Ruo_5doyu514PesWGvCAg',
 	VOLUME_MAX_IMG: 'VolumeMax',
 	VOLUME_HALF_IMG: 'VolumeHalf',
 	VOLUME_MUTE_IMG: 'VolumeMute',
@@ -24,29 +24,27 @@ BasicGame.Boot.prototype={
 			MAIN_STROKE_COLOR: BasicGame.MAIN_STROKE_COLOR,
 			WHITE_COLOR: BasicGame.WHITE_COLOR,
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			BG_COUNT:12,
 		});
 		this.M.defineGlobal({
 			curMode:0,
 			stage2Score:0,
 			stage3Score:0,
 			stage4Score:0,
+			doneTutorial:false,
 		});
 		this.M.defineConf({
 			ModeInfo:{
-				0:{name:'ハズレ',
-					// isEasy:false,isHard:false,
+				0:{name:'ハズレ',tweetName:'ハズレモード',
 					scoreRate:1,
 					st2Scale:1,st3Speed:3,st4TimerInterval:3E3,},
-				1:{name:'Easyモード',
-					// isEasy:true,isHard:false,
+				1:{name:'Easyモード',tweetName:'Easyモード',
 					scoreRate:1,
 					st2Scale:1.5,st3Speed:1,st4TimerInterval:5E3,},
-				2:{name:'Hardモード\nスコア2倍',
-					// isEasy:false,isHard:true,
+				2:{name:'Hardモード\nスコア2倍',tweetName:'Hardスコア2倍モード',
 					scoreRate:2,
 					st2Scale:.5,st3Speed:5,st4TimerInterval:1E3,},
-				3:{name:'スコア1.5倍',
-					// isEasy:false,isHard:false,
+				3:{name:'スコア1.5倍',tweetName:'スコア1.5倍モード',
 					scoreRate:1.5,
 					st2Scale:1,st3Speed:3,st4TimerInterval:3E3,},
 			}
