@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 16;
+	var totalCount = 17;
 	return {
 		GamesInfo:{
 			1001: {
@@ -176,6 +176,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				order: totalCount-16,
 				textColor: '#a17b63',
 				bgColor: '#fef106',
+				scale: 1,
+			},
+			1017: {
+				id: 1017,
+				title: 'グンッマー葵',
+				url: 'https://238g.github.io/Parace/AoiGame.html',
+				slideImg: 'Aoi_1',
+				slideImgUrl: 'images/AoiGame/Aoi_1.png',
+				order: totalCount-17,
+				textColor: '#106ab7',
+				bgColor: '#6aa3d9',
 				scale: 1,
 			},
 		},
