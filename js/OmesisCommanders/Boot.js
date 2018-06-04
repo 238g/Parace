@@ -15,7 +15,7 @@ BasicGame = {
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype = {
-	init:function(){this.M.BootInit(!0);this.stage.disableVisibilityChange=!1;},
+	init:function(){this.M.BootInit(!0);},
 	preload: function () {
 		this.load.crossOrigin = 'Anonymous';
 		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');

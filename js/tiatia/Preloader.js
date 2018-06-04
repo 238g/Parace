@@ -128,6 +128,7 @@ BasicGame.Preloader.prototype = {
 			if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 			this.M.SE.setSounds(this.sounds);
 			this.M.H.setSPBrowserColor(this.M.getConst('MAIN_COLOR'));
+			this.stage.disableVisibilityChange = false;
 		}
 	},
 

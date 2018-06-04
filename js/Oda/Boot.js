@@ -16,7 +16,7 @@ BasicGame = {
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
-init:function(){this.M.BootInit(!1);this.stage.disableVisibilityChange=!1;},preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+init:function(){this.M.BootInit(!1);},preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
 create:function(){
 	this.M.defineConst({
 		MAIN_COLOR: BasicGame.MAIN_COLOR,
