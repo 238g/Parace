@@ -1,34 +1,27 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function () { 
-		////////// Val
 		this.isPlaying=!1;
-		this.curSimonFrame=null;
-		////////// Obj
-		this.Btns=null;
+		this.correctCount=0;
+		this.curSimonNum=0;
+		this.goalCount=5;// TODO for info
+		this.challengeCount=1;
+		this.endSummonSimonCount=0;
+		this.simonList=[];
+		this.playerInput=!1;
+		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
+		this.btnCount=6; // TODO for info?
+		this.gamePadColor=0x0000f0;
 	},
-
-	// TODO del // This game is player side vs simon side
 
 	create:function () {
 		this.time.events.removeAll();
+		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
 		this.playBGM();
 		this.BtnContainer();
-		this.start(); // TODO del
+		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
+		this.start();
 		this.test();
-	},
-
-	updateT: function () {
-		if (this.isPlaying) {
-		}
-	},
-
-	TimeManager: function () {
-		if (this.countdownTimer<0) {
-			this.countdownTimer=1E3;
-			this.countdown--;
-		}
-		this.countdownTimer-=this.time.elapsed;
 	},
 
 	playBGM: function () {
@@ -40,22 +33,19 @@ BasicGame.Play.prototype={
 	},
 
 	start: function () {
-		if (this.isPlaying==0) {
-			this.isPlaying=!0;
-		}
+		this.isPlaying=!0;
+		this.summonSimon();
 	},
 
-	renderT: function () {
-		// this.game.debug.geom(this.BladeLine);
-		// for (var key in this.Targets.children) this.game.debug.body(this.Targets.children[key]);
+	end:function(){
+		console.log('end');
 	},
 
 	test: function () {
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
 			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameOver');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end();},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}
 	},

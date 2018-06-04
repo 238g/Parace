@@ -25,49 +25,48 @@ BasicGame.Title.prototype = {
 	},
 
 	EmitFlower: function () {
-    	var back_emitter=this.add.emitter(this.world.centerX*.7,-32,Math.floor(16000/this.time.physicsElapsedMS));
-    	back_emitter.makeParticles('Flower');
-    	back_emitter.maxParticleScale=.3;
-    	back_emitter.minParticleScale=.1;
-    	back_emitter.setYSpeed(50,150);
-    	back_emitter.setXSpeed(20,20);
-    	back_emitter.gravity = 0;
-    	back_emitter.width=this.world.width*1.5;
-    	back_emitter.minRotation=0;
-    	back_emitter.maxRotation=40;
-    	var mid_emitter = this.add.emitter(this.world.centerX*.7,-32,Math.floor(5000/this.time.physicsElapsedMS));
-    	mid_emitter.makeParticles('Flower');
-    	mid_emitter.minParticleScale=.4;
-    	mid_emitter.maxParticleScale=.7;
-    	mid_emitter.setYSpeed(80,180);
-    	mid_emitter.setXSpeed(30,30);
-    	mid_emitter.gravity = 0;
-    	mid_emitter.width=this.world.width*1.5;
-    	mid_emitter.minRotation = 0;
-    	mid_emitter.maxRotation = 40;
-    	var front_emitter = this.add.emitter(this.world.centerX*.7,-32,Math.floor(3000/this.time.physicsElapsedMS));
-    	front_emitter.makeParticles('Flower');
-    	front_emitter.maxParticleScale=1;
-    	front_emitter.minParticleScale=.8;
-    	front_emitter.setYSpeed(100,200);
-    	front_emitter.setXSpeed(50,50);
-    	front_emitter.gravity = 0;
-    	front_emitter.width=this.world.width * 1.5;
-    	front_emitter.minRotation = 0;
-    	front_emitter.maxRotation = 40;
-    	this.EmitterPool=front_emitter;
-    	back_emitter.start(false,8000,this.time.physicsElapsedMS);
-    	mid_emitter.start(false,7000,this.time.physicsElapsedMS*10);
-    	front_emitter.start(false,6000,this.time.physicsElapsedMS*50);
-    	// this.camera.scale.x=.5; this.camera.scale.y=.5;
+		var back_emitter=this.add.emitter(this.world.centerX*.7,-32,Math.floor(16000/this.time.physicsElapsedMS));
+		back_emitter.makeParticles('Flower');
+		back_emitter.maxParticleScale=.3;
+		back_emitter.minParticleScale=.1;
+		back_emitter.setYSpeed(50,150);
+		back_emitter.setXSpeed(20,20);
+		back_emitter.gravity = 0;
+		back_emitter.width=this.world.width*1.5;
+		back_emitter.minRotation=0;
+		back_emitter.maxRotation=40;
+		var mid_emitter = this.add.emitter(this.world.centerX*.7,-32,Math.floor(5000/this.time.physicsElapsedMS));
+		mid_emitter.makeParticles('Flower');
+		mid_emitter.minParticleScale=.4;
+		mid_emitter.maxParticleScale=.7;
+		mid_emitter.setYSpeed(80,180);
+		mid_emitter.setXSpeed(30,30);
+		mid_emitter.gravity = 0;
+		mid_emitter.width=this.world.width*1.5;
+		mid_emitter.minRotation = 0;
+		mid_emitter.maxRotation = 40;
+		var front_emitter = this.add.emitter(this.world.centerX*.7,-32,Math.floor(3000/this.time.physicsElapsedMS));
+		front_emitter.makeParticles('Flower');
+		front_emitter.maxParticleScale=1;
+		front_emitter.minParticleScale=.8;
+		front_emitter.setYSpeed(100,200);
+		front_emitter.setXSpeed(50,50);
+		front_emitter.gravity = 0;
+		front_emitter.width=this.world.width * 1.5;
+		front_emitter.minRotation = 0;
+		front_emitter.maxRotation = 40;
+		this.EmitterPool=front_emitter;
+		back_emitter.start(false,8000,this.time.physicsElapsedMS*1.5);
+		mid_emitter.start(false,7000,this.time.physicsElapsedMS*15);
+		front_emitter.start(false,6000,this.time.physicsElapsedMS*50);
+		// this.camera.scale.x=.5; this.camera.scale.y=.5;
 	},
 
 	BtnContainer: function () {
-		var tint = BasicGame.MAIN_TINT;
 		this.genStartBtnSprite(this.world.centerX,this.world.height*.75);
 		this.genLogoBtnSprite(this.world.centerX,this.world.height);
-		this.genVolumeBtnSprite(this.world.width*.1,30,tint);
-		this.genFullScreenBtnSprite(this.world.width*.9,30,tint);
+		this.genVolumeBtnSprite(this.world.width*.1,30);
+		this.genFullScreenBtnSprite(this.world.width*.9,30);
 	},
 
 	genStartBtnSprite: function (x,y,tint) {
@@ -90,7 +89,7 @@ BasicGame.Title.prototype = {
 		}
 	},
 
-	genVolumeBtnSprite: function (x,y,tint) {
+	genVolumeBtnSprite: function (x,y) {
 		var maxImg = BasicGame.VOLUME_MAX_IMG;
 		var halfImg = BasicGame.VOLUME_HALF_IMG;
 		var muteImg = BasicGame.VOLUME_MUTE_IMG;
@@ -118,7 +117,7 @@ BasicGame.Title.prototype = {
 		}
 	},
 
-	genFullScreenBtnSprite: function (x,y,tint) {
+	genFullScreenBtnSprite: function (x,y) {
 		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
 		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 		var curImg = this.scale.isFullScreen ? offImg : onImg;

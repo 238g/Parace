@@ -2,7 +2,6 @@ BasicGame.Result = function () {};
 BasicGame.Result.prototype = {
 	init: function(){
 		this.score=this.M.getGlobal('stage4Score');
-		this.score=450779;
 		this.mvDuration1=2E3;
 		this.mvDuration2=1E3;
 		this.baseScoreText='距離: ';
