@@ -69,14 +69,14 @@ BasicGame.Title.prototype = {
 		this.genFullScreenBtnSprite(this.world.width*.9,30);
 	},
 
-	genStartBtnSprite: function (x,y,tint) {
+	genStartBtnSprite: function (x,y) {
 		var btnSprite=this.add.button(x,y,'CircleBtn',this.start,this,0,0,1,0);
 		btnSprite.anchor.setTo(.5);
 		btnSprite.scale.setTo(.5);
 		// var startSprite=this.add.sprite(x,y,'StartText');
 		// startSprite.anchor.setTo(.5);
 		// startSprite.scale.setTo(.2);
-		this.M.S.genText(x,y,'スタート',this.M.S.BaseTextStyleSS(18),tint);
+		this.M.S.genText(x,y,'スタート',this.M.S.BaseTextStyleSS(18));
 	},
 
 	start: function () {
