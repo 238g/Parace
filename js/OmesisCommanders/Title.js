@@ -1,24 +1,21 @@
-BasicGame.Title = function () {};
+BasicGame.Title=function(){};
 BasicGame.Title.prototype = {
-	init: function(){this.inputEnabled=!1;this.Dialog=null;},
+	init: function(){
+		this.inputEnabled=!1;
+		this.Dialog=null;
+	},
 	create: function () {
 		this.time.events.removeAll();
-		this.playBGM();
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.BgContainer();
 		this.BtnContainer();
 		this.DialogContainer();
-		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
-	},
-
-	playBGM: function () {
-		return; // TODO
-		if(this.M.SE.isPlaying('TitleBGM'))return;
-		this.M.SE.stop('currentBGM');
-		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1});
+		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
 	},
 
 	BgContainer: function () {
-		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
+		// genTextM
 		var textSprite = this.M.S.genText(this.world.centerX,this.world.height*.7,
 			BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(40));
 		textSprite.addTween('stressA',null);
@@ -27,43 +24,38 @@ BasicGame.Title.prototype = {
 
 	BtnContainer: function () {
 		var textStyle = this.M.S.BaseTextStyleS(25);
-		var tint = BasicGame.MAIN_TINT;
-		this.genHowToSprite(this.world.centerX*1.6,this.world.height*.85,textStyle,tint);
-		this.genStartBtnSprite(this.world.centerX*.4,this.world.height*.85,textStyle,tint);
-		this.genOtherGameBtnSprite(this.world.centerX,this.world.height*.95,textStyle,tint);
+		this.genHowToSprite(this.world.centerX*1.6,this.world.height*.85,textStyle);
+		this.genStartBtnSprite(this.world.centerX*.4,this.world.height*.85,textStyle);
+		this.genOtherGameBtnSprite(this.world.centerX,this.world.height*.95,textStyle);
 		this.genLogoBtnSprite(10,10);
 		var bottomY = this.world.height*.95;
-		this.genVolumeBtnSprite(this.world.width*.1,bottomY,tint);
-		this.genFullScreenBtnSprite(this.world.width*.9,bottomY,tint);
+		this.genVolumeBtnSprite(this.world.width*.1,bottomY);
+		this.genFullScreenBtnSprite(this.world.width*.9,bottomY);
 	},
 
-	genStartBtnSprite: function (x,y,textStyle,tint) {
+	genStartBtnSprite: function (x,y,textStyle) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
 			if (this.inputEnabled) {
 				// this.M.SE.play('OnBtn',{volume:1}); // TODO
 				this.M.NextScene('Play');
 				// this.M.NextScene('SelectLevel');
 			} else {
-				this.playBGM();
+				// this.M.SE.playBGM('TitleBGM',{volume:1});
 				this.inputEnabled = true;
 			}
-		},'プレイ！',textStyle,{tint:tint});
+		},'プレイ！',textStyle,{tint:BasicGame.MAIN_TIN});
 	},
 
-	genHowToSprite: function (x,y,textStyle,tint) {
+	genHowToSprite: function (x,y,textStyle) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
 			this.Dialog.bringToTop();
 			this.Dialog.tweenShow();
-		},'遊び方',textStyle,{tint:tint});
+		},'遊び方',textStyle,{tint:BasicGame.MAIN_TIN});
 	},
 
-	genVolumeBtnSprite: function (x,y,tint) {
-		var maxImg = BasicGame.VOLUME_MAX_IMG;
-		var halfImg = BasicGame.VOLUME_HALF_IMG;
-		var muteImg = BasicGame.VOLUME_MUTE_IMG;
-		var curImg = this.sound.mute ? muteImg : (this.sound.volume==1) ? maxImg : halfImg;
-		var volumeSprite = this.M.S.genSprite(x,y,'VolumeIcon',curImg);
+	genVolumeBtnSprite: function (x,y) {
+		var volumeSprite=this.M.S.genSprite(x,y,'VolumeIcon',this.sound.mute?BasicGame.VOLUME_MUTE_IMG:(this.sound.volume==1)?BasicGame.VOLUME_MAX_IMG:BasicGame.VOLUME_HALF_IMG);
 		volumeSprite.anchor.setTo(.5);
 		volumeSprite.scale.setTo(.5);
 		volumeSprite.UonInputDown(this.onDownVolumeBtn);
@@ -86,10 +78,8 @@ BasicGame.Title.prototype = {
 		}
 	},
 
-	genFullScreenBtnSprite: function (x,y,tint) {
-		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
-		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
-		var curImg = this.scale.isFullScreen ? offImg : onImg;
+	genFullScreenBtnSprite: function (x,y) {
+		var curImg=this.scale.isFullScreen?BasicGame.FULL_SCREEN_OFF_IMG:BasicGame.FULL_SCREEN_ON_IMG;
 		var fullScreenSprite = this.M.S.genButton(x,y,'GameIconsWhite',this.onDonwFullScreenBtn,this);
 		fullScreenSprite.tint=0x000000;
 		fullScreenSprite.setFrames(curImg,curImg,curImg,curImg);
@@ -98,20 +88,17 @@ BasicGame.Title.prototype = {
 	},
 
 	onDonwFullScreenBtn: function (sprite) {
-		var curImg;
-		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
-		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 		if (this.scale.isFullScreen) {
-			curImg = onImg;
+			var curImg = BasicGame.FULL_SCREEN_ON_IMG;
 			this.scale.stopFullScreen(false);
 		} else {
-			curImg = offImg;
+			var curImg = BasicGame.FULL_SCREEN_OFF_IMG;
 			this.scale.startFullScreen(false);
 		}
 		sprite.setFrames(curImg,curImg,curImg,curImg);
 	},
 
-	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
+	genOtherGameBtnSprite: function (x,y,textStyle) {
 		this.M.S.BasicGrayLabelS(x,y,function () {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
 			if (this.game.device.desktop) {
@@ -119,7 +106,7 @@ BasicGame.Title.prototype = {
 			} else {
 				location.href = BasicGame.MY_GAMES_URL;
 			}
-		},'他ゲームを遊ぶ',textStyle,{tint:tint});
+		},'他ゲームを遊ぶ',textStyle,{tint:BasicGame.MAIN_TIN});
 	},
 
 	genLogoBtnSprite: function (x,y) {
@@ -140,12 +127,10 @@ BasicGame.Title.prototype = {
 		var text = 
 			action+'\n'
 			+'飛んでくるピーナッツくんを\n'
-			+'切って切って切りまくれ！\n'
-			+'ぽんぽこは切らないでね！\n'
 			+'';
 			// TODO char???
+		// genTextM
 		var textSprite = this.M.S.genText(0,0,text,this.M.S.BaseTextStyleS(25));
-		this.Dialog.addChild(textSprite.multipleTextSprite);
-		this.Dialog.addChild(textSprite);
+		textSprite.addToChild(this.Dialog);
 	},
 };

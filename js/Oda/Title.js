@@ -1,47 +1,40 @@
-BasicGame.Title = function () {};
+BasicGame.Title=function(){};
 BasicGame.Title.prototype = {
-	init: function(){this.inputEnabled=!1;},
+	init: function(){
+		this.inputEnabled=!1;
+		this.StartBtnSprite=this.DialogTween=null;
+	},
 	create: function () {
 		this.time.events.removeAll();
-		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
-		this.playBGM();
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.BtnContainer();
-	},
-
-	playBGM: function () {
-		return; // TODO
-		if(this.M.SE.isPlaying('TitleBGM'))return;
-		this.M.SE.stop('currentBGM');
-		this.M.SE.play('TitleBGM',{isBGM:!0,loop:!0,volume:1});
+		this.DialogContainer();
+		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
 	},
 
 	BtnContainer: function () {
 		this.genStartBtnSprite(this.world.centerX,this.world.height*.75);
-		this.genLogoBtnSprite(this.world.centerX,this.world.height);
 		this.genVolumeBtnSprite(this.world.width*.1,30);
 		this.genFullScreenBtnSprite(this.world.width*.9,30);
 	},
 
 	genStartBtnSprite: function (x,y) {
-		//TODO btnlabel
+		// TODO
+		this.StartBtnSprite=this.M.S.BasicGrayLabelS(x,y,this.showCharSelecter,'スタート',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 	},
 
-	start: function () {
+	showCharSelecter:function(){
 		if (this.inputEnabled) {
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
-			this.M.NextScene('Stage1');
-		} else {
-			this.playBGM();
-			this.inputEnabled=!0;
+			// this.M.SE.playBGM('TitleBGM',{volume:1});
+			this.StartBtnSprite.hide();
+			this.DialogTween.start();
 		}
 	},
 
 	genVolumeBtnSprite: function (x,y) {
-		var maxImg=BasicGame.VOLUME_MAX_IMG;
-		var halfImg=BasicGame.VOLUME_HALF_IMG;
-		var muteImg=BasicGame.VOLUME_MUTE_IMG;
-		var curImg=this.sound.mute?muteImg:(this.sound.volume==1)?maxImg:halfImg;
-		var volumeSprite=this.M.S.genSprite(x,y,'VolumeIcon',curImg);
+		var volumeSprite=this.M.S.genSprite(x,y,'VolumeIcon',this.sound.mute?BasicGame.VOLUME_MUTE_IMG:(this.sound.volume==1)?BasicGame.VOLUME_MAX_IMG:BasicGame.VOLUME_HALF_IMG);
 		volumeSprite.anchor.setTo(.5);
 		volumeSprite.scale.setTo(.5);
 		volumeSprite.UonInputDown(this.onDownVolumeBtn);
@@ -65,9 +58,7 @@ BasicGame.Title.prototype = {
 	},
 
 	genFullScreenBtnSprite: function (x,y) {
-		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
-		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
-		var curImg = this.scale.isFullScreen ? offImg : onImg;
+		var curImg=this.scale.isFullScreen?BasicGame.FULL_SCREEN_OFF_IMG:BasicGame.FULL_SCREEN_ON_IMG;
 		var fullScreenSprite = this.M.S.genButton(x,y,'GameIconsWhite',this.onDonwFullScreenBtn,this);
 		fullScreenSprite.tint=0x000000;
 		fullScreenSprite.setFrames(curImg,curImg,curImg,curImg);
@@ -76,29 +67,26 @@ BasicGame.Title.prototype = {
 	},
 
 	onDonwFullScreenBtn: function (sprite) {
-		var curImg;
-		var offImg = BasicGame.FULL_SCREEN_OFF_IMG;
-		var onImg = BasicGame.FULL_SCREEN_ON_IMG;
 		if (this.scale.isFullScreen) {
-			curImg = onImg;
+			var curImg = BasicGame.FULL_SCREEN_ON_IMG;
 			this.scale.stopFullScreen(false);
 		} else {
-			curImg = offImg;
+			var curImg = BasicGame.FULL_SCREEN_OFF_IMG;
 			this.scale.startFullScreen(false);
 		}
 		sprite.setFrames(curImg,curImg,curImg,curImg);
 	},
 
-	genLogoBtnSprite: function (x,y) {
-		var logoSprite=this.M.S.genButton(x,y,'Logo',function () {
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
-			if (this.game.device.desktop) {
-				window.open(BasicGame.YOUTUBE_URL,'_blank');
-			} else {
-				location.href = BasicGame.YOUTUBE_URL;
-			}
-		});
-		logoSprite.anchor.setTo(.5,1.05);
-		logoSprite.scale.setTo(.9);
+	DialogContainer:function(){
+		var dialogSprite=this.add.sprite(this.world.width*1.5,this.world.centerY,'TWP');
+		dialogSprite.anchor.setTo(.5);
+		dialogSprite.tint = 0x000000;
+		this.DialogTween=this.M.T.moveD(dialogSprite,{xy:{x:this.world.centerX},duration:1000});
+		// TODO char dialogSprite.addChild();
+	},
+
+	start: function () {
+		// this.M.SE.play('OnBtn',{volume:1}); // TODO
+		this.M.NextScene('Play');
 	},
 };

@@ -17,19 +17,11 @@ BasicGame.Play.prototype={
 	create:function () {
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
-		this.playBGM();
+		// this.M.SE.playBGM('PlayBGM',{volume:1});
 		this.BtnContainer();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
 		this.start();
 		this.test();
-	},
-
-	playBGM: function () {
-		return; // TODO
-		if (this.M.SE.isPlaying('PlayBGM')) return;
-		this.M.SE.stop('currentBGM');
-		this.M.SE.stop('TitleBGM');
-		this.M.SE.play('PlayBGM',{isBGM:!0,loop:!0,volume:1});
 	},
 
 	start: function () {

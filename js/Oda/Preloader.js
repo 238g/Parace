@@ -15,12 +15,9 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
-			'Title': 'images/AoiGame/Title.png',
-			'Logo': 'images/AoiGame/Logo.png',
-			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
+			'TWP': 'images/Oda/TranslucentWhitePaper.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
-		for(var i=0;i<=this.M.getConst('BG_COUNT');i++)this.load.image('Bg_'+i,'images/AoiGame/Bg/Bg_'+i+'.jpg');
 		this.loadAudio();
 	},
 
@@ -42,6 +39,5 @@ BasicGame.Preloader.prototype={
 		this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
 	},
-
 	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
 };

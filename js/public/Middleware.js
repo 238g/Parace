@@ -238,6 +238,24 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 		return textSprite;
 	},
+	genTextM:function(x,y,text,textStyle){
+		var Scene = this.M.getScene();
+		var commonTextStyle=textStyle||this.BaseTextStyleS(25);
+		var multipleTextStyle={};
+		for(var k in commonTextStyle)multipleTextStyle[k]=commonTextStyle[k];
+		multipleTextStyle.fill=commonTextStyle.multipleStroke;
+		multipleTextStyle.stroke=commonTextStyle.multipleStroke;
+		multipleTextStyle.strokeThickness=commonTextStyle.strokeThickness+commonTextStyle.multipleStrokeThickness;
+		var multipleTextSprite = Scene.add.text(x,y,text,multipleTextStyle);
+		multipleTextSprite.lineSpacing=-commonTextStyle.multipleStrokeThickness;
+		multipleTextSprite.anchor.setTo(.5);
+		var textSprite = Scene.add.text(0,0,text,commonTextStyle);
+		textSprite.anchor.setTo(.5);
+		multipleTextSprite.addChild(textSprite);
+		multipleTextSprite.show=function(){this.visible=!0;};
+		multipleTextSprite.hide=function(){this.visible=!1;};
+		return multipleTextSprite;
+	},
 	genBmpSprite: function (x,y,w,h,fillStyle) {
 		var Scene = this.M.getScene();
 		var bmp = Scene.add.bitmapData(w,h);
@@ -563,6 +581,14 @@ Middleware.prototype.TweenManager.prototype = {
 			option.xy, option.duration, 
 			Phaser.Easing.Cubic.Out, false, option.delay, -1, true);
 	},
+	// xy[, duration, delay]
+	moveD: function (target, option) {
+		var Scene = this.M.getScene();
+		option = option || {};
+		return Scene.add.tween(target).to(
+			option.xy, option.duration, 
+			Phaser.Easing.Bounce.Out, false, option.delay);
+	},
 	// xy, easing[, duration, delay]
 	moveX: function (target, option) {
 		var Scene = this.M.getScene();
@@ -668,6 +694,11 @@ Middleware.prototype.SoundManager.prototype = {
 		if (option.volume) sound.volume = option.volume;
 		if (option.isBGM) this.sounds.currentBGM = sound;
 		sound.play();
+	},
+	playBGM:function(key,option){
+		if(this.isPlaying(key))return;
+		this.stop('currentBGM');
+		this.play(key,{isBGM:!0,loop:!0,volume:option.volume});
 	},
 	stop: function (key) {
 		if (this.isPlaying(key)) this.sounds[key].stop();
