@@ -27,8 +27,11 @@ create:function(){
 		TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 	});
 	this.M.defineGlobal({
+		endTutorial:!1,
+		curLevel:1,
 	});
 	this.M.defineConf({
+		LevelInfo:this.LevelInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

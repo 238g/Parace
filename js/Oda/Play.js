@@ -1,16 +1,23 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function () { 
-		this.isPlaying=!1;
-		this.rotationSpeed=2;
-		this.canThrow=!1;
-		this.minAngle=13;
+		this.isPlaying=this.canThrow=!1;
+		this.minAngle=12;
+		this.bladeStartPosY=this.world.height*.2;
+		this.bladeGoToPosY=this.world.height*.8;
 
-		this.dir=1; // 1 or -1
+		this.curLevel=this.M.getGlobal('curLevel');
+		this.LevelInfo=this.M.getConf('LevelInfo')[this.curLevel];
 
-		this.BladeGroup=
-		this.Blade=
+		this.rotationSpeed=this.LevelInfo.RotSpeed;
+		this.rotationDir=this.LevelInfo.RotDir;
+
+		this.leftCount=this.LevelInfo.GoalCount;
+
+		this.BladeGroup=this.Blade=
 		this.Target=
+		this.GoalCountTextSprite=
+		this.LimitTimeTextSprite=
 		this.FrontGroup= // need???
 
 		null;
@@ -20,27 +27,33 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('PlayBGM',{volume:1});
+	
+		//TODO change text
+		this.GoalCountTextSprite=this.M.S.genTextM(this.world.centerX,this.world.centerY,this.leftCount,this.M.S.BaseTextStyle(80));
 
-		this.BladeGroup=this.add.group();
-
-		// this.Blade=this.add.sprite(this.world.centerX,this.world.height*.2,'');
-		this.Blade=this.M.S.genBmpSprite(this.world.centerX,this.world.height*.2,10,100,'#00ff00');
-		this.Blade.anchor.setTo(.5);
-
-		// this.Target=this.add.sprite();
-		this.Target=this.M.S.genBmpCircleSprite(this.world.centerX,this.world.height*.8,100,'#ff0000');
-		this.Target.anchor.setTo(.5);
-		this.Target.addChild(this.M.S.genBmpSprite(30,0,10,10,'#0000ff')); // TODO del
-		this.Target.addChild(this.M.S.genBmpSprite(-30,0,10,10,'#00ff00')); // TODO del
-
-		this.start();//TODO
+		this.BladeContainer();
+		this.TargetContainer();
+		this.HUDContainer();
+		this.tutorial();
 		this.test();
+	},
+
+	tutorial:function(){
+		if(this.M.getGlobal('endTutorial')){
+			this.start();
+		} else {
+			// TODO tutorial sprite
+			this.input.onDown.addOnce(function(){
+				this.M.setGlobal('endTutorial',!0);
+				this.start();
+			},this);
+		}
 	},
 
 	throwBlade:function(){
 		if (this.canThrow) {
 			this.canThrow=!1;
-			var tween=this.M.T.moveB(this.Blade,{xy:{y:this.world.height*.7},duration:150});
+			var tween=this.M.T.moveB(this.Blade,{xy:{y:this.bladeGoToPosY},duration:150});
 			tween.onComplete.add(this.hitTarget,this);
 			tween.start();
 		}
@@ -58,31 +71,26 @@ BasicGame.Play.prototype={
 		if (legalHit) {
 			this.canThrow=!0;
 			this.genStuckBlade(this.Blade.x,this.Blade.y,this.Target.angle);
-			this.Blade.y=this.world.height*.2;
+			this.Blade.y=this.bladeStartPosY;
+			this.leftCount--;
+			// TODO text change
+			if(this.leftCount==0)this.end();
 		} else {
 			this.end();
 		}
 	},
 
-	genStuckBlade:function(x,y,angle){
-		// TODO when first gen... this or other function
-		var blade=this.M.S.genBmpSprite(x,y,10,100,'#00ff00');
-		// var blade=this.add.sprite(x,y,'');
-		blade.anchor.setTo(.5);
-		blade.impactAngle=angle;
-		this.BladeGroup.add(blade);
-	},
-
 	update:function(){
 		if (this.isPlaying) {
-			var rotation=this.time.physicsElapsedMS*.1*this.rotationSpeed*this.dir;
+			var rotation=this.time.physicsElapsedMS*.1*this.rotationSpeed*this.rotationDir;
 			this.Target.angle+=rotation;
 			var children = this.BladeGroup.children;
 			for(var i=0;i<children.length;i++){
-				children[i].angle+=rotation;
-				var radians = Phaser.Math.degToRad(children[i].angle-90);
-				children[i].x=this.Target.x+(this.Target.width*.5)*Math.cos(radians);
-				children[i].y=this.Target.y+(this.Target.width*.5)*Math.sin(radians);
+				var child=children[i];
+				child.angle+=rotation;
+				var radians = Phaser.Math.degToRad(child.angle-90);
+				child.x=this.Target.x+(this.Target.width*.5)*Math.cos(radians);
+				child.y=this.Target.y+(this.Target.width*.5)*Math.sin(radians);
 			}
 		}
 	},
@@ -103,7 +111,7 @@ BasicGame.Play.prototype={
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
 			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end();},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end();},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}
 	},
