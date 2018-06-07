@@ -254,6 +254,10 @@ Middleware.prototype.SpriteManager.prototype = {
 		multipleTextSprite.addChild(textSprite);
 		multipleTextSprite.show=function(){this.visible=!0;};
 		multipleTextSprite.hide=function(){this.visible=!1;};
+		multipleTextSprite.changeText=function(text){
+			this.setText(text);
+			this.children[0].setText(text);
+		};
 		return multipleTextSprite;
 	},
 	genBmpSprite: function (x,y,w,h,fillStyle) {

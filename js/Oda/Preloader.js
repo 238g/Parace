@@ -16,6 +16,10 @@ BasicGame.Preloader.prototype={
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
 			'TWP': 'images/Oda/TranslucentWhitePaper.png',
+			'Blade': 'images/Oda/Blade.png',
+			'NobuhimeCircle_1': 'images/Oda/NobuhimeCircle_1.png',
+			'NobuhimeCircle_2': 'images/Oda/NobuhimeCircle_2.png',
+
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();

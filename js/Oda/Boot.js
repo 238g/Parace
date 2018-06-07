@@ -1,12 +1,12 @@
 BasicGame = {
 	GAME_TITLE: document.title,
-	MAIN_COLOR: '#6aa3d9', // TODO
-	MAIN_TINT:  0x6aa3d9, // TODO
-	MAIN_TEXT_COLOR: '#106ab7', // TODO
-	MAIN_STROKE_COLOR: '#0b69b6', // TODO
+	MAIN_COLOR: '#cbdf9c',
+	MAIN_TINT:  0xcbdf9c,
+	MAIN_TEXT_COLOR: '#ff549c',
+	MAIN_STROKE_COLOR: '#ff549c',
 	WHITE_COLOR: '#ffffff',
-	YOUTUBE_URL: '', // TODO
-	YOUTUBE_URL2: '', // TODO
+	YOUTUBE_URL: 'https://www.youtube.com/channel/UCnqDxEcVsvt7WpDy0px1HgA', // おだのぶ
+	YOUTUBE_URL2: 'https://www.youtube.com/channel/UCGcD5iUDG8xiywZeeDxye-A', // 織田信姫
 	VOLUME_MAX_IMG: 'VolumeMax',
 	VOLUME_HALF_IMG: 'VolumeHalf',
 	VOLUME_MUTE_IMG: 'VolumeMute',

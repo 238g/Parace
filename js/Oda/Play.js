@@ -2,7 +2,7 @@ BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function () { 
 		this.isPlaying=this.canThrow=!1;
-		this.minAngle=12;
+		this.minAngle=10;
 		this.bladeStartPosY=this.world.height*.2;
 		this.bladeGoToPosY=this.world.height*.8;
 
@@ -17,7 +17,6 @@ BasicGame.Play.prototype={
 		this.BladeGroup=this.Blade=
 		this.Target=
 		this.GoalCountTextSprite=
-		this.LimitTimeTextSprite=
 		this.FrontGroup= // need???
 
 		null;
@@ -27,10 +26,7 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor = BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('PlayBGM',{volume:1});
-	
-		//TODO change text
-		this.GoalCountTextSprite=this.M.S.genTextM(this.world.centerX,this.world.centerY,this.leftCount,this.M.S.BaseTextStyle(80));
-
+		this.BgContainer();
 		this.BladeContainer();
 		this.TargetContainer();
 		this.HUDContainer();
@@ -60,23 +56,37 @@ BasicGame.Play.prototype={
 	},
 
 	hitTarget:function(){
-		var legalHit=!0;
-		var children = this.BladeGroup.children;
-		for(var i=0;i<children.length;i++){
-			if(Math.abs(Phaser.Math.getShortestAngle(this.Target.angle,children[i].impactAngle)) < this.minAngle){
-				legalHit=!1;
-				break;
+		if(this.isPlaying){
+			var legalHit=!0;
+			var children = this.BladeGroup.children;
+			for(var i=0;i<children.length;i++){
+				if(Math.abs(Phaser.Math.getShortestAngle(this.Target.angle,children[i].impactAngle)) < this.minAngle){
+					legalHit=!1;
+					break;
+				}
 			}
-		}
-		if (legalHit) {
-			this.canThrow=!0;
-			this.genStuckBlade(this.Blade.x,this.Blade.y,this.Target.angle);
-			this.Blade.y=this.bladeStartPosY;
-			this.leftCount--;
-			// TODO text change
-			if(this.leftCount==0)this.end();
-		} else {
-			this.end();
+			if(this.Target.face==2){
+				this.time.events.add(500,function(){
+					if(this.isPlaying){
+						this.Target.loadTexture('NobuhimeCircle_1');
+						this.Target.face=1;
+					}
+				},this);
+			}else{
+				this.Target.loadTexture('NobuhimeCircle_2');
+				this.Target.face=2;
+			}
+			if (legalHit) {
+				this.canThrow=!0;
+				this.genStuckBlade(this.Blade.x,this.Blade.y,this.Target.angle);
+				this.leftCount--;
+				this.GoalCountTextSprite.changeText(this.leftCount);
+				if(this.leftCount==0)return this.end('clear');
+				this.Blade.y=this.bladeStartPosY;
+			} else {
+				this.end('gameover');
+			}
+
 		}
 	},
 
@@ -101,10 +111,29 @@ BasicGame.Play.prototype={
 		this.input.onDown.add(this.throwBlade,this);
 	},
 
-	end:function(){
+	end:function(type){
 		this.isPlaying=!1;
 		this.canThrow=!0;
-		console.log('end');
+		this.Blade.visible=!1;
+		this.genStuckBlade(this.Blade.x,this.Blade.y,this.Target.angle);
+		var rotation=this.time.physicsElapsedMS*.1*this.rotationSpeed*this.rotationDir;
+		this.Target.angle+=rotation;
+		var children = this.BladeGroup.children;
+		for(var i=0;i<children.length;i++){
+			var child=children[i];
+			child.angle+=rotation;
+			var radians = Phaser.Math.degToRad(child.angle-90);
+			child.x=this.Target.x+(this.Target.width*.5)*Math.cos(radians);
+			child.y=this.Target.y+(this.Target.width*.5)*Math.sin(radians);
+		}
+		if (type=='clear') {
+			// TODO clear curLevel++
+		} else {
+			// TODO reduce life
+		}
+		// TODO end face
+		// this.Target.loadTexture('NobuhimeCircle_3');
+		// this.Target.face=3;
 	},
 
 	test: function () {
