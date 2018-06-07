@@ -1,13 +1,9 @@
-BasicGame.Play = function () {};
-
-BasicGame.Play.prototype = {
+BasicGame.Play=function(){};
+BasicGame.Play.prototype={
 	init: function () {
-		this.player = null;
-		this.walls = null;
-		this.enemys = null;
-		this.exp = null;
+		this.currentSound=
+		this.player=this.walls=this.enemys=this.exp=null;
 		this.HUD = {};
-		this.currentSound = null;
 		this.score = 0;
 		this.isPlaying = false;
 		this.enemyMaxCount = this.game.const.ENEMY_MAX_COUNT;
@@ -15,16 +11,11 @@ BasicGame.Play.prototype = {
 	},
 
 	create: function () {
-		this.ready();
-	},
-
-	ready: function () {
 		this.player = this.playerContainer();
 		this.walls = this.wallContainer();
 		this.enemys = this.enemyContainer();
 		this.exp = this.genParticles();
 		this.HUD = this.genHUDContainer();
-
 		this.game.global.SoundManager.stop('currentBGM');
 		this.currentSound = 'Male_3';
 		this.countDown(this.currentSound);
@@ -64,8 +55,8 @@ BasicGame.Play.prototype = {
 
 	update: function () {
 		if (this.isPlaying) {
-			this.collisionWall();
-			this.collisionEnemy();
+			this.physics.arcade.collide(this.player, this.walls, this.gameOver, null, this);
+			this.physics.arcade.overlap(this.player, this.enemys, this.gameOver, null, this);
 
 			this.score += Math.floor(this.time.elapsed/10);
 			this.HUD.changeScore('スコア: ' + this.score);
@@ -77,14 +68,6 @@ BasicGame.Play.prototype = {
 				this.player.x = 0;
 			}
 		}
-	},
-
-	collisionWall: function () {
-		this.physics.arcade.collide(this.player, this.walls, this.gameOver, null, this);
-	},
-
-	collisionEnemy: function () {
-		this.physics.arcade.overlap(this.player, this.enemys, this.gameOver, null, this);
 	},
 
 	inputController: function () {
