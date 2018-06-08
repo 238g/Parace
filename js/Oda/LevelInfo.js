@@ -5,6 +5,7 @@ BasicGame.Boot.prototype.LevelInfo = function () {
 		3:{RotSpeed:1,ChangeSpeed:0,Res:!1,GoalCount:3,RotDir:-1,StuckBlades:[180]},
 		4:{RotSpeed:1,ChangeSpeed:0,Res:!1,GoalCount:3,RotDir:-1,StuckBlades:[0,180]},
 		5:{RotSpeed:1,ChangeSpeed:0,Res:!0,GoalCount:4,RotDir:1,StuckBlades:[0,180]},
+		6:{RotSpeed:1,ChangeSpeed:0,Res:!0,GoalCount:4,RotDir:1,StuckBlades:[0,180]},
 
 		// level 50 _ per 5 _ result
 	};

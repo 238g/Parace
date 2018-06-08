@@ -5,21 +5,30 @@ BasicGame.Play.prototype={
 		this.minAngle=10;
 		this.bladeStartPosY=this.world.height*.2;
 		this.bladeGoToPosY=this.world.height*.8;
-
+		this.curChar=this.M.getGlobal('curChar');
 		this.curLevel=this.M.getGlobal('curLevel');
 		this.LevelInfo=this.M.getConf('LevelInfo')[this.curLevel];
-
 		this.rotationSpeed=this.LevelInfo.RotSpeed;
 		this.rotationDir=this.LevelInfo.RotDir;
-
 		this.leftCount=this.LevelInfo.GoalCount;
-
-		this.BladeGroup=this.Blade=
-		this.Target=
-		this.GoalCountTextSprite=
-		this.FrontGroup= // need???
-
-		null;
+		this.BladeGroup=this.Blade=this.Target=
+		this.TutorialSprite=this.GoalCountTextSprite=null;
+		this.curLang=this.M.getGlobal('curLang');
+		if(this.curLang=='en'){
+			this.AllClearText='ALL CLEAR';
+			this.TweetText='Tweet';
+			this.NextLevelText='Next Level';
+			this.GoToTitleText='Title';
+			this.LevelText='LEVEL: ';
+			this.OtherGameText='Other Game';
+		}else{
+			this.AllClearText='全クリア！！';
+			this.TweetText='結果をツイート';
+			this.NextLevelText='次のレベルへ';
+			this.GoToTitleText='タイトルに戻る';
+			this.LevelText='レベル: ';
+			this.OtherGameText='他のゲーム';
+		}
 	},
 
 	create:function () {
@@ -37,9 +46,13 @@ BasicGame.Play.prototype={
 	tutorial:function(){
 		if(this.M.getGlobal('endTutorial')){
 			this.start();
-		} else {
-			// TODO tutorial sprite
+		}else{
+			this.TutorialSprite=this.add.sprite(this.world.centerX,this.world.centerY,'TWP');
+			this.TutorialSprite.anchor.setTo(.5);
+			this.TutorialSprite.tint=0x000000;
+			// TODO tutorial text
 			this.input.onDown.addOnce(function(){
+				this.TutorialSprite.destroy();
 				this.M.setGlobal('endTutorial',!0);
 				this.start();
 			},this);
@@ -65,15 +78,14 @@ BasicGame.Play.prototype={
 					break;
 				}
 			}
-			if(this.Target.face==2){
+			if(this.Target.face==1){
 				this.time.events.add(500,function(){
 					if(this.isPlaying){
-						this.Target.loadTexture('NobuhimeCircle_1');
+						this.Target.loadTexture(this.curChar+'Circle_1');
 						this.Target.face=1;
 					}
 				},this);
-			}else{
-				this.Target.loadTexture('NobuhimeCircle_2');
+				this.Target.loadTexture(this.curChar+'Circle_2');
 				this.Target.face=2;
 			}
 			if (legalHit) {
@@ -126,21 +138,30 @@ BasicGame.Play.prototype={
 			child.x=this.Target.x+(this.Target.width*.5)*Math.cos(radians);
 			child.y=this.Target.y+(this.Target.width*.5)*Math.sin(radians);
 		}
+		this.Target.loadTexture(this.curChar+'Circle_3');
+		this.Target.face=3;
 		if (type=='clear') {
-			// TODO clear curLevel++
-		} else {
-			// TODO reduce life
+			if(this.curLevel==50)return this.genResult('allClear');
+			if(this.curLevel%5==0){
+				this.genResult('normal');
+			}else{
+				// TODO animation??
+				this.M.NextScene('Play');
+			}
+			this.curLevel++;
+			this.M.setGlobal('curLevel',this.curLevel);
+		}else{//gameover
+			// TODO animation??
+			this.M.NextScene('Play');
 		}
-		// TODO end face
-		// this.Target.loadTexture('NobuhimeCircle_3');
-		// this.Target.face=3;
 	},
 
 	test: function () {
 		if(__ENV!='prod'){
 			this.game.debug.font='40px Courier';this.game.debug.lineHeight=100;
 			this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end();},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.curLevel=5;this.end('clear');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.curLevel=50;this.end('clear');},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		}
 	},
