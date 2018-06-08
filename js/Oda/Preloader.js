@@ -40,6 +40,7 @@ BasicGame.Preloader.prototype={
 			'OdanobuLogo': 'images/Oda/OdanobuCircle_2.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
+		this.load.script('Fire','https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Fire.js');
 		this.loadAudio();
 	},
 

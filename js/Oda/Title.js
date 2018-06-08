@@ -12,10 +12,24 @@ BasicGame.Title.prototype = {
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
+
+		// TODO TEST
+		this.stage.backgroundColor='#000000';
+		var bgSprite=this.add.sprite(0,0);
+		bgSprite.width=this.world.width;
+		bgSprite.height=this.world.height;
+		this.Fire=this.add.filter('Fire',bgSprite.width,bgSprite.height);
+		bgSprite.filters=[this.Fire];
+		this.Fire=this.Fire;
+		
+
+
 		this.BtnContainer();
 		this.DialogContainer();
 		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
 	},
+
+	update:function(){this.Fire.update();},
 
 	BtnContainer: function () {
 		this.StartBtnSprite=this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.75,this.showCharSelecter,this.StartText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
