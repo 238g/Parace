@@ -26,10 +26,10 @@ BasicGame.Play.prototype.summonSimon=function(){
 
 BasicGame.Play.prototype.BtnContainer = function () {
 	var arrowCenterX=50;
-	var arrowCenterY=200;
+	var arrowCenterY=this.world.height*.65;
 	var margin=50;
-	this.genGamePadBtnSprite(530,200,0);
-	this.genGamePadBtnSprite(470,250,1);
+	this.genGamePadBtnSprite(530,arrowCenterY,0);
+	this.genGamePadBtnSprite(470,arrowCenterY+margin,1);
 	this.genGamePadBtnSprite(arrowCenterX-margin,arrowCenterY,2);
 	this.genGamePadBtnSprite(arrowCenterX,arrowCenterY+margin,3);
 	this.genGamePadBtnSprite(arrowCenterX,arrowCenterY-margin,4);
@@ -61,15 +61,17 @@ BasicGame.Play.prototype.onInputUpGamePad = function (b) {
 					this.curSimonNum=0;
 					this.endSummonSimonCount=0;
 					if (this.challengeCount>this.goalCount) {
-						this.end();
+						this.end('clear');
 					} else {
 						this.summonSimon();
 					}
 				}
 			} else {
 				// TODO incorrect
-				console.log('incorrect');
-				// this.playerInput=!1; // TODO OK
+				this.life-=this.damage;
+				if(this.life<0){
+					this.end('gameover');
+				}
 			}
 		}
 	}

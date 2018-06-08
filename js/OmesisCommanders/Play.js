@@ -1,6 +1,6 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
-	init:function () { 
+	init:function(){ 
 		this.isPlaying=!1;
 		this.correctCount=0;
 		this.curSimonNum=0;
@@ -12,6 +12,9 @@ BasicGame.Play.prototype={
 		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
 		this.btnCount=6; // TODO for info?
 		this.gamePadColor=0x0000f0;
+
+		this.life=100;
+		this.damage=35; // TODO for info
 	},
 
 	create:function () {
@@ -29,8 +32,13 @@ BasicGame.Play.prototype={
 		this.summonSimon();
 	},
 
-	end:function(){
-		console.log('end');
+	end:function(type){
+		this.isPlaying=!1;
+		this.playerInput=!1;
+		if(type=='clear'){
+		}else{//gameover
+		}
+		console.log(type);
 	},
 
 	test: function () {
