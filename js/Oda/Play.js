@@ -38,7 +38,7 @@ BasicGame.Play.prototype={
 		this.BgContainer();
 		this.BladeContainer();
 		this.TargetContainer();
-		this.HUDContainer();
+		this.M.S.genTextM(70,30,this.LevelText+this.curLevel);
 		this.tutorial();
 		this.test();
 	},
