@@ -41,6 +41,7 @@ BasicGame.Preloader.prototype={
 			'OdanobuLogo': 'images/Oda/OdanobuLogo.png',
 			'Temple': 'images/Oda/Temple.png',
 			'GiantNobuhime': 'images/Oda/GiantNobuhime.jpg',
+			'PlayBg': 'images/Oda/PlayBg.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.load.script('Fire','https://cdn.rawgit.com/photonstorm/phaser-ce/master/filters/Fire.js');
@@ -88,6 +89,10 @@ BasicGame.Preloader.prototype={
 			'NobuhimeVoice_3':[
 				'sounds/VOICE/Nobuhime/NobuhimeVoice_3.mp3',
 				'sounds/VOICE/Nobuhime/NobuhimeVoice_3.wav',
+			],
+			'NobuhimeVoice_4':[
+				'sounds/VOICE/Nobuhime/NobuhimeVoice_4.mp3',
+				'sounds/VOICE/Nobuhime/NobuhimeVoice_4.wav',
 			],
 			'NobuhimeLaugh':[
 				'sounds/VOICE/Nobuhime/NobuhimeLaugh.mp3',

@@ -118,7 +118,7 @@ BasicGame.Play.prototype={
 			if(this.curChar=='Odanobu'){
 				this.M.SE.play('OdanobuVoice_'+this.rnd.integerInRange(1,3),{volume:1});
 			}else{
-				this.M.SE.play('NobuhimeVoice_'+this.rnd.integerInRange(2,3),{volume:1.5});
+				this.M.SE.play('NobuhimeVoice_'+this.rnd.integerInRange(2,4),{volume:1.5});
 			}
 		}
 	},

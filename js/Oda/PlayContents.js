@@ -1,4 +1,5 @@
 BasicGame.Play.prototype.BgContainer=function(){
+	this.add.sprite(0,0,'PlayBg').alpha=.5;
 	this.GoalCountTextSprite=this.M.S.genTextM(this.world.centerX,this.world.centerY-30,this.leftCount,this.M.S.BaseTextStyle(80));
 };
 

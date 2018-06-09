@@ -58,7 +58,7 @@ BasicGame.Title.prototype = {
 	showCharSelecter:function(){
 		if (this.inputEnabled) {
 			this.M.SE.play('OnBtn',{volume:1});
-			// this.M.SE.playBGM('TitleBGM',{volume:1});
+			this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.StartBtnSprite.hide();
 			this.DialogTween.start();
 		}
