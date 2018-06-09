@@ -44,18 +44,24 @@ BasicGame.Play.prototype.genResult=function(type){
 			this.M.NextScene('Title');
 		},this.GoToTitleText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
 	}else{
-		dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,-200,function(){this.M.NextScene('Play');},this.NextLevelText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
-		dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,-40,function(){this.M.NextScene('Title');},this.GoToTitleText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
+		dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,-200,function(){
+			this.M.SE.play('OnBtn2',{volume:1});
+			this.M.NextScene('Play');
+		},this.NextLevelText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
+		dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,-40,function(){
+			this.M.SE.play('OnBtn2',{volume:1});
+			this.M.NextScene('Title');
+		},this.GoToTitleText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
 	}
 	dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,-120,this.tweet,this.TweetText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
 	dialogSprite.addChild(this.M.S.BasicGrayLabelM(0,40,this.otherGame,this.OtherGameText,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}));
 	var logoSprite=this.add.button(0,200,this.curChar+'Logo',this.channel,this);
 	logoSprite.anchor.setTo(.5);
 	dialogSprite.addChild(logoSprite);
+	logoSprite.addChild(this.M.S.genTextM(0,logoSprite.height*.5,'↑↑↑ Youtube ↑↑↑'));
 };
 
 BasicGame.Play.prototype.otherGame=function(){
-	// this.M.SE.play('MajiManjiVoice_1',{volume:1});
 	var url=(this.curLang=='en')?BasicGame.MY_GAMES_URL+'?lang=en':BasicGame.MY_GAMES_URL;
 	if(this.game.device.desktop){
 		window.open(url,'_blank');
@@ -65,7 +71,6 @@ BasicGame.Play.prototype.otherGame=function(){
 };
 
 BasicGame.Play.prototype.channel=function(){
-	// this.M.SE.play('MajiManjiVoice_1',{volume:1}); //TODO
 	var url=(this.curChar=='Odanobu')?BasicGame.YOUTUBE_URL_1:BasicGame.YOUTUBE_URL_2;
 	if (this.game.device.desktop) {
 		window.open(url,'_blank');
@@ -75,7 +80,6 @@ BasicGame.Play.prototype.channel=function(){
 };
 
 BasicGame.Play.prototype.tweet=function(){
-	// this.M.SE.play('MajiManjiVoice_1',{volume:1});
 	var emoji=(this.curChar=='Odanobu')?'🏯🔪🏯🔪🏯🔪🏯':'🏯🔥🏯🔥🏯🔥🏯';
 	if(this.curLang=='en'){
 		var text =  emoji+'\n'

@@ -708,6 +708,7 @@ Middleware.prototype.SoundManager.prototype = {
 		if (option.volume) sound.volume = option.volume;
 		if (option.isBGM) this.sounds.currentBGM = sound;
 		sound.play();
+		return sound;
 	},
 	playBGM:function(key,option){
 		if(this.isPlaying(key))return;
