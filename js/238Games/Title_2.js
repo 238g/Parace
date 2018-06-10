@@ -104,7 +104,7 @@ BasicGame.Title.prototype = {
 			fontSize: 25,
 			fill: gameInfo.textColor,
 			stroke: '#FFFFFF',
-			strokeThickness: 8,
+			strokeThickness: 5,
 			multipleStroke: gameInfo.textColor,
 			multipleStrokeThickness: 5,
 		};

@@ -83,16 +83,20 @@ BasicGame.Play.prototype.channel=function(){
 BasicGame.Play.prototype.tweet=function(){
 	var emoji=(this.curChar=='Odanobu')?'🏯🔪🏯🔪🏯🔪🏯':'🏯🔥🏯🔥🏯🔥🏯';
 	if(this.curLang=='en'){
-		var text =  emoji+'\n'
-					+'I PLAY "'+BasicGame.GAME_TITLE+'"!!!\n'
-					+('Your Level: '+this.curLevel)+'\n'
+		var char=(this.curChar=='Odanobu')?'ODANOBU':'NOBUHIME';
+		var text =  'I\'ve played the game "'+BasicGame.GAME_TITLE+'"!!!\n'
+					+emoji+'\n'
+					+'Selected Character: '+char+'\n'
+					+'Your Level: '+this.curChallengeLevel+'\n'
 					+emoji+'\n';
 		var hashtags = '織田ゲーム,OdaGame';
 		var url=location.href+'?lang=en';
 	}else{
-		var text =  emoji+'\n'
-					+'『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
-					+('達成レベル: '+this.curLevel)+'\n'
+		var char=(this.curChar=='Odanobu')?'おだのぶ':'織田信姫';
+		var text =  '『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
+					+emoji+'\n'
+					+'選択キャラ: '+char+'\n'
+					+'達成レベル: '+this.curChallengeLevel+'\n'
 					+emoji+'\n';
 		var hashtags = '織田ゲーム';
 		var url=location.href;

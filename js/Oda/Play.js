@@ -7,6 +7,7 @@ BasicGame.Play.prototype={
 		this.bladeGoToPosY=this.world.height*.8;
 		this.curChar=this.M.getGlobal('curChar');
 		this.curLevel=this.M.getGlobal('curLevel');
+		this.curChallengeLevel=this.curLevel;
 		this.LevelInfo=this.M.getConf('LevelInfo')[this.curLevel];
 		this.rotationSpeed=this.LevelInfo.RotSpeed;
 		this.rotationDir=this.LevelInfo.RotDir;

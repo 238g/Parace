@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 17;
+	var totalCount = 18;
 	return {
 		GamesInfo:{
 			1001: {
@@ -187,6 +187,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				order: totalCount-17,
 				textColor: '#106ab7',
 				bgColor: '#6aa3d9',
+				scale: 1,
+			},
+			1018: {
+				id: 1018,
+				title: '織田だだだだだだだだ',
+				url: 'https://238g.github.io/Parace/Odadadadadadadadadada.html',
+				slideImg: 'Oda',
+				slideImgUrl: 'images/Oda/favicons/apple-icon-180x180.png',
+				order: totalCount-18,
+				textColor: '#ff549c',
+				bgColor: '#cbdf9c',
 				scale: 1,
 			},
 		},
