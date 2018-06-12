@@ -144,7 +144,7 @@ BasicGame.Title.prototype = {
 		this.M.S.BasicGrayLabelS(100,40,function () {
 			window.open('https://twitter.com/'+__DEVELOPER_TWITTER_ID,'_blank');
 		},this.isEn?'Developer':'開発者',textStyle);
-		this.M.S.genText(this.world.width-80,20,'238Games',textStyle);
+		this.M.S.genText(this.world.width-80,50,this.isEn?'Vtuber\nGameList':'Vtuber\nゲーム一覧',textStyle);
 	},
 
 	genStartBtnSprite: function (bottomY,textStyle) {
