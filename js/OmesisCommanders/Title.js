@@ -27,8 +27,7 @@ BasicGame.Title.prototype = {
 		var sprite=this.M.S.BasicGrayLabelM(x,y,function () {
 			if (this.inputEnabled) {
 				// this.M.SE.play('OnBtn',{volume:1}); // TODO
-				this.M.NextScene('Play');
-				// this.M.NextScene('SelectChar');
+				this.M.NextScene('SelectChar');
 			} else {
 				// this.M.SE.playBGM('TitleBGM',{volume:1});
 				this.inputEnabled=!0;
