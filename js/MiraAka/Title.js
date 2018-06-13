@@ -178,16 +178,14 @@ BasicGame.Title.prototype = {
 	},
 
 	genLogoBtnSprite: function (x,y) {
-		var logoSprite = this.M.S.genSprite(x,y,'Logo');
-		logoSprite.anchor.setTo(.5);
-		logoSprite.UonInputDown(function () {
-			var url = BasicGame.YOUTUBE_URL;
+		var logoSprite = this.M.S.genButton(x,y,'Logo',function(){
 			if (this.game.device.desktop) {
-				window.open(url,'_blank');
+				window.open(BasicGame.YOUTUBE_URL,'_blank');
 			} else {
-				location.href = url;
+				location.href = BasicGame.YOUTUBE_URL;
 			}
 		});
+		logoSprite.anchor.setTo(.5);
 		this.M.T.beatA(logoSprite,{duration:this.beatDuration}).start();
 		var logoBgSprite = this.M.S.genBmpSprite(x,y,
 			logoSprite.width+30,logoSprite.height+20,BasicGame.MAIN_COLOR);

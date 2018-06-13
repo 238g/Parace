@@ -49,12 +49,15 @@ BasicGame.Title.prototype = {
 		charSpriteK.scale.setTo(1.8);
 		var logoBgSprite = this.M.S.genBmpSprite(this.world.width,this.world.height,450,190,'#fff');
 		logoBgSprite.anchor.setTo(1);
-		var logoSprite = this.M.S.genSprite(this.world.width,this.world.height,'Logo')
+		var logoSprite = this.M.S.genButton(this.world.width,this.world.height,'Logo',function(){
+			if (this.game.device.desktop) {
+				window.open('https://www.youtube.com/channel/UCfiK42sBHraMBK6eNWtsy7A','_blank');
+			} else {
+				location.href = 'https://www.youtube.com/channel/UCfiK42sBHraMBK6eNWtsy7A';
+			}
+		});
 		logoSprite.anchor.setTo(1);
 		logoSprite.scale.setTo(.4);
-		logoSprite.UonInputDown(function () {
-			window.open('https://www.youtube.com/channel/UCfiK42sBHraMBK6eNWtsy7A','_blank');	
-		});
 	},
 
 	genTitleTextSprite: function () {

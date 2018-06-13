@@ -5,15 +5,15 @@ BasicGame.Preloader.prototype={
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
 		if(this.M.getGlobal('curLang')=='en'){
-			// THIS IS TEST FOR TWITTER
+			// THIS IS TEST FOR TWITTER => OGP CAN'T
 			var title='Odadadadadadadadadada';
 			document.title=title;
 			BasicGame.GAME_TITLE=title;
 			document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',title);
-			document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html?lang=en');
-			document.getElementsByName('og:title')[0].setAttribute('content',title);
-			document.getElementsByName('og:description')[0].setAttribute('content',
-				'Oda\'s doujin game! Overcome the prepared 50 levels of trials! Well, just stick the Oda Army!');
+			// document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html?lang=en');
+			// document.getElementsByName('og:title')[0].setAttribute('content',title);
+			// document.getElementsByName('og:description')[0].setAttribute('content',
+				// 'Oda\'s doujin game! Overcome the prepared 50 levels of trials! Well, just stick the Oda Army!');
 		}else{//jp
 			this.M.S.genText(this.world.centerX,this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
 		}

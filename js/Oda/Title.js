@@ -74,25 +74,25 @@ BasicGame.Title.prototype = {
 		this.OdanobuTextSprite.changeText((this.curLang=='en')?'ODANOBU':'おだのぶ');
 		this.NobuhimeTextSprite.changeText((this.curLang=='en')?'NOBUHIME':'織田信姫');
 		this.TitleSprite.loadTexture('Title_'+this.curLang);
-		// THIS IS TEST FOR TWITTER
+		// THIS IS TEST FOR TWITTER => OGP CAN'T
 		if(this.M.getGlobal('curLang')=='en'){
 			var title='Odadadadadadadadadada';
 			document.title=title;
 			BasicGame.GAME_TITLE=title;
 			document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',title);
-			document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html?lang=en');
-			document.getElementsByName('og:title')[0].setAttribute('content',title);
-			document.getElementsByName('og:description')[0].setAttribute('content',
-				'Oda\'s doujin game! Overcome the prepared 50 levels of trials! Well, just stick the Oda Army!');
+			// document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html?lang=en');
+			// document.getElementsByName('og:title')[0].setAttribute('content',title);
+			// document.getElementsByName('og:description')[0].setAttribute('content',
+				// 'Oda\'s doujin game! Overcome the prepared 50 levels of trials! Well, just stick the Oda Army!');
 		}else{
 			var title='織田だだだだだだだだ';
 			document.title=title;
 			BasicGame.GAME_TITLE=title;
 			document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',title);
-			document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html');
-			document.getElementsByName('og:title')[0].setAttribute('content',title);
-			document.getElementsByName('og:description')[0].setAttribute('content',
-				'織田信姫とおだのぶの二次創作ゲームです！用意された50レベルもの試練を乗り越えろ！さぁ、ひたすら織田軍を刺すのです！');
+			// document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html');
+			// document.getElementsByName('og:title')[0].setAttribute('content',title);
+			// document.getElementsByName('og:description')[0].setAttribute('content',
+				// '織田信姫とおだのぶの二次創作ゲームです！用意された50レベルもの試練を乗り越えろ！さぁ、ひたすら織田軍を刺すのです！');
 		}
 	},
 
