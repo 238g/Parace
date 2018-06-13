@@ -6,11 +6,6 @@ BasicGame={
 	MAIN_STROKE_COLOR: '#8f8e8f', // TODO
 	WHITE_COLOR: '#ffffff', // TODO
 	YOUTUBE_URL: '', // TODO
-	VOLUME_MAX_IMG: 'VolumeMax',
-	VOLUME_HALF_IMG: 'VolumeHalf',
-	VOLUME_MUTE_IMG: 'VolumeMute',
-	FULL_SCREEN_OFF_IMG: 'smaller',
-	FULL_SCREEN_ON_IMG: 'larger',
 	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};

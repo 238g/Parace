@@ -496,6 +496,77 @@ Middleware.prototype.SpriteManager.prototype = {
 			multipleStrokeThickness: 3,
 		};
 	},
+	BasicVolSprite:function(x,y){
+		var Scene=this.M.getScene();
+		var s=this.genSprite(x,y,'VolumeIcon',Scene.sound.mute?'VolumeMute':(Scene.sound.volume==1)?'VolumeMax':'VolumeHalf');
+		s.anchor.setTo(.5);
+		s.scale.setTo(.5);
+		s.UonInputDown(this.onDownVolSprite);
+	},
+	onDownVolSprite:function(s){
+		var Scene=this.M.getScene();
+		if(Scene.sound.mute){
+			s.frameName='VolumeMax';
+			Scene.sound.mute=!1;
+			Scene.sound.volume=1;
+		}else{
+			if(Scene.sound.volume==1){
+				s.frameName='VolumeHalf';
+				Scene.sound.volume=.5;
+			}else{
+				s.frameName='VolumeMute';
+				Scene.sound.volume=0;
+				Scene.sound.mute=!0;
+			}
+		}
+	},
+	BasicVolBtn:function(x,y){
+		var Scene=this.M.getScene();
+		var s=this.genButton(x,y,'VolumeIcon',this.onDownVolBtn);
+		s.anchor.setTo(.5);
+		s.scale.setTo(.5);
+		var f=Scene.sound.mute?'VolumeMute':(Scene.sound.volume==1)?'VolumeMax':'VolumeHalf';
+		s.setFrames(f,f,f,f);
+	},
+	onDownVolBtn:function(s){
+		var Scene=this.M.getScene();
+		var f;
+		if(Scene.sound.mute){
+			f='VolumeMax';
+			Scene.sound.mute=!1;
+			Scene.sound.volume=1;
+		}else{
+			if(Scene.sound.volume==1){
+				f='VolumeHalf';
+				Scene.sound.volume=.5;
+			}else{
+				f='VolumeMute';
+				Scene.sound.volume=0;
+				Scene.sound.mute=!0;
+			}
+		}
+		s.setFrames(f,f,f,f);
+	},
+	BasicFullScreenBtn:function(x,y){
+		var Scene=this.M.getScene();
+		var i=Scene.scale.isFullScreen?'smaller':'larger';
+		var s=this.M.S.genButton(x,y,'GameIconsWhite',this.onDonwFullScreenBtn,Scene);
+		s.tint=0x000000;
+		s.setFrames(i,i,i,i);
+		s.anchor.setTo(.5);
+		s.scale.setTo(.5);
+	},
+	onDonwFullScreenBtn:function(s){
+		var Scene=this.M.getScene();
+		if (Scene.scale.isFullScreen) {
+			var i='larger';
+			Scene.scale.stopFullScreen(!1);
+		} else {
+			var i='smaller';
+			Scene.scale.startFullScreen(!1);
+		}
+		s.setFrames(i,i,i,i);
+	},
 };
 
 /////////////////////////////////////////////////////////////////////
