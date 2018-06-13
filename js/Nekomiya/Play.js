@@ -66,11 +66,9 @@ BasicGame.Play.prototype={
 		var launcherPoint=this.rnd.pick(this.launcherPoints);
 		this.Clay.reset(launcherPoint.x,launcherPoint.y);
 
-		// TODO launch clay
-		// TODO think,move,ease
-		// this.M.T.moveC(this.Clay,{xy:{x:160,y:this.world.centerY}}).start();
-		// OR moveA
-
+		// TODO x:rnd+-50 / x(160,320,480) / y:rnd+-yet / duration:rnd
+		this.M.T.moveA(this.Clay,{xy:{x:160,y:this.world.centerY},duration:5000}).start();
+		// TODO scale
 
 		//this.time.physicsElapsedMS
 	},
