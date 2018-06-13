@@ -1,4 +1,4 @@
-BasicGame = {
+BasicGame={
 	GAME_TITLE: document.title,
 	MAIN_COLOR: '#fef106', // TODO
 	MAIN_TINT:  0xfef106, // TODO
