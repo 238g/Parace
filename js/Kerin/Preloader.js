@@ -77,7 +77,8 @@ BasicGame.Preloader.prototype = {
 		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:30});
 		this.game.input.onDown.add(this.start,this);
 	},
 

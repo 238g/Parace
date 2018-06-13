@@ -13,14 +13,8 @@ BasicGame.Title.prototype = {
 		this.BgContainer();
 		this.BtnContainer();
 		this.soundController();
-		this.inputController();
+		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
 		this.EffectContainer();
-	},
-
-	inputController: function () {
-		this.time.events.add(800, function () {
-			this.inputEnabled = true; 
-		}, this);
 	},
 
 	soundController: function () {

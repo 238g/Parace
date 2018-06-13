@@ -41,6 +41,8 @@ BasicGame.Boot.prototype = {
 			EASY_MODE: 1,
 			NORMAL_MODE: 2,
 			HARD_MODE: 3,
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		};
 	},
 

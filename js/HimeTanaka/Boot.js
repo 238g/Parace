@@ -27,6 +27,8 @@ BasicGame.Boot.prototype = {
 			SUB_TINT: 0xffc9e5,
 			YOUTUBE_URL: 'https://www.youtube.com/channel/UCFv2z4iM5vHrS8bZPq4fHQQ',
 			ALBUM_COUNT: 12,
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		});
 	},
 

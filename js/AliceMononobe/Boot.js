@@ -25,6 +25,8 @@ BasicGame.Boot.prototype = {
 			MAIN_TEXT_COLOR: '#89beff',
 			WHITE_COLOR: '#ffffff',
 			YOUTUBE_URL: 'https://www.youtube.com/channel/UCt0clH12Xk1-Ej5PXKGfdPA',
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		});
 	},
 

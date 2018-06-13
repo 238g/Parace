@@ -11,5 +11,7 @@ BasicGame.Boot.prototype.defineConst = function () {
 		DAYTIME_COLOR: 0xffffff,
 		EVENING_COLOR: 0xff7f50,
 		NIGHT_COLOR: 0x483d8b,
+		TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+		EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 	};
 };

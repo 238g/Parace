@@ -38,6 +38,8 @@ BasicGame.Boot.prototype = {
 			GAME_MAIN_COLOR: '#a1a4ad',
 			GAME_MAIN_COLOR_B: 0xa1a4ad,
 			GAME_TEXT_COLOR: '#917492',
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		};
 	},
 

@@ -67,6 +67,10 @@ BasicGame.Preloader.prototype = {
 
 	loadComplete: function () {
 		this.loadOnlyFirst();
-		this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:80});
+		this.game.input.onDown.add(this.start,this);
 	},
+
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
 };

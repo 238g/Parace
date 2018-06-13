@@ -28,6 +28,8 @@ BasicGame.Boot.prototype = {
 			GOOD: 3,
 			BAD: 4,
 			FALSE: 5,
+			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		});
 	},
 

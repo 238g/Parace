@@ -7,7 +7,7 @@ BasicGame.Title.prototype = {
 		this.BgContainer();
 		this.BtnContainer();
 		this.DialogContainer();
-		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
+		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
 	},
 
 	playBGM: function () {

@@ -112,7 +112,8 @@ BasicGame.Preloader.prototype = {
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.add.sprite(0,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(0,1);
 		this.add.sprite(this.world.width,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(1,1);
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.M.getConst('TOUCH_OR_CLICK')+'してスタート',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:30});
 		this.game.input.onDown.add(this.start,this);
 	},
 

@@ -13,7 +13,7 @@ BasicGame.Title.prototype = {
 	},
 
 	inputController: function () {
-		this.time.events.add(800, function () {
+		this.time.events.add(500, function () {
 			this.inputEnabled = true; 
 		}, this);
 	},

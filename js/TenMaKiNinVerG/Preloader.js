@@ -138,6 +138,13 @@ BasicGame.Preloader.prototype = {
 
 	loadComplete: function () {
 		this.loadOnlyFirst();
-		this.state.start(this.game.global.nextSceen);
+		var textStyle = { font: '80px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
+		var textSprite = this.add.text(this.world.centerX, this.world.centerY*1.7,
+			this.game.const.TOUCH_OR_CLICK+'してスタート\n'+this.game.const.EN_TOUCH_OR_CLICK+' TO PLAY', textStyle);
+		textSprite.anchor.setTo(.5);
+		this.game.input.onDown.add(this.start,this);
 	},
+
+	start:function(){this.state.start(this.game.global.nextSceen);},
+	
 };

@@ -15,7 +15,7 @@ BasicGame.Title.prototype = {
 	},
 
 	inputController: function () {
-		this.time.events.add(800, function () {
+		this.time.events.add(500, function () {
 			this.inputEnabled = true; 
 		}, this);
 	},
@@ -23,11 +23,8 @@ BasicGame.Title.prototype = {
 	soundController: function () {
 		var s = this.M.SE;
 		s.stop('currentBGM');
+		s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
 		this.time.events.add(500, function () {
-			s.stop('currentBGM');
-			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
-		}, this);
-		this.time.events.add(1200, function () {
 			if (s.isPlaying('TitleBGM')) return;
 			s.stop('currentBGM');
 			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});

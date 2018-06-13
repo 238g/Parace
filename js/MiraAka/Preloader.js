@@ -3,7 +3,7 @@ BasicGame.Preloader.prototype = {
 	init: function () { 
 		this.sounds = null; 
 		// this.isChecking = false;
-		this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
+		// this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
 	},
 	create: function () {
 		this.M.S.BasicLoadingAnim();
@@ -66,7 +66,9 @@ BasicGame.Preloader.prototype = {
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		// this.isChecking = true;
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.touchOrClick+'してスタート',{fontSize:30});
+		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:30});
+		// this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.touchOrClick+'してスタート',{fontSize:30});
 		this.game.input.onDown.add(this.start,this);
 		// this.M.S.genText(this.world.centerX, this.world.centerY*1.5,'アセット読み込み完了！\nBGM読み込み中…',{fontSize:30});
 	},
