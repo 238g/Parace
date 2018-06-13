@@ -12,10 +12,12 @@ Middleware.prototype = {
 		this.global = {};
 		this.const = {};
 		this.conf = {};
+		this.GameObj=null;
 	},
 	initialize: function (game,GameObj,BootClass) {
 		this.initVar();
 		game.M = this;
+		this.GameObj=GameObj;
 		for (var className in GameObj) game.state.add(className, GameObj[className]);
 		this.S = new this.SpriteManager(game, this);
 		this.T = new this.TweenManager(game, this);
@@ -473,24 +475,26 @@ Middleware.prototype.SpriteManager.prototype = {
 		};
 	},
 	BaseTextStyleS: function (fontSize) {
-		var mainTextColor = this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
-		var mainStrokeColor = this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
+		var g=this.M.GameObj;
+		var mainTextColor = g.MAIN_TEXT_COLOR||this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
+		var mainStrokeColor = g.MAIN_STROKE_COLOR||this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
 		return {
 			fontSize: fontSize || 25,
 			fill: mainTextColor,
-			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
+			stroke: g.WHITE_COLOR||this.M.getConst('WHITE_COLOR') || '#000000',
 			strokeThickness: 8,
 			multipleStroke: mainStrokeColor,
 			multipleStrokeThickness: 5,
 		};
 	},
 	BaseTextStyleSS: function (fontSize) {
-		var mainTextColor = this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
-		var mainStrokeColor = this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
+		var g=this.M.GameObj;
+		var mainTextColor = g.MAIN_TEXT_COLOR||this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
+		var mainStrokeColor = g.MAIN_STROKE_COLORthis.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
 		return {
 			fontSize: fontSize || 18,
 			fill: mainTextColor,
-			stroke: this.M.getConst('WHITE_COLOR') || '#000000',
+			stroke: g.WHITE_COLOR||this.M.getConst('WHITE_COLOR') || '#000000',
 			strokeThickness: 5,
 			multipleStroke: mainStrokeColor,
 			multipleStrokeThickness: 3,
