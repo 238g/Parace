@@ -24,6 +24,7 @@ BasicGame.Boot.prototype={
 			MAIN_STROKE_COLOR: BasicGame.MAIN_STROKE_COLOR,
 			WHITE_COLOR: BasicGame.WHITE_COLOR,
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
+			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 			BG_COUNT:12,
 		});
 		this.M.defineGlobal({
