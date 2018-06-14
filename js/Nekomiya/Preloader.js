@@ -38,7 +38,7 @@ BasicGame.Preloader.prototype={
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
-			BasicGame.TOUCH_OR_CLICK+'してスタート\n'+BasicGame.EN_TOUCH_OR_CLICK+' TO PLAY',{fontSize:25});
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		// this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
 	},
