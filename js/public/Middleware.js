@@ -56,6 +56,8 @@ Middleware.prototype = {
 		}
 		Scene.scale.parentIsWindow = true;
 		Scene.scale.refresh();
+		this.GameObj.TOUCH_OR_CLICK=(Scene.game.device.touch)?'タッチ':'クリック';
+		this.GameObj.EN_TOUCH_OR_CLICK=(Scene.game.device.touch)?'TOUCH':'CLICK';
 	},
 	NextScene: function (nextScene) {
 		var Scene = this.getScene();
