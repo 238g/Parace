@@ -493,7 +493,7 @@ Middleware.prototype.SpriteManager.prototype = {
 	BaseTextStyleSS: function (fontSize) {
 		var g=this.M.GameObj;
 		var mainTextColor = g.MAIN_TEXT_COLOR||this.M.getConst('MAIN_TEXT_COLOR') || '#FFFFFF';
-		var mainStrokeColor = g.MAIN_STROKE_COLORthis.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
+		var mainStrokeColor = g.MAIN_STROKE_COLOR||this.M.getConst('MAIN_STROKE_COLOR') || mainTextColor;
 		return {
 			fontSize: fontSize || 18,
 			fill: mainTextColor,
