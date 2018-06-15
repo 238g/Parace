@@ -12,18 +12,18 @@ BasicGame.Title.prototype={
 	},
 
 	genContents: function () {
-		this.genTitle();
-		this.genStartBtnSprite(this.world.centerX,this.world.height*.7,this.M.S.BaseTextStyleS(25));
+		this.genTitle(this.world.width*.7,this.world.height*.3);
+		this.genStartBtnSprite(this.world.width*.8,this.world.centerY);
 		var bottomY=this.world.height*.9;
 		this.M.S.BasicVolSprite(this.world.width*.1,bottomY);
 		this.M.S.BasicFullScreenBtn(this.world.width*.9,bottomY);
 	},
 
-	genTitle:function(){
+	genTitle:function(x,y){
 		this.stage.backgroundColor='#555555'; // TODO del
-		var title = this.add.sprite(this.world.centerX,this.world.centerY,'Title');
+		var title = this.add.sprite(x,y,'Title');
 		title.anchor.setTo(.5);
-		var blink=this.add.sprite(this.world.centerX,this.world.centerY,'Blink');
+		var blink=this.add.sprite(x,y,'Blink');
 		blink.anchor.setTo(.5);
 		var mask=this.add.graphics(blink.left-20,0);
 		mask.beginFill(0xffffff);
@@ -36,17 +36,14 @@ BasicGame.Title.prototype={
 	},
 
 	genStartBtnSprite: function (x,y,textStyle) {
-		// TODO sprite
-		var sprite=this.M.S.BasicGrayLabelM(x,y,function () {
+		this.M.S.BasicGrayLabelM(x,y,function () {
 			if (this.inputEnabled) {
 				// this.M.SE.play('OnBtn',{volume:1}); // TODO
 				this.M.NextScene('SelectLevel');
 			} else {
-				// this.M.SE.playBGM('TitleBGM',{volume:1});
+				this.M.SE.playBGM('TitleBGM',{volume:1});
 				this.inputEnabled=!0;
 			}
-		},'スタート',textStyle,{tint:BasicGame.MAIN_TIN});
-		sprite.scale.setTo(0);
-		this.M.T.popUpB(sprite,{delay:800}).start();
+		},'スタート',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 	},
 };

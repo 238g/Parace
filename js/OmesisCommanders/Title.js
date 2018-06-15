@@ -32,7 +32,7 @@ BasicGame.Title.prototype = {
 				// this.M.SE.playBGM('TitleBGM',{volume:1});
 				this.inputEnabled=!0;
 			}
-		},'スタート',textStyle,{tint:BasicGame.MAIN_TIN});
+		},'スタート',textStyle,{tint:BasicGame.MAIN_TINT});
 		sprite.scale.setTo(0);
 		this.M.T.popUpB(sprite,{delay:800}).start();
 	},

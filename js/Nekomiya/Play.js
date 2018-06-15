@@ -6,12 +6,40 @@ BasicGame.Play.prototype={
 		this.launcherTurn=!1;
 		this.launcherTimer=0;
 
-		this.launcherPoints=[];
-		this.launcherOrderOfTrap=[0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2];
-		this.leftClayCount=this.launcherOrderOfTrap.length;
+		this.score=0;
+
+
+		this.curLevel=this.M.getGlobal('curLevel');
+		this.LevelInfo=this.M.getConf('LevelInfo')[this.curLevel];
+
+		this.launcherPointWidth=this.LevelInfo.respawnWitdh;
+
+
+		if(this.LevelInfo.isTrap){
+			this.initTrap();
+		}else if(this.LevelInfo.isSD){
+			this.initSD();
+		}else{
+			this.initScore();
+		}
+
+		this.ScoreTextSprite=null;
+		this.Clays=null;
+	},
+	initTrap:function(){
+		this.curLaunchCountTrap=0;
+		this.launcherOrderTrap=[0,0,0,0,0,0,0,0,0,0,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2];
+		this.moveToXTrap=[160,320,480];
+		Phaser.ArrayUtils.shuffle(this.launcherOrderTrap);
+		this.launchClay=this.launchClayTrap;
 
 		this.TargetTextSprite=null;
-		this.ScoreTextSprite=null;
+	},
+	initSD:function(){
+		// TODO
+	},
+	initScore:function(){
+		this.launchClay=this.launchClayScore;
 	},
 
 	create:function(){
@@ -20,29 +48,17 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor='#555555';//TODO del
 		// this.M.SE.playBGM('PlayBGM',{volume:1});
 
-
-		var LauncherInfo={
-			center:{x:this.world.centerX,y:this.world.height},
-		};
-		var LI=LauncherInfo;
-		this.launcherPoints=[LI.center];
-
-		Phaser.ArrayUtils.shuffle(this.launcherOrderOfTrap);
+		this.Clays=this.add.group();
+		this.Clays.inputEnableChildren=!0;
+		this.Clays.createMultiple(30,'Clay');
+		this.Clays.children.forEach(function(t){t.anchor.setTo(.5);});
+		this.Clays.onChildInputDown.add(this.breakClay,this);
 
 
+		if(this.LevelInfo.isTrap){
+			this.TargetTextSprite=this.M.S.genTextM(this.world.width*.7,this.world.height*.9,'目標: '+this.launcherOrderTrap.length);
+		}
 
-		this.launcherTimer=1000;//TODO del
-		// this.launcherTimer=this.rnd.between(3000,5000);
-
-		// this.Clay=this.add.sprite(0,0,'Clay');
-		// this.physics.arcade.enable(this.Clay);
-		this.Clay=this.add.button(0,0,'Clay',this.breakClay,this);
-		this.Clay.anchor.setTo(.5);
-		// this.Clay.body.gravity.y=500;
-		// this.Clay.kill();
-
-
-		this.TargetTextSprite=this.M.S.genTextM(this.world.width*.7,this.world.height*.9,'目標: '+this.leftClayCount);
 		this.ScoreTextSprite=this.M.S.genTextM(this.world.width*.85,this.world.height*.9,'現在: 0');
 
 		this.start();
@@ -61,32 +77,82 @@ BasicGame.Play.prototype={
 			}
 		}
 	},
+	launchClay:function(){},
+	launchClayBase:function(moveToX){
+		var clay=this.Clays.getFirstDead();
+		if(clay){
+			var w=this.LevelInfo.respawnWidth;
+			var launcherX=this.world.centerX+this.rnd.between(-w,w);
 
-	launchClay:function(){
-		var launcherPoint=this.rnd.pick(this.launcherPoints);
-		this.Clay.reset(launcherPoint.x,launcherPoint.y);
+			clay.scale.setTo(1);
+			clay.reset(launcherX,this.world.height+clay.height);
+	
+			var delay=this.rnd.between(0,1000);
+			var duration=4000-this.rnd.between(0,this.LevelInfo.durationMinusRange);
+	
+			var h=this.LevelInfo.moveRangeY;
+			var moveToY=180+this.rnd.between(-h,h);
+			var tween=this.M.T.moveA(clay,{xy:{x:moveToX,y:moveToY},duration:duration,delay:delay}).start();
+			tween.onComplete.add(this.missClay,this);
+			this.add.tween(clay.scale).to({x:0,y:0},duration,Phaser.Easing.Cubic.Out,!0,delay);
+		}
+	},
 
-		// TODO x:rnd+-50 / x(160,320,480) / y:rnd+-yet / duration:rnd
-		this.M.T.moveA(this.Clay,{xy:{x:160,y:this.world.centerY},duration:5000}).start();
-		// TODO scale
+	launchClayTrap:function(){
+		var to=this.launcherOrderTrap[this.curLaunchCountTrap];
+		var moveToX=this.moveToXTrap[to]+this.rnd.between(-50,50);
 
-		//this.time.physicsElapsedMS
+		this.launchClayBase(moveToX);
+
+		this.curLaunchCountTrap++;
+	},
+
+	launchClayScore:function(){
+		// TODO launch cycle...
+		var r=this.rnd.integerInRange(1,3);
+		for(var i=0;i<r;i++){
+			var moveToX=this.world.centerX+this.rnd.between(-280,280);
+			this.launchClayBase(moveToX);
+		}
+
 	},
 
 	breakClay:function(btn){
 		btn.kill();
+		console.log('break');
 
+		this.score++;
+		this.ScoreTextSprite.changeText('現在: '+this.score);
+
+		this.nextClay();
+	},
+
+	missClay:function(s){
+		s.kill();
+		this.nextClay();
+	},
+
+	nextClay:function(){
+		if(this.LevelInfo.isTrap&&(this.curLaunchCountTrap==this.launcherOrderTrap.length)){
+			this.end();
+		}
+		this.launcherTimer=this.rnd.between(this.LevelInfo.launcherMinTimer,this.LevelInfo.launcherMaxTimer);
+		this.time.events.add(500,function(){this.launcherTurn=!0;},this);
 	},
 
 	start:function(){
 		this.isPlaying=!0;
 
 
-		this.launcherTurn=!0;
+		this.nextClay();
 	},
 
 	end:function(type){
 		this.isPlaying=!1;
+
+
+
+		console.log('end');
 	},
 
 	test:function(){

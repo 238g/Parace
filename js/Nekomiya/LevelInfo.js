@@ -1,0 +1,49 @@
+BasicGame.Boot.prototype.genLevelInfo=function(){
+	return {
+		1:{
+			btnName:'LEVEL 1',btnPosX:this.world.width*.18,btnPosY:this.world.height*.7,btnDelay:0,
+			respawnWidth:100,
+			isTrap:!0,isSD:!1,
+			durationMinusRange:500,
+			launcherMinTimer:1000,
+			launcherMaxTimer:4500,
+			moveRangeY:100,
+		},
+		2:{
+			btnName:'LEVEL 2',btnPosX:this.world.centerX,btnPosY:this.world.height*.7,btnDelay:200,
+			respawnWidth:150,
+			isTrap:!0,isSD:!1,
+			durationMinusRange:1000,
+			launcherMinTimer:1000,
+			launcherMaxTimer:4500,
+			moveRangeY:120,
+		},
+		3:{
+			btnName:'LEVEL 3',btnPosX:this.world.width*.82,btnPosY:this.world.height*.7,btnDelay:400,
+			respawnWidth:280,
+			isTrap:!0,isSD:!1,
+			durationMinusRange:2000,
+			launcherMinTimer:1000,
+			launcherMaxTimer:4500,
+			moveRangeY:150,
+		},
+		4:{
+			btnName:'スコア',btnPosX:this.world.width*.3,btnPosY:this.world.height*.87,btnDelay:600,
+			respawnWidth:150,
+			isTrap:!1,isSD:!1,
+			durationMinusRange:2000,
+			launcherMinTimer:300,
+			launcherMaxTimer:500,
+			moveRangeY:120,
+		},
+		5:{
+			btnName:'サドンデス',btnPosX:this.world.width*.7,btnPosY:this.world.height*.87,btnDelay:800,
+			respawnWidth:280,
+			isTrap:!1,isSD:!0,
+			durationMinusRange:2000,
+			launcherMinTimer:500,
+			launcherMaxTimer:4500,
+			moveRangeY:150,
+		},
+	};
+};

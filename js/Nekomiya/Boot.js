@@ -18,8 +18,10 @@ create: function () {
 		EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 	});
 	this.M.defineGlobal({
+		curLevel:1,
 	});
 	this.M.defineConf({
+		LevelInfo:this.genLevelInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};
