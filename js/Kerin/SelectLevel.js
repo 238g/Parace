@@ -66,7 +66,7 @@ BasicGame.SelectLevel.prototype = {
 			levelsGroup.add(levelBtnSprite);
 			margin+=levelBtnSprite.height+50;
 		}
-		levelsGroup.alignIn(this.world.bounds,Phaser.RIGHT_CENTER,0,0);
+		levelsGroup.alignIn(this.world.bounds,Phaser.RIGHT_CENTER,0,-50);
 	},
 
 	genLevelBtnSprite: function (key,text,textStyle,tint,margin) {

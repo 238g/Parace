@@ -106,12 +106,18 @@ BasicGame.Play.prototype = {
 	},
 
 	playBGM: function () {
-		if (this.M.SE.isPlaying('PlayBGM')) return;
-		this.M.SE.play('PlayBGM',{isBGM:true,loop:true,volume:.8});
+		if(this.LevelInfo.isHinako){
+			if (this.M.SE.isPlaying('PlayBGM2')) return;
+			this.M.SE.play('PlayBGM2',{isBGM:!0,loop:!0,volume:1.2});
+		}else{
+			if (this.M.SE.isPlaying('PlayBGM')) return;
+			this.M.SE.play('PlayBGM',{isBGM:true,loop:true,volume:.8});
+		}
 	},
 
 	stopBGM: function () {
 		if (this.M.SE.isPlaying('PlayBGM')) return;
+		if (this.M.SE.isPlaying('PlayBGM2')) return;
 		this.M.SE.stop('currentBGM');
 		this.M.SE.stop('TitleBGM');
 	},

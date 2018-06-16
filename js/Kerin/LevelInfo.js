@@ -11,6 +11,7 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			infinite: false,
 			goalImg: 'Level_1',
 			goalImgPath: 'images/Kerin/Level_1.jpg',
+			isHinako:!1,
 		},
 		2: {
 			name: 'ニコ◯コ本社',
@@ -23,6 +24,7 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			infinite: false,
 			goalImg: 'Level_2',
 			goalImgPath: 'images/Kerin/Level_2.jpg',
+			isHinako:!1,
 		},
 		3: {
 			name: 'エルフの森',
@@ -35,6 +37,7 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			infinite: false,
 			goalImg: 'Level_3',
 			goalImgPath: 'images/Kerin/Level_3.jpg',
+			isHinako:!1,
 		},
 		4: {
 			name: '無限コンギョ',
@@ -47,6 +50,20 @@ BasicGame.Boot.prototype.genLevelInfo = function () {
 			infinite: true,
 			goalImg: null,
 			goalImgPath: null,
+			isHinako:!1,
+		},
+		5: {
+			name: '宇森ひなコンギョ',
+			clearCount: 610,
+			holeCount: 3,
+			guardImgName: 'GuardHinako',
+			guardImgPath: 'images/Kerin/GuardHinako.png',
+			multipleImg: false,
+			happyEnd: false,
+			infinite: false,
+			goalImg: 'Hinako',
+			goalImgPath: 'images/Kerin/Hinako.jpg',
+			isHinako:!0,
 		},
 	};
 };

@@ -53,6 +53,10 @@ BasicGame.Preloader.prototype = {
 				'sounds/BGM/K/Konggyo.mp3',
 				'sounds/BGM/K/Konggyo.wav',
 			],
+			'PlayBGM2': [
+				'sounds/BGM/K/KonggyoHinako.mp3',
+				'sounds/BGM/K/KonggyoHinako.wav',
+			],
 			'BombKerin': [
 				'sounds/VOICE/Kerin/BombKerinVoice.mp3',
 				'sounds/VOICE/Kerin/BombKerinVoice.wav',
