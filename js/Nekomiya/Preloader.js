@@ -11,13 +11,20 @@ BasicGame.Preloader.prototype={
 	},
 
 	loadAssets:function(){
-		this.load.atlasXML('greySheet','./images/public/sheets/greySheet.png','./images/public/sheets/greySheet.xml');
+		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
+		this.load.spritesheet('BrokenClay','images/Nekomiya/BrokenClay.png',50,50);
 		var imageAssets={
-			'Title':'images/PeanutNinja/Title.png',
-			'Blink':'images/Nekomiya/TitleTEST.png',
-			'Clay':'images/cafenozombiko/Shine.png',
+			'Title':'images/Nekomiya/Title.png',
+			'Blink':'images/Nekomiya/Blink.png',
+			'Clay':'images/Nekomiya/Clay.png',
+			'Bg_1':'images/Nekomiya/Bg_1.jpg',
+			'Bg_2':'images/Nekomiya/Bg_2.jpg',
+			'Bg_3':'images/Nekomiya/Bg_3.jpg',
+			'PlayBg':'images/Nekomiya/PlayBg.jpg',
+			'PlayHinata':'images/Nekomiya/PlayHinata.png',
+			'WP':'images/Nekomiya/TranslucentWhitePaper.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -25,10 +32,43 @@ BasicGame.Preloader.prototype={
 
 	loadAudio:function(){
 		this.sounds={
-			'TitleBGM': [
+			'TitleBGM':[
 				'sounds/BGM/O/OnPatrol.mp3',
 				'sounds/BGM/O/OnPatrol.wav',
 			],
+			'PlayBGM':[
+				'sounds/BGM/P/PerpetualTension.mp3',
+				'sounds/BGM/P/PerpetualTension.wav',
+			],
+			'OnBtn':[
+				'sounds/SE/GUI_Sound_Effects/misc_menu_4.mp3',
+				'sounds/SE/GUI_Sound_Effects/misc_menu_4.wav',
+			],
+			'Slide':[
+				'sounds/SE/JRPG_UI/Close.mp3',
+				'sounds/SE/JRPG_UI/Close.wav',
+			],
+			'Play':[
+				'sounds/SE/JRPG_UI/Close.mp3',
+				'sounds/SE/JRPG_UI/Close.wav',
+			],
+			'Shot1':[
+				'sounds/SE/Gun/mono_shot_strong_1.mp3',
+				'sounds/SE/Gun/mono_shot_strong_1.wav',
+			],
+			'Shot2':[
+				'sounds/SE/Gun/mono_shot_strong_2.mp3',
+				'sounds/SE/Gun/mono_shot_strong_2.wav',
+			],
+			'Shot3':[
+				'sounds/SE/Gun/mono_shot_strong_3.mp3',
+				'sounds/SE/Gun/mono_shot_strong_3.wav',
+			],
+			'Break':[
+				'sounds/SE/LabJP/Life/Collision/stone-break1.mp3',
+				'sounds/SE/LabJP/Life/Collision/stone-break1.wav',
+			],
+			
 		};
 		for(var k in this.sounds)this.load.audio(k,this.sounds[k]);
 	},
