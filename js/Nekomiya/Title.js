@@ -11,7 +11,7 @@ BasicGame.Title.prototype={
 		this.Bg=this.add.sprite(0,0,'Bg_1');
 		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
-		this.time.events.add(500,function(){this.inputEnabled=!0;},this);
+		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 		this.input.onDown.add(this.cheat,this);
 	},
 

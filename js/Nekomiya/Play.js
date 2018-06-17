@@ -36,6 +36,7 @@ BasicGame.Play.prototype={
 		this.moveToXTrap=[160,320,480];
 		this.launchClay=this.launchClayTrap;
 		this.addScore=this.addScoreTrap;
+		this.missClay=this.none;
 		this.TargetTextSprite=null;
 	},
 	initSD:function(){
@@ -56,10 +57,12 @@ BasicGame.Play.prototype={
 		this.timer=0;
 		this.addScore=this.addScoreScore;
 		this.launchClay=this.launchClayScore;
+		this.missClay=this.none;
 		this.onInput=this.onInputScore;
 		this.TimeTextSprite=null;
 	},
-
+	none:function(){},
+	
 	create:function(){
 		this.time.events.removeAll();
 		this.M.SE.playBGM('PlayBGM',{volume:1});
