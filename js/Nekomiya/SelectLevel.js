@@ -21,7 +21,7 @@ BasicGame.SelectLevel.prototype={
 		sprite.level=level;
 	},
 	play:function(b){
-		this.M.SE.play('Play',{volume:1});
+		this.M.SE.play('OnBtn',{volume:1});
 		this.M.setGlobal('curLevel',b.level);
 		this.M.NextScene('Play');
 	},

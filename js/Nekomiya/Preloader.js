@@ -52,10 +52,6 @@ BasicGame.Preloader.prototype={
 				'sounds/SE/JRPG_UI/Close.mp3',
 				'sounds/SE/JRPG_UI/Close.wav',
 			],
-			'Play':[
-				'sounds/SE/JRPG_UI/Close.mp3',
-				'sounds/SE/JRPG_UI/Close.wav',
-			],
 			'Shot1':[
 				'sounds/SE/Gun/mono_shot_strong_1.mp3',
 				'sounds/SE/Gun/mono_shot_strong_1.wav',
