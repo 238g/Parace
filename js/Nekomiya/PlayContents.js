@@ -149,11 +149,12 @@ BasicGame.Play.prototype.genResult=function(){
 };
 BasicGame.Play.prototype.genResultContents = function () {
 	var textStyle=this.M.S.BaseTextStyleSS(30);
-	var upperY=this.world.height*.45;
-	var middleY=this.world.height*.65;
-	var bottomY=this.world.height*.85;
+	var upperY=this.world.height*.35;
+	var middleY=this.world.height*.52;
+	var bottomY=this.world.height*.69;
+	var bottomY2=this.world.height*.86;
 	var leftX=this.world.width*.3;
-	this.genResultTextSprite(this.world.centerX,this.world.height*.25,'結果',this.M.S.BaseTextStyleS(40),0);
+	this.genResultTextSprite(this.world.centerX,this.world.height*.15,'結果',this.M.S.BaseTextStyleS(50),0);
 	this.genResultTextSprite(leftX,upperY,'挑戦: '+this.LevelInfo.btnName,textStyle,200);
 	this.genResultTextSprite(leftX,middleY,this.resultBaseText+this.M.H.formatComma(this.score),textStyle,400);
 	if(this.LevelInfo.isTrap&&this.score==this.launcherOrderTrap.length){
@@ -170,6 +171,13 @@ BasicGame.Play.prototype.genResultContents = function () {
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Title');
 	},'タイトルに戻る',textStyle,600);
+	this.genResultBtnSprite(rightX,bottomY2,function(){
+		if (this.game.device.desktop) {
+			window.open(BasicGame.MY_GAMES_URL,'_blank');
+		} else {
+			location.href = BasicGame.MY_GAMES_URL;
+		}
+	},'他のゲーム',textStyle,800);
 };
 BasicGame.Play.prototype.genResultTextSprite=function(x,y,text,textStyle,delay){
 	var textSprite=this.M.S.genTextM(x,y,text,textStyle);
