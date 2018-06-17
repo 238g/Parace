@@ -26,7 +26,7 @@ BasicGame.Title.prototype={
 	genTitle:function(x,y){
 		var title = this.add.sprite(x,y,'Title');
 		title.anchor.setTo(.5);
-		var blink=this.add.sprite(x,y,'Blink');
+		var blink=this.add.sprite(x,y,'TitleBlink');
 		blink.anchor.setTo(.5);
 		var mask=this.add.graphics(blink.left-20,0);
 		mask.beginFill(0xffffff);

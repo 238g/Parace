@@ -17,14 +17,18 @@ BasicGame.Preloader.prototype={
 		this.load.spritesheet('BrokenClay','images/Nekomiya/BrokenClay.png',50,50);
 		var imageAssets={
 			'Title':'images/Nekomiya/Title.png',
-			'Blink':'images/Nekomiya/Blink.png',
+			'TitleBlink':'images/Nekomiya/TitleBlink.png',
 			'Clay':'images/Nekomiya/Clay.png',
 			'Bg_1':'images/Nekomiya/Bg_1.jpg',
 			'Bg_2':'images/Nekomiya/Bg_2.jpg',
 			'Bg_3':'images/Nekomiya/Bg_3.jpg',
+			'Bg_4':'images/Nekomiya/Bg_4.jpg',
+			'Bg_5':'images/Nekomiya/Bg_5.jpg',
 			'PlayBg':'images/Nekomiya/PlayBg.jpg',
 			'PlayHinata':'images/Nekomiya/PlayHinata.png',
 			'WP':'images/Nekomiya/TranslucentWhitePaper.png',
+			'Channel':'images/Nekomiya/Channel.png',
+			'ChannelBlink':'images/Nekomiya/ChannelBlink.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -68,7 +72,6 @@ BasicGame.Preloader.prototype={
 				'sounds/SE/LabJP/Life/Collision/stone-break1.mp3',
 				'sounds/SE/LabJP/Life/Collision/stone-break1.wav',
 			],
-			
 		};
 		for(var k in this.sounds)this.load.audio(k,this.sounds[k]);
 	},
