@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 18;
+	var totalCount = 19;
 	return {
 		GamesInfo:{
 			1001: {
@@ -198,6 +198,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				order: totalCount-18,
 				textColor: '#ff549c',
 				bgColor: '#cbdf9c',
+				scale: 1,
+			},
+			1019: {
+				id: 1019,
+				title: 'スナイパーひなた',
+				url: 'https://238g.github.io/Parace/Nekomiya.html',
+				slideImg: 'PlayHinata',
+				slideImgUrl: 'images/Nekomiya/PlayHinata.png',
+				order: totalCount-19,
+				textColor: '#f8978f',
+				bgColor: '#ff7f26',
 				scale: 1,
 			},
 		},
