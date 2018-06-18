@@ -84,11 +84,6 @@ BasicGame.Play.prototype={
 					this.launchClay();
 				}
 			}
-			if(this.physics.arcade.angleToPointer(this.Hinata)<-.51){
-				this.Hinata.rotation=-.51;
-			}else{
-				this.Hinata.rotation = this.physics.arcade.angleToPointer(this.Hinata);
-			}
 			if(this.LevelInfo.isScore){
 				this.timer-=this.time.elapsed;
 				if(this.timer<0){
@@ -97,6 +92,12 @@ BasicGame.Play.prototype={
 					this.TimeTextSprite.changeText('制限時間: '+this.leftTime);
 					if(this.leftTime==0)this.end();
 				}
+			}
+			var r=this.physics.arcade.angleToPointer(this.Hinata);
+			if(r<-.51){
+				this.Hinata.rotation=-.51;
+			}else{
+				this.Hinata.rotation=r;
 			}
 		}
 	},
