@@ -5,9 +5,9 @@ BasicGame.SelectChar.prototype={
 		this.curChar=this.M.getGlobal('curChar');
 		this.curCharInfo=this.CharInfo[this.curChar];
 
-		this.CharIntroGroup=null;
+		this.CharIntroGrp=null;
 		this.CharIntroSprite=null;
-		this.CharNameTextSprite=null;
+		this.CharNameTxtSprite=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
@@ -17,11 +17,11 @@ BasicGame.SelectChar.prototype={
 	},
 
 	genContents:function(){
-		this.CharIntroGroup=this.add.group();
+		this.CharIntroGrp=this.add.group();
 		this.CharIntroSprite=this.add.sprite(0,0,this.curCharInfo.charIntro);
-		this.CharIntroGroup.add(this.CharIntroSprite);
-		this.CharNameTextSprite=this.M.S.genTextM(100,100,this.curCharInfo.charName,this.M.S.BaseTextStyleSS(25));
-		this.CharIntroGroup.add(this.CharNameTextSprite);
+		this.CharIntroGrp.add(this.CharIntroSprite);
+		this.CharNameTxtSprite=this.M.S.genTextM(100,100,this.curCharInfo.charName,this.M.S.BaseTextStyleSS(25));
+		this.CharIntroGrp.add(this.CharNameTxtSprite);
 
 		this.genSquares();
 
@@ -65,12 +65,12 @@ BasicGame.SelectChar.prototype={
 		this.M.setGlobal('curChar',curChar);
 		this.curCharInfo=this.CharInfo[curChar];
 
-		this.CharIntroGroup.x=-300;
+		this.CharIntroGrp.x=-300;
 
-		var tween=this.M.T.moveA(this.CharIntroGroup,{xy:{x:0}});
+		var tween=this.M.T.moveA(this.CharIntroGrp,{xy:{x:0}});
 		tween.onStart.add(function(){
 			this.CharIntroSprite.loadTexture(this.curCharInfo.charIntro);
-			this.CharNameTextSprite.changeText(this.curCharInfo.charName);
+			this.CharNameTxtSprite.changeText(this.curCharInfo.charName);
 		},this);
 		tween.start();
 	},

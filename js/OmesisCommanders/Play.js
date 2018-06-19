@@ -28,9 +28,9 @@ BasicGame.Play.prototype={
 
 		this.maxLife=
 		this.curLife=100;
-		this.damage=35; // TODO for info
+		this.dmge=this.curStageInfo.dmge;
 
-		this.ReadyTextSprite=this.GoTextSprite=
+		this.RdyTxtSprite=this.GoTxtSprite=
 		this.PlayerSprite=this.EnemySprite=
 		null;
 	},
@@ -42,26 +42,26 @@ BasicGame.Play.prototype={
 		this.genContents();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
 		this.rdy();
-		this.test();
+		this.tes();
 	},
 
 	rdy:function(){
 		// TODO tut // tutorial
 
-		var tween=this.M.T.popUpB(this.ReadyTextSprite);
+		var tween=this.M.T.popUpB(this.RdyTxtSprite);
 		tween.start();
 		tween.onComplete.add(this.go,this);
 	},
 	go:function(){
 		//TODO destroy timing -> refer other game
-		this.ReadyTextSprite.destroy();
-		var tween=this.M.T.popUpB(this.GoTextSprite);
+		this.RdyTxtSprite.destroy();
+		var tween=this.M.T.popUpB(this.GoTxtSprite);
 		tween.start();
 		tween.onComplete.add(this.start,this);
 	},
 	start:function(){
 		//TODO destroy timing -> refer other game
-		this.GoTextSprite.destroy();
+		this.GoTxtSprite.destroy();
 		this.isPlaying=!0;
 		this.summonSimon();
 	},
@@ -83,7 +83,7 @@ BasicGame.Play.prototype={
 		console.log(type);
 	},
 
-	test:function(){
+	tes:function(){
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameover');},this);

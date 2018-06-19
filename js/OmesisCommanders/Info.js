@@ -19,7 +19,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 	};
 };
 BasicGame.Boot.prototype.genStageInfo=function(){
-	// TODO 8 stage ???
+	// TODO 8 stg ???
 	return {
 		1:{
 			selectorName:'CCCCCC',
@@ -27,7 +27,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			stageBgImg:'Bg_2',stageBgPath:'images/Nekomiya/Bg_2.jpg',
 			goalCount:5,
 			isEndless:!1,
-			damage:10,
+			dmge:10,
 		},
 		2:{
 			selectorName:'DDDDDD',
@@ -35,7 +35,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			stageBgImg:'Bg_3',stageBgPath:'images/Nekomiya/Bg_3.jpg',
 			goalCount:8,
 			isEndless:!1,
-			damage:20,
+			dmge:20,
 		},
 		3:{
 			selectorName:'EEEE',
@@ -43,7 +43,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			stageBgImg:'Bg_4',stageBgPath:'images/Nekomiya/Bg_4.jpg',
 			goalCount:10,
 			isEndless:!1,
-			damage:25,
+			dmge:25,
 		},
 		4:{
 			selectorName:'FFFFFFFFF',
@@ -51,7 +51,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			stageBgImg:'Bg_5',stageBgPath:'images/Nekomiya/Bg_5.jpg',
 			goalCount:999,
 			isEndless:!0,
-			damage:100,
+			dmge:100,
 		},
 	};
 };

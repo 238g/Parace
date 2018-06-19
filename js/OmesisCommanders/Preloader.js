@@ -16,8 +16,8 @@ BasicGame.Preloader.prototype={
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
 			// TODO
-			'Title':'images/Nekomiya/Title.png',
-			'TitleBlink':'images/Nekomiya/TitleBlink.png',
+			'Ttl':'images/Nekomiya/Title.png',
+			'TtlBlink':'images/Nekomiya/TitleBlink.png',
 			'StartBtn':'images/PeanutNinja/Title.png',
 			'OkBtn':'images/AoiGame/Pin.png',
 			'BackBtn':'images/AoiGame/Flower.png',

@@ -37,12 +37,12 @@ BasicGame.Play.prototype.genContents=function(){
 	this.genGamePadBtns();
 };
 BasicGame.Play.prototype.genStartSprites=function(){
-	this.ReadyTextSprite=this.add.sprite(this.world.centerX,this.world.centerY,'ReadyText');
-	this.ReadyTextSprite.anchor.setTo(.5);
-	this.ReadyTextSprite.scale.setTo(0);
-	this.GoTextSprite=this.add.sprite(this.world.centerX,this.world.centerY,'GoText');
-	this.GoTextSprite.anchor.setTo(.5);
-	this.GoTextSprite.scale.setTo(0);
+	this.RdyTxtSprite=this.add.sprite(this.world.centerX,this.world.centerY,'ReadyText');
+	this.RdyTxtSprite.anchor.setTo(.5);
+	this.RdyTxtSprite.scale.setTo(0);
+	this.GoTxtSprite=this.add.sprite(this.world.centerX,this.world.centerY,'GoText');
+	this.GoTxtSprite.anchor.setTo(.5);
+	this.GoTxtSprite.scale.setTo(0);
 };
 BasicGame.Play.prototype.genCharSprites=function(){
 	// TODO if(this.curStageInfo.isEndless) -> player center? enemy delete
@@ -99,8 +99,8 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 				// this.PlayerSprite.loadTexture(this.curCharInfo.animBaseImg+(frameNum+1));
 			} else {
 				// TODO incorrect
-				this.curLife-=this.damage;
-				// TODO damage animation
+				this.curLife-=this.dmge;
+				// TODO dmge animation
 				// TODO reduce player health -> (gauge width = this.curLife/this.maxLife)
 				console.log(this.curLife);
 				if(this.curLife<0){
