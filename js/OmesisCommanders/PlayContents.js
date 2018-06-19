@@ -19,12 +19,41 @@ BasicGame.Play.prototype.summonSimon=function(){
 		},simonSprite);
 		tweenD.onComplete.add(function(){
 			this.endSummonSimonCount++;
-			if(this.endSummonSimonCount==this.challengeCount)this.playerInput=!0;
+			if(this.endSummonSimonCount==this.challengeCount){
+				this.playerInput=!0;
+				this.PlayerSprite.loadTexture(this.curCharInfo.idleImg);
+			}
+		},this);
+		tweenA.onStart.add(function(){
+			this.PlayerSprite.loadTexture(this.curCharInfo.animBaseImg+(1)); // TODO del
+			// this.PlayerSprite.loadTexture(this.curCharInfo.animBaseImg+(frameNum+1));
 		},this);
 	}
 };
 
-BasicGame.Play.prototype.BtnContainer = function () {
+BasicGame.Play.prototype.genContents=function(){
+	this.genStartSprites();
+	this.genCharSprites();
+	this.genGamePadBtns();
+};
+BasicGame.Play.prototype.genStartSprites=function(){
+	this.ReadyTextSprite=this.add.sprite(this.world.centerX,this.world.centerY,'ReadyText');
+	this.ReadyTextSprite.anchor.setTo(.5);
+	this.ReadyTextSprite.scale.setTo(0);
+	this.GoTextSprite=this.add.sprite(this.world.centerX,this.world.centerY,'GoText');
+	this.GoTextSprite.anchor.setTo(.5);
+	this.GoTextSprite.scale.setTo(0);
+};
+BasicGame.Play.prototype.genCharSprites=function(){
+	// TODO if(this.curStageInfo.isEndless) -> player center? enemy delete
+	this.PlayerSprite=this.add.sprite(this.world.width*.3,this.world.height*.3,this.curCharInfo.idleImg);
+	this.PlayerSprite.anchor.setTo(.5);
+	this.EnemySprite=this.add.sprite(this.world.width*.7,this.world.height*.3,this.curEnemyInfo.idleImg);
+	this.EnemySprite.anchor.setTo(.5);
+	this.EnemySprite.scale.setTo(-1,1);
+	// TODO health gauge
+};
+BasicGame.Play.prototype.genGamePadBtns=function(){
 	var arrowCenterX=50;
 	var arrowCenterY=this.world.height*.65;
 	var margin=50;
@@ -35,8 +64,7 @@ BasicGame.Play.prototype.BtnContainer = function () {
 	this.genGamePadBtnSprite(arrowCenterX,arrowCenterY-margin,4);
 	this.genGamePadBtnSprite(arrowCenterX+margin,arrowCenterY,5);
 };
-
-BasicGame.Play.prototype.genGamePadBtnSprite = function (x,y,frameNum) {
+BasicGame.Play.prototype.genGamePadBtnSprite=function(x,y,frameNum){
 	var frame=this.gamePadFrames[frameNum];
 	var btnSprite = this.add.button(x,y,'GameIconsWhite',this.onInputUpGamePad,this,frame,frame,frame,frame);
 	btnSprite.tint=this.gamePadColor;
@@ -46,11 +74,12 @@ BasicGame.Play.prototype.genGamePadBtnSprite = function (x,y,frameNum) {
 	btnSprite.onInputOut.add(this.onInputOutGamePad,this);
 };
 
-BasicGame.Play.prototype.onInputUpGamePad = function (b) {
+BasicGame.Play.prototype.onInputUpGamePad=function(b){
 	if(b.alpha==.5){
 		b.alpha=1;
 		if (this.playerInput&&this.isPlaying) {
-			if (this.simonList[this.curSimonNum]==b.frameNum) {
+			var frameNum=b.frameNum;
+			if (this.simonList[this.curSimonNum]==frameNum) {
 				// TODO correct
 				console.log('correct');
 				this.curSimonNum++;
@@ -63,13 +92,18 @@ BasicGame.Play.prototype.onInputUpGamePad = function (b) {
 					if (this.challengeCount>this.goalCount) {
 						this.end('clear');
 					} else {
-						this.summonSimon();
+						this.endInput();
 					}
 				}
+				this.PlayerSprite.loadTexture(this.curCharInfo.animBaseImg+(1)); // TODO del
+				// this.PlayerSprite.loadTexture(this.curCharInfo.animBaseImg+(frameNum+1));
 			} else {
 				// TODO incorrect
-				this.life-=this.damage;
-				if(this.life<0){
+				this.curLife-=this.damage;
+				// TODO damage animation
+				// TODO reduce player health -> (gauge width = this.curLife/this.maxLife)
+				console.log(this.curLife);
+				if(this.curLife<0){
 					this.end('gameover');
 				}
 			}
@@ -78,3 +112,12 @@ BasicGame.Play.prototype.onInputUpGamePad = function (b) {
 };
 BasicGame.Play.prototype.onInputDownGamePad=function(b){b.alpha=.5;};
 BasicGame.Play.prototype.onInputOutGamePad=function(b){b.alpha=1;};
+BasicGame.Play.prototype.endInput=function(){
+	this.playerInput=!1;
+	// TODO attack animation
+	this.PlayerSprite.loadTexture(this.curCharInfo.idleImg);
+	// TODO reduce enemy health -> (gauge width / goalCount)
+	// TODO oncomplete
+	this.summonSimon();
+};
+

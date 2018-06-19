@@ -1,0 +1,57 @@
+BasicGame.Boot.prototype.genCharInfo=function(){
+	return {
+		1:{
+			charName:'AAAAAAAA',
+			charIntro:'Peanutkun_Face',charIntroPath:'images/PeanutNinja/Peanutkun_Face.png',
+			charSquare:'GuardHinako',charSquarePath:'images/Kerin/GuardHinako.png',
+			idleImg:'Kikunojo',idlePath:'images/AoiGame/Hiyoko.png',
+			animBaseImg:'Aoi_',animBasePath:'images/AoiGame/Aoi_',
+			youtube:'',
+		},
+		2:{
+			charName:'BBBBBBBB',
+			charIntro:'Hiyoko',charIntroPath:'images/AoiGame/Kikunojo.png',
+			charSquare:'GuardKaede',charSquarePath:'images/Kerin/GuardKaede.png',
+			idleImg:'Kikunojo',idlePath:'images/AoiGame/Hiyoko.png',
+			animBaseImg:'Aoi_',animBasePath:'images/AoiGame/Aoi_',
+			youtube:'',
+		},
+	};
+};
+BasicGame.Boot.prototype.genStageInfo=function(){
+	// TODO 8 stage ???
+	return {
+		1:{
+			selectorName:'CCCCCC',
+			selectorImg:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stageBgImg:'Bg_2',stageBgPath:'images/Nekomiya/Bg_2.jpg',
+			goalCount:5,
+			isEndless:!1,
+			damage:10,
+		},
+		2:{
+			selectorName:'DDDDDD',
+			selectorImg:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stageBgImg:'Bg_3',stageBgPath:'images/Nekomiya/Bg_3.jpg',
+			goalCount:8,
+			isEndless:!1,
+			damage:20,
+		},
+		3:{
+			selectorName:'EEEE',
+			selectorImg:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stageBgImg:'Bg_4',stageBgPath:'images/Nekomiya/Bg_4.jpg',
+			goalCount:10,
+			isEndless:!1,
+			damage:25,
+		},
+		4:{
+			selectorName:'FFFFFFFFF',
+			selectorImg:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stageBgImg:'Bg_5',stageBgPath:'images/Nekomiya/Bg_5.jpg',
+			goalCount:999,
+			isEndless:!0,
+			damage:100,
+		},
+	};
+};

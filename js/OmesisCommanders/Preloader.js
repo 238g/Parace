@@ -15,9 +15,38 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
+			// TODO
+			'Title':'images/Nekomiya/Title.png',
+			'TitleBlink':'images/Nekomiya/TitleBlink.png',
+			'StartBtn':'images/PeanutNinja/Title.png',
+			'OkBtn':'images/AoiGame/Pin.png',
+			'BackBtn':'images/AoiGame/Flower.png',
+			'ReadyText':'images/Oda/Title_en.png',
+			'GoText':'images/Oda/Title_jp.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
+		this.loadInfo();
+	},
+	loadInfo:function(){
+		var charCount=0;
+		var charAnimCount=1;
+		var CI=this.M.getConf('CharInfo');
+		for(var k in CI){
+			var info=CI[k];
+			this.load.image(info.charIntro,info.charIntroPath);
+			this.load.image(info.charSquare,info.charSquarePath);
+			this.load.image(info.idleImg,info.idlePath);
+			for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBaseImg+i,info.animBasePath+i+'.png');
+			charCount++;
+		}
+		this.M.setGlobal('charCount',charCount);
+		var SI=this.M.getConf('StageInfo');
+		for(var k in SI){
+			var info=SI[k];
+			this.load.image(info.selectorImg,info.selectorPath);
+			this.load.image(info.stageBgImg,info.stageBgPath);
+		}
 	},
 
 	loadAudio:function(){
