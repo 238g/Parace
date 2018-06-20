@@ -249,6 +249,6 @@ BasicGame.Play.prototype.tweet=function(){
 				+emoji+'\n'
 				+resultText
 				+emoji+'\n';
-	var hashtags = 'おめシスゲーム,おめシスコマンダーズ'; // TODO title correct??
+	var hashtags = 'おめシスゲーム,おめシスコマンダーズ';
 	this.M.H.tweet(text,hashtags,location.href);
 };

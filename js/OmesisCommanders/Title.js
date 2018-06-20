@@ -7,7 +7,7 @@ BasicGame.Title.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		// this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
@@ -18,24 +18,24 @@ BasicGame.Title.prototype={
 		// TODO adjust pos
 		this.genTtl(this.world.width*.6,this.world.height*.4);
 		// TODO adjust pos
-		this.add.button(this.world.centerX,this.world.height*.7,'StartBtn',this.start,this).anchor.setTo(.5);
+		this.add.button(this.world.centerX,this.world.height*.9,'StartBtn',this.start,this).anchor.setTo(.5);
 		this.genHUD();
 	},
-	genTtl:function(x,y,){
+	genTtl:function(x,y){
 		var ttl = this.add.sprite(x,y,'Ttl');
 		ttl.anchor.setTo(.5);
 		this.TtlGrp.add(ttl);
 		var blink=this.add.sprite(x,y,'TtlBlink');
 		blink.anchor.setTo(.5);
 		this.TtlGrp.add(blink);
-		var mask=this.add.graphics(blink.left-20,0);
+		var mask=this.add.graphics(blink.left,0);
 		mask.beginFill(0xffffff);
-		mask.drawRect(0,0,20,this.world.height);
+		mask.drawRect(0,0,15,this.world.height);
 		mask.endFill();
+		mask.angle=35;
 		this.TtlGrp.add(mask);
 		blink.mask=mask;
-		// TODO adjust duration and delay
-		var tween=this.M.T.moveB(mask,{xy:{x:blink.right},duration:1000,delay:1000});
+		var tween=this.M.T.moveB(mask,{xy:{x:blink.centerX*2},duration:1000,delay:2000});
 		tween.loop();
 		tween.start(); // TODO popup complete
 	},
