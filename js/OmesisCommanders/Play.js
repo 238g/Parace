@@ -18,19 +18,27 @@ BasicGame.Play.prototype={
 
 		this.goalCount=this.curStageInfo.goalCount;
 
-		this.challengeCount=1;
+		this.charAnimCount=this.M.getConst('CHAR_ANIM_COUNT');
+
+		this.challengeCount=this.curStageInfo.firstChallengeCount;
 		this.endSummonSimonCount=0;
 		this.simonList=[];
 		this.playerInput=!1;
+
+		// TODO for info?
 		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
-		this.btnCount=6; // TODO for info?
+		this.btnCount=this.gamePadFrames.length;
 		this.gamePadColor=0x0000f0;
 
 		this.maxLife=
 		this.curLife=100;
 		this.dmge=this.curStageInfo.dmge;
 
-		this.RdyTxtSprite=this.GoTxtSprite=
+		this.endSt=null;
+
+		this.TutSprite=
+		this.PlayerLifeSprite=this.EnemyLifeSprite=
+		this.RdyTxtSprite=this.FightTxtSprite=
 		this.PlayerSprite=this.EnemySprite=
 		null;
 	},
@@ -41,53 +49,56 @@ BasicGame.Play.prototype={
 		// this.M.SE.playBGM('PlayBGM',{volume:1});
 		this.genContents();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
-		this.rdy();
+		this.tut();
 		this.tes();
 	},
 
+	tut:function(){
+		if(this.M.getGlobal('endTut'))return this.rdy();
+		this.genTut();
+	},
 	rdy:function(){
-		// TODO tut // tutorial
-
 		var tween=this.M.T.popUpB(this.RdyTxtSprite);
 		tween.start();
-		tween.onComplete.add(this.go,this);
+		tween.onComplete.add(this.fight,this);
 	},
-	go:function(){
+	fight:function(){
 		//TODO destroy timing -> refer other game
 		this.RdyTxtSprite.destroy();
-		var tween=this.M.T.popUpB(this.GoTxtSprite);
+		var tween=this.M.T.popUpB(this.FightTxtSprite);
 		tween.start();
 		tween.onComplete.add(this.start,this);
 	},
 	start:function(){
 		//TODO destroy timing -> refer other game
-		this.GoTxtSprite.destroy();
+		this.FightTxtSprite.destroy();
 		this.isPlaying=!0;
 		this.summonSimon();
 	},
-
-	end:function(type){
+	end:function(){
 		this.isPlaying=!1;
 		this.playerInput=!1;
-		if(type=='clear'){
+
+		if(this.endSt=='WIN'){
 			// TODO enemy health =0
-			// TODO winner res
+			this.genResPopUp('WIN');
 		}else{//gameover
 			if(this.curStageInfo.isEndless){
 				// TODO endless res
+				this.genResPopUp('GAME OVER');
 			}else{
-				// TODO loser res
 				// TODO player health =0
+				this.genResPopUp('LOSE');
 			}
 		}
-		console.log(type);
 	},
 
 	tes:function(){
 		if(__ENV!='prod'){
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.end('clear');},this);
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.end('gameover');},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.endSt='WIN';this.end();},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.endSt='LOSE';this.end();},this);
 			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
+			this.M.H.getQuery('cc')&&(this.challengeCount=this.M.H.getQuery('cc'));
 		}
 	},
 };

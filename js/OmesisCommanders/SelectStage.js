@@ -1,30 +1,26 @@
 BasicGame.SelectStage=function(){};
 BasicGame.SelectStage.prototype={
 	init:function(){
+		this.inputEnabled=!1;
+		this.isPlaying=!0;
 		this.StageInfo=this.M.getConf('StageInfo');
 		this.curStage=this.M.getGlobal('curStage');
 		this.curStageInfo=this.StageInfo[this.curStage];
-
-		this.CurBgSprite=null;
-		this.DynamicBgSprite=null;
-		this.Tween=null;
+		this.CurBgSprite=this.DynamicBgSprite=this.Tween=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
+		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 
 	genContents:function(){
-		this.CurBgSprite=this.add.sprite(0,0,this.curStageInfo.stageBgImg);
-		this.DynamicBgSprite=this.add.sprite(this.world.width,0,this.curStageInfo.stageBgImg);
-
+		this.CurBgSprite=this.add.sprite(0,0,this.curStageInfo.stgBg);
+		this.DynamicBgSprite=this.add.sprite(this.world.width,0,this.curStageInfo.stgBg);
 		this.genSelector();
-
 		this.add.button(this.world.width,this.world.height,'OkBtn',this.ok,this).anchor.setTo(1);
 		this.add.button(0,this.world.height,'BackBtn',this.back,this).anchor.setTo(0,1);
-
 		this.genHUD();
 	},
 	genSelector:function(){
@@ -37,11 +33,13 @@ BasicGame.SelectStage.prototype={
 		var orderY=0;
 		var l=arrX.length;
 		for(var k in this.StageInfo){
-			var i=this.StageInfo[k];
+			var info=this.StageInfo[k];
 			var x=arrX[orderX];
 			var y=arrY[orderY];
-			var btn=this.add.button(x,y,i.selectorImg,this.selectStage,this);
+			var btn=this.add.button(x,y,info.selector,this.selectStage,this);
 			btn.stageNum=k;
+			this.M.S.genTextM(btn.left,btn.top,info.selectorName,this.M.S.BaseTextStyleSS(20));
+			this.M.S.genTextM(btn.right,btn.bottom,info.selectorSubName,this.M.S.BaseTextStyleSS(20));
 			orderX++;
 			if(orderX==l){
 				orderX=0;
@@ -51,24 +49,14 @@ BasicGame.SelectStage.prototype={
 	},
 	selectStage:function(btn){
 		// this.M.SE.play('OnBtn',{volume:1}); // TODO
-
 		var curStage=btn.stageNum;
-
-		if(curStage==this.curStage){
-			return;
-		}
-
-		if(this.Tween&&this.Tween.isRunning){
-			return;
-		}
-
+		if(curStage==this.curStage)return;
+		if(this.Tween&&this.Tween.isRunning)return;
 		this.curStage=curStage;
-
 		this.M.setGlobal('curStage',curStage);
-
 		this.curStageInfo=this.StageInfo[curStage];
 
-		this.DynamicBgSprite.loadTexture(this.curStageInfo.stageBgImg);
+		this.DynamicBgSprite.loadTexture(this.curStageInfo.stgBg);
 
 		// TODO adjust tween duration
 		this.M.T.moveX(this.CurBgSprite,{xy:{x:-this.CurBgSprite.width},easing:Phaser.Easing.Cubic.Out}).start();
@@ -84,8 +72,16 @@ BasicGame.SelectStage.prototype={
 		},this);
 	},
 	ok:function(){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
-		this.M.NextScene('Play');
+		if(this.inputEnabled&&this.isPlaying){
+			this.isPlaying=!1;
+			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			var tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
+			tween.onComplete.add(this.genVS,this);
+			tween.start();
+		}
 	},
 	back:function(){
 		// this.M.SE.play('OnBtn',{volume:1}); // TODO
@@ -95,5 +91,10 @@ BasicGame.SelectStage.prototype={
 		var y=this.world.height*.1;
 		this.M.S.BasicVolSprite(this.world.width*.1,y);
 		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+	},
+	genVS:function(){
+		// TODO VS animation
+		// TODO oncomp -> to play
+		this.M.NextScene('Play');
 	},
 };

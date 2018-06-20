@@ -15,11 +15,13 @@ create:function(){
 	this.M.defineConst({
 		TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 		EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
+		CHAR_ANIM_COUNT:6,
 	});
 	this.M.defineGlobal({
 		curChar:1,
 		curStage:1,
 		charCount:0,
+		endTut:!1,
 	});
 	this.M.defineConf({
 		CharInfo:this.genCharInfo(),

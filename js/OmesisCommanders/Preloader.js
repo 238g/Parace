@@ -23,6 +23,8 @@ BasicGame.Preloader.prototype={
 			'BackBtn':'images/AoiGame/Flower.png',
 			'ReadyText':'images/Oda/Title_en.png',
 			'GoText':'images/Oda/Title_jp.png',
+			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
+			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -30,22 +32,24 @@ BasicGame.Preloader.prototype={
 	},
 	loadInfo:function(){
 		var charCount=0;
-		var charAnimCount=1;
+		var charAnimCount=this.M.getConst('CHAR_ANIM_COUNT');
 		var CI=this.M.getConf('CharInfo');
 		for(var k in CI){
 			var info=CI[k];
 			this.load.image(info.charIntro,info.charIntroPath);
 			this.load.image(info.charSquare,info.charSquarePath);
-			this.load.image(info.idleImg,info.idlePath);
-			for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBaseImg+i,info.animBasePath+i+'.png');
+			this.load.image(info.idle,info.idlePath);
+			this.load.image(info.ch,info.chPath);
+			for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg'); // TODO del
+			// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.png');
 			charCount++;
 		}
 		this.M.setGlobal('charCount',charCount);
 		var SI=this.M.getConf('StageInfo');
 		for(var k in SI){
 			var info=SI[k];
-			this.load.image(info.selectorImg,info.selectorPath);
-			this.load.image(info.stageBgImg,info.stageBgPath);
+			this.load.image(info.selector,info.selectorPath);
+			this.load.image(info.stgBg,info.stgBgPath);
 		}
 	},
 
@@ -63,7 +67,7 @@ BasicGame.Preloader.prototype={
 		this.game.device.desktop&&(document.body.style.cursor='pointer');
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
-		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
+		this.M.S.genText(this.world.centerX,this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		// this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);

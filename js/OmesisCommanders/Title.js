@@ -2,6 +2,7 @@ BasicGame.Title=function(){};
 BasicGame.Title.prototype={
 	init:function(){
 		this.inputEnabled=!1;
+		this.isPlaying=!0;
 		this.TtlGrp=null;
 	},
 	create:function(){
@@ -17,10 +18,8 @@ BasicGame.Title.prototype={
 		// TODO adjust pos
 		this.genTtl(this.world.width*.6,this.world.height*.4);
 		// TODO adjust pos
-		this.genStartBtnSprite(this.world.centerX,this.world.height*.7);
-		var y=this.world.height*.1;
-		this.M.S.BasicVolSprite(this.world.width*.1,y);
-		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+		this.add.button(this.world.centerX,this.world.height*.7,'StartBtn',this.start,this).anchor.setTo(.5);
+		this.genHUD();
 	},
 	genTtl:function(x,y,){
 		var ttl = this.add.sprite(x,y,'Ttl');
@@ -40,16 +39,26 @@ BasicGame.Title.prototype={
 		tween.loop();
 		tween.start(); // TODO popup complete
 	},
-	genStartBtnSprite:function(x,y){
-		this.add.button(x,y,'StartBtn',this.start,this).anchor.setTo(.5);
-	},
 	start:function(){
-		if (this.inputEnabled) {
+		if (this.inputEnabled&&this.isPlaying) {
+			this.isPlaying=!1;
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO
-			this.M.NextScene('SelectChar');
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			var tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
+			tween.onComplete.add(function(){
+				this.M.NextScene('SelectChar');
+			},this);
+			tween.start();
 		} else {
 			// this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
+	},
+	genHUD:function(){
+		var y=this.world.height*.1;
+		this.M.S.BasicVolSprite(this.world.width*.1,y);
+		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
 	},
 };
