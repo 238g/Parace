@@ -48,7 +48,7 @@ BasicGame.Title.prototype={
 			wp.alpha=0;
 			var tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
 			tween.onComplete.add(function(){
-				this.M.NextScene('SelectChar');
+				this.M.NextScene('Play');
 			},this);
 			tween.start();
 		} else {
