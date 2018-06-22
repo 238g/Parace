@@ -2,7 +2,8 @@
 
 |ID|Name|URL|Release|
 |:---:|:---:|:---:|:---:|
-|#1|238Games|https://238g.github.io/Parace/238Games.html|2018/4/8|
+|#0|238Games|https://238g.github.io/Parace/238Games.html|2018/4/8|
+|#1|秒当てゲーム|https://238g.github.io/hitten/index.html|2018/2/12|
 |#2|レッツ・あん肝！|https://238g.github.io/Parace/ankimo_drrrr.html|2018/2/18|
 |#3|シロラン|https://238g.github.io/Parace/sirorun.html|2018/3/2|
 |#4|燃やせ！エルフの森！|https://238g.github.io/Parace/eff.html|2018/3/6|

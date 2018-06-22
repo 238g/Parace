@@ -63,5 +63,25 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			dmge:100,
 			firstChallengeCount:1,
 		},
+		5:{
+			selectorName:'FFFFFFFFF',
+			selectorSubName:'ｺﾏﾝﾀﾞｰ',
+			selector:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stgBg:'Bg_5',stgBgPath:'images/Nekomiya/Bg_5.jpg',
+			goalCount:999,
+			isEndless:!0,
+			dmge:100,
+			firstChallengeCount:1,
+		},
+		6:{
+			selectorName:'FFFFFFFFF',
+			selectorSubName:'ｺﾏﾝﾀﾞｰ',
+			selector:'Clay',selectorPath:'images/Nekomiya/Clay.png',
+			stgBg:'Bg_5',stgBgPath:'images/Nekomiya/Bg_5.jpg',
+			goalCount:999,
+			isEndless:!0,
+			dmge:100,
+			firstChallengeCount:1,
+		},
 	};
 };

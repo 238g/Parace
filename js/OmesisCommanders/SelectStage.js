@@ -17,6 +17,7 @@ BasicGame.SelectStage.prototype={
 
 	genContents:function(){
 		this.CurBgSprite=this.add.sprite(0,0,this.curStageInfo.stgBg);
+		this.CurBgSprite.alpha=.5;//TODO del
 		this.DynamicBgSprite=this.add.sprite(this.world.width,0,this.curStageInfo.stgBg);
 		this.genSelector();
 		this.add.button(this.world.width,this.world.height,'OkBtn',this.ok,this).anchor.setTo(1);
@@ -27,7 +28,7 @@ BasicGame.SelectStage.prototype={
 		// TODO adjust pos
 		var w=this.world.width;
 		var h=this.world.height;
-		var arrX=[w*.3,w*.7];
+		var arrX=[w*.2,w*.6];
 		var arrY=[h*.3,h*.5,h*.7];
 		var orderX=0;
 		var orderY=0;
