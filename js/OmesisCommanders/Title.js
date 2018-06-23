@@ -7,18 +7,16 @@ BasicGame.Title.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		// this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 	genContents:function(){
+		this.add.sprite(0,0,'Bg_1');
 		this.TtlGrp=this.add.group();
-		// TODO bg sprite
-		// TODO adjust pos
-		this.genTtl(this.world.width*.6,this.world.height*.4);
-		// TODO adjust pos
-		this.add.button(this.world.centerX,this.world.height*.9,'StartBtn',this.start,this).anchor.setTo(.5);
+		this.genTtl(this.world.width*.7,this.world.height*.45);
+		this.add.button(this.world.centerX,this.world.height*.87,'StartBtn',this.start,this).anchor.setTo(.5);
 		this.genHUD();
 	},
 	genTtl:function(x,y){
@@ -57,8 +55,8 @@ BasicGame.Title.prototype={
 		}
 	},
 	genHUD:function(){
-		var y=this.world.height*.1;
-		this.M.S.BasicVolSprite(this.world.width*.1,y);
-		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+		var y=this.world.height*.94;
+		this.M.S.BasicVolSprite(this.world.width*.05,y);
+		this.M.S.BasicFullScreenBtn(this.world.width*.95,y);
 	},
 };

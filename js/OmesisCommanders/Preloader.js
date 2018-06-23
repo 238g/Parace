@@ -15,16 +15,17 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
-			// TODO
 			'Ttl':'images/OmesisCommanders/Ttl.png',
 			'TtlBlink':'images/OmesisCommanders/TtlBlink.png',
-			'StartBtn':'images/PeanutNinja/Title.png',
-			'OkBtn':'images/AoiGame/Pin.png',
-			'BackBtn':'images/AoiGame/Flower.png',
+			'StartBtn':'images/OmesisCommanders/StartBtn.png',
+			'OkBtn':'images/OmesisCommanders/OkBtn.png',
+			'BackBtn':'images/OmesisCommanders/BackBtn.png',
 			'ReadyText':'images/Oda/Title_en.png',
 			'GoText':'images/Oda/Title_jp.png',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
+			'Bg_1':'images/OmesisCommanders/Bg_1.jpg',
+			'Bg_2':'images/OmesisCommanders/Bg_2.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -36,7 +37,6 @@ BasicGame.Preloader.prototype={
 		var CI=this.M.getConf('CharInfo');
 		for(var k in CI){
 			var info=CI[k];
-			this.load.image(info.charIntro,info.charIntroPath);
 			this.load.image(info.charSquare,info.charSquarePath);
 			this.load.image(info.idle,info.idlePath);
 			this.load.image(info.ch,info.chPath);

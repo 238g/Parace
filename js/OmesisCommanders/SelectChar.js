@@ -16,23 +16,23 @@ BasicGame.SelectChar.prototype={
 	},
 
 	genContents:function(){
+		this.add.sprite(0,0,'Bg_2');
 		this.CharIntroGrp=this.add.group();
-		this.CharIntroSprite=this.add.sprite(0,0,this.curCharInfo.charIntro);
+		this.CharIntroSprite=this.add.sprite(100,30,this.curCharInfo.idle);
 		this.CharIntroGrp.add(this.CharIntroSprite);
-		this.CharNameTxtSprite=this.M.S.genTextM(this.CharIntroSprite.right,this.CharIntroSprite.bottom,this.curCharInfo.charName,this.M.S.BaseTextStyleSS(25));
+		this.CharNameTxtSprite=this.M.S.genTextM(this.world.width*.25,this.world.height*.65,this.curCharInfo.charName,this.M.S.BaseTextStyleSS(40));
 		this.CharIntroGrp.add(this.CharNameTxtSprite);
 		this.genSquares();
-		this.add.button(this.world.width,this.world.height,'OkBtn',this.ok,this).anchor.setTo(1);
-		this.add.button(0,this.world.height,'BackBtn',this.back,this).anchor.setTo(0,1);
+		this.add.button(this.world.width-10,this.world.height-10,'OkBtn',this.ok,this).anchor.setTo(1);
+		this.add.button(10,this.world.height-10,'BackBtn',this.back,this).anchor.setTo(0,1);
 		this.genHUD();
 		this.selectedChar(this.curChar);
 	},
 	genSquares:function(){
-		// TODO adjust pos
-		var w=this.world.width;
-		var h=this.world.height;
-		var arrX=[w*.6,w*.7,w*.8,w*.9];
-		var arrY=[h*.2,h*.3,h*.4];
+		var w=this.world.centerX;
+		var h=this.world.height*.07;
+		var arrX=[w,w+65,w+130,w+195];
+		var arrY=[h,h+65,h+130,h+195];
 		var orderX=0;
 		var orderY=0;
 		var l=arrX.length;
@@ -59,13 +59,10 @@ BasicGame.SelectChar.prototype={
 		this.curChar=curChar;
 		this.M.setGlobal('curChar',curChar);
 		this.curCharInfo=this.CharInfo[curChar];
-
-		// TODO adjust tween and pos
-		this.CharIntroGrp.x=-300;
-
+		this.CharIntroGrp.x=-this.world.centerX;
 		var tween=this.M.T.moveA(this.CharIntroGrp,{xy:{x:0}});
 		tween.onStart.add(function(){
-			this.CharIntroSprite.loadTexture(this.curCharInfo.charIntro);
+			this.CharIntroSprite.loadTexture(this.curCharInfo.idle);
 			this.CharNameTxtSprite.changeText(this.curCharInfo.charName);
 		},this);
 		tween.start();
@@ -89,8 +86,8 @@ BasicGame.SelectChar.prototype={
 		this.M.NextScene('Title');
 	},
 	genHUD:function(){
-		var y=this.world.height*.1;
-		this.M.S.BasicVolSprite(this.world.width*.1,y);
-		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+		var y=this.world.height*.06;
+		this.M.S.BasicVolSprite(this.world.width*.05,y);
+		this.M.S.BasicFullScreenBtn(this.world.width*.95,y);
 	},
 };

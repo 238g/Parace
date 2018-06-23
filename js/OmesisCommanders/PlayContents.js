@@ -74,17 +74,17 @@ BasicGame.Play.prototype.genCharSprites=function(){
 	// this.curCharInfo.charName
 };
 BasicGame.Play.prototype.genGaugeContainer=function(){
-	var x=this.world.width*.05;
-	var y=this.world.height*.05;
-	var w=this.world.width*.4;
-	var h=this.world.height*.1;
+	var x=this.world.width*.025;
+	var y=this.world.height*.03;
+	var w=x*18;
+	var h=this.world.height*.07;
 	var textStyle=this.M.S.BaseTextStyleS(25);
 	this.PlayerLifeSprite=this.genGauge(x,y,w,h);
-	this.M.S.genTextM(this.PlayerLifeSprite.centerX-40,this.PlayerLifeSprite.bottom+20,this.curCharInfo.charName,textStyle);
+	this.M.S.genTextM(this.PlayerLifeSprite.centerX-60,this.PlayerLifeSprite.bottom+30,this.curCharInfo.charName,textStyle);
 	x+=this.world.centerX;
 	// TODO change color? textStyle.*****
 	this.EnemyLifeSprite=this.genGauge(x,y,w,h);
-	this.M.S.genTextM(this.EnemyLifeSprite.centerX+40,this.EnemyLifeSprite.bottom+20,this.curEnemyInfo.charName,textStyle);
+	this.M.S.genTextM(this.EnemyLifeSprite.centerX+60,this.EnemyLifeSprite.bottom+30,this.curEnemyInfo.charName,textStyle);
 };
 BasicGame.Play.prototype.genGauge=function(x,y,w,h){
 	this.M.S.genBmpSprite(x,y,w,h,'#000000');

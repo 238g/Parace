@@ -6,10 +6,11 @@ BasicGame.SelectStage.prototype={
 		this.StageInfo=this.M.getConf('StageInfo');
 		this.curStage=this.M.getGlobal('curStage');
 		this.curStageInfo=this.StageInfo[this.curStage];
-		this.CurBgSprite=this.DynamicBgSprite=this.Tween=null;
+		this.CurBgSprite=this.DynamicBgSprite=this.Tween=this.CurBgNameTextSprite=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
@@ -17,19 +18,18 @@ BasicGame.SelectStage.prototype={
 
 	genContents:function(){
 		this.CurBgSprite=this.add.sprite(0,0,this.curStageInfo.stgBg);
-		this.CurBgSprite.alpha=.5;//TODO del
 		this.DynamicBgSprite=this.add.sprite(this.world.width,0,this.curStageInfo.stgBg);
 		this.genSelector();
-		this.add.button(this.world.width,this.world.height,'OkBtn',this.ok,this).anchor.setTo(1);
-		this.add.button(0,this.world.height,'BackBtn',this.back,this).anchor.setTo(0,1);
+		this.add.button(this.world.width-10,this.world.height-10,'OkBtn',this.ok,this).anchor.setTo(1);
+		this.add.button(10,this.world.height-10,'BackBtn',this.back,this).anchor.setTo(0,1);
+		this.CurBgNameTextSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.9,this.curStageInfo.selectorName,this.M.S.BaseTextStyleS(50));
 		this.genHUD();
 	},
 	genSelector:function(){
-		// TODO adjust pos
 		var w=this.world.width;
 		var h=this.world.height;
 		var arrX=[w*.2,w*.6];
-		var arrY=[h*.3,h*.5,h*.7];
+		var arrY=[h*.05,h*.3,h*.55];
 		var orderX=0;
 		var orderY=0;
 		var l=arrX.length;
@@ -39,8 +39,8 @@ BasicGame.SelectStage.prototype={
 			var y=arrY[orderY];
 			var btn=this.add.button(x,y,info.selector,this.selectStage,this);
 			btn.stageNum=k;
-			this.M.S.genTextM(btn.left,btn.top,info.selectorName,this.M.S.BaseTextStyleSS(20));
-			this.M.S.genTextM(btn.right,btn.bottom,info.selectorSubName,this.M.S.BaseTextStyleSS(20));
+			this.M.S.genTextM(btn.left+10,btn.top+15,info.selectorName,this.M.S.BaseTextStyleSS(20));
+			this.M.S.genTextM(btn.right-10,btn.bottom-15,info.selectorSubName,this.M.S.BaseTextStyleSS(20));
 			orderX++;
 			if(orderX==l){
 				orderX=0;
@@ -56,14 +56,11 @@ BasicGame.SelectStage.prototype={
 		this.curStage=curStage;
 		this.M.setGlobal('curStage',curStage);
 		this.curStageInfo=this.StageInfo[curStage];
-
 		this.DynamicBgSprite.loadTexture(this.curStageInfo.stgBg);
-
-		// TODO adjust tween duration
+		this.CurBgNameTextSprite.changeText(this.curStageInfo.selectorName);
 		this.M.T.moveX(this.CurBgSprite,{xy:{x:-this.CurBgSprite.width},easing:Phaser.Easing.Cubic.Out}).start();
 		this.Tween=this.M.T.moveX(this.DynamicBgSprite,{xy:{x:0},easing:Phaser.Easing.Cubic.Out});
 		this.Tween.start();
-
 		this.Tween.onComplete.add(function(){
 			this.CurBgSprite.x=this.world.width;
 			var tmp=this.DynamicBgSprite;
@@ -89,9 +86,9 @@ BasicGame.SelectStage.prototype={
 		this.M.NextScene('SelectChar');
 	},
 	genHUD:function(){
-		var y=this.world.height*.1;
-		this.M.S.BasicVolSprite(this.world.width*.1,y);
-		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+		var y=this.world.height*.06;
+		this.M.S.BasicVolSprite(this.world.width*.05,y);
+		this.M.S.BasicFullScreenBtn(this.world.width*.95,y);
 	},
 	genVS:function(){
 		// TODO VS animation

@@ -1,9 +1,9 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	MAIN_COLOR:'#fef106', // TODO
-	MAIN_TINT:0xfef106, // TODO
-	MAIN_TEXT_COLOR:'#a17b63', // TODO
-	MAIN_STROKE_COLOR:'#8f8e8f', // TODO
+	MAIN_COLOR:'#668af6',
+	MAIN_TINT:0x668af6,
+	MAIN_TEXT_COLOR:'#557be4',
+	MAIN_STROKE_COLOR:'#d16769',
 	WHITE_COLOR:'#ffffff',
 	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
 };
