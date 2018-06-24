@@ -25,10 +25,9 @@ BasicGame.Play.prototype={
 		this.simonList=[];
 		this.playerInput=!1;
 
-		// TODO for info?
 		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
+		this.gamePadColors=[0xe8383d,0x00a960,0x444444,0x444444,0x444444,0x444444];
 		this.btnCount=this.gamePadFrames.length;
-		this.gamePadColor=0x0000f0;
 
 		this.maxLife=
 		this.curLife=100;
@@ -46,7 +45,7 @@ BasicGame.Play.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('PlayBGM',{volume:1});
+		this.M.SE.playBGM('G_Alpha',{volume:1});
 		this.genContents();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
 		this.tut();
@@ -58,14 +57,14 @@ BasicGame.Play.prototype={
 		this.genTut();
 	},
 	rdy:function(){
-		var tween=this.M.T.popUpB(this.RdyTxtSprite);
+		var tween=this.M.T.popUpB(this.RdyTxtSprite,{duration:800});
 		tween.start();
 		tween.onComplete.add(this.fight,this);
 	},
 	fight:function(){
 		//TODO destroy timing -> refer other game
 		this.RdyTxtSprite.destroy();
-		var tween=this.M.T.popUpB(this.FightTxtSprite);
+		var tween=this.M.T.popUpB(this.FightTxtSprite,{duration:800});
 		tween.start();
 		tween.onComplete.add(this.start,this);
 	},

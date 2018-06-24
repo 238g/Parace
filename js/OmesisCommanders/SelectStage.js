@@ -11,7 +11,7 @@ BasicGame.SelectStage.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},

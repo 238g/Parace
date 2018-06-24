@@ -3,39 +3,47 @@ BasicGame.Title.prototype={
 	init:function(){
 		this.inputEnabled=!1;
 		this.isPlaying=!0;
-		this.TtlGrp=null;
+		this.TtlGrp=this.TtlBlink=this.TtlMask=this.StartBtn=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
-		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 	genContents:function(){
 		this.add.sprite(0,0,'Bg_1');
 		this.TtlGrp=this.add.group();
 		this.genTtl(this.world.width*.7,this.world.height*.45);
-		this.add.button(this.world.centerX,this.world.height*.87,'StartBtn',this.start,this).anchor.setTo(.5);
+		this.StartBtn=this.add.button(this.world.centerX,this.world.height*.87,'StartBtn',this.start,this);
+		this.StartBtn.anchor.setTo(.5);
+		this.StartBtn.visible=!1;
 		this.genHUD();
 	},
 	genTtl:function(x,y){
 		var ttl=this.add.sprite(x,y,'Ttl');
 		ttl.anchor.setTo(.5);
 		this.TtlGrp.add(ttl);
-		var blink=this.add.sprite(x,y,'TtlBlink');
-		blink.anchor.setTo(.5);
-		this.TtlGrp.add(blink);
-		var mask=this.add.graphics(blink.left,0);
-		mask.beginFill(0xffffff);
-		mask.drawRect(0,0,15,this.world.height);
-		mask.endFill();
-		mask.angle=35;
-		this.TtlGrp.add(mask);
-		blink.mask=mask;
-		var tween=this.M.T.moveB(mask,{xy:{x:blink.centerX*2},duration:1000,delay:2000});
-		tween.loop();
-		tween.start(); // TODO popup complete
+		this.TtlBlink=this.add.sprite(x,y,'TtlBlink');
+		this.TtlBlink.anchor.setTo(.5);
+		this.TtlGrp.add(this.TtlBlink);
+		this.TtlMask=this.add.graphics(this.TtlBlink.left,0);
+		this.TtlMask.beginFill(0xffffff);
+		this.TtlMask.drawRect(0,0,15,this.world.height);
+		this.TtlMask.endFill();
+		this.TtlMask.angle=35;
+		this.TtlGrp.add(this.TtlMask);
+		this.TtlBlink.mask=this.TtlMask;
+		this.TtlGrp.scale.setTo(0);
+		var t=this.M.T.popUpB(this.TtlGrp,{delay:500});
+		t.onComplete.add(function(){
+			var t2=this.M.T.moveB(this.TtlMask,{xy:{x:this.TtlBlink.centerX*2},duration:1000,delay:2000});
+			t2.loop();
+			t2.start();
+			this.StartBtn.visible=!0;
+			this.inputEnabled=!0;
+		},this);
+		t.start();
 	},
 	start:function(){
 		if (this.inputEnabled&&this.isPlaying) {

@@ -10,7 +10,8 @@ BasicGame.SelectChar.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
@@ -18,7 +19,8 @@ BasicGame.SelectChar.prototype={
 	genContents:function(){
 		this.add.sprite(0,0,'Bg_2');
 		this.CharIntroGrp=this.add.group();
-		this.CharIntroSprite=this.add.sprite(100,30,this.curCharInfo.idle);
+		this.CharIntroSprite=this.add.sprite(this.world.width*.25,this.world.centerY,this.curCharInfo.idle);
+		this.CharIntroSprite.anchor.setTo(.5);
 		this.CharIntroGrp.add(this.CharIntroSprite);
 		this.CharNameTxtSprite=this.M.S.genTextM(this.world.width*.25,this.world.height*.65,this.curCharInfo.charName,this.M.S.BaseTextStyleSS(40));
 		this.CharIntroGrp.add(this.CharNameTxtSprite);

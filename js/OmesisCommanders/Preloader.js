@@ -1,7 +1,7 @@
 BasicGame.Preloader=function(){};
 BasicGame.Preloader.prototype={
 	create:function(){
-		this.sounds=null; 
+		this.sounds={}; 
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
 		this.M.S.genText(this.world.centerX,this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
@@ -20,8 +20,8 @@ BasicGame.Preloader.prototype={
 			'StartBtn':'images/OmesisCommanders/StartBtn.png',
 			'OkBtn':'images/OmesisCommanders/OkBtn.png',
 			'BackBtn':'images/OmesisCommanders/BackBtn.png',
-			'ReadyText':'images/Oda/Title_en.png',
-			'GoText':'images/Oda/Title_jp.png',
+			'ReadyText':'images/OmesisCommanders/ReadyText.png',
+			'FightText':'images/OmesisCommanders/FightText.png',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 			'Bg_1':'images/OmesisCommanders/Bg_1.jpg',
@@ -37,30 +37,48 @@ BasicGame.Preloader.prototype={
 		var CI=this.M.getConf('CharInfo');
 		for(var k in CI){
 			var info=CI[k];
-			this.load.image(info.charSquare,info.charSquarePath);
-			this.load.image(info.idle,info.idlePath);
 			this.load.image(info.ch,info.chPath);
-			for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg'); // TODO del
+			// animBase:'album_',animBasePath:'images/AzlimBushi/album_',
+			// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg'); // TODO del
 			// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.png');
 			charCount++;
+
+			var charSquare='CS'+charCount;
+			this.load.image(charSquare,'images/OmesisCommanders/Chars/CharSquare/'+charCount+'.jpg');
+			info.charSquare=charSquare;
+			var idle='Idle_'+charCount;
+			this.load.image(idle,'images/OmesisCommanders/Chars/Char_'+charCount+'/Idle.png');
+			info.idle=idle;
 		}
 		this.M.setGlobal('charCount',charCount);
 		var SI=this.M.getConf('StageInfo');
 		for(var k in SI){
 			var info=SI[k];
-			this.load.image(info.selector,info.selectorPath);
-			this.load.image(info.stgBg,info.stgBgPath);
+			var selector='SBs'+k;
+			this.load.image(selector,'images/OmesisCommanders/StgBg/s'+k+'.jpg');
+			info.selector=selector;
+			var stgBg='SB'+k;
+			this.load.image(stgBg,'images/OmesisCommanders/StgBg/'+k+'.jpg');
+			info.stgBg=stgBg;
 		}
 	},
 
 	loadAudio:function(){
-		this.sounds={
-			'TitleBGM': [
-				'sounds/BGM/O/OnPatrol.mp3',
-				'sounds/BGM/O/OnPatrol.wav',
-			],
+		var s={
+			TitleBGM:'sounds/BGM/OmesisCommanders/MaouCyber16',
+			G_Alpha:'sounds/BGM/OmesisCommanders/Greece_Alpha',
+			G_Beta:'sounds/BGM/OmesisCommanders/Greece_Beta',
+			G_Delta:'sounds/BGM/OmesisCommanders/Greece_Delta',
+			G_Epsilon:'sounds/BGM/OmesisCommanders/Greece_Epsilon',
+			G_Gamma:'sounds/BGM/OmesisCommanders/Greece_Gamma',
+			G_Omega:'sounds/BGM/OmesisCommanders/Greece_Omega',
+			VS:'sounds/SE/V/VS',
 		};
-		for(var k in this.sounds)this.load.audio(k,this.sounds[k]);
+		for(var k in s){
+			var p=s[k];
+			this.sounds[k]=1;
+			this.load.audio(k,[p+'.mp3',p+'wav']);
+		}
 	},
 
 	loadComplete:function(){

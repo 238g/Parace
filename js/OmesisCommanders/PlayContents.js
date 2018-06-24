@@ -2,8 +2,9 @@ BasicGame.Play.prototype.genTut=function(){
 	this.TutSprite=this.add.sprite(this.world.centerX,this.world.centerY,'TWP');
 	this.TutSprite.tint=0x000000;
 	this.TutSprite.anchor.setTo(.5);
-	// TODO tutorial text
-	var text='aaaaaaaaaaaaaaaaaaaaa\nbbbbbbbbbbbbbbb';
+	var text=this.curStageInfo.isEndless
+		?'表示されるコマンドを覚えよう！\n覚えた順に同じコマンドを押していこう！\nどこまで行けるか…\n記憶力との勝負だ！'
+		:'表示されるコマンドを覚えよう！\n覚えた順に同じコマンドを押して\n相手に攻撃しよう！\n間違えるとダメージを受けるから注意！';
 	var textStyle=this.M.S.BaseTextStyleS(30);
 	textStyle.align='center';
 	var textSprite=this.M.S.genTextM(0,0,text,textStyle);
@@ -20,10 +21,15 @@ BasicGame.Play.prototype.summonSimon=function(){
 		var frameNum=this.simonList[i];
 		var delay=i*1000;
 		var simonSprite=this.M.S.genSprite(this.world.centerX,this.world.height,'GameIconsWhite',this.gamePadFrames[frameNum]);
-		simonSprite.tint=this.gamePadColor;
+		simonSprite.tint=0x000000;
 		simonSprite.anchor.setTo(.5,0);
 		simonSprite.frameNum=frameNum;
-		// TODO think tween
+		var simonSprite2=this.M.S.genSprite(-3,-3,'GameIconsWhite',this.gamePadFrames[frameNum]);
+		simonSprite2.tint=this.gamePadColors[frameNum];
+		simonSprite2.anchor.setTo(.5,0);
+		simonSprite2.frameNum=frameNum;
+		simonSprite2.scale.setTo(1.03);
+		simonSprite.addChild(simonSprite2);
 		var tweenA=this.M.T.moveA(simonSprite,{xy:{y:'-100'},delay:delay});
 		var tweenB=this.M.T.moveA(simonSprite,{xy:{y:'-100'}});
 		var tweenC=this.M.T.moveA(simonSprite,{xy:{y:'-100'}});
@@ -42,36 +48,38 @@ BasicGame.Play.prototype.summonSimon=function(){
 				this.PlayerSprite.loadTexture(this.curCharInfo.idle);
 			}
 		},this);
-		tweenA.onStart.add(function(s){
-			// TODO SE
-			this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(s.frameNum+1));
-		},this);
+		// tweenA.onStart.add(function(s){
+			// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(s.frameNum+1));
+		// },this);
 	}
 };
 BasicGame.Play.prototype.genContents=function(){
 	this.add.sprite(0,0,this.curStageInfo.stgBg);
-	this.genStartSprites();
 	this.genCharSprites();
 	this.genGamePadBtns();
+	this.genStartSprites();
 };
 BasicGame.Play.prototype.genStartSprites=function(){
 	this.RdyTxtSprite=this.add.sprite(this.world.centerX,this.world.centerY,'ReadyText');
 	this.RdyTxtSprite.anchor.setTo(.5);
 	this.RdyTxtSprite.scale.setTo(0);
-	this.FightTxtSprite=this.add.sprite(this.world.centerX,this.world.centerY,'GoText');
+	this.FightTxtSprite=this.add.sprite(this.world.centerX,this.world.centerY,'FightText');
 	this.FightTxtSprite.anchor.setTo(.5);
 	this.FightTxtSprite.scale.setTo(0);
 };
 BasicGame.Play.prototype.genCharSprites=function(){
-	// TODO if(this.curStageInfo.isEndless) -> player center? enemy delete
-	this.PlayerSprite=this.add.sprite(this.world.width*.3,this.world.height*.3,this.curCharInfo.idle);
-	this.PlayerSprite.anchor.setTo(.5);
-	this.EnemySprite=this.add.sprite(this.world.width*.7,this.world.height*.3,this.curEnemyInfo.idle);
-	this.EnemySprite.anchor.setTo(.5);
-	this.EnemySprite.scale.setTo(-1,1);
-	this.genGaugeContainer();
-	// TODO gauge lower name
-	// this.curCharInfo.charName
+	if(this.curStageInfo.isEndless){
+		this.PlayerSprite=this.add.sprite(this.world.centerX,this.world.centerY,this.curCharInfo.idle);
+		this.PlayerSprite.anchor.setTo(.5);
+	}else{
+		this.PlayerSprite=this.add.sprite(this.world.width*.3,this.world.centerY,this.curCharInfo.idle);
+		this.PlayerSprite.anchor.setTo(.5);
+		this.PlayerSprite.scale.setTo(.7);
+		this.EnemySprite=this.add.sprite(this.world.width*.7,this.world.centerY,this.curEnemyInfo.idle);
+		this.EnemySprite.anchor.setTo(.5);
+		this.EnemySprite.scale.setTo(-.7,.7);
+		this.genGaugeContainer();
+	}
 };
 BasicGame.Play.prototype.genGaugeContainer=function(){
 	var x=this.world.width*.025;
@@ -107,16 +115,12 @@ BasicGame.Play.prototype.genGamePadBtns=function(){
 };
 BasicGame.Play.prototype.genGamePadBtnSprite=function(x,y,frameNum){
 	var frame=this.gamePadFrames[frameNum];
-	// TODO need stroke ???
 	var s=this.add.sprite(x,y,'GameIconsWhite',frame);
 	s.tint=0x000000;
 	s.scale.setTo(.83);
-	// s.scale.setTo(.9);
-	// s.anchor.setTo(.5);
 	var btnSprite = this.add.button(x,y,'GameIconsWhite',this.onInputUpGamePad,this,frame,frame,frame,frame);
-	btnSprite.tint=this.gamePadColor;
+	btnSprite.tint=this.gamePadColors[frameNum];
 	btnSprite.frameNum=frameNum;
-	// btnSprite.anchor.setTo(.5);
 	btnSprite.scale.setTo(.8);
 	btnSprite.onInputDown.add(this.onInputDownGamePad,this);
 	btnSprite.onInputOut.add(this.onInputOutGamePad,this);
@@ -144,13 +148,13 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 						this.endInput();
 					}
 				}
-				this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
-				if(this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture(this.curCharInfo.idle);
+				// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
+				// if(this.EnemySprite&&this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture("****ENEMY_IDLE****");
 			} else {
 				// TODO incorrect
 				this.curLife-=this.dmge;
 				// TODO dmge animation
-				this.EnemySprite.loadTexture(this.curCharInfo.animBase+this.rnd.integerInRange(1,this.charAnimCount));
+				// this.EnemySprite.loadTexture(this.curCharInfo.animBase+this.rnd.integerInRange(1,this.charAnimCount));
 				// TODO reduce player health -> (gauge width = this.curLife/this.maxLife)
 				console.log(this.curLife);
 				if(this.curLife<=0){
