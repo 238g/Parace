@@ -9,20 +9,18 @@ BasicGame.Preloader.prototype={
 		this.loadAssets();
 		this.load.start();
 	},
-
 	loadAssets:function(){
 		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
 			'Ttl':'images/OmesisCommanders/Ttl.png',
-			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
-			'WP':'images/OmesisCommanders/WhitePaper.jpg',
+			'TWP':'images/Oda/TranslucentWhitePaper.png', // TODO fix size
+			'Asahi':'images/kashikomari/Pandey_1.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
 	},
-
 	loadAudio:function(){
 		var s={
 			TitleBGM:'sounds/BGM/OmesisCommanders/MaouCyber16',
@@ -33,7 +31,6 @@ BasicGame.Preloader.prototype={
 			this.load.audio(k,[p+'.mp3',p+'wav']);
 		}
 	},
-
 	loadComplete:function(){
 		this.game.device.desktop&&(document.body.style.cursor='pointer');
 		this.M.SE.setSounds(this.sounds);

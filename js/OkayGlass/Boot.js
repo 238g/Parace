@@ -18,6 +18,8 @@ create:function(){
 		EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 	});
 	this.M.defineGlobal({
+		curMode:'FREE',
+		endTut:!1,
 	});
 	this.M.defineConf({
 	});
