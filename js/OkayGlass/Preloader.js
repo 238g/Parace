@@ -16,12 +16,6 @@ BasicGame.Preloader.prototype={
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
 			'Ttl':'images/OmesisCommanders/Ttl.png',
-			'TtlBlink':'images/OmesisCommanders/TtlBlink.png',
-			'StartBtn':'images/PeanutNinja/Title.png',
-			'OkBtn':'images/AoiGame/Pin.png',
-			'BackBtn':'images/AoiGame/Flower.png',
-			'ReadyText':'images/Oda/Title_en.png',
-			'GoText':'images/Oda/Title_jp.png',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 		};

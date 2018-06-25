@@ -11,7 +11,9 @@ BasicGame.Play.prototype={
 		this.genContents();
 		this.tes();
 	},
+	genContents:function(){
 
+	},
 	start:function(){
 		this.isPlaying=!0;
 	},

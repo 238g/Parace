@@ -1,51 +1,46 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
-	init:function(){ 
-		this.isPlaying=!1;
-		this.correctCount=0;
-		this.curSimonNum=0;
-
+	init:function(){
+		/// Conf
 		var CharInfo=this.M.getConf('CharInfo');
-
 		this.curChar=this.M.getGlobal('curChar');
 		this.curCharInfo=CharInfo[this.curChar];
-
 		this.curEnemy=this.rnd.integerInRange(1,this.M.getGlobal('charCount'));
 		this.curEnemyInfo=CharInfo[this.curEnemy];
-
 		this.curStage=this.M.getGlobal('curStage');
 		this.curStageInfo=this.M.getConf('StageInfo')[this.curStage];
-
-		this.goalCount=this.curStageInfo.goalCount;
-
-		this.charAnimCount=this.M.getConst('CHAR_ANIM_COUNT');
-
-		this.challengeCount=this.curStageInfo.firstChallengeCount;
-		this.endSummonSimonCount=0;
-		this.simonList=[];
+		/// Val
+		this.isPlaying=
 		this.playerInput=!1;
-
+		this.endSt=null;
+		this.playerLifeWidth=this.enemyLifeWidth=
+		this.correctCount=
+		this.curSimonNum=
+		this.endSummonSimonCount=0;
+		this.goalCount=this.curStageInfo.goalCount;
+		this.challengeCount=this.curStageInfo.firstChallengeCount;
+		this.simonList=[];
+		////// this.charAnimCount=this.M.getConst('CHAR_ANIM_COUNT');
+		/// GamePad
 		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
 		this.gamePadColors=[0xe8383d,0x00a960,0x444444,0x444444,0x444444,0x444444];
 		this.btnCount=this.gamePadFrames.length;
-
+		/// Gauge
 		this.maxLife=
-		this.curLife=100;
+		this.curLife=
+		this.curEnemyLife=100;
 		this.dmge=this.curStageInfo.dmge;
-
-		this.endSt=null;
-
-		this.TutSprite=
+		this.attack=100/((this.goalCount-this.challengeCount)+1);
+		/// Obj
+		this.TutSprite=this.RdyTxtSprite=this.FightTxtSprite=
 		this.PlayerLifeSprite=this.EnemyLifeSprite=
-		this.RdyTxtSprite=this.FightTxtSprite=
-		this.PlayerSprite=this.EnemySprite=
-		null;
+		this.PlayerSprite=this.EnemySprite=null;
 	},
 
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.SE.playBGM('G_Alpha',{volume:1});
+		this.stage.backgroundColor='#000000';
+		this.M.SE.playBGM('G_Alpha',{volume:1}); // TODO
 		this.genContents();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
 		this.tut();
@@ -62,31 +57,26 @@ BasicGame.Play.prototype={
 		tween.onComplete.add(this.fight,this);
 	},
 	fight:function(){
-		//TODO destroy timing -> refer other game
 		this.RdyTxtSprite.destroy();
 		var tween=this.M.T.popUpB(this.FightTxtSprite,{duration:800});
 		tween.start();
 		tween.onComplete.add(this.start,this);
 	},
 	start:function(){
-		//TODO destroy timing -> refer other game
-		this.FightTxtSprite.destroy();
 		this.isPlaying=!0;
-		this.summonSimon();
+		this.time.events.add(300,function(){
+			this.FightTxtSprite.destroy();
+			this.summonSimon();
+		},this);
 	},
 	end:function(){
-		this.isPlaying=!1;
-		this.playerInput=!1;
-
+		this.isPlaying=this.playerInput=!1;
 		if(this.endSt=='WIN'){
-			// TODO enemy health =0
 			this.genResPopUp('WIN');
-		}else{//gameover
+		}else{//GAMEOVER
 			if(this.curStageInfo.isEndless){
-				// TODO endless res
 				this.genResPopUp('GAME OVER');
 			}else{
-				// TODO player health =0
 				this.genResPopUp('LOSE');
 			}
 		}
@@ -96,7 +86,6 @@ BasicGame.Play.prototype={
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(function(){this.endSt='WIN';this.end();},this);
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(function(){this.endSt='LOSE';this.end();},this);
-			this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 			this.M.H.getQuery('cc')&&(this.challengeCount=this.M.H.getQuery('cc'));
 		}
 	},

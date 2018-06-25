@@ -3,7 +3,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		1:{
 			charName:'おめがレイ',
 			ytUrl:'https://www.youtube.com/channel/UCNjTjd2-PMC8Oo_-dCEss7A',
-			ch:'Channel',chPath:'images/Nekomiya/Channel.png',
+			ch:'Channel',chPath:'images/Nekomiya/Channel.png', // TODO into preloader
 		},
 		2:{
 			charName:'おめがリオ',

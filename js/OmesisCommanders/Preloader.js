@@ -38,17 +38,17 @@ BasicGame.Preloader.prototype={
 		for(var k in CI){
 			var info=CI[k];
 			this.load.image(info.ch,info.chPath);
-			// animBase:'album_',animBasePath:'images/AzlimBushi/album_',
-			// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg'); // TODO del
-			// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.png');
+			////// animBase:'album_',animBasePath:'images/AzlimBushi/album_',
+			////// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg');
+			////// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.png');
 			charCount++;
-
 			var charSquare='CS'+charCount;
 			this.load.image(charSquare,'images/OmesisCommanders/Chars/CharSquare/'+charCount+'.jpg');
 			info.charSquare=charSquare;
 			var idle='Idle_'+charCount;
 			this.load.image(idle,'images/OmesisCommanders/Chars/Char_'+charCount+'/Idle.png');
 			info.idle=idle;
+			// TODO channel
 		}
 		this.M.setGlobal('charCount',charCount);
 		var SI=this.M.getConf('StageInfo');
@@ -89,6 +89,7 @@ BasicGame.Preloader.prototype={
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		// this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
+		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
 	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
 };

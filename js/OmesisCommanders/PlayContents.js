@@ -19,7 +19,8 @@ BasicGame.Play.prototype.summonSimon=function(){
 	this.playerInput=!1;
 	for(var i=0;i<this.challengeCount;i++){
 		var frameNum=this.simonList[i];
-		var delay=i*1000;
+		var duration=800;
+		var delay=i*duration;
 		var simonSprite=this.M.S.genSprite(this.world.centerX,this.world.height,'GameIconsWhite',this.gamePadFrames[frameNum]);
 		simonSprite.tint=0x000000;
 		simonSprite.anchor.setTo(.5,0);
@@ -30,10 +31,10 @@ BasicGame.Play.prototype.summonSimon=function(){
 		simonSprite2.frameNum=frameNum;
 		simonSprite2.scale.setTo(1.03);
 		simonSprite.addChild(simonSprite2);
-		var tweenA=this.M.T.moveA(simonSprite,{xy:{y:'-100'},delay:delay});
-		var tweenB=this.M.T.moveA(simonSprite,{xy:{y:'-100'}});
-		var tweenC=this.M.T.moveA(simonSprite,{xy:{y:'-100'}});
-		var tweenD=this.M.T.popUpA(simonSprite,{scale:{x:.001,y:.5},delay:2000+delay});
+		var tweenA=this.M.T.moveA(simonSprite,{xy:{y:'-100'},delay:delay,duration:duration});
+		var tweenB=this.M.T.moveA(simonSprite,{xy:{y:'-100'},duration:duration});
+		var tweenC=this.M.T.moveA(simonSprite,{xy:{y:'-100'},duration:duration});
+		var tweenD=this.M.T.popUpA(simonSprite,{scale:{x:.001,y:.5},delay:duration*2+delay,duration:duration});
 		tweenA.chain(tweenB);
 		tweenB.chain(tweenC);
 		tweenA.start();
@@ -48,9 +49,9 @@ BasicGame.Play.prototype.summonSimon=function(){
 				this.PlayerSprite.loadTexture(this.curCharInfo.idle);
 			}
 		},this);
-		// tweenA.onStart.add(function(s){
-			// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(s.frameNum+1));
-		// },this);
+		////// tweenA.onStart.add(function(s){
+			////// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(s.frameNum+1));
+		////// },this);
 	}
 };
 BasicGame.Play.prototype.genContents=function(){
@@ -88,10 +89,11 @@ BasicGame.Play.prototype.genGaugeContainer=function(){
 	var h=this.world.height*.07;
 	var textStyle=this.M.S.BaseTextStyleS(25);
 	this.PlayerLifeSprite=this.genGauge(x,y,w,h);
+	this.playerLifeWidth=this.PlayerLifeSprite.width;
 	this.M.S.genTextM(this.PlayerLifeSprite.centerX-60,this.PlayerLifeSprite.bottom+30,this.curCharInfo.charName,textStyle);
 	x+=this.world.centerX;
-	// TODO change color? textStyle.*****
 	this.EnemyLifeSprite=this.genGauge(x,y,w,h);
+	this.enemyLifeWidth=this.EnemyLifeSprite.width;
 	this.M.S.genTextM(this.EnemyLifeSprite.centerX+60,this.EnemyLifeSprite.bottom+30,this.curEnemyInfo.charName,textStyle);
 };
 BasicGame.Play.prototype.genGauge=function(x,y,w,h){
@@ -137,10 +139,16 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 				this.curSimonNum++;
 				this.correctCount++;
 				if(this.challengeCount==this.correctCount){
-					this.challengeCount++;
 					this.correctCount=0;
 					this.curSimonNum=0;
 					this.endSummonSimonCount=0;
+					if(!this.curStageInfo.isEndless){
+						this.curEnemyLife-=this.attack;
+						this.EnemyLifeSprite.width=(this.curEnemyLife<=0||this.challengeCount>this.goalCount)?0:this.enemyLifeWidth*(this.curEnemyLife/this.maxLife);
+						// TODO attack animation
+					}
+					this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
+					this.challengeCount++;
 					if (this.challengeCount>this.goalCount) {
 						this.endSt='WIN';
 						this.end();
@@ -148,15 +156,18 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 						this.endInput();
 					}
 				}
-				// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
-				// if(this.EnemySprite&&this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture("****ENEMY_IDLE****");
+				////// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
+				////// if(this.EnemySprite&&this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture("****ENEMY_IDLE****");
 			} else {
 				// TODO incorrect
 				this.curLife-=this.dmge;
-				// TODO dmge animation
-				// this.EnemySprite.loadTexture(this.curCharInfo.animBase+this.rnd.integerInRange(1,this.charAnimCount));
-				// TODO reduce player health -> (gauge width = this.curLife/this.maxLife)
 				console.log(this.curLife);
+				if(!this.curStageInfo.isEndless){
+					this.PlayerLifeSprite.width=(this.curLife<=0)?0:this.playerLifeWidth*(this.curLife/this.maxLife);
+				}
+				this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
+				// TODO dmge animation /// effect
+				////// this.EnemySprite.loadTexture(this.curCharInfo.animBase+this.rnd.integerInRange(1,this.charAnimCount));
 				if(this.curLife<=0){
 					this.endSt='LOSE';
 					this.end();
@@ -169,11 +180,8 @@ BasicGame.Play.prototype.onInputDownGamePad=function(b){b.alpha=.5;};
 BasicGame.Play.prototype.onInputOutGamePad=function(b){b.alpha=1;};
 BasicGame.Play.prototype.endInput=function(){
 	this.playerInput=!1;
-	// TODO attack animation
 	this.PlayerSprite.loadTexture(this.curCharInfo.idle);
-	// TODO reduce enemy health -> (gauge width / goalCount)
-	// TODO oncomplete
-	this.summonSimon();
+	this.time.events.add(1000,this.summonSimon,this); // TODO adjust
 };
 BasicGame.Play.prototype.genResPopUp=function(txt){
 	var ts=this.M.S.genTextM(this.world.centerX,this.world.centerY,txt,this.M.S.BaseTextStyleS(80));
@@ -198,7 +206,7 @@ BasicGame.Play.prototype.genRes=function(){
 	var bottomY2=this.world.height*.86;
 	var leftX=this.world.width*.3;
 	this.genResTxtSprite(this.world.centerX,this.world.height*.15,'結果',this.M.S.BaseTextStyleS(50),0);
-	this.genResTxtSprite(leftX,upperY,this.curStageInfo.isEndless?(this.challengeCount-1):this.endSt,this.M.S.BaseTextStyleS(35),200);
+	this.genResTxtSprite(leftX,upperY,this.curStageInfo.isEndless?'記録: '+(this.challengeCount-1):this.endSt,this.M.S.BaseTextStyleS(35),200);
 	this.genYtSprite(leftX,bottomY,600);
 	var rightX=this.world.width*.75;
 	textStyle=this.M.S.BaseTextStyleSS(25);
