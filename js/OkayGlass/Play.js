@@ -8,7 +8,7 @@ BasicGame.Play.prototype={
 		this.msTimer=1E3;
 		this.score=0;
 
-		this.BackBtnSprite=
+		this.BrokenGlasses=this.curTween=
 		this.TutSprite=this.TimeTxtSprite=this.ScoreTxtSprite=this.TiredBtnSprite=null;
 	},
 	create:function(){
@@ -34,8 +34,27 @@ BasicGame.Play.prototype={
 		}
 	},
 	freeContents:function(){
-		this.BackBtnSprite=this.M.S.BasicGrayLabelM(this.world.width*.25,this.world.height*.95,this.back,'戻る',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
-		// TODO dont need start
+		var charSprie=this.add.button(0,0,'Asahi_1',function(){
+			if(!this.curTween.isRunning){
+				this.BrokenGlasses.frame+=1;
+				if(this.BrokenGlasses.frame==0){
+					this.score++;
+					this.ScoreTxtSprite.changeText('粉砕数: '+this.score);
+					this.M.SE.play('RepairGlasses',{volume:1});
+					// TODO fly broken glasses
+				}else{
+					this.M.SE.play('BreakGlasses_1',{volume:1});
+				}
+				this.curTween.start();
+			}
+		},this);
+		this.curTween=this.add.tween(charSprie);
+		this.curTween.to({x:'+2'},50,null,!1,0,3,!0);
+		this.BrokenGlasses=this.add.sprite(0,0,'BrokenGlasses',0);
+		charSprie.addChild(this.BrokenGlasses);
+		this.M.S.BasicGrayLabelM(this.world.width*.25,this.world.height*.95,this.back,'戻る',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
+		this.M.S.BasicGrayLabelM(this.world.width*.75,this.world.height*.95,this.tweet,'ツイート',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
+		this.ScoreTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.05,'粉砕数: '+this.score,this.M.S. BaseTextStyleS(30));
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
 	back:function(){
@@ -81,6 +100,9 @@ BasicGame.Play.prototype={
 	end:function(){
 		this.isPlaying=!1;
 		// TODO res
+	},
+	tweet:function(){
+
 	},
 	tes:function(){
 		if(__ENV!='prod'){

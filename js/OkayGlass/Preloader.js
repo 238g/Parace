@@ -13,10 +13,12 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
+		this.load.spritesheet('BrokenGlasses','images/OkayGlass/BrokenGlasses.png',400,225);
+			
 		var imageAssets={
 			'Ttl':'images/OmesisCommanders/Ttl.png',
 			'TWP':'images/Oda/TranslucentWhitePaper.png', // TODO fix size
-			'Asahi':'images/kashikomari/Pandey_1.png',
+			'Asahi_1':'images/OkayGlass/Asahi_1.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -24,6 +26,8 @@ BasicGame.Preloader.prototype={
 	loadAudio:function(){
 		var s={
 			TitleBGM:'sounds/BGM/OmesisCommanders/MaouCyber16',
+			RepairGlasses:'sounds/SE/LabJP/Performance/Anime/shakin2',
+			BreakGlasses_1:'sounds/SE/LabJP/Life/Collision/glass-break4',
 		};
 		for(var k in s){
 			var p=s[k];
