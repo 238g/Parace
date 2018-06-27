@@ -9,7 +9,7 @@ BasicGame.Play.prototype={
 		this.enemiesCount=100;
 		//// Obj
 		this.StartTxtSprite=
-		this.BrokenGlasses=this.curTween=
+		this.BrokenGlasses=this.shakeTween=this.moveTween=
 		this.TutSprite=this.TimeTxtSprite=this.ScoreTxtSprite=
 		this.Enemies=this.TiredBtnSprite=null;
 	},
@@ -37,19 +37,22 @@ BasicGame.Play.prototype={
 		}
 	},
 	freeContents:function(){
+		this.add.sprite(0,0,'Bg_1');
 		var charSprie=this.add.sprite(0,0,'Asahi_1');
-		this.curTween=this.add.tween(charSprie);
-		this.curTween.to({x:'+2'},50,null,!1,0,3,!0);
+		this.shakeTween=this.add.tween(charSprie);
+		this.shakeTween.to({x:'+2'},50,null,!1,0,3,!0);
 		this.BrokenGlasses=this.add.sprite(0,0,'BrokenGlasses',0);
 		charSprie.addChild(this.BrokenGlasses);
 		this.M.S.BasicGrayLabelM(this.world.width*.25,this.world.height*.95,this.back,'戻る',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 		this.M.S.BasicGrayLabelM(this.world.width*.75,this.world.height*.95,this.freeModeTweet,'ツイート',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 		this.ScoreTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.05,'粉砕数: '+this.score,this.M.S. BaseTextStyleS(30));
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
-		var clickRange=this.add.button(this.world.centerX,this.world.height*.3,'',this.breakGlasses,this);
-		clickRange.width=this.world.width*.5;
-		clickRange.height=this.world.height*.4;
+		var clickRange=this.add.button(this.world.centerX,this.world.height*.45,'',this.breakGlasses,this);
+		clickRange.width=this.world.width*.55;
+		clickRange.height=this.world.height*.8;
 		clickRange.anchor.setTo(.5);
+		this.moveTween={isRunning:!1};
+		this.genHUD();
 	},
 	back:function(){
 		if(this.inputEnabled){
@@ -58,17 +61,20 @@ BasicGame.Play.prototype={
 		}
 	},
 	breakGlasses:function(){
-		if(!this.curTween.isRunning){
-			this.BrokenGlasses.frame+=1;
+		if(!this.shakeTween.isRunning&&!this.moveTween.isRunning){
+			this.BrokenGlasses.frame++;
 			if(this.BrokenGlasses.frame==0){
 				this.score++;
 				this.ScoreTxtSprite.changeText('粉砕数: '+this.M.H.formatComma(this.score));
 				this.M.SE.play('RepairGlasses',{volume:1});
-				// TODO fly broken glasses
+				var s=this.add.sprite(this.BrokenGlasses.centerX,this.BrokenGlasses.height,'Glasses');
+				s.anchor.setTo(.5,1);
+				this.moveTween=this.M.T.moveB(s,{xy:{x:-this.world.centerX,y:this.world.centerY},duration:500});
+				this.moveTween.start();
 			}else{
 				this.M.SE.play('BreakGlasses_1',{volume:1});
+				this.shakeTween.start();
 			}
-			this.curTween.start();
 		}
 	},
 	freeModeTweet:function(){
@@ -81,7 +87,13 @@ BasicGame.Play.prototype={
 		var url=location.href;
 		this.M.H.tweet(text,hashtags,url);
 	},
+	genHUD:function(){
+		var y=this.world.height*.05;
+		this.M.S.BasicVolSprite(this.world.width*.1,y);
+		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+	},
 	scoreContents:function(){
+		this.add.sprite(0,0,'Bg_2');
 		this.genEnemies();
 		this.TimeTxtSprite=this.M.S.genTextM(this.world.width*.75,this.world.height*.95,'制限時間: '+this.leftTime,this.M.S. BaseTextStyleS(30));
 		this.ScoreTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.05,'スコア: '+this.score,this.M.S. BaseTextStyleS(30));
@@ -91,7 +103,7 @@ BasicGame.Play.prototype={
 				if(this.leftTime<0){
 					this.leftTime=0;
 				}else{
-					this.score+=1000;
+					this.score+=500;
 					this.ScoreTxtSprite.changeText('スコア: '+this.M.H.formatComma(this.score));
 					this.TimeTxtSprite.changeText('制限時間: '+this.leftTime);
 				}
@@ -124,10 +136,9 @@ BasicGame.Play.prototype={
 		}
 	},
 	breakGlassesScore:function(btn){
-		// TODO score
 		var parent=btn.parent;
 		var glasses=parent.getChildAt(0);
-		glasses.frame+=1;
+		glasses.frame++;
 		if(glasses.frame==0){
 			parent.kill();
 			// TODO SE
@@ -135,9 +146,12 @@ BasicGame.Play.prototype={
 				this.respownEnemy();
 				this.respownEnemy();
 			}
+			this.score+=parseInt((1/parent.scale.x)*1500);
 		}else{
 			this.M.SE.play('BreakGlasses_1',{volume:1});
+			this.score+=parseInt(glasses.frame*(1/parent.scale.x)*300);
 		}
+		this.ScoreTxtSprite.changeText('スコア: '+this.M.H.formatComma(this.score));
 	},
 	tut:function(){
 		this.TutSprite=this.add.sprite(this.world.centerX,this.world.centerY,'TWP');
@@ -147,8 +161,10 @@ BasicGame.Play.prototype={
 			this.TutSprite.destroy();
 			this.start();
 		},this);
-		var txt='3分間メガネを割り続けろ！';
-		var t=this.M.S.genTextM(0,0,txt,this.M.S.BaseTextStyleS(25));
+		var txt='3分間\nメガネを\n割り続けろ';
+		var ts=this.M.S.BaseTextStyleS(50);
+		ts.align='center';
+		var t=this.M.S.genTextM(0,0,txt,ts);
 		this.TutSprite.addChild(t);
 	},
 	start:function(){
@@ -158,6 +174,10 @@ BasicGame.Play.prototype={
 		var tween=this.M.T.popUpB(this.StartTxtSprite);
 		tween.onComplete.add(function(){
 			this.StartTxtSprite.destroy();
+			this.respownEnemy();
+			this.respownEnemy();
+			this.respownEnemy();
+			this.respownEnemy();
 			this.isPlaying=!0;
 		},this);
 		tween.start();
@@ -173,6 +193,9 @@ BasicGame.Play.prototype={
 		var tween=this.M.T.popUpB(ts);
 		tween.onComplete.add(function(){
 			this.Enemies.killAll();
+			this.ScoreTxtSprite.visible=!1;
+			this.TimeTxtSprite.visible=!1;
+			this.TiredBtnSprite.visible=!1;
 			var twp=this.add.sprite(0,0,'TWP');
 			twp.tint=0x000000;
 			twp.alpha=0;
@@ -183,15 +206,15 @@ BasicGame.Play.prototype={
 		tween.start();
 	},
 	genRes:function(){
-		var resTextStyle=this.M.S.BaseTextStyleS(50);
+		var resTextStyle=this.M.S.BaseTextStyleS(55);
 		resTextStyle.align='center';
 		var textStyle=this.M.S.BaseTextStyleSS(30);
-		var upperY=this.world.height*.6;
-		var middleY=this.world.height*.7;
+		var upperY=this.world.height*.55;
+		var middleY=this.world.height*.65;
 		var leftX=this.world.width*.25;
 		var rightX=this.world.width*.75;
-		this.genResTxtSprite(this.world.centerX,this.world.height*.15,'結果',resTextStyle,0);
-		this.genResTxtSprite(this.world.centerX,this.world.height*.4,'スコア: \n'+this.M.H.formatComma(this.score),resTextStyle,0);
+		this.genResTxtSprite(this.world.centerX,this.world.height*.1,'結果',resTextStyle,0);
+		this.genResTxtSprite(this.world.centerX,this.world.height*.35,'スコア\n'+this.M.H.formatComma(this.score),resTextStyle,0);
 		textStyle=this.M.S.BaseTextStyleSS(25);
 		this.genResBtnSprite(leftX,upperY,function(){
 			// this.M.SE.play('OnBtn',{volume:1}); // TODO

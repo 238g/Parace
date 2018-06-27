@@ -16,10 +16,13 @@ BasicGame.Preloader.prototype={
 		this.load.spritesheet('BrokenGlasses','images/OkayGlass/BrokenGlasses.png',400,225);
 			
 		var imageAssets={
-			'Ttl':'images/OmesisCommanders/Ttl.png',
-			'TWP':'images/Oda/TranslucentWhitePaper.png', // TODO fix size
+			'TWP':'images/OkayGlass/TranslucentWhitePaper.png',
 			'Asahi_1':'images/OkayGlass/Asahi_1.png',
-			'Channel':'images/Nekomiya/Channel.png', // TODO fix size
+			'Asahi_2':'images/OkayGlass/Asahi_2.png',
+			'Glasses':'images/OkayGlass/Glasses.png',
+			'Channel':'images/OkayGlass/Channel.png',
+			'Bg_1':'images/OkayGlass/Bg_1.jpg',
+			'Bg_2':'images/OkayGlass/Bg_2.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
