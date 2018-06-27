@@ -18,7 +18,8 @@ BasicGame.Preloader.prototype={
 		var imageAssets={
 			'Ttl':'images/OmesisCommanders/Ttl.png',
 			'TWP':'images/Oda/TranslucentWhitePaper.png', // TODO fix size
-			'Asahi_1':'images/OkayGlass/Asahi_1.jpg',
+			'Asahi_1':'images/OkayGlass/Asahi_1.png',
+			'Channel':'images/Nekomiya/Channel.png', // TODO fix size
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();

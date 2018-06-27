@@ -8,21 +8,7 @@ BasicGame.Title.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
-
-		var charSprie=this.add.button(0,0,'Asahi_1',function(){
-			if(!this.curTween.isRunning){
-				if(this.BrokenGlasses.frame==3){
-					if(this.TtlTxtSprite.changed==!1){
-						this.TtlTxtSprite.changed=!0;
-						this.TtlTxtSprite.changeText('クソメガネいじり');
-					}
-					return;
-				}
-				this.M.SE.play('BreakGlasses_1',{volume:1});
-				this.BrokenGlasses.frame+=1;
-				this.curTween.start();
-			}
-		},this);
+		var charSprie=this.add.sprite(0,0,'Asahi_1');
 		this.curTween=this.add.tween(charSprie);
 		this.curTween.to({x:'+2'},50,null,!1,0,3,!0);
 		this.BrokenGlasses=this.add.sprite(0,0,'BrokenGlasses',0);
@@ -30,13 +16,29 @@ BasicGame.Title.prototype={
 		this.TtlTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.6,'あさひさんいじり',this.M.S.BaseTextStyleS(45));
 		this.TtlTxtSprite.anchor.setTo(.5);
 		this.TtlTxtSprite.changed=!1;
-		this.genLabel(this.world.width*.25,this.world.height*.85,'フリーモード','FREE');
-		this.genLabel(this.world.width*.75,this.world.height*.85,'スコアモード','SCORE');
+		this.M.S.BasicGrayLabelM(this.world.width*.25,this.world.height*.85,this.start,'フリースタイル',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}).tag='FREE';
+		this.M.S.BasicGrayLabelM(this.world.width*.75,this.world.height*.85,this.start,'MCバトル',this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}).tag='SCORE';
 		this.genHUD();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
+		var clickRange=this.add.button(this.world.centerX,this.world.height*.3,'',this.breakGlasses,this);
+		clickRange.width=this.world.width*.5;
+		clickRange.height=this.world.height*.4;
+		clickRange.anchor.setTo(.5);
+		clickRange.tint=0x000000;
 	},
-	genLabel:function(x,y,text,tag){
-		this.M.S.BasicGrayLabelM(x,y,this.start,text,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT}).tag=tag;
+	breakGlasses:function(){
+		if(!this.curTween.isRunning){
+			if(this.BrokenGlasses.frame==3){
+				if(this.TtlTxtSprite.changed==!1){
+					this.TtlTxtSprite.changed=!0;
+					this.TtlTxtSprite.changeText('クソメガネいじり');
+				}
+				return;
+			}
+			this.M.SE.play('BreakGlasses_1',{volume:1});
+			this.BrokenGlasses.frame+=1;
+			this.curTween.start();
+		}
 	},
 	start:function(b){
 		if (this.inputEnabled) {

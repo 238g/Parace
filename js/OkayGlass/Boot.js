@@ -5,8 +5,8 @@ BasicGame={
 	MAIN_TEXT_COLOR:'#a17b63', // TODO
 	MAIN_STROKE_COLOR:'#8f8e8f', // TODO
 	WHITE_COLOR:'#ffffff',
-	YOUTUBE_URL:'',
-	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCuE6xoui7gZOTUiF0OtWWJw',
+	MY_GAMES_URL:'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
