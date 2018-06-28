@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 19;
+	var totalCount = 20;
 	return {
 		GamesInfo:{
 			1001: {
@@ -209,6 +209,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				order: totalCount-19,
 				textColor: '#f8978f',
 				bgColor: '#ff7f26',
+				scale: 1,
+			},
+			1020: {
+				id: 1020,
+				title: 'あさひさんいじり',
+				url: 'https://238g.github.io/Parace/FOckingGlasses.html',
+				slideImg: 'apple-icon',
+				slideImgUrl: 'images/FOckingGlasses/favicons/apple-icon.png',
+				order: totalCount-20,
+				textColor: '#503110',
+				bgColor: '#aee9f3',
 				scale: 1,
 			},
 		},
