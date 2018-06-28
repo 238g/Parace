@@ -6,12 +6,11 @@ BasicGame.Play.prototype={
 		this.leftTime=180;
 		this.msTimer=1E3;
 		this.score=0;
-		this.enemiesCount=100;
+		this.enemiesCount=30;
 		//// Obj
-		this.StartTxtSprite=
-		this.BrokenGlasses=this.shakeTween=this.moveTween=
+		this.StartTxtSprite=this.BrokenGlasses=this.shakeTween=this.moveTween=
 		this.TutSprite=this.TimeTxtSprite=this.ScoreTxtSprite=
-		this.Enemies=this.TiredBtnSprite=null;
+		this.Obstacles=this.Enemies=this.TiredBtnSprite=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
@@ -95,6 +94,7 @@ BasicGame.Play.prototype={
 	scoreContents:function(){
 		this.add.sprite(0,0,'Bg_2');
 		this.genEnemies();
+		this.genObstacles();
 		this.TimeTxtSprite=this.M.S.genTextM(this.world.width*.75,this.world.height*.95,'制限時間: '+this.leftTime,this.M.S. BaseTextStyleS(30));
 		this.ScoreTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.05,'スコア: '+this.score,this.M.S. BaseTextStyleS(30));
 		this.TiredBtnSprite=this.M.S.BasicGrayLabelM(this.world.width*.25,this.world.height*.95,function(){
@@ -110,6 +110,26 @@ BasicGame.Play.prototype={
 			}
 		},'面倒',this.M.S. BaseTextStyleS(30));
 		this.M.getGlobal('endTut')?this.start():this.tut();
+	},
+	genObstacles:function(){
+		this.Obstacles=this.add.group();
+		this.Obstacles.inputEnableChildren=!0;
+		this.Obstacles.enableBody=!0;
+		this.Obstacles.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Obstacles.createMultiple(3,['Asahi_2']);
+		this.Obstacles.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+ 		},this);
+		this.Obstacles.onChildInputDown.add(this.missBreak,this);
+	},
+	missBreak:function(btn){
+		btn.kill();
+		// TODO SE
+		this.score-=30000;
+		if(this.score<=0)this.score=0;
+		this.ScoreTxtSprite.changeText('スコア: '+this.M.H.formatComma(this.score));
 	},
 	genEnemies:function(){
 		this.Enemies=this.add.group();
@@ -129,27 +149,57 @@ BasicGame.Play.prototype={
 		if(enemy){
 			enemy.scale.setTo(this.rnd.between(15,50)*.01);
 			enemy.reset(this.world.randomX-enemy.width*.5,this.world.randomY-enemy.height*.5);
+			var rndNum=this.rnd.between(1,100);
+			if(rndNum<15){
+				var speed=this.rnd.between(1,5);
+				enemy.speed=speed;
+				enemy.bonusScore=speed*speed;
+				enemy.pivot.x=this.world.randomX;
+				enemy.pivot.y=this.world.randomY;
+				enemy.update=this.rotationEnemy;////Func
+			}else if(rndNum<30){
+				enemy.angle=this.rnd.angle();
+				enemy.bonusScore=1;
+			}else if(rndNum<45){
+				var move=this.rnd.angle()*2;
+				enemy.bonusScore=Math.abs(move*.1);
+				enemy.tween=this.M.T.moveC(enemy,{xy:{x:move,y:move}});
+				enemy.tween.start();
+			}else{
+				enemy.bonusScore=1;
+				// var obstacle=this.Obstacles.getFirstDead();
+				var obstacle=this.rnd.pick(this.Obstacles.children.filter(function(e){return!e.alive;}));
+				if(obstacle){
+					obstacle.scale.setTo(this.rnd.between(10,100)*.01);
+					obstacle.reset(this.world.randomX,this.world.height);
+					obstacle.body.gravity.y=-this.rnd.between(1,15)*this.time.physicsElapsedMS;
+				}
+			}
 		}
 		if((this.enemiesCount-1)==this.Enemies.countDead()){
 			this.respownEnemy();
 			this.respownEnemy();
 		}
 	},
+	rotationEnemy:function(){
+		this.angle+=(.03*this.game.time.physicsElapsedMS*this.speed);
+	},
 	breakGlassesScore:function(btn){
 		var parent=btn.parent;
 		var glasses=parent.getChildAt(0);
+		var bonusScore=parent.bonusScore;
+		var scaleRate=(1/parent.scale.x);
 		glasses.frame++;
 		if(glasses.frame==0){
 			parent.kill();
+			parent.update=function(){};
+			parent.angle=0;
+			parent.tween&&parent.tween.stop();
 			// TODO SE
-			if((this.enemiesCount-1)==this.Enemies.countDead()){
-				this.respownEnemy();
-				this.respownEnemy();
-			}
-			this.score+=parseInt((1/parent.scale.x)*1500);
+			this.score+=parseInt(scaleRate*scaleRate*bonusScore*150);
 		}else{
 			this.M.SE.play('BreakGlasses_1',{volume:1});
-			this.score+=parseInt(glasses.frame*(1/parent.scale.x)*300);
+			this.score+=parseInt(glasses.frame*scaleRate*scaleRate*bonusScore*30);
 		}
 		this.ScoreTxtSprite.changeText('スコア: '+this.M.H.formatComma(this.score));
 	},
@@ -174,7 +224,6 @@ BasicGame.Play.prototype={
 		var tween=this.M.T.popUpB(this.StartTxtSprite);
 		tween.onComplete.add(function(){
 			this.StartTxtSprite.destroy();
-			this.respownEnemy();
 			this.respownEnemy();
 			this.respownEnemy();
 			this.respownEnemy();
