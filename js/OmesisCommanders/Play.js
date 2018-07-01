@@ -77,7 +77,7 @@ BasicGame.Play.prototype={
 		if(this.endSt=='WIN'){
 			this.M.SE.play('Win',{volume:1});
 			this.genResPopUp('WIN');
-		}else
+		}else{
 			if(this.curStageInfo.isEndless){
 				this.M.SE.play('GameOver',{volume:1});
 				this.genResPopUp('GAME OVER');
