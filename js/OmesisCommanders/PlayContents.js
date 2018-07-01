@@ -46,13 +46,15 @@ BasicGame.Play.prototype.summonSimon=function(){
 			this.endSummonSimonCount++;
 			if(this.endSummonSimonCount==this.challengeCount){
 				this.playerInput=!0;
-				this.PlayerSprite.loadTexture(this.curCharInfo.idle);
+				////// this.PlayerSprite.loadTexture(this.curCharInfo.idle);
 			}
 		},this);
-		////// tweenA.onStart.add(function(s){
+		tweenA.onStart.add(function(s){
+			this.M.SE.play('OnClickGamePad',{volume:1});
 			////// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(s.frameNum+1));
-		////// },this);
+		},this);
 	}
+	this.PlayerSprite.loadTexture(this.curCharInfo.idle);
 };
 BasicGame.Play.prototype.genContents=function(){
 	this.add.sprite(0,0,this.curStageInfo.stgBg);
@@ -134,8 +136,6 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 		if (this.playerInput&&this.isPlaying) {
 			var frameNum=b.frameNum;
 			if (this.simonList[this.curSimonNum]==frameNum) {
-				// TODO correct
-				console.log('correct');
 				this.curSimonNum++;
 				this.correctCount++;
 				if(this.challengeCount==this.correctCount){
@@ -145,9 +145,11 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 					if(!this.curStageInfo.isEndless){
 						this.curEnemyLife-=this.attack;
 						this.EnemyLifeSprite.width=(this.curEnemyLife<=0||this.challengeCount>this.goalCount)?0:this.enemyLifeWidth*(this.curEnemyLife/this.maxLife);
-						// TODO attack animation
+						this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
+						this.EnemySprite.loadTexture(this.curEnemyInfo.idle);
 					}
-					this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
+					this.PlayerSprite.loadTexture('Anim_'+this.curChar+'_1');
+					this.M.SE.play('Attack_'+this.rnd.integerInRange(1,2),{volume:1});
 					this.challengeCount++;
 					if (this.challengeCount>this.goalCount) {
 						this.endSt='WIN';
@@ -159,14 +161,13 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 				////// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
 				////// if(this.EnemySprite&&this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture("****ENEMY_IDLE****");
 			} else {
-				// TODO incorrect
 				this.curLife-=this.dmge;
-				console.log(this.curLife);
 				if(!this.curStageInfo.isEndless){
 					this.PlayerLifeSprite.width=(this.curLife<=0)?0:this.playerLifeWidth*(this.curLife/this.maxLife);
+					this.EnemySprite.loadTexture('Anim_'+this.curEnemy+'_1');
 				}
+				this.M.SE.play('Damage_'+this.rnd.integerInRange(1,2),{volume:1});
 				this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
-				// TODO dmge animation /// effect
 				////// this.EnemySprite.loadTexture(this.curCharInfo.animBase+this.rnd.integerInRange(1,this.charAnimCount));
 				if(this.curLife<=0){
 					this.endSt='LOSE';
@@ -176,12 +177,18 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 		}
 	}
 };
-BasicGame.Play.prototype.onInputDownGamePad=function(b){b.alpha=.5;};
+BasicGame.Play.prototype.onInputDownGamePad=function(b){
+	if(this.playerInput){
+		this.M.SE.play('OnClickGamePad',{volume:1});
+		b.alpha=.5;
+		this.EnemySprite.loadTexture(this.curEnemyInfo.idle);
+	}
+};
 BasicGame.Play.prototype.onInputOutGamePad=function(b){b.alpha=1;};
 BasicGame.Play.prototype.endInput=function(){
 	this.playerInput=!1;
-	this.PlayerSprite.loadTexture(this.curCharInfo.idle);
-	this.time.events.add(1000,this.summonSimon,this); // TODO adjust
+	////// this.PlayerSprite.loadTexture(this.curCharInfo.idle);
+	this.time.events.add(1000,this.summonSimon,this);
 };
 BasicGame.Play.prototype.genResPopUp=function(txt){
 	var ts=this.M.S.genTextM(this.world.centerX,this.world.centerY,txt,this.M.S.BaseTextStyleS(80));
@@ -211,15 +218,16 @@ BasicGame.Play.prototype.genRes=function(){
 	var rightX=this.world.width*.75;
 	textStyle=this.M.S.BaseTextStyleSS(25);
 	this.genResBtnSprite(rightX,upperY,function(){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
+		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Play');
 	},'もう一度',textStyle,200);
 	this.genResBtnSprite(rightX,middleY,this.tweet,'結果をツイート',textStyle,400);
 	this.genResBtnSprite(rightX,bottomY,function(){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
+		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('SelectChar');
 	},'キャラ選択',textStyle,600);
 	this.genResBtnSprite(rightX,bottomY2,function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		if (this.game.device.desktop) {
 			window.open(BasicGame.MY_GAMES_URL,'_blank');
 		} else {
@@ -251,7 +259,7 @@ BasicGame.Play.prototype.openYt=function(){
 	}
 };
 BasicGame.Play.prototype.tweet=function(){
-	// this.M.SE.play('OnBtn',{volume:1}); // TODO del
+	this.M.SE.play('OnBtn',{volume:1});
 	var resultText=
 		'選択キャラクター: '+this.curCharInfo.charName+'\n'
 		+'選択ステージ: '+this.curStageInfo.selectorName+'\n'

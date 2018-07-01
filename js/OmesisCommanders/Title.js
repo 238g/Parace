@@ -8,7 +8,7 @@ BasicGame.Title.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:.7});
 		this.genContents();
 	},
 	genContents:function(){
@@ -48,7 +48,7 @@ BasicGame.Title.prototype={
 	start:function(){
 		if (this.inputEnabled&&this.isPlaying) {
 			this.isPlaying=!1;
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('OnBtn',{volume:2});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -58,7 +58,7 @@ BasicGame.Title.prototype={
 			},this);
 			tween.start();
 		} else {
-			// this.M.SE.playBGM('TitleBGM',{volume:1});
+			this.M.SE.playBGM('TitleBGM',{volume:.7});
 			this.inputEnabled=!0;
 		}
 	},

@@ -5,7 +5,7 @@ BasicGame={
 	MAIN_TEXT_COLOR:'#557be4',
 	MAIN_STROKE_COLOR:'#d16769',
 	WHITE_COLOR:'#ffffff',
-	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
+	MY_GAMES_URL:'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
@@ -22,6 +22,7 @@ create:function(){
 		curStage:1,
 		charCount:0,
 		endTut:!1,
+		rndBgm:null,
 	});
 	this.M.defineConf({
 		CharInfo:this.genCharInfo(),

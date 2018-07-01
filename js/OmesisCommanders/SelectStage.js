@@ -11,7 +11,7 @@ BasicGame.SelectStage.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:.7});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
@@ -39,6 +39,9 @@ BasicGame.SelectStage.prototype={
 			var y=arrY[orderY];
 			var btn=this.add.button(x,y,info.selector,this.selectStage,this);
 			btn.stageNum=k;
+			btn.onInputOver.add(function(){this.M.SE.play('HoverMouse',{volume:1});},this);
+			btn.onInputOut.add(function(){this.tint=0xffffff;},btn);
+			btn.onInputOver.add(function(){this.tint=0x00ffff;},btn);
 			this.M.S.genTextM(btn.left+10,btn.top+15,info.selectorName,this.M.S.BaseTextStyleSS(20));
 			this.M.S.genTextM(btn.right-10,btn.bottom-15,info.selectorSubName,this.M.S.BaseTextStyleSS(20));
 			orderX++;
@@ -49,10 +52,10 @@ BasicGame.SelectStage.prototype={
 		}
 	},
 	selectStage:function(btn){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
 		var curStage=btn.stageNum;
 		if(curStage==this.curStage)return;
 		if(this.Tween&&this.Tween.isRunning)return;
+		this.M.SE.play('SelectStage',{volume:1});
 		this.curStage=curStage;
 		this.M.setGlobal('curStage',curStage);
 		this.curStageInfo=this.StageInfo[curStage];
@@ -72,7 +75,7 @@ BasicGame.SelectStage.prototype={
 	ok:function(){
 		if(this.inputEnabled&&this.isPlaying){
 			this.isPlaying=!1;
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('OnBtn',{volume:2});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -82,7 +85,7 @@ BasicGame.SelectStage.prototype={
 		}
 	},
 	back:function(){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
+		this.M.SE.play('OnBtn',{volume:2});
 		this.M.NextScene('SelectChar');
 	},
 	genHUD:function(){
@@ -91,8 +94,8 @@ BasicGame.SelectStage.prototype={
 		this.M.S.BasicFullScreenBtn(this.world.width*.95,y);
 	},
 	genVS:function(){
-		// TODO VS animation
-		// TODO oncomp -> to play
+		////// MEMO VS animation
+		////// MEMO oncomp -> to play
 		this.M.NextScene('Play');
 	},
 };

@@ -48,6 +48,7 @@ BasicGame.Preloader.prototype={
 			var idle='Idle_'+charCount;
 			this.load.image(idle,'images/OmesisCommanders/Chars/Char_'+charCount+'/Idle.png');
 			info.idle=idle;
+			this.load.image('Anim_'+charCount+'_1','images/OmesisCommanders/Chars/Char_'+charCount+'/Anim_1.png');
 			// TODO channel
 		}
 		this.M.setGlobal('charCount',charCount);
@@ -66,14 +67,27 @@ BasicGame.Preloader.prototype={
 	loadAudio:function(){
 		var s={
 			TitleBGM:'sounds/BGM/OmesisCommanders/MaouCyber16',
-			G_Alpha:'sounds/BGM/OmesisCommanders/Greece_Alpha',
-			G_Beta:'sounds/BGM/OmesisCommanders/Greece_Beta',
-			G_Delta:'sounds/BGM/OmesisCommanders/Greece_Delta',
-			G_Epsilon:'sounds/BGM/OmesisCommanders/Greece_Epsilon',
-			G_Gamma:'sounds/BGM/OmesisCommanders/Greece_Gamma',
-			G_Omega:'sounds/BGM/OmesisCommanders/Greece_Omega',
-			VS:'sounds/SE/V/VS',
+			////// VS:'sounds/SE/V/VS',
+			OnBtn:'sounds/SE/Menu_Select_00',
+			HoverMouse:'sounds/SE/JingleSet1/click',
+			SelectChar:'sounds/SE/LabJP/Performance/Anime/jump-anime1',
+			SelectStage:'sounds/SE/LabJP/Btn/decision17',
+			Attack_1:'sounds/SE/LabJP/Battle/Fight/kick-low1',
+			Attack_2:'sounds/SE/LabJP/Battle/Fight/punch-middle2',
+			Damage_1:'sounds/SE/LabJP/Battle/Fight/kick-middle1',
+			Damage_2:'sounds/SE/LabJP/Battle/Fight/punch-high1',
+			OnClickGamePad:'sounds/SE/UISoundLibrary/Click_Electronic/Click_Electronic_14',
+			Ready:'sounds/VOICE/K_VoiceFighter/ready',
+			Fight:'sounds/VOICE/K_VoiceFighter/fight',
+			GameOver:'sounds/VOICE/K_VoiceFighter/game_over',
+			Win:'sounds/VOICE/K_VoiceFighter/you_win',
+			Lose:'sounds/VOICE/K_VoiceFighter/you_lose',
+			ChooseChar:'sounds/VOICE/K_VoiceFighter/choose_your_character',
 		};
+		var playBgmList=['Greece_Alpha','Greece_Beta','Greece_Delta','Greece_Epsilon','Greece_Gamma','Greece_Omega'];
+		var rndBgm=this.rnd.pick(playBgmList);
+		s[rndBgm]='sounds/BGM/OmesisCommanders/'+rndBgm;
+		this.M.setGlobal('rndBgm',rndBgm);
 		for(var k in s){
 			var p=s[k];
 			this.sounds[k]=1;

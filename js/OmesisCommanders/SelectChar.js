@@ -11,9 +11,10 @@ BasicGame.SelectChar.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:.7});
 		this.genContents();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
+		this.M.SE.play('ChooseChar',{volume:1});
 	},
 
 	genContents:function(){
@@ -44,6 +45,9 @@ BasicGame.SelectChar.prototype={
 			var y=arrY[orderY];
 			var btn=this.add.button(x,y,i.charSquare,this.selectChar,this);
 			btn.charNum=k;
+			btn.onInputOver.add(function(){this.M.SE.play('HoverMouse',{volume:1});},this);
+			btn.onInputOut.add(function(){this.tint=0xffffff;},btn);
+			btn.onInputOver.add(function(){this.tint=0x00ffff;},btn);
 			orderX++;
 			if(orderX==l){
 				orderX=0;
@@ -52,9 +56,9 @@ BasicGame.SelectChar.prototype={
 		}
 	},
 	selectChar:function(btn){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
 		var curChar=btn.charNum;
 		if(curChar==this.curChar) return;
+		this.M.SE.play('SelectChar',{volume:.9});
 		this.selectedChar(curChar);
 	},
 	selectedChar:function(curChar){
@@ -72,7 +76,7 @@ BasicGame.SelectChar.prototype={
 	ok:function(){
 		if(this.inputEnabled&&this.isPlaying){
 			this.isPlaying=!1;
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('OnBtn',{volume:2});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -84,7 +88,7 @@ BasicGame.SelectChar.prototype={
 		}
 	},
 	back:function(){
-		// this.M.SE.play('OnBtn',{volume:1}); // TODO
+		this.M.SE.play('OnBtn',{volume:2});
 		this.M.NextScene('Title');
 	},
 	genHUD:function(){

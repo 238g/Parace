@@ -20,6 +20,7 @@ BasicGame.Play.prototype={
 		this.goalCount=this.curStageInfo.goalCount;
 		this.challengeCount=this.curStageInfo.firstChallengeCount;
 		this.simonList=[];
+		this.playBgm=this.M.getGlobal('rndBgm');
 		////// this.charAnimCount=this.M.getConst('CHAR_ANIM_COUNT');
 		/// GamePad
 		this.gamePadFrames=['buttonA','buttonB','arrowLeft','arrowDown','arrowUp','arrowRight'];
@@ -40,7 +41,7 @@ BasicGame.Play.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#000000';
-		this.M.SE.playBGM('G_Alpha',{volume:1}); // TODO
+		this.M.SE.playBGM(this.playBgm,{volume:1.5});
 		this.genContents();
 		for(var i=0;i<this.goalCount;i++)this.simonList.push(this.rnd.integerInRange(0,this.btnCount-1));
 		this.tut();
@@ -55,12 +56,14 @@ BasicGame.Play.prototype={
 		var tween=this.M.T.popUpB(this.RdyTxtSprite,{duration:800});
 		tween.start();
 		tween.onComplete.add(this.fight,this);
+		this.M.SE.play('Ready',{volume:1});
 	},
 	fight:function(){
 		this.RdyTxtSprite.destroy();
 		var tween=this.M.T.popUpB(this.FightTxtSprite,{duration:800});
 		tween.start();
 		tween.onComplete.add(this.start,this);
+		this.M.SE.play('Fight',{volume:1});
 	},
 	start:function(){
 		this.isPlaying=!0;
@@ -72,11 +75,14 @@ BasicGame.Play.prototype={
 	end:function(){
 		this.isPlaying=this.playerInput=!1;
 		if(this.endSt=='WIN'){
+			this.M.SE.play('Win',{volume:1});
 			this.genResPopUp('WIN');
-		}else{//GAMEOVER
+		}else
 			if(this.curStageInfo.isEndless){
+				this.M.SE.play('GameOver',{volume:1});
 				this.genResPopUp('GAME OVER');
 			}else{
+				this.M.SE.play('Lose',{volume:1});
 				this.genResPopUp('LOSE');
 			}
 		}
