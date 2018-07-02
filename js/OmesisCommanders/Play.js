@@ -35,7 +35,7 @@ BasicGame.Play.prototype={
 		/// Obj
 		this.TutSprite=this.RdyTxtSprite=this.FightTxtSprite=
 		this.PlayerLifeSprite=this.EnemyLifeSprite=
-		this.PlayerSprite=this.EnemySprite=null;
+		this.PlayerSprite=this.EnemySprite=this.ScoreTxtSprite=this.InstructTxtSprite=null;
 	},
 
 	create:function(){
@@ -49,7 +49,11 @@ BasicGame.Play.prototype={
 	},
 
 	tut:function(){
-		if(this.M.getGlobal('endTut'))return this.rdy();
+		if(this.curStageInfo.isEndless){
+			if(this.M.getGlobal('endTutEndless'))return this.rdy();
+		}else{
+			if(this.M.getGlobal('endTutLevel'))return this.rdy();
+		}
 		this.genTut();
 	},
 	rdy:function(){

@@ -10,7 +10,11 @@ BasicGame.Play.prototype.genTut=function(){
 	var textSprite=this.M.S.genTextM(0,0,text,textStyle);
 	this.TutSprite.addChild(textSprite);
 	this.input.onDown.addOnce(function(){
-		this.M.setGlobal('endTut',!0);
+		if(this.curStageInfo.isEndless){
+			this.M.setGlobal('endTutEndless',!0);
+		}else{
+			this.M.setGlobal('endTutLevel',!0);
+		}
 		this.TutSprite.destroy();
 		this.rdy();
 	},this);
@@ -31,7 +35,7 @@ BasicGame.Play.prototype.summonSimon=function(){
 		simonSprite2.frameNum=frameNum;
 		simonSprite2.scale.setTo(1.03);
 		simonSprite.addChild(simonSprite2);
-		var tweenA=this.M.T.moveA(simonSprite,{xy:{y:'-100'},delay:delay,duration:duration});
+		var tweenA=this.M.T.moveA(simonSprite,{xy:{y:'-180'},delay:delay,duration:duration});
 		var tweenB=this.M.T.moveA(simonSprite,{xy:{y:'-100'},duration:duration});
 		var tweenC=this.M.T.moveA(simonSprite,{xy:{y:'-100'},duration:duration});
 		var tweenD=this.M.T.popUpA(simonSprite,{scale:{x:.001,y:.5},delay:duration*2+delay,duration:duration});
@@ -47,6 +51,7 @@ BasicGame.Play.prototype.summonSimon=function(){
 			if(this.endSummonSimonCount==this.challengeCount){
 				this.playerInput=!0;
 				////// this.PlayerSprite.loadTexture(this.curCharInfo.idle);
+				this.InstructTxtSprite.changeText('コマンドを入力しろ！');
 			}
 		},this);
 		tweenA.onStart.add(function(s){
@@ -55,11 +60,13 @@ BasicGame.Play.prototype.summonSimon=function(){
 		},this);
 	}
 	this.PlayerSprite.loadTexture(this.curCharInfo.idle);
+	this.InstructTxtSprite.changeText('コマンドを覚えろ！');
 };
 BasicGame.Play.prototype.genContents=function(){
 	this.add.sprite(0,0,this.curStageInfo.stgBg);
 	this.genCharSprites();
 	this.genGamePadBtns();
+	this.InstructTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.9,'',this.M.S.BaseTextStyleS(30));
 	this.genStartSprites();
 };
 BasicGame.Play.prototype.genStartSprites=function(){
@@ -74,6 +81,7 @@ BasicGame.Play.prototype.genCharSprites=function(){
 	if(this.curStageInfo.isEndless){
 		this.PlayerSprite=this.add.sprite(this.world.centerX,this.world.centerY,this.curCharInfo.idle);
 		this.PlayerSprite.anchor.setTo(.5);
+		this.ScoreTxtSprite=this.M.S.genTextM(this.world.width*.2,this.world.height*.3,'記録: 0',this.M.S.BaseTextStyleS(40));
 	}else{
 		this.PlayerSprite=this.add.sprite(this.world.width*.3,this.world.centerY,this.curCharInfo.idle);
 		this.PlayerSprite.anchor.setTo(.5);
@@ -136,6 +144,7 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 		if (this.playerInput&&this.isPlaying) {
 			var frameNum=b.frameNum;
 			if (this.simonList[this.curSimonNum]==frameNum) {
+				////// correct
 				this.curSimonNum++;
 				this.correctCount++;
 				if(this.challengeCount==this.correctCount){
@@ -147,6 +156,8 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 						this.EnemyLifeSprite.width=(this.curEnemyLife<=0||this.challengeCount>this.goalCount)?0:this.enemyLifeWidth*(this.curEnemyLife/this.maxLife);
 						this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
 						this.EnemySprite.loadTexture(this.curEnemyInfo.idle);
+					}else{
+						this.ScoreTxtSprite.changeText('記録: '+this.challengeCount);
 					}
 					this.PlayerSprite.loadTexture('Anim_'+this.curChar+'_1');
 					this.M.SE.play('Attack_'+this.rnd.integerInRange(1,2),{volume:1});
@@ -161,6 +172,7 @@ BasicGame.Play.prototype.onInputUpGamePad=function(b){
 				////// this.PlayerSprite.loadTexture(this.curCharInfo.animBase+(frameNum+1));
 				////// if(this.EnemySprite&&this.EnemySprite.frameName!=this.curCharInfo.idle)this.EnemySprite.loadTexture("****ENEMY_IDLE****");
 			} else {
+				////// incorrect
 				this.curLife-=this.dmge;
 				if(!this.curStageInfo.isEndless){
 					this.PlayerLifeSprite.width=(this.curLife<=0)?0:this.playerLifeWidth*(this.curLife/this.maxLife);
@@ -181,7 +193,7 @@ BasicGame.Play.prototype.onInputDownGamePad=function(b){
 	if(this.playerInput){
 		this.M.SE.play('OnClickGamePad',{volume:1});
 		b.alpha=.5;
-		this.EnemySprite.loadTexture(this.curEnemyInfo.idle);
+		this.EnemySprite&&this.EnemySprite.loadTexture(this.curEnemyInfo.idle);
 	}
 };
 BasicGame.Play.prototype.onInputOutGamePad=function(b){b.alpha=1;};
