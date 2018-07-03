@@ -26,6 +26,9 @@ BasicGame.Preloader.prototype={
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 			'Bg_1':'images/OmesisCommanders/Bg_1.jpg',
 			'Bg_2':'images/OmesisCommanders/Bg_2.jpg',
+			'KO':'images/OmesisCommanders/KO.png',
+			'GameOver':'images/OmesisCommanders/GameOver.png',
+			'ChannelPanel':'images/OmesisCommanders/ChannelPanel.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
@@ -37,7 +40,6 @@ BasicGame.Preloader.prototype={
 		var CI=this.M.getConf('CharInfo');
 		for(var k in CI){
 			var info=CI[k];
-			this.load.image(info.ch,info.chPath);
 			////// animBase:'album_',animBasePath:'images/AzlimBushi/album_',
 			////// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.jpg');
 			////// for(var i=1;i<=charAnimCount;i++)this.load.image(info.animBase+i,info.animBasePath+i+'.png');
@@ -49,7 +51,6 @@ BasicGame.Preloader.prototype={
 			this.load.image(idle,'images/OmesisCommanders/Chars/Char_'+charCount+'/Idle.png');
 			info.idle=idle;
 			this.load.image('Anim_'+charCount+'_1','images/OmesisCommanders/Chars/Char_'+charCount+'/Anim_1.png');
-			// TODO channel
 		}
 		this.M.setGlobal('charCount',charCount);
 		var SI=this.M.getConf('StageInfo');
@@ -83,6 +84,8 @@ BasicGame.Preloader.prototype={
 			Win:'sounds/VOICE/K_VoiceFighter/you_win',
 			Lose:'sounds/VOICE/K_VoiceFighter/you_lose',
 			ChooseChar:'sounds/VOICE/K_VoiceFighter/choose_your_character',
+			WinSE:'sounds/SE/LabJP/People/people_people-stadium-cheer1',
+			LoseSE:'sounds/SE/LabJP/People/people_people-performance-cheer2',
 		};
 		var playBgmList=['Greece_Alpha','Greece_Beta','Greece_Delta','Greece_Epsilon','Greece_Gamma','Greece_Omega'];
 		var rndBgm=this.rnd.pick(playBgmList);

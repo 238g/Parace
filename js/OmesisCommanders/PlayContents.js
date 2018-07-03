@@ -202,11 +202,24 @@ BasicGame.Play.prototype.endInput=function(){
 	////// this.PlayerSprite.loadTexture(this.curCharInfo.idle);
 	this.time.events.add(1000,this.summonSimon,this);
 };
-BasicGame.Play.prototype.genResPopUp=function(txt){
-	var ts=this.M.S.genTextM(this.world.centerX,this.world.centerY,txt,this.M.S.BaseTextStyleS(80));
-	ts.anchor.setTo(.5);
-	ts.scale.setTo(0);
-	var tween=this.M.T.popUpB(ts);
+BasicGame.Play.prototype.genResPopUp=function(){
+	var img;
+	if(this.endSt=='WIN'){
+		this.M.SE.play('Win',{volume:1});
+		img='KO';
+	}else{
+		if(this.curStageInfo.isEndless){
+			this.M.SE.play('GameOver',{volume:1});
+			img='GameOver';
+		}else{
+			this.M.SE.play('Lose',{volume:1});
+			img='KO';
+		}
+	}
+	var s=this.add.sprite(this.world.centerX,this.world.centerY,img);
+	s.anchor.setTo(.5);
+	s.scale.setTo(0);
+	var tween=this.M.T.popUpB(s);
 	tween.onComplete.add(function(){
 		var twp=this.add.sprite(0,0,'TWP');
 		twp.tint=0x000000;
@@ -246,6 +259,15 @@ BasicGame.Play.prototype.genRes=function(){
 			location.href = BasicGame.MY_GAMES_URL;
 		}
 	},'他のゲーム',textStyle,800);
+	if(this.endSt=='WIN'){
+		this.M.SE.play('WinSE',{volume:1});
+	}else{
+		if(this.curStageInfo.isEndless&&this.challengeCount>5){
+			this.M.SE.play('WinSE',{volume:1.3});
+		}else{
+			this.M.SE.play('LoseSE',{volume:1.5});
+		}
+	}
 };
 BasicGame.Play.prototype.genResTxtSprite=function(x,y,txt,textStyle,delay){
 	var textSprite=this.M.S.genTextM(x,y,txt,textStyle);
@@ -258,10 +280,18 @@ BasicGame.Play.prototype.genResBtnSprite=function(x,y,func,txt,textStyle,delay){
 	this.M.T.popUpB(btnSprite,{duration:800,delay:delay}).start();
 };
 BasicGame.Play.prototype.genYtSprite=function(x,y,delay){
-	var yt=this.add.button(x,y,this.curCharInfo.ch,this.openYt,this);
+	var yt=this.add.button(x,y,'ChannelPanel',this.openYt,this);
 	yt.anchor.setTo(.5);
 	yt.scale.setTo(0);
 	this.M.T.popUpB(yt,{duration:800,delay:delay}).start();
+	yt.tint=this.curCharInfo.tint;
+	var charS=this.add.sprite(0,40,this.curCharInfo.charSquare);
+	charS.anchor.setTo(.5);
+	var txtStyle=this.M.S.BaseTextStyleS(20);
+	txtStyle.align='center';
+	var ts=this.M.S.genTextM(0,-15,'YouTube\nチャンネルはこちら！\n→ 　　　　←',txtStyle);
+	yt.addChild(charS);
+	yt.addChild(ts);
 };
 BasicGame.Play.prototype.openYt=function(){
 	if (this.game.device.desktop) {
