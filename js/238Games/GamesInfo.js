@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 20;
+	var totalCount = 21;
 	return {
 		GamesInfo:{
 			1001: {
@@ -220,6 +220,17 @@ BasicGame.Boot.prototype.genGamesInfo = function () {
 				order: totalCount-20,
 				textColor: '#503110',
 				bgColor: '#aee9f3',
+				scale: 1,
+			},
+			1021: {
+				id: 1021,
+				title: 'おめシスコマンダーズ',
+				url: 'https://238g.github.io/Parace/OmesisCommanders.html',
+				slideImg: 'OmesisCommanders_1',
+				slideImgUrl: 'images/238Games/OmesisCommanders_1.png',
+				order: totalCount-21,
+				textColor: '#d16769',
+				bgColor: '#668af6',
 				scale: 1,
 			},
 		},
