@@ -1,5 +1,5 @@
-BasicGame.Boot.prototype.genGamesInfo = function () {
-	var totalCount = 21;
+BasicGame.Boot.prototype.genGamesInfo=function(){
+	var totalCount=21;
 	return {
 		GamesInfo:{
 			1001: {
