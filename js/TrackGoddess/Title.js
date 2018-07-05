@@ -7,6 +7,7 @@ BasicGame.Title.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1}); // TODO
+		this.M.S.BasicGrayLabelS(this.world.centerX,this.world.height*.8,this.start,'START',this.M.S.BaseTextStyleS(30),{tint:BasicGame.MAIN_TINT});
 		this.genHUD();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},

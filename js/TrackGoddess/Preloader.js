@@ -14,15 +14,15 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
-			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+			'Handle':'images/TrackGoddess/Handle.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			TitleBGM:'sounds/BGM/FOckingGlasses/cyber41',
-			PlayBGM:'sounds/BGM/FOckingGlasses/Lets_Party2',
+			// TitleBGM:'sounds/BGM/FOckingGlasses/cyber41',
+			// PlayBGM:'sounds/BGM/FOckingGlasses/Lets_Party2',
 		};
 		for(var k in s){
 			var p=s[k];
