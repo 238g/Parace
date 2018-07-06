@@ -306,7 +306,7 @@ BasicGame.Play.prototype.tweet=function(){
 		'選択キャラクター: '+this.curCharInfo.charName+'\n'
 		+'選択ステージ: '+this.curStageInfo.selectorName+'\n'
 		+'結果: '+(this.curStageInfo.isEndless?(this.challengeCount-1):this.endSt)+'\n';
-	var emoji='';
+	var emoji='👊💥👊💥👊💥👊';
 	var text='『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
 				+emoji+'\n'
 				+resultText
