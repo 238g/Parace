@@ -1,12 +1,19 @@
 BasicGame.SelectChar=function(){};
 BasicGame.SelectChar.prototype={
 	init:function(){
-		this.inputEnabled=!1;
 		this.curChar=this.M.getGlobal('curChar');
 		this.CharInfo=this.M.getConf('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
 		this.CharNameTextStyle=this.M.S.BaseTextStyleS(40);
 		this.CharFrame=this.CharName=null;
+		if(this.M.getGlobal('curLang')=='en'){
+			this.BackTxt='BACK';
+			this.SelectTxt='SELECT';
+		}else{
+			// TODO lang
+			this.BackTxt='BACK';
+			this.SelectTxt='SELECT';
+		}
 	},
 	create:function(){
 		this.time.events.removeAll();
@@ -14,8 +21,8 @@ BasicGame.SelectChar.prototype={
 		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genCharFrame();
 		this.genCharPanels();
-		this.M.S.BasicGrayLabelM(this.world.width*.24,this.world.height*.0365,this.back,'BACK',this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
-		this.M.S.BasicGrayLabelM(this.CharFrame.right-20,this.CharFrame.bottom,this.play,'SELECT',this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
+		this.M.S.BasicGrayLabelM(this.world.width*.24,this.world.height*.0365,this.back,this.BackTxt,this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
+		this.M.S.BasicGrayLabelM(this.CharFrame.right-20,this.CharFrame.bottom,this.play,this.SelectTxt,this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
 		this.genHUD();
 	},
 	genCharFrame:function(){

@@ -19,6 +19,7 @@ create:function(){
 	});
 	this.M.defineGlobal({
 		curChar:1,
+		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 	});
 	this.M.defineConf({CharInfo:this.genCharInfo()});
 	this.M.NextScene('Preloader');

@@ -4,12 +4,18 @@ BasicGame.Preloader.prototype={
 		this.sounds={};
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
-		this.M.S.genText(this.world.centerX,this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
+		if(this.M.getGlobal('curLang')=='en'){
+			var ttl='VT Stopwatch';
+			document.title=ttl;
+			BasicGame.GAME_TITLE=ttl;
+			document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',ttl);
+		}else{
+			this.M.S.genText(this.world.centerX,this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});	
+		}
 		this.load.onLoadComplete.add(this.loadComplete,this);
 		this.loadAssets();
 		this.load.start();
 	},
-
 	loadAssets:function(){
 		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
