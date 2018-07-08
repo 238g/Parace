@@ -21,6 +21,7 @@ create:function(){
 		endTut:!1,
 	});
 	this.M.defineConf({
+		Vehicle:['Ambulance','Audi','Black_viper','Car','Mini_truck','Mini_van','Police','Taxi','Truck_2'],
 	});
 	this.M.NextScene('Preloader');
 },};

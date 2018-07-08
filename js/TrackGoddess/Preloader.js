@@ -15,9 +15,15 @@ BasicGame.Preloader.prototype={
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
 			'Handle':'images/TrackGoddess/Handle.png',
+			'Truck':'images/TrackGoddess/Vehicle/Truck.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
+		this.loadVehicle();
 		this.loadAudio();
+	},
+	loadVehicle:function(){
+		var Vehicle=this.M.getConf('Vehicle');
+		for(var k in Vehicle)this.load.image(Vehicle[k],'images/TrackGoddess/Vehicle/'+Vehicle[k]+'.png');
 	},
 	loadAudio:function(){
 		var s={

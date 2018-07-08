@@ -1,12 +1,22 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function(){ 
-		this.inputEnabled=this.isPlaying=!1;
+		this.isPlaying=!1;
 
 		this.onDownRot=0;
 
-		this.HandleSprite=
+		this.playerStartY=this.world.height*.6;
+
+		this.secTimer=1E3;
+
+		this.Vehicle=this.M.getConf('Vehicle');
+
 		this.Player=
+		this.Enemies=
+		this.HandleSprite=
+
+		this.PlayerCollisionGroup=
+		this.EnemyCollisionGroup=
 		null;
 	},
 	create:function(){
@@ -14,26 +24,37 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('PlayBGM',{volume:1}); // TODO
 
+		this.PhysicsController();
+		this.EnemyContainer();
+		this.PlayerContainer();
+		this.HUDContainer();
 
-		this.HandleSprite=this.add.sprite(this.world.centerX,this.world.height*.95,'Handle');
-		this.HandleSprite.anchor.setTo(.5);
-		this.HandleSprite.scale.setTo(.3);
-
-		this.Player=this.M.S.genBmpSprite(this.world.centerX,this.world.centerY,30,80,'#00ff00');
-		this.Player.anchor.setTo(.5,.1);
-
-		this.input.onDown.add(function(){
-			this.onDownRot=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer);
-		},this);
-
+		this.start();
 		this.tes();
 	},
 	update:function(){
-		if(this.input.activePointer.isDown){
-			this.HandleSprite.rotation=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer)-this.onDownRot;
-			this.Player.rotation=this.HandleSprite.rotation; // !?!?
+		if(this.isPlaying){
+			if(this.input.activePointer.isDown){
+				this.HandleSprite.rotation=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer)-this.onDownRot;
+				this.Player.body.rotation=this.HandleSprite.rotation;
+			}
+			this.Player.body.x+=this.HandleSprite.angle*.03;
+			if(Math.abs(this.Player.angle)<90){
+				if(this.Player.body.y>this.playerStartY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
+			}else{
+				this.Player.body.y+=.01*this.time.physicsElapsedMS;
+			}
+			this.secTimer-=this.time.elapsed;
+			if(this.secTimer<0){
+				this.secTimer=1E3;
+				this.respawnEnemy();
+				// this.respawnEnemy();
+				this.Enemies.forEachAlive(function(e){
+					if(e.y>this.world.height)e.kill();
+					if(e.y<0)e.kill();
+				},this);
+			}
 		}
-		this.Player.x+=this.HandleSprite.angle*.03;
 	},
 	start:function(){
 		this.isPlaying=!0;
@@ -45,6 +66,8 @@ BasicGame.Play.prototype={
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.end,this);
 			// this.M.H.getQuery('time')&&(this.leftTime=this.M.H.getQuery('time'));
+			this.Player.body.debug=!0;
+			this.Enemies.forEach(function(e){e.body.debug=!0;},this);
 		}
 	},
 };
