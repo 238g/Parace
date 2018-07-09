@@ -14,8 +14,13 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
+			'WP':'images/TrackGoddess/WhitePaper.jpg',
+			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Handle':'images/TrackGoddess/Handle.png',
 			'Truck':'images/TrackGoddess/Vehicle/Truck.png',
+			'Road_1':'images/TrackGoddess/Road_1.jpg',
+			'DifficultyGauge':'images/TrackGoddess/DifficultyGauge.png',
+			'TitleChar':'images/eff/Tree.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadVehicle();

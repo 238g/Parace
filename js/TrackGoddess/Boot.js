@@ -19,8 +19,10 @@ create:function(){
 	});
 	this.M.defineGlobal({
 		endTut:!1,
+		curStage:1,
 	});
 	this.M.defineConf({
+		StageInfo:this.genStageInfo(),
 		Vehicle:['Ambulance','Audi','Black_viper','Car','Mini_truck','Mini_van','Police','Taxi','Truck_2'],
 	});
 	this.M.NextScene('Preloader');
