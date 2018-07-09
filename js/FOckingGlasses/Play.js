@@ -30,7 +30,7 @@ BasicGame.Play.prototype={
 				}else{
 					this.TimeTxtSprite.changeText('制限時間: '+this.leftTime);
 				}
-				this.respownEnemy();
+				this.respawnEnemy();
 			}
 		}
 	},
@@ -146,7 +146,7 @@ BasicGame.Play.prototype={
 			c.addChild(clickRange);
  		},this);
 	},
-	respownEnemy:function(){
+	respawnEnemy:function(){
 		var enemy=this.Enemies.getFirstDead();
 		if(enemy){
 			enemy.scale.setTo(this.rnd.between(15,50)*.01);
@@ -180,8 +180,8 @@ BasicGame.Play.prototype={
 			}
 		}
 		if((this.enemiesCount-1)==this.Enemies.countDead()){
-			this.respownEnemy();
-			this.respownEnemy();
+			this.respawnEnemy();
+			this.respawnEnemy();
 		}
 	},
 	rotationEnemy:function(){
@@ -228,11 +228,11 @@ BasicGame.Play.prototype={
 		var tween=this.M.T.popUpB(this.StartTxtSprite);
 		tween.onComplete.add(function(){
 			this.StartTxtSprite.destroy();
-			this.respownEnemy();
-			this.respownEnemy();
-			this.respownEnemy();
-			this.respownEnemy();
-			this.respownEnemy();
+			this.respawnEnemy();
+			this.respawnEnemy();
+			this.respawnEnemy();
+			this.respawnEnemy();
+			this.respawnEnemy();
 			this.isPlaying=!0;
 		},this);
 		tween.start();
@@ -247,7 +247,7 @@ BasicGame.Play.prototype={
 		ts.scale.setTo(0);
 		var tween=this.M.T.popUpB(ts);
 		tween.onComplete.add(function(){
-		this.M.SE.play('Death',{volume:1.5});
+			this.M.SE.play('Death',{volume:1.5});
 			this.Enemies.killAll();
 			this.Obstacles.killAll();
 			this.ScoreTxtSprite.visible=!1;
