@@ -14,12 +14,12 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets={
-			'WP':'images/TrackGoddess/WhitePaper.jpg',
+			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-			'Handle':'images/TrackGoddess/Handle.png',
-			'Truck':'images/TrackGoddess/Vehicle/Truck.png',
-			'Road_1':'images/TrackGoddess/Road_1.jpg',
-			'DifficultyGauge':'images/TrackGoddess/DifficultyGauge.png',
+			'Handle':'images/TruckGoddess/Handle.png',
+			'Truck':'images/TruckGoddess/Vehicle/Truck.png',
+			'Road_1':'images/TruckGoddess/Road_1.jpg',
+			'DifficultyGauge':'images/TruckGoddess/DifficultyGauge.png',
 			'TitleChar':'images/eff/Tree.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
@@ -28,7 +28,7 @@ BasicGame.Preloader.prototype={
 	},
 	loadVehicle:function(){
 		var Vehicle=this.M.getConf('Vehicle');
-		for(var k in Vehicle)this.load.image(Vehicle[k],'images/TrackGoddess/Vehicle/'+Vehicle[k]+'.png');
+		for(var k in Vehicle)this.load.image(Vehicle[k],'images/TruckGoddess/Vehicle/'+Vehicle[k]+'.png');
 	},
 	loadAudio:function(){
 		var s={
