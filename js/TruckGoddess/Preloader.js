@@ -27,8 +27,8 @@ BasicGame.Preloader.prototype={
 		this.loadAudio();
 	},
 	loadVehicle:function(){
-		var Vehicle=this.M.getConf('Vehicle');
-		for(var k in Vehicle)this.load.image(Vehicle[k],'images/TruckGoddess/Vehicle/'+Vehicle[k]+'.png');
+		var v=this.M.getConf('Vehicle');
+		for(var k in v)this.load.image(v[k],'images/TruckGoddess/Vehicle/'+v[k]+'.png');
 	},
 	loadAudio:function(){
 		var s={

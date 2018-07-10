@@ -23,6 +23,7 @@ create:function(){
 	});
 	this.M.defineConf({
 		StageInfo:this.genStageInfo(),
+		Words:this.genWords(),
 		Vehicle:['Ambulance','Audi','Black_viper','Car','Mini_truck','Mini_van','Police','Taxi','Truck_2'],
 	});
 	this.M.NextScene('Preloader');

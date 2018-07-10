@@ -5,14 +5,14 @@ BasicGame.SelectStage.prototype={
 		this.curStage=this.M.getGlobal('curStage');
 		this.StageInfo=this.M.getConf('StageInfo');
 		this.BaseTextStyle=this.M.S.BaseTextStyleS(30);
+
+		this.Words=this.M.getConf('Words')['jp'];
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#555555';
 		// this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1}); // TODO
-
-		// TODO 目的地を選べ！
 
 		var gaugeX=this.world.width*.2;
 		var gs=this.add.sprite(gaugeX,this.world.centerY,'DifficultyGauge');
@@ -32,8 +32,10 @@ BasicGame.SelectStage.prototype={
 		btns.align(1,-1,btn.width,btn.height*1.2);
 		btns.alignTo(this.world.bounds,Phaser.RIGHT_CENTER,0,0);
 
+		this.M.S.genTextM(this.world.width*.7,this.world.height*.15,this.Words.SS_Ttl,this.BaseTextStyle);
+
 		this.time.events.add(200*count+800,function(){
-			this.M.S.BasicGrayLabelM(this.world.width*.7,this.world.height*.9,this.start,'START',this.BaseTextStyle,{tint:BasicGame.MAIN_TINT});
+			this.M.S.BasicGrayLabelM(this.world.width*.7,this.world.height*.9,this.start,this.Words.Start,this.BaseTextStyle,{tint:BasicGame.MAIN_TINT});
 		},this);
 
 		this.genHUD();

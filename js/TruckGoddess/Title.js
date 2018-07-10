@@ -3,6 +3,7 @@ BasicGame.Title.prototype={
 	init:function(){
 		this.inputEnabled=!1;
 		this.isPlaying=!0;
+		this.Words=this.M.getConf('Words')['jp'];
 	},
 	create:function(){
 		this.time.events.removeAll();
@@ -13,7 +14,7 @@ BasicGame.Title.prototype={
 		this.M.T.moveC(s,{xy:{x:'+5'},duration:100}).start();
 		this.M.T.moveC(s,{xy:{y:'+10'},duration:200}).start();
 
-		this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.8,this.start,'START',this.M.S.BaseTextStyleS(30),{tint:BasicGame.MAIN_TINT});
+		this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.8,this.start,this.Words.Start,this.M.S.BaseTextStyleS(30),{tint:BasicGame.MAIN_TINT});
 		this.genHUD();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},

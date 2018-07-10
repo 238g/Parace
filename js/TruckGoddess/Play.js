@@ -1,41 +1,52 @@
 BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function(){ 
+		// Game
 		this.isPlaying=!1;
 
+		// Conf
+		this.StageInfo=this.M.getConf('StageInfo');
 		this.curStage=this.M.getGlobal('curStage');
-		this.curStageInfo=this.M.getConf('StageInfo')[this.curStage];
+		this.curStageInfo=this.StageInfo[this.curStage];
+		this.Vehicle=this.M.getConf('Vehicle');
+		this.Words=this.M.getConf('Words')['jp'];
 
+		// Dinamic
 		this.score=
 		this.onDownRot=0;
 
+		// Pos
+		this.laneLL=this.world.width*.25;
+		this.laneLC=this.world.width*.45;
+		this.laneRC=this.world.width*.55;
+		this.laneRR=this.world.width*.75;
 		this.playerStartY=this.world.height*.6;
 
+		// Option
+		this.EffectTxtStyle=this.M.S.BaseTextStyleSS(20);
+
+		// Timer
 		this.secTimer=1E3;
 		this.leftTime=this.curStageInfo.leftTime;
 
-		// TODO jp en
-		this.ScoreBaseFrontTxt='罰金: ';
-		this.ScoreBaseBackTxt='円';
-
-		this.Vehicle=this.M.getConf('Vehicle');
-
-
+		// Obj
 		this.BgSprite=this.TutSprite=
 		this.StartTxtSprite=
-		this.Player=this.Enemies=
-		this.HandleSprite=this.ScoreTxtSprite=
-		this.PlayerCollisionGroup=this.EnemyCollisionGroup=
+		this.Player=this.Obstacles=this.Enemies=
+		this.HandleSprite=this.ScoreTxtSprite=this.TimeTxtSprite=
+		this.PlayerCollisionGroup=this.ObstacleCollisionGroup=this.EnemyCollisionGroup=
+		this.EndTxtSprite=
 		null;
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.stage.backgroundColor='#000000';
 		// this.M.SE.playBGM('PlayBGM',{volume:1}); // TODO
 
 		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,'Road_1');
 
 		this.PhysicsController();
+		this.ObstacleContainer();
 		this.EnemyContainer();
 		this.PlayerContainer();
 		this.HUDContainer();
@@ -59,6 +70,7 @@ BasicGame.Play.prototype={
 			if(this.secTimer<0){
 				this.secTimer=1E3;
 				this.leftTime--;
+				this.TimeTxtSprite.changeText(this.genTimeTxt());
 				if(this.leftTime<=0)this.end();
 				this.respawnEnemy();
 				// this.respawnEnemy();
@@ -67,7 +79,7 @@ BasicGame.Play.prototype={
 					if(e.y<0)e.kill();
 				},this);
 			}
-			this.BgSprite.tilePosition.y+=.1*this.time.physicsElapsedMS;
+			this.BgSprite.tilePosition.y+=this.curStageInfo.tileSpeed*this.time.physicsElapsedMS;
 		}
 	},
 	tut:function(){
@@ -78,19 +90,15 @@ BasicGame.Play.prototype={
 			this.TutSprite.destroy();
 			this.start();
 		},this);
-		var txt='usage handle\naaaaaaaa'; // TODO usage handle
 		var ts=this.M.S.BaseTextStyleS(50);
 		ts.align='center';
-		var t=this.M.S.genTextM(0,0,txt,ts);
+		var t=this.M.S.genTextM(0,0,this.Words.HowTo,ts);
 		this.TutSprite.addChild(t);
 	},
 	start:function(){
-		this.isPlaying=!0;
+		this.isPlaying=!0; // TODO del
 		return;// TODO del
 		// this.M.SE.play('Cheer_s1',{volume:1});
-		this.StartTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.centerY,'スタート！',this.M.S.BaseTextStyleS(60));
-		this.StartTxtSprite.anchor.setTo(.5);
-		this.StartTxtSprite.scale.setTo(0);
 		var t=this.M.T.popUpB(this.StartTxtSprite);
 		t.onComplete.add(function(){
 			this.isPlaying=!0;
