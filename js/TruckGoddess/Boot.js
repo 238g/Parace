@@ -1,11 +1,11 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	MAIN_COLOR:'#aee9f3',//TODO
-	MAIN_TINT:0xaee9f3,//TODO
-	MAIN_TEXT_COLOR:'#503110',//TODO
-	MAIN_STROKE_COLOR:'#424242',//TODO
-	WHITE_COLOR:'#ffffff',
-	YOUTUBE_URL:'',//TODO
+	MAIN_COLOR:'#c8f7f4',
+	MAIN_TINT:0xc8f7f4,
+	MAIN_TEXT_COLOR:'#28ceff',
+	MAIN_STROKE_COLOR:'#7ed0e6',
+	WHITE_COLOR:'#e9f0f4',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCvmppcdYf4HOv-tFQhHHJMA',
 	MY_GAMES_URL:'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};
@@ -24,7 +24,9 @@ create:function(){
 	this.M.defineConf({
 		StageInfo:this.genStageInfo(),
 		Words:this.genWords(),
-		Vehicle:['Ambulance','Audi','Black_viper','Car','Mini_truck','Mini_van','Police','Taxi','Truck_2'],
+		VehicleInfo:this.genVehicleInfo(),
+		Vehicle:this.genVehicle(),
+		ObstacleInfo:this.genObstacleInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

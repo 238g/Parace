@@ -47,6 +47,7 @@ BasicGame.Play.prototype.PlayerContainer=function(){
 	this.Player.body.collides(this.EnemyCollisionGroup,this.hitEnemy,this);
 	this.Player.body.collides(this.ObstacleCollisionGroup,this.hitObstacle,this);
 
+	this.Player.addChild(this.M.S.genTextM(0,this.Player.height*.5,this.Words.You,this.M.S.BaseTextStyleSS(20)));
 	this.input.onDown.add(function(){
 		this.onDownRot=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer);
 	},this);
@@ -54,17 +55,26 @@ BasicGame.Play.prototype.PlayerContainer=function(){
 BasicGame.Play.prototype.respawnEnemy=function(LR){
 	var s=this.rnd.pick(this.Enemies.children.filter(function(e){return!e.alive;}));
 	if(s){
-		var x,v=0;
+		var x=y=v=0;
 		var speed=this.curStageInfo.carSpeed;
 		var l=this.curStageInfo.lane;
 		if(l=='ALL'){
-			x=this.rnd.between(this.laneLL,this.laneRR);
-			v=speed*this.rnd.between(1,3)*this.time.physicsElapsedMS;
+			if(this.rndTFNum()==1){
+				x=this.rnd.between(this.laneLL,this.laneRR);
+				v=speed*this.rnd.between(1,3)*this.time.physicsElapsedMS;
+				s.scale.setTo(1);
+			}else{
+				x=this.rnd.between(this.laneLL,this.laneRR);
+				y=this.world.height;
+				v=-speed*this.rnd.between(1,3)*this.time.physicsElapsedMS;
+				s.scale.setTo(1,-1);
+			}
 		}else{
 			if(LR==1){
 				if(l=='LEFT'){
 					x=this.rnd.between(this.laneLL,this.laneLC);
 					v=speed*this.time.physicsElapsedMS;
+					s.scale.setTo(1);
 				}else{
 					x=this.rnd.between(this.laneLL,this.laneLC);
 					v=speed*3*this.time.physicsElapsedMS;
@@ -78,10 +88,11 @@ BasicGame.Play.prototype.respawnEnemy=function(LR){
 				}else{
 					x=this.rnd.between(this.laneRC,this.laneRR);
 					v=speed*this.time.physicsElapsedMS;
+					s.scale.setTo(1);
 				}
 			}
 		}
-		s.reset(x,0);
+		s.reset(x,y);
 		s.body.velocity.y=v;
 	}
 };
@@ -96,12 +107,11 @@ BasicGame.Play.prototype.hitEnemy=function(p,e){
 	if(this.isPlaying){
 		if(e.sprite.alive){
 			e.sprite.alive=!1;
-			// TODO score per vehicle
-			var addScore=this.curStageInfo.scoreRate*10;
-			this.score+=addScore; // TODO
+			var info=this.VehicleInfo[e.sprite.key];
+			var addScore=this.curStageInfo.scoreRate*info.addScore;
+			this.score+=addScore;
 			this.ScoreTxtSprite.changeText(this.genScoreTxt());
-			console.log(e); // TODO check name???
-			this.txtEffect(e.x,e.y,'車両'+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
+			this.txtEffect(e.x,e.y,info.jp_name+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
 			// TODO effect // car explode
 		}
 		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
@@ -111,12 +121,11 @@ BasicGame.Play.prototype.hitObstacle=function(p,o){
 	if(this.isPlaying){
 		if(o.sprite.alive){
 			o.sprite.alive=!1;
-			// TODO score per obstacle frame
-			var addScore=this.curStageInfo.scoreRate*10;
-			this.score+=addScore; // TODO
+			var info=this.ObstacleInfo[o.sprite.key][o.sprite.frame];
+			var addScore=this.curStageInfo.scoreRate*info.addScore;
+			this.score+=addScore;
 			this.ScoreTxtSprite.changeText(this.genScoreTxt());
-			console.log(o); // TODO check name???
-			this.txtEffect(o.x,o.y,'****'+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
+			this.txtEffect(o.x,o.y,info.jp_name+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
 			// TODO effect // ???
 		}
 		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
@@ -147,7 +156,7 @@ BasicGame.Play.prototype.HUDContainer=function(){
 	this.EndTxtSprite.scale.setTo(0);
 };
 BasicGame.Play.prototype.genScoreTxt=function(){
-	return (this.Words.ScoreBaseFront+this.M.H.formatComma(this.score)+this.Words.ScoreBaseBack);
+	return (this.Words.ScoreBaseFront+this.M.H.formatComma(Math.floor(this.score))+this.Words.ScoreBaseBack);
 };
 BasicGame.Play.prototype.genTimeTxt=function(){
 	return (this.Words.TimeBaseFront+this.leftTime+this.Words.TimeBaseBack);
@@ -167,7 +176,7 @@ BasicGame.Play.prototype.genResPopUp=function(){
 };
 BasicGame.Play.prototype.openSecret=function(){
 	// TODO score think...
-	if(this.score<1)this.StageInfo[5].openSecret=!0;
+	if(this.score<10000)this.StageInfo[5].openSecret=!0;
 	if(this.score>1)this.StageInfo[6].openSecret=!0;
 };
 BasicGame.Play.prototype.genRes=function(){
@@ -219,7 +228,7 @@ BasicGame.Play.prototype.genResTxtSprite=function(x,y,txt,ts,d){
 	this.M.T.moveA(t,{xy:{x:x},duration:800,delay:d}).start();
 };
 BasicGame.Play.prototype.genResBtnSprite=function(x,y,func,txt,ts,d){
-	var b=this.M.S.BasicGrayLabelS(this.world.width*1.5,y,func,txt,ts,{tint:BasicGame.MAIN_TINT});
+	var b=this.M.S.BasicGrayLabelM(this.world.width*1.5,y,func,txt,ts,{tint:BasicGame.MAIN_TINT});
 	this.M.T.moveA(b,{xy:{x:x},duration:800,delay:d}).start();
 };
 BasicGame.Play.prototype.tweet=function(){

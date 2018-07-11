@@ -4,17 +4,20 @@ BasicGame.Title.prototype={
 		this.inputEnabled=!1;
 		this.isPlaying=!0;
 		this.Words=this.M.getConf('Words')['jp'];
+		this.BgSprite=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1}); // TODO
-		var s=this.add.sprite(this.world.centerX,this.world.centerY,'TitleChar');
+		this.stage.backgroundColor='#000000';
+		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.BgSprite=this.add.sprite(0,0,'TopBg');
+		this.time.events.loop(3000,function(){this.camera.shake(.01,200,!0,Phaser.Camera.SHAKE_BOTH);},this);
+		var s=this.add.sprite(this.world.centerX,this.world.height*.7,'TitleWord');
 		s.anchor.setTo(.5);
 		this.M.T.moveC(s,{xy:{x:'+5'},duration:100}).start();
 		this.M.T.moveC(s,{xy:{y:'+10'},duration:200}).start();
-
-		this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.8,this.start,this.Words.Start,this.M.S.BaseTextStyleS(30),{tint:BasicGame.MAIN_TINT});
+		this.M.S.genTextM(this.world.centerX,this.world.height*.2,BasicGame.GAME_TITLE,this.M.S.BaseTextStyleS(60));
+		this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.93,this.start,this.Words.Start,this.M.S.BaseTextStyleS(30),{tint:BasicGame.MAIN_TINT});
 		this.genHUD();
 		this.time.events.add(800,function(){this.inputEnabled=!0;},this);
 	},
@@ -31,7 +34,7 @@ BasicGame.Title.prototype={
 			},this);
 			tween.start();
 		} else {
-			// this.M.SE.playBGM('TitleBGM',{volume:1}); // TODO
+			this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},

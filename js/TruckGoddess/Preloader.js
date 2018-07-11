@@ -22,7 +22,8 @@ BasicGame.Preloader.prototype={
 			'Truck':'images/TruckGoddess/Vehicle/Truck.png',
 			'Road_1':'images/TruckGoddess/Road_1.jpg',
 			'DifficultyGauge':'images/TruckGoddess/DifficultyGauge.png',
-			'TitleChar':'images/eff/Tree.png',
+			'TitleWord':'images/TruckGoddess/TitleWord.png',
+			'TopBg':'images/TruckGoddess/TopBg.png',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadVehicle();
@@ -33,9 +34,10 @@ BasicGame.Preloader.prototype={
 		for(var k in v)this.load.image(v[k],'images/TruckGoddess/Vehicle/'+v[k]+'.png');
 	},
 	loadAudio:function(){
+		var playBGM=this.rnd.pick(['cyrf_solitary','cyrf_truth','cyrf_warm_up','cyrf_winter_season']);
 		var s={
-			// TitleBGM:'sounds/BGM/FOckingGlasses/cyber41',
-			// PlayBGM:'sounds/BGM/FOckingGlasses/Lets_Party2',
+			TitleBGM:'sounds/BGM/TruckGoddess/yuuenchi',
+			PlayBGM:'sounds/BGM/TruckGoddess/'+playBGM,
 		};
 		for(var k in s){
 			var p=s[k];

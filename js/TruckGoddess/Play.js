@@ -9,6 +9,8 @@ BasicGame.Play.prototype={
 		this.curStage=this.M.getGlobal('curStage');
 		this.curStageInfo=this.StageInfo[this.curStage];
 		this.Vehicle=this.M.getConf('Vehicle');
+		this.VehicleInfo=this.M.getConf('VehicleInfo');
+		this.ObstacleInfo=this.M.getConf('ObstacleInfo');
 		this.Words=this.M.getConf('Words')['jp'];
 
 		// Dinamic
@@ -43,7 +45,7 @@ BasicGame.Play.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#000000';
-		// this.M.SE.playBGM('PlayBGM',{volume:1}); // TODO
+		this.M.SE.playBGM('PlayBGM',{volume:1});
 
 		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,'Road_1');
 
@@ -64,7 +66,8 @@ BasicGame.Play.prototype={
 			}
 			this.Player.body.x+=this.HandleSprite.angle*.03;
 			if(Math.abs(this.Player.angle)<90){
-				if(this.Player.body.y>this.playerStartY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
+				// if(this.Player.body.y>this.playerStartY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
+				if(this.Player.body.y>this.world.centerY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
 			}else{
 				this.Player.body.y+=.01*this.time.physicsElapsedMS;
 			}
@@ -116,6 +119,7 @@ BasicGame.Play.prototype={
 		this.TutSprite.tint=0x000000;
 		this.input.onDown.addOnce(function(){
 			this.TutSprite.destroy();
+			this.M.setGlobal('endTut',!0);
 			this.start();
 		},this);
 		var ts=this.M.S.BaseTextStyleS(50);
