@@ -13,6 +13,8 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
+		this.load.spritesheet('Signboards','images/TruckGoddess/Signboards.png',32,64);
+		this.load.spritesheet('Obstacles','images/TruckGoddess/Obstacles.png',32,32);
 		var imageAssets={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',

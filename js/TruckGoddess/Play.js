@@ -28,6 +28,8 @@ BasicGame.Play.prototype={
 		// Timer
 		this.secTimer=1E3;
 		this.leftTime=this.curStageInfo.leftTime;
+		this.respawnRateTimeBase=this.curStageInfo.respawnRateTimeBase;
+		this.respawnRateTimer=this.respawnRateTimeBase;
 
 		// Obj
 		this.BgSprite=this.TutSprite=
@@ -72,12 +74,38 @@ BasicGame.Play.prototype={
 				this.leftTime--;
 				this.TimeTxtSprite.changeText(this.genTimeTxt());
 				if(this.leftTime<=0)this.end();
-				this.respawnEnemy();
-				// this.respawnEnemy();
 				this.Enemies.forEachAlive(function(e){
 					if(e.y>this.world.height)e.kill();
 					if(e.y<0)e.kill();
+					if(e.x>this.world.width)e.kill();
+					if(e.x<0)e.kill();
 				},this);
+				this.Obstacles.forEachAlive(function(e){
+					if(e.y>this.world.height)e.kill();
+					if(e.y<0)e.kill();
+					if(e.x>this.world.width)e.kill();
+					if(e.x<0)e.kill();
+				},this);
+			}
+			this.respawnRateTimer-=this.time.elapsed;
+			if(this.respawnRateTimer<0){
+				this.respawnRateTimer=this.respawnRateTimeBase;
+				var r=this.rnd.between(1,10);
+				if(r==1){
+					this.respawnEnemy(1);
+					this.respawnEnemy(-1);
+					this.respawnEnemy(this.rndTFNum());
+					this.respawnObstacle(this.rndTFNum());
+				}else if(r==2){
+					this.respawnEnemy(1);
+					this.respawnEnemy(1);
+					this.respawnObstacle(1);
+					this.respawnObstacle(-1);
+				}else{
+					this.respawnEnemy(1);
+					this.respawnEnemy(-1);
+					this.respawnObstacle(this.rndTFNum());
+				}
 			}
 			this.BgSprite.tilePosition.y+=this.curStageInfo.tileSpeed*this.time.physicsElapsedMS;
 		}
@@ -103,7 +131,8 @@ BasicGame.Play.prototype={
 		t.onComplete.add(function(){
 			this.isPlaying=!0;
 			this.StartTxtSprite.destroy();
-			this.respawnEnemy();
+			this.respawnEnemy(1);
+			this.respawnEnemy(-1);
 		},this);
 		t.start();
 	},
@@ -118,6 +147,7 @@ BasicGame.Play.prototype={
 			// this.M.H.getQuery('time')&&(this.leftTime=this.M.H.getQuery('time'));
 			this.Player.body.debug=!0;
 			this.Enemies.forEach(function(e){e.body.debug=!0;},this);
+			this.Obstacles.forEach(function(e){e.body.debug=!0;},this);
 		}
 	},
 };

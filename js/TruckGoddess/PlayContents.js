@@ -12,13 +12,14 @@ BasicGame.Play.prototype.ObstacleContainer=function(){
 	this.Obstacles=this.add.group();
 	this.Obstacles.physicsBodyType=Phaser.Physics.P2JS;
 	this.Obstacles.enableBody=!0;
-	this.Obstacles.createMultiple(1,[
-		'Car'// TODO
-	]);
+	this.Obstacles.createMultiple(2,'Obstacles',[0,1,2,3,4,5,6,7]);
+	this.Obstacles.createMultiple(2,'Signboards',[0,1,2,3,4]);
 	this.Obstacles.forEach(function(s){
 		s.body.setCollisionGroup(this.ObstacleCollisionGroup);
 		s.body.collides([this.ObstacleCollisionGroup,this.PlayerCollisionGroup]);
 		s.body.collideWorldBounds=!1;
+		s.body.fixedRotation=!0;
+		// TODO add name???
 	},this);
 };
 BasicGame.Play.prototype.EnemyContainer=function(){
@@ -26,11 +27,11 @@ BasicGame.Play.prototype.EnemyContainer=function(){
 	this.Enemies.physicsBodyType=Phaser.Physics.P2JS;
 	this.Enemies.enableBody=!0;
 	this.Enemies.createMultiple(20,this.Vehicle);
-	// this.Enemies.createMultiple(1,'Car');
 	this.Enemies.forEach(function(s){
 		s.body.setCollisionGroup(this.EnemyCollisionGroup);
 		s.body.collides([this.EnemyCollisionGroup,this.PlayerCollisionGroup]);
 		s.body.collideWorldBounds=!1;
+		// TODO add name???
 	},this);
 };
 BasicGame.Play.prototype.PlayerContainer=function(){
@@ -50,7 +51,7 @@ BasicGame.Play.prototype.PlayerContainer=function(){
 		this.onDownRot=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer);
 	},this);
 };
-BasicGame.Play.prototype.respawnEnemy=function(){
+BasicGame.Play.prototype.respawnEnemy=function(LR){
 	var s=this.rnd.pick(this.Enemies.children.filter(function(e){return!e.alive;}));
 	if(s){
 		var x,v=0;
@@ -60,12 +61,12 @@ BasicGame.Play.prototype.respawnEnemy=function(){
 			x=this.rnd.between(this.laneLL,this.laneRR);
 			v=speed*this.rnd.between(1,3)*this.time.physicsElapsedMS;
 		}else{
-			if(this.rndTFNum()==1){
+			if(LR==1){
 				if(l=='LEFT'){
 					x=this.rnd.between(this.laneLL,this.laneLC);
 					v=speed*this.time.physicsElapsedMS;
 				}else{
-					x=this.rnd.between(this.laneRC,this.laneRR);
+					x=this.rnd.between(this.laneLL,this.laneLC);
 					v=speed*3*this.time.physicsElapsedMS;
 					s.scale.setTo(1,-1);
 				}
@@ -75,7 +76,7 @@ BasicGame.Play.prototype.respawnEnemy=function(){
 					v=speed*3*this.time.physicsElapsedMS;
 					s.scale.setTo(1,-1);
 				}else{
-					x=this.rnd.between(this.laneLL,this.laneLC);
+					x=this.rnd.between(this.laneRC,this.laneRR);
 					v=speed*this.time.physicsElapsedMS;
 				}
 			}
@@ -84,15 +85,23 @@ BasicGame.Play.prototype.respawnEnemy=function(){
 		s.body.velocity.y=v;
 	}
 };
+BasicGame.Play.prototype.respawnObstacle=function(LR){
+	var s=this.rnd.pick(this.Obstacles.children.filter(function(e){return!e.alive;}));
+	if(s){
+		s.reset((LR==1)?this.world.width*.1:this.world.width*.9,0);
+		s.body.velocity.y=this.curStageInfo.carSpeed*this.time.physicsElapsedMS;
+	}
+};
 BasicGame.Play.prototype.hitEnemy=function(p,e){
 	if(this.isPlaying){
 		if(e.sprite.alive){
 			e.sprite.alive=!1;
-			// TODO score
-			var addScore=100;
+			// TODO score per vehicle
+			var addScore=this.curStageInfo.scoreRate*10;
 			this.score+=addScore; // TODO
 			this.ScoreTxtSprite.changeText(this.genScoreTxt());
-			this.txtEffect(e.x,e.y,'車両破壊\n-'+addScore+'円','#ff0000');
+			console.log(e); // TODO check name???
+			this.txtEffect(e.x,e.y,'車両'+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
 			// TODO effect // car explode
 		}
 		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
@@ -102,11 +111,12 @@ BasicGame.Play.prototype.hitObstacle=function(p,o){
 	if(this.isPlaying){
 		if(o.sprite.alive){
 			o.sprite.alive=!1;
-			// TODO score
-			this.score++; // TODO
+			// TODO score per obstacle frame
+			var addScore=this.curStageInfo.scoreRate*10;
+			this.score+=addScore; // TODO
 			this.ScoreTxtSprite.changeText(this.genScoreTxt());
-			// TODO color per obstacle
-			this.txtEffect(o.x,o.y,'****破壊\n-'+addScore+'円','#00ff00');
+			console.log(o); // TODO check name???
+			this.txtEffect(o.x,o.y,'****'+this.Words.Break+addScore+this.Words.ScoreBaseBack,'#ff0000');
 			// TODO effect // ???
 		}
 		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
