@@ -20,10 +20,12 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Handle':'images/TruckGoddess/Handle.png',
 			'Truck':'images/TruckGoddess/Vehicle/Truck.png',
-			'Road_1':'images/TruckGoddess/Road_1.jpg',
+			'PlayBg_1':'images/TruckGoddess/Road_1.jpg',
 			'DifficultyGauge':'images/TruckGoddess/DifficultyGauge.png',
 			'TitleWord':'images/TruckGoddess/TitleWord.png',
 			'TopBg':'images/TruckGoddess/TopBg.png',
+			// TODO bg 1~3,5,6
+			'Bg_4':'images/TruckGoddess/Bg_4.jpg',
 		};
 		for(var k in imageAssets)this.load.image(k,imageAssets[k]);
 		this.loadVehicle();

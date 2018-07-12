@@ -22,7 +22,6 @@ BasicGame.Play.prototype={
 		this.laneLC=this.world.width*.45;
 		this.laneRC=this.world.width*.55;
 		this.laneRR=this.world.width*.75;
-		this.playerStartY=this.world.height*.6;
 
 		// Option
 		this.EffectTxtStyle=this.M.S.BaseTextStyleSS(20);
@@ -47,7 +46,7 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor='#000000';
 		this.M.SE.playBGM('PlayBGM',{volume:1});
 
-		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,'Road_1');
+		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,'PlayBg_1');
 
 		this.PhysicsController();
 		this.ObstacleContainer();
@@ -66,7 +65,6 @@ BasicGame.Play.prototype={
 			}
 			this.Player.body.x+=this.HandleSprite.angle*.03;
 			if(Math.abs(this.Player.angle)<90){
-				// if(this.Player.body.y>this.playerStartY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
 				if(this.Player.body.y>this.world.centerY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
 			}else{
 				this.Player.body.y+=.01*this.time.physicsElapsedMS;
@@ -78,16 +76,10 @@ BasicGame.Play.prototype={
 				this.TimeTxtSprite.changeText(this.genTimeTxt());
 				if(this.leftTime<=0)this.end();
 				this.Enemies.forEachAlive(function(e){
-					if(e.y>this.world.height)e.kill();
-					if(e.y<0)e.kill();
-					if(e.x>this.world.width)e.kill();
-					if(e.x<0)e.kill();
+					if(e.y>this.world.height||e.y<0||e.x>this.world.width||e.x<0)e.kill();
 				},this);
 				this.Obstacles.forEachAlive(function(e){
-					if(e.y>this.world.height)e.kill();
-					if(e.y<0)e.kill();
-					if(e.x>this.world.width)e.kill();
-					if(e.x<0)e.kill();
+					if(e.y>this.world.height||e.y<0||e.x>this.world.width||e.x<0)e.kill();
 				},this);
 			}
 			this.respawnRateTimer-=this.time.elapsed;
@@ -148,7 +140,6 @@ BasicGame.Play.prototype={
 	tes:function(){
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.end,this);
-			// this.M.H.getQuery('time')&&(this.leftTime=this.M.H.getQuery('time'));
 			this.Player.body.debug=!0;
 			this.Enemies.forEach(function(e){e.body.debug=!0;},this);
 			this.Obstacles.forEach(function(e){e.body.debug=!0;},this);

@@ -10,9 +10,9 @@ BasicGame.SelectStage.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#555555';
-		// this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1}); // TODO
+		this.M.SE.playBGM('TitleBGM',{volume:1});
+
+		this.add.sprite(0,0,'Bg_1'); // TODO per stage
 
 		var gaugeX=this.world.width*.2;
 		var gs=this.add.sprite(gaugeX,this.world.centerY,'DifficultyGauge');

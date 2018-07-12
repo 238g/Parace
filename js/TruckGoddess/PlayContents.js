@@ -1,8 +1,7 @@
 BasicGame.Play.prototype.PhysicsController=function(){
 	this.physics.startSystem(Phaser.Physics.P2JS);
 	this.physics.p2.setImpactEvents(!0);
-	this.physics.p2.restitution=1; // TODO think... bound
-	// this.physics.p2.restitution=.1; // TODO think... bound
+	this.physics.p2.restitution=1;
 	this.PlayerCollisionGroup=this.physics.p2.createCollisionGroup();
 	this.EnemyCollisionGroup=this.physics.p2.createCollisionGroup();
 	this.ObstacleCollisionGroup=this.physics.p2.createCollisionGroup();
@@ -19,7 +18,6 @@ BasicGame.Play.prototype.ObstacleContainer=function(){
 		s.body.collides([this.ObstacleCollisionGroup,this.PlayerCollisionGroup]);
 		s.body.collideWorldBounds=!1;
 		s.body.fixedRotation=!0;
-		// TODO add name???
 	},this);
 };
 BasicGame.Play.prototype.EnemyContainer=function(){
@@ -31,12 +29,11 @@ BasicGame.Play.prototype.EnemyContainer=function(){
 		s.body.setCollisionGroup(this.EnemyCollisionGroup);
 		s.body.collides([this.EnemyCollisionGroup,this.PlayerCollisionGroup]);
 		s.body.collideWorldBounds=!1;
-		// TODO add name???
 	},this);
 };
 BasicGame.Play.prototype.PlayerContainer=function(){
 	var x=(this.curStageInfo.lane=='RIGHT')?this.world.width*.73:this.world.width*.27;
-	this.Player=this.add.sprite(x,this.playerStartY,'Truck');//TODO left right
+	this.Player=this.add.sprite(x,this.world.height*.8,'Truck');
 	this.Player.smoothed=!1;
 	this.physics.p2.enable(this.Player, false);
 	this.Player.anchor.setTo(.5,.1);
@@ -46,7 +43,6 @@ BasicGame.Play.prototype.PlayerContainer=function(){
 	this.Player.body.setCollisionGroup(this.PlayerCollisionGroup);
 	this.Player.body.collides(this.EnemyCollisionGroup,this.hitEnemy,this);
 	this.Player.body.collides(this.ObstacleCollisionGroup,this.hitObstacle,this);
-
 	this.Player.addChild(this.M.S.genTextM(0,this.Player.height*.5,this.Words.You,this.M.S.BaseTextStyleSS(20)));
 	this.input.onDown.add(function(){
 		this.onDownRot=this.physics.arcade.angleBetween(this.HandleSprite,this.input.activePointer);
@@ -222,14 +218,20 @@ BasicGame.Play.prototype.genRes=function(){
 	},this);
 	
 	// TODO check stage 5,6 open if ok-> popup open secret stg
+	this.checkSecret();
+};
+BasicGame.Play.prototype.checkSecret=function(){
+	if(this.StageInfo[5].openSecret){
+		// TODO open JAPAN
+	}else if(this.StageInfo[6].openSecret){
+		// TODO open HEAVEN
+	}
 };
 BasicGame.Play.prototype.genResTxtSprite=function(x,y,txt,ts,d){
-	var t=this.M.S.genTextM(this.world.width*1.5,y,txt,ts);
-	this.M.T.moveA(t,{xy:{x:x},duration:800,delay:d}).start();
+	this.M.T.moveA(this.M.S.genTextM(this.world.width*1.5,y,txt,ts),{xy:{x:x},duration:800,delay:d}).start();
 };
 BasicGame.Play.prototype.genResBtnSprite=function(x,y,func,txt,ts,d){
-	var b=this.M.S.BasicGrayLabelM(this.world.width*1.5,y,func,txt,ts,{tint:BasicGame.MAIN_TINT});
-	this.M.T.moveA(b,{xy:{x:x},duration:800,delay:d}).start();
+	this.M.T.moveA(this.M.S.BasicGrayLabelM(this.world.width*1.5,y,func,txt,ts,{tint:BasicGame.MAIN_TINT}),{xy:{x:x},duration:800,delay:d}).start();
 };
 BasicGame.Play.prototype.tweet=function(){
 	// this.M.SE.play('OnBtn',{volume:1}); // TODO
