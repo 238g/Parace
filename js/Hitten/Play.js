@@ -2,9 +2,10 @@ BasicGame.Play=function(){};
 BasicGame.Play.prototype={
 	init:function(){ 
 		this.isPlaying=!1;
-		this.curChar=this.M.getGlobal('curChar');
-		this.CharInfo=this.M.getConf('CharInfo');
+		this.curChar=this.M.gGlb('curChar');
+		this.CharInfo=this.M.gCnf('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
+		this.curWords=this.M.gCnf('Words')[this.M.gGlb('curLang')];
 
 		this.playCount=0;
 
@@ -29,16 +30,16 @@ BasicGame.Play.prototype={
 	genContents:function(){
 		this.CharSprite=this.add.sprite(this.world.centerX,this.world.centerY,this.curCharInfo.normal);
 		this.CharSprite.anchor.setTo(.5);
-		this.ResWordsTxtSprite=this.M.S.genTextM(0,0,'');
-		this.HowToTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.12,this.targetTime+' でピッタリ止めろ',this.M.S.BaseTextStyleS(40));
-		this.PlayCountTxtSprite=this.M.S.genTextM(this.world.width*.8,this.world.height*.96,'0回',this.M.S.BaseTextStyleSS(35));
-		this.M.S.BasicGrayLabelM(this.world.width*.24,this.world.height*.0365,this.back,'BACK',this.M.S.BaseTextStyleS(20),{tint:0xFF8000}).scale.setTo(1.1);
-		this.PlayLabel=this.M.S.BasicGrayLabelM(this.world.centerX,this.world.height*.875,this.play,'START',this.M.S.BaseTextStyleS(20),{tint:0xFF8000});
+		this.ResWordsTxtSprite=this.M.S.genTxt(0,0,'');
+		this.HowToTxtSprite=this.M.S.genTxt(this.world.centerX,this.world.height*.12,this.curWords.InstructF+this.targetTime+this.curWords.InstructB,this.M.S.txtstyl(40));
+		this.PlayCountTxtSprite=this.M.S.genTxt(this.world.width*.8,this.world.height*.96,this.playCount+this.curWords.PlayCount,this.M.S.txtstylS(35));
+		this.M.S.genLbl(this.world.width*.24,this.world.height*.0365,this.back,this.curWords.Back,this.M.S.txtstyl(20),{tint:0xFF8000}).scale.setTo(1.1);
+		this.PlayLabel=this.M.S.genLbl(this.world.centerX,this.world.height*.875,this.play,this.curWords.Start,this.M.S.txtstyl(20),{tint:0xFF8000});
 		this.PlayLabel.scale.setTo(1.1);
-		this.TweetLabel=this.M.S.BasicGrayLabelM(this.world.width*.24,this.world.height*.95,this.tweet,'TWEET',this.M.S.BaseTextStyleS(20),{tint:0xFF8000});
+		this.TweetLabel=this.M.S.genLbl(this.world.width*.24,this.world.height*.95,this.tweet,this.curWords.Tweet,this.M.S.txtstyl(20),{tint:0xFF8000});
 		this.TweetLabel.visible=!1;
 
-		this.TimeTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.2,this.targetTime,this.M.S.BaseTextStyleS(60));
+		this.TimeTxtSprite=this.M.S.genTxt(this.world.centerX,this.world.height*.2,this.targetTime,this.M.S.txtstyl(60));
 	},
 	play:function(){
 		this.isPlaying?this.timerStop():this.timerStart();
@@ -46,7 +47,7 @@ BasicGame.Play.prototype={
 	},
 	timerStart:function(){
 		this.isPlaying=!0;
-		this.PlayLabel.children[0].changeText('STOP');
+		this.PlayLabel.children[0].changeText(this.curWords.Stop);
 		this.TweetLabel.visible=!1;
 		this.playCount++;
 		this.startTime=Date.now();
@@ -60,9 +61,9 @@ BasicGame.Play.prototype={
 	},
 	timerStop:function(){
 		this.isPlaying=!1;
-		this.PlayLabel.children[0].changeText('AGAIN');
+		this.PlayLabel.children[0].changeText(this.curWords.Again);
 		this.TweetLabel.visible=!0; // TODO ???? clear tweet
-		this.PlayCountTxtSprite.changeText(this.playCount+'回');
+		this.PlayCountTxtSprite.changeText(this.playCount+this.curWords.PlayCount);
 		var elapsedTime=(Date.now()-this.startTime)*.001;
 		var curTime=elapsedTime.toFixed(2);
 		this.TimeTxtSprite.changeText(curTime);
@@ -105,15 +106,15 @@ BasicGame.Play.prototype={
 	tweet:function(){
 		this.M.SE.play('SelectSE',{volume:1});
 		var resultText=
-			'選択キャラクター: '+this.curCharInfo.charName+'\n'
-			+this.targetTime+'秒クリア！\n'
+			this.curWords.SelectedChar+this.curCharInfo.charName+'\n'
+			+this.curWords.TweetClearF+this.targetTime+this.curWords.TweetClearB+'\n'
 			+this.playCount+'回目の挑戦！\n'; // TODO
 		var emoji='⏰⏰⏰⏰⏰⏰';
-		var text='『'+BasicGame.GAME_TITLE+'』で遊んだよ！\n'
+		var text=this.curWords.TweetTtl+'\n'
 					+emoji+'\n'
 					+resultText
 					+emoji+'\n';
-		var hashtags = 'VT秒当てゲーム';
+		var hashtags = 'VT秒当てゲーム,Vtuber';
 		this.M.H.tweet(text,hashtags,location.href);
 	},
 	tes:function(){

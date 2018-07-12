@@ -72,3 +72,41 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		},
 	};
 };
+BasicGame.Boot.prototype.genWords=function(){
+	return {
+		jp:{
+			Start:'スタート',
+			OtherGames:'他ゲーム',
+			Lang:'English',
+			Back:'戻る',
+			Select:'選択',
+			InstructB:' でピッタリ止めろ',
+			InstructF:'',
+			PlayCount:'回',
+			Tweet:'ツイート',
+			Again:'もう一度',
+			SelectedChar:'選択キャラクター: ',
+			TweetClearF:'',
+			TweetClearB:'秒クリア！',
+			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			Stop:'STOP',
+		},
+		en:{
+			Start:'START',
+			OtherGames:'OTHER GAMES',
+			Lang:'日本語',
+			Back:'BACK',
+			Select:'SELECT',
+			InstructB:'',
+			InstructF:'STOP ',
+			PlayCount:'times',
+			Tweet:'TWEET',
+			Again:'AGAIN',
+			SelectedChar:'Selected: ',
+			TweetClearF:'Clear ',
+			TweetClearB:'sec',
+			TweetTtl:'I\'d play『'+BasicGame.GAME_TITLE+'』',
+			Stop:'STOP',
+		},
+	};
+};

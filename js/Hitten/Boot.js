@@ -1,5 +1,6 @@
 BasicGame={
 	GAME_TITLE:document.title,
+	GAME_EN_TITLE:'VT Stopwatch',
 	MAIN_COLOR:'#ffffff',
 	MAIN_TINT:0xffffff,
 	MAIN_TEXT_COLOR:'#000000',
@@ -11,16 +12,16 @@ BasicGame={
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
 init:function(){this.M.BootInit(!1);},
-preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
 create:function(){
-	this.M.defineConst({
-		TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
-		EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
-	});
-	this.M.defineGlobal({
+	this.M.dCst({});
+	this.M.dGlb({
 		curChar:1,
 		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 	});
-	this.M.defineConf({CharInfo:this.genCharInfo()});
+	this.M.dCnf({
+		CharInfo:this.genCharInfo(),
+		Words:this.genWords(),
+	});
 	this.M.NextScene('Preloader');
-},};
+}};

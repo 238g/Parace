@@ -1,19 +1,12 @@
 BasicGame.SelectChar=function(){};
 BasicGame.SelectChar.prototype={
 	init:function(){
-		this.curChar=this.M.getGlobal('curChar');
-		this.CharInfo=this.M.getConf('CharInfo');
+		this.curChar=this.M.gGlb('curChar');
+		this.CharInfo=this.M.gCnf('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
-		this.CharNameTextStyle=this.M.S.BaseTextStyleS(40);
+		this.curWords=this.M.gCnf('Words')[this.M.gGlb('curLang')];
+		this.CharNameTextStyle=this.M.S.txtstyl(40);
 		this.CharFrame=this.CharName=null;
-		if(this.M.getGlobal('curLang')=='en'){
-			this.BackTxt='BACK';
-			this.SelectTxt='SELECT';
-		}else{
-			// TODO lang
-			this.BackTxt='BACK';
-			this.SelectTxt='SELECT';
-		}
 	},
 	create:function(){
 		this.time.events.removeAll();
@@ -21,8 +14,8 @@ BasicGame.SelectChar.prototype={
 		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genCharFrame();
 		this.genCharPanels();
-		this.M.S.BasicGrayLabelM(this.world.width*.24,this.world.height*.0365,this.back,this.BackTxt,this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
-		this.M.S.BasicGrayLabelM(this.CharFrame.right-20,this.CharFrame.bottom,this.play,this.SelectTxt,this.M.S.BaseTextStyleS(20),{tint:0x00FF80}).scale.setTo(1.1);
+		this.M.S.genLbl(this.world.width*.24,this.world.height*.0365,this.back,this.curWords.Back,this.M.S.txtstyl(20),{tint:0x00FF80}).scale.setTo(1.1);
+		this.M.S.genLbl(this.CharFrame.right-20,this.CharFrame.bottom,this.play,this.curWords.Select,this.M.S.txtstyl(20),{tint:0x00FF80}).scale.setTo(1.1);
 		this.genHUD();
 	},
 	genCharFrame:function(){
@@ -34,7 +27,7 @@ BasicGame.SelectChar.prototype={
 		this.CharSprite.anchor.setTo(.5);
 		this.CharNameTextStyle.fill=this.curCharInfo.txtColor;
 		this.CharNameTextStyle.multipleStroke=this.curCharInfo.stroke;
-		this.CharName=this.M.S.genTextM(this.world.centerX,this.world.height*.17,this.curCharInfo.charName,this.CharNameTextStyle);
+		this.CharName=this.M.S.genTxt(this.world.centerX,this.world.height*.17,this.curCharInfo.charName,this.CharNameTextStyle);
 	},
 	genCharPanels:function(){
 		var x=y=0;
@@ -73,7 +66,7 @@ BasicGame.SelectChar.prototype={
 	},
 	play:function(){
 		this.M.SE.play('SelectSE',{volume:1});
-		this.M.setGlobal('curChar',this.curChar);
+		this.M.sGlb('curChar',this.curChar);
 		this.M.NextScene('Play');
 	},
 	back:function(){
@@ -82,7 +75,7 @@ BasicGame.SelectChar.prototype={
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;
-		this.M.S.BasicVolSprite(this.world.width*.1,y);
-		this.M.S.BasicFullScreenBtn(this.world.width*.9,y);
+		this.M.S.genVolBtn(this.world.width*.1,y);
+		this.M.S.gebFlScBtn(this.world.width*.9,y);
 	},
 };
