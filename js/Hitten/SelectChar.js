@@ -2,9 +2,9 @@ BasicGame.SelectChar=function(){};
 BasicGame.SelectChar.prototype={
 	init:function(){
 		this.curChar=this.M.gGlb('curChar');
-		this.CharInfo=this.M.gCnf('CharInfo');
+		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
-		this.curWords=this.M.gCnf('Words')[this.M.gGlb('curLang')];
+		this.curWords=this.M.gGlb('Words')[this.M.gGlb('curLang')];
 		this.CharNameTextStyle=this.M.S.txtstyl(40);
 		this.CharFrame=this.CharName=null;
 	},

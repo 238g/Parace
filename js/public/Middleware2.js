@@ -1,9 +1,6 @@
 Middleware=function(game,GmObj,BootCls){this.initialize(game,GmObj,BootCls)};
 Middleware.prototype={
-	initVar:function(){
-		this.game=this.S=this.T=this.SE=this.H=this.currentScene=this.nextScene=this.GmObj=null;
-		this.glb=this.cst=this.cnf={};
-	},
+	initVar:function(){this.nextScene=null;this.glb={};},
 	initialize:function(game,GmObj,BootCls){
 		this.initVar();
 		game.M=this;
@@ -19,24 +16,24 @@ Middleware.prototype={
 		this.setM();
 	},
 	BootInit: function (orientation) {
-		var s=this.gScn();
-		s.input.maxPointers=1;
-		s.stage.backgroundColor='#424242';
-		s.stage.disableVisibilityChange=!0;
-		s.scale.scaleMode=Phaser.ScaleManager.SHOW_ALL;
+		var sc=this.gScn();
+		sc.input.maxPointers=1;
+		sc.stage.backgroundColor='#424242';
+		sc.stage.disableVisibilityChange=!0;
+		sc.scale.scaleMode=Phaser.ScaleManager.SHOW_ALL;
 		if(orientation){
-			s.scale.fullScreenScaleMode=Phaser.ScaleManager.EXACT_FIT;
-			if (!s.game.device.desktop) {
-				s.scale.forceOrientation(!0,!1);
-				s.scale.enterIncorrectOrientation.add(function(){document.getElementById('orientation').style.display='block';});
-				s.scale.leaveIncorrectOrientation.add(function(){document.getElementById('orientation').style.display='none';});
+			sc.scale.fullScreenScaleMode=Phaser.ScaleManager.EXACT_FIT;
+			if (!sc.game.device.desktop) {
+				sc.scale.forceOrientation(!0,!1);
+				sc.scale.enterIncorrectOrientation.add(function(){document.getElementById('orientation').style.display='block';});
+				sc.scale.leaveIncorrectOrientation.add(function(){document.getElementById('orientation').style.display='none';});
 			}
 		}else{
-			s.scale.fullScreenScaleMode=s.game.device.desktop?Phaser.ScaleManager.SHOW_ALL:Phaser.ScaleManager.EXACT_FIT;
+			sc.scale.fullScreenScaleMode=sc.game.device.desktop?Phaser.ScaleManager.SHOW_ALL:Phaser.ScaleManager.EXACT_FIT;
 		}
-		s.scale.parentIsWindow=!0;
-		s.scale.refresh();
-		s.load.crossOrigin='Anonymous';
+		sc.scale.parentIsWindow=!0;
+		sc.scale.refresh();
+		sc.load.crossOrigin='Anonymous';
 	},
 	NextScene: function (nextScene) {
 		this.gScn().state.start(nextScene);
@@ -48,12 +45,6 @@ Middleware.prototype={
 	dGlb:function(v){this.glb=v;},
 	sGlb:function(k,v){this.glb[k]=v;},
 	gGlb:function(k){return this.glb[k];},
-	dCst:function(v){this.cst=v;},
-	sCst:function(k,v){this.cst[k]=v;},
-	gCst:function(k){if(!k)return this.cst;return this.cst[k];},
-	dCnf:function(v){this.cnf=v;},
-	sCnf:function(k,v){this.cnf[k]=v;},
-	gCnf:function(k){return this.cnf[k];},
 };
 Middleware.prototype.SpriteManager=function(game,M){this.initialize(game,M)};
 Middleware.prototype.SpriteManager.prototype={
@@ -85,6 +76,13 @@ Middleware.prototype.SpriteManager.prototype={
 			this.setText(t);
 			this.children[0].setText(t);
 		};
+		mts.changeStyle=function(txtstyl){
+			this.children[0].setStyle(txtstyl);
+			txtstyl.fill=txtstyl.mStroke;
+			txtstyl.stroke=txtstyl.mStroke;
+			txtstyl.strokeThickness=txtstyl.strokeThickness+txtstyl.mStrokeThickness;
+			this.setStyle(txtstyl);
+		};
 		return mts;
 	},
 	genLbl:function(x,y,f,t,txtstyl,op={}){
@@ -100,7 +98,8 @@ Middleware.prototype.SpriteManager.prototype={
 		var g=this.M.GmObj;
 		var f=g.MAIN_TEXT_COLOR||'#FFFFFF';
 		return {
-			fontSize:fs||25,fill:f,
+			fontSize:fs||25,
+			fill:f,
 			align:'center',
 			stroke:g.WHITE_COLOR||'#000000',
 			strokeThickness:8,
@@ -112,7 +111,8 @@ Middleware.prototype.SpriteManager.prototype={
 		var g=this.M.GmObj;
 		var f=g.MAIN_TEXT_COLOR||'#FFFFFF';
 		return {
-			fontSize:fs||25,fill:f,
+			fontSize:fs||25,
+			fill:f,
 			align:'center',
 			stroke:g.WHITE_COLOR||'#000000',
 			strokeThickness:5,
@@ -211,8 +211,8 @@ Middleware.prototype.SpriteManager.prototype={
 		var sc=this.M.gScn();
 		var j=(sc.game.device.touch)?'タッチ':'クリック';
 		var e=(sc.game.device.touch)?'TOUCH':'CLICK';
-		this.M.sCst('TOUCH_OR_CLICK',j);
-		this.M.sCst('EN_TOUCH_OR_CLICK',e);
+		this.M.sGlb('TOUCH_OR_CLICK',j);
+		this.M.sGlb('EN_TOUCH_OR_CLICK',e);
 		sc.game.device.desktop&&(document.body.style.cursor='pointer');
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.genTxt(sc.world.centerX,sc.world.height*.85,j+'してスタート\n'+e+' TO PLAY',this.txtstyl(25));

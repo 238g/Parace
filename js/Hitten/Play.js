@@ -3,15 +3,14 @@ BasicGame.Play.prototype={
 	init:function(){ 
 		this.isPlaying=!1;
 		this.curChar=this.M.gGlb('curChar');
-		this.CharInfo=this.M.gCnf('CharInfo');
+		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
-		this.curWords=this.M.gCnf('Words')[this.M.gGlb('curLang')];
+		this.curWords=this.M.gGlb('Words')[this.M.gGlb('curLang')];
 
+		this.startTime=
 		this.playCount=0;
 
 		this.targetTime='1.00';
-
-		this.startTime=
 
 		this.CharSprite=
 		this.ResWordsTxtSprite=
@@ -73,13 +72,18 @@ BasicGame.Play.prototype={
 		var rw=this.curCharInfo.resultWords[res];
 		rw.charX&&(this.CharSprite.x=rw.charX);
 		rw.charY&&(this.CharSprite.y=rw.charY);
-		var txt=this.ResWordsTxtSprite.children[0];
-		var ts=rw.ts;
-		for(var k in ts){
-			var a=ts[k];
-			this.ResWordsTxtSprite[k]=a;
-			txt[k]=a;
-		}
+
+		var txtOp=rw.txtOp;
+		this.ResWordsTxtSprite.x=this.world.centerX;
+		this.ResWordsTxtSprite.y=this.world.height*.75;
+		this.ResWordsTxtSprite.angle=0;
+		for(var k in txtOp)this.ResWordsTxtSprite[k]=txtOp[k];
+			
+		var txtstyl=rw.txtstyl;
+		var bts=this.M.S.txtstyl();
+		for(var k in txtstyl)bts[k]=txtstyl[k];
+		this.ResWordsTxtSprite.changeStyle(bts);
+
 		this.ResWordsTxtSprite.changeText(rw.words);
 		this.ResWordsTxtSprite.show();
 	},

@@ -14,12 +14,9 @@ BasicGame.Boot.prototype={
 init:function(){this.M.BootInit(!1);},
 preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
 create:function(){
-	this.M.dCst({});
 	this.M.dGlb({
 		curChar:1,
 		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
-	});
-	this.M.dCnf({
 		CharInfo:this.genCharInfo(),
 		Words:this.genWords(),
 	});

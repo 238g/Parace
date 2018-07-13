@@ -14,7 +14,7 @@ BasicGame.Preloader.prototype={
 		this.loadAudio();
 	},
 	loadChar:function(){
-		var CharInfo=this.M.gCnf('CharInfo');
+		var CharInfo=this.M.gGlb('CharInfo');
 		for(var k in CharInfo){
 			var info=CharInfo[k];
 			var icon='icon_'+k;

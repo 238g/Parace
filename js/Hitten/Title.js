@@ -2,7 +2,7 @@ BasicGame.Title=function(){};
 BasicGame.Title.prototype={
 	init:function(){
 		this.inputEnabled=!1;
-		this.Words=this.M.gCnf('Words');
+		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.M.gGlb('curLang')];
 	},
 	create:function(){
