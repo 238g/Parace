@@ -17,7 +17,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			leftTime:90,carSpeed:12,tileSpeed:.2,scoreRate:3,respawnRateTimeBase:600,
 			isSecret:!1,},
 		5:{
-			jp_name:'日本',en_name:'Japan',lane:'LEFT',
+			jp_name:'日本',en_name:'Japan',lane:'ALL',
 			leftTime:90,carSpeed:3,tileSpeed:.05,scoreRate:10,respawnRateTimeBase:400,
 			isSecret:!0,openSecret:!1,},
 		6:{
@@ -30,9 +30,10 @@ BasicGame.Boot.prototype.genWords=function(){
 	return {
 		jp:{
 			SS_Ttl:'目的地を選択！',
-			HowTo:'usage handle\naaaaaaaa', // TODO usage handle
+			HowTo:'ハンドルを回して\n目的地まで\nトラックを\n運転しよう！\n\n"交通ルール"は\n守りましょう！',
 			Start:'スタート！',
 			ScoreBaseFront:'罰金: ',
+			ScoreBaseMiddle:'億',
 			ScoreBaseBack:'万円',
 			TimeBaseFront:'残り: ',
 			TimeBaseBack:'km',
@@ -46,6 +47,30 @@ BasicGame.Boot.prototype.genWords=function(){
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			Break:'破壊\n-',
 			You:'YOU',
+			Quote:[
+				'助手席\n座りたーい！',
+				'ごめんなさーい',
+				'やっべ',
+				'なんで\n曲がれないの？',
+				'ごめんね\nごめんね',
+				'まって！\nまって！',
+				'なんで\n止まらないの？',
+				'速くない？\n速くない？',
+				'白い粉\n運ぶ？',
+				'ちょっとまって\nちょっとまって\nお兄さん！',
+				'Oh, My God…',
+				'全国\nニュース\nじゃぁ…',
+				'つんだ。\nつんだ。',
+				'くっ…\n屈しない！',
+				'という夢を\n見たのさ',
+				'借金はね\n良くない！',
+				'はっ！？\n銀行から\n来てやがる…',
+				'女神さっきより\nキル数\n多いと思う',
+				'まぁゆっくり\nいこうや',
+				'よし！\nいくのだわ！',
+				'違反なのだわ！\nどうしよう！',
+				'あれ？\nブレーキが\n効かないなぁ…',
+			],
 		},
 		en:{
 			//TODO

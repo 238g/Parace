@@ -16,6 +16,8 @@ BasicGame.Play.prototype={
 		// Dinamic
 		this.score=
 		this.onDownRot=0;
+		this.appearMoiraCount=1;
+		this.appearMoiraVal=Math.floor(100*this.curStageInfo.scoreRate);
 
 		// Pos
 		this.laneLL=this.world.width*.25;
@@ -46,7 +48,7 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor='#000000';
 		this.M.SE.playBGM('PlayBGM',{volume:1});
 
-		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,'PlayBg_1');
+		this.BgSprite=this.add.tileSprite(0,0,this.world.width,this.world.height,this.curStage==6?'Road_2':'Road_1');
 
 		this.PhysicsController();
 		this.ObstacleContainer();
@@ -114,15 +116,13 @@ BasicGame.Play.prototype={
 			this.M.setGlobal('endTut',!0);
 			this.start();
 		},this);
-		var ts=this.M.S.BaseTextStyleS(50);
+		var ts=this.M.S.BaseTextStyleS(40);
 		ts.align='center';
 		var t=this.M.S.genTextM(0,0,this.Words.HowTo,ts);
 		this.TutSprite.addChild(t);
 	},
 	start:function(){
-		this.isPlaying=!0; // TODO del
-		return;// TODO del
-		// this.M.SE.play('Cheer_s1',{volume:1});
+		this.M.SE.play('Play',{volume:2});
 		var t=this.M.T.popUpB(this.StartTxtSprite);
 		t.onComplete.add(function(){
 			this.isPlaying=!0;
@@ -135,14 +135,14 @@ BasicGame.Play.prototype={
 	end:function(){
 		this.isPlaying=!1;
 		this.genResPopUp();
-		this.openSecret();
 	},
 	tes:function(){
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.end,this);
-			this.Player.body.debug=!0;
-			this.Enemies.forEach(function(e){e.body.debug=!0;},this);
-			this.Obstacles.forEach(function(e){e.body.debug=!0;},this);
+			// this.Player.body.debug=!0;
+			// this.Enemies.forEach(function(e){e.body.debug=!0;},this);
+			// this.Obstacles.forEach(function(e){e.body.debug=!0;},this);
+			// this.add.sprite(0,this.world.height,'Moira_3').anchor.setTo(0,1);
 		}
 	},
 };

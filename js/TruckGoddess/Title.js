@@ -24,7 +24,7 @@ BasicGame.Title.prototype={
 	start:function(b){
 		if (this.inputEnabled&&this.isPlaying) {
 			this.isPlaying=!1;
-			// this.M.SE.play('OnBtn',{volume:1}); // TODO
+			this.M.SE.play('Start',{volume:1});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
