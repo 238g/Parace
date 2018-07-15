@@ -187,7 +187,7 @@ BasicGame.Play.prototype.txtEffect=function(x,y,txt,color){
 	tw.start();
 };
 BasicGame.Play.prototype.HUDContainer=function(){
-	this.HandleSprite=this.add.sprite(this.world.centerX,this.world.height*.95,'Handle');
+	this.HandleSprite=this.add.sprite(this.world.centerX,this.world.height*.85,'Handle');
 	this.HandleSprite.anchor.setTo(.5);
 	this.HandleSprite.scale.setTo(.3);
 	this.ScoreTxtSprite=this.M.S.genTextM(this.world.centerX,this.world.height*.05,this.genScoreTxt(),this.M.S.BaseTextStyleSS(30));

@@ -3,26 +3,32 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 		1:{
 			jp_name:'イギリス',en_name:'England',lane:'LEFT',
 			leftTime:30,carSpeed:6,tileSpeed:.1,scoreRate:1,respawnRateTimeBase:1500,
+			truckSpeed:.1,
 			isSecret:!1,},
 		2:{
 			jp_name:'フランス',en_name:'France',lane:'RIGHT',
 			leftTime:45,carSpeed:8,tileSpeed:.12,scoreRate:1.5,respawnRateTimeBase:1E3,
+			truckSpeed:.2,
 			isSecret:!1,},
 		3:{
 			jp_name:'ドイツ',en_name:'Germany',lane:'RIGHT',
 			leftTime:60,carSpeed:10,tileSpeed:.15,scoreRate:2,respawnRateTimeBase:800,
+			truckSpeed:.3,
 			isSecret:!1,},
 		4:{
 			jp_name:'チェコ',en_name:'Czech',lane:'RIGHT',
 			leftTime:90,carSpeed:12,tileSpeed:.2,scoreRate:3,respawnRateTimeBase:600,
+			truckSpeed:.4,
 			isSecret:!1,},
 		5:{
 			jp_name:'日本',en_name:'Japan',lane:'ALL',
 			leftTime:90,carSpeed:3,tileSpeed:.05,scoreRate:10,respawnRateTimeBase:400,
+			truckSpeed:.3,
 			isSecret:!0,openSecret:!1,},
 		6:{
 			jp_name:'天界',en_name:'Heaven',lane:'ALL',
 			leftTime:90,carSpeed:18,tileSpeed:.3,scoreRate:10,respawnRateTimeBase:400,
+			truckSpeed:.4,
 			isSecret:!0,openSecret:!1,},
 	};
 };

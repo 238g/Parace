@@ -20,6 +20,7 @@ BasicGame.Play.prototype={
 		this.appearMoiraVal=Math.floor(100*this.curStageInfo.scoreRate);
 
 		// Pos
+		this.playerStartY=this.world.height*.4;
 		this.laneLL=this.world.width*.25;
 		this.laneLC=this.world.width*.45;
 		this.laneRC=this.world.width*.55;
@@ -67,7 +68,7 @@ BasicGame.Play.prototype={
 			}
 			this.Player.body.x+=this.HandleSprite.angle*.03;
 			if(Math.abs(this.Player.angle)<90){
-				if(this.Player.body.y>this.world.centerY)this.Player.body.y-=.1*this.time.physicsElapsedMS;
+				if(this.Player.body.y>this.playerStartY)this.Player.body.y-=this.curStageInfo.truckSpeed*this.time.physicsElapsedMS;
 			}else{
 				this.Player.body.y+=.01*this.time.physicsElapsedMS;
 			}
