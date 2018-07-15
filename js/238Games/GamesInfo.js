@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=21;
+	var totalCount=22;
 	return {
 		GamesInfo:{
 			1001: {
@@ -231,6 +231,17 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				order: totalCount-21,
 				textColor: '#d16769',
 				bgColor: '#668af6',
+				scale: 1,
+			},
+			1022: {
+				id: 1022,
+				title: 'トラック女神',
+				url: 'https://238g.github.io/Parace/TruckGoddess.html',
+				slideImg: 'TruckGoddess_1',
+				slideImgUrl: 'images/238Games/TruckGoddess_1.png',
+				order: totalCount-22,
+				textColor: '#28ceff',
+				bgColor: '#c8f7f4',
 				scale: 1,
 			},
 		},
