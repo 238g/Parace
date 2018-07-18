@@ -1,0 +1,24 @@
+BasicGame={
+	GAME_TITLE:document.title,
+	GAME_EN_TITLE:'Laki********',
+	MAIN_COLOR:'#ffffff',//TODO
+	MAIN_TINT:0xffffff,//TODO
+	MAIN_TEXT_COLOR:'#000000',//TODO
+	MAIN_STROKE_COLOR:'#000000',//TODO
+	WHITE_COLOR:'#ffffff',//TODO
+	YOUTUBE_URL:'',//TODO
+	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
+};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+init:function(){this.M.BootInit(!1);},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+create:function(){
+	this.M.dGlb({
+		curStage:1,
+		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		StageInfo:this.genStageInfo(),
+		Words:this.genWords(),
+	});
+	this.M.NextScene('Preloader');
+}};

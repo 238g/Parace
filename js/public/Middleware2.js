@@ -92,6 +92,9 @@ Middleware.prototype.SpriteManager.prototype={
 		b.tint=op.tint||this.M.GmObj.MAIN_TINT||0xffffff;
 		var ts=this.genTxt(0,0,t,txtstyl);
 		b.addChild(ts);
+		b.changeText=function(t){
+			this.children[0].changeText(t);
+		};
 		return b;
 	},
 	txtstyl:function(fs){
