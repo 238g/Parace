@@ -1,6 +1,8 @@
 BasicGame.Boot.prototype.genStageInfo=function(){
 	return {
-		
+		1:{
+
+		},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
