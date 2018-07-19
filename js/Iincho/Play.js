@@ -24,4 +24,8 @@ BasicGame.Play.prototype={
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end();},this);
 		}
 	},
+	////////////////////////////////////// PlayContents
+	genContents:function(){
+
+	},
 };
