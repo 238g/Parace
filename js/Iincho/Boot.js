@@ -1,12 +1,13 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	MAIN_COLOR:'#fef106',//TODO
-	MAIN_TINT:0xfef106,//TODO
-	MAIN_TEXT_COLOR:'#a17b63',//TODO
-	MAIN_STROKE_COLOR:'#8f8e8f',//TODO
-	WHITE_COLOR:'#ffffff',//TODO
-	YOUTUBE_URL:'',//TODO
-	MY_GAMES_URL: 'https://238g.github.io/Parace/238Games.html',
+	GAME_TITLE_EN:'',
+	MAIN_COLOR:'#48468f',
+	MAIN_TINT:0x48468f,
+	MAIN_TEXT_COLOR:'#302e31',
+	MAIN_STROKE_COLOR:'#302e31',
+	WHITE_COLOR:'#f6f4f5',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCD-miitqNY3nyukJ4Fnf4_A',
+	MY_GAMES_URL:'https://238g.github.io/Parace/238Games.html',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
@@ -14,7 +15,8 @@ init:function(){this.M.BootInit(!1);},
 preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
 create:function(){
 	this.M.dGlb({
-		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		curLang:'jp',
+		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		Words:this.genWords(),
 	});
 	this.M.NextScene('Preloader');

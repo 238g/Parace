@@ -1,0 +1,73 @@
+// respawn 3.=1s,10=3s,100=30s,200=60s,300=90s
+BasicGame.Boot.prototype.genStageInfo=function(){
+	return {
+		1:{
+			name:'EASY',
+			animSpeed:16,
+			respawnList:[
+				1,10,25,32,42,
+				50,60,75,85,90,
+			],
+			reach:5,
+			rndRangeRate:.5,
+			rndMarginX:this.world.width*.25,
+			rndMarginY:this.world.height*.25,
+			mouseScale:1,
+		},
+		2:{
+			name:'NORMAL',
+			animSpeed:16,
+			respawnList:[
+				2,8,15,20,25,
+				30,38,44,50,56,
+				66,75,80,85,90,
+				100,105,112,118,125,
+			],
+			reach:4,
+			rndRangeRate:.6,
+			rndMarginX:this.world.width*.2,
+			rndMarginY:this.world.height*.2,
+			mouseScale:.9,
+		},
+		3:{
+			name:'HARD',
+			animSpeed:20,
+			respawnList:[
+				8,12,16,23,30,
+				35,39,45,52,60,
+				66,70,74,78,82,
+				90,94,98,108,112,
+				120,126,131,135,139,
+				145,150,154,165,169,
+			],
+			reach:3,
+			rndRangeRate:.8,
+			rndMarginX:this.world.width*.1,
+			rndMarginY:this.world.height*.1,
+			mouseScale:.6,
+		},
+	};
+};
+BasicGame.Boot.prototype.genWords=function(){
+	return {
+		jp:{
+			Start:'START',
+			OtherGames:'他のゲーム',
+			Back:'もどる',
+			Again:'もういちど',
+			HowTo:'踊り？にあわせて\nマウスをクリックしよう！\nダンサーのタイミング…\nとかないけど\nクリック！　クリック！\nゲームシステムは結構適当だよ！\nフィーリングでがんばってくださいね。',
+			Tweet:'結果をツイート',
+			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			Clear:'モードをクリアしたよ！',
+		},
+		en:{
+			Start:'START',
+			OtherGames:'OtherGames',
+			Back:'BACK',
+			Again:'AGAIN',
+			HowTo:'',
+			TweetTtl:'"'+BasicGame.GAME_TITLE_EN+'"',
+			Clear:'',
+		},
+	};
+};

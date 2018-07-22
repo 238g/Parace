@@ -59,6 +59,6 @@ BasicGame.Title.prototype={
 	genHUD:function(){
 		var y=this.world.height*.95;
 		this.M.S.genVolBtn(this.world.width*.1,y);
-		this.M.S.gebFlScBtn(this.world.width*.9,y);
+		this.M.S.genFlScBtn(this.world.width*.9,y);
 	},
 };

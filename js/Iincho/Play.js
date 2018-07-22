@@ -7,8 +7,7 @@ BasicGame.Play.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('PlayBGM',{volume:1});
-		this.genContents();
+		this.firstPlay();
 		this.tes();
 	},
 
@@ -25,7 +24,10 @@ BasicGame.Play.prototype={
 		}
 	},
 	////////////////////////////////////// PlayContents
-	genContents:function(){
+	firstPlay:function(){
+
+	},
+	secondPlay:function(){
 
 	},
 };

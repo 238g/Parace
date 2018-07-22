@@ -20,7 +20,7 @@ BasicGame.Preloader.prototype={
 
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Hitten/stageSelectBGM',
+			TitleBGM:'sounds/BGM/Iincyo/Game-Menu',
 		};
 		for(var k in s){
 			var p=s[k];

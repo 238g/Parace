@@ -1,20 +1,19 @@
-Middleware=function(game,GmObj,BootCls){this.initialize(game,GmObj,BootCls)};
+Middleware=function(game,GmObj,BootCls){
+	this.nextScene=null;
+	this.glb={};
+	game.M=this;
+	this.GmObj=GmObj;
+	for (var c in GmObj)game.state.add(c,GmObj[c]);
+	this.S=new this.SpriteManager(game,this);
+	this.T=new this.TweenManager(game,this);
+	this.SE=new this.SoundManager(game,this);
+	this.H=new this.Helper(this);
+	this.currentScene=BootCls;
+	this.game=game;
+	game.state.start(BootCls);
+	this.setM();
+};
 Middleware.prototype={
-	initVar:function(){this.nextScene=null;this.glb={};},
-	initialize:function(game,GmObj,BootCls){
-		this.initVar();
-		game.M=this;
-		this.GmObj=GmObj;
-		for (var c in GmObj)game.state.add(c,GmObj[c]);
-		this.S=new this.SpriteManager(game,this);
-		this.T=new this.TweenManager(game,this);
-		this.SE=new this.SoundManager(game,this);
-		this.H=new this.Helper(this);
-		this.currentScene=BootCls;
-		this.game=game;
-		game.state.start(BootCls);
-		this.setM();
-	},
 	BootInit: function (orientation) {
 		var sc=this.gScn();
 		sc.input.maxPointers=1;
@@ -46,9 +45,11 @@ Middleware.prototype={
 	sGlb:function(k,v){this.glb[k]=v;},
 	gGlb:function(k){return this.glb[k];},
 };
-Middleware.prototype.SpriteManager=function(game,M){this.initialize(game,M)};
+Middleware.prototype.SpriteManager=function(game,M){
+	this.game=game;
+	this.M=M;
+};
 Middleware.prototype.SpriteManager.prototype={
-	initialize:function(game,M){this.game=game;this.M=M;},
 	genBtnSp:function(x,y,k,f){
 		var sc=this.M.gScn();
 		var b=sc.add.button(x,y,k,f,sc);
@@ -167,7 +168,7 @@ Middleware.prototype.SpriteManager.prototype={
 		}
 		s.setFrames(f,f,f,f);
 	},
-	gebFlScBtn:function(x,y){
+	genFlScBtn:function(x,y){
 		var sc=this.M.gScn();
 		var i=sc.scale.isFullScreen?'smaller':'larger';
 		var s=this.M.S.genBtnSp(x,y,'GameIconsWhite',this.onDonwFlScBtn,sc);
@@ -221,9 +222,11 @@ Middleware.prototype.SpriteManager.prototype={
 		this.genTxt(sc.world.centerX,sc.world.height*.85,j+'してスタート\n'+e+' TO PLAY',this.txtstyl(25));
 	},
 };
-Middleware.prototype.TweenManager=function(game,M){this.initialize(game,M)};
+Middleware.prototype.TweenManager=function(game,M){
+	this.game=game;
+	this.M=M;
+};
 Middleware.prototype.TweenManager.prototype={
-	initialize:function(game,M){this.game=game;this.M=M;},
 	// [duration, delay]
 	beatA:function(t,op={}){return this.M.gScn().add.tween(t.scale).to({x:'+.1',y:'+.1'},op.duration, Phaser.Easing.Sinusoidal.Out,!1,op.delay,-1,!0)},
 	// xy[, duration, delay]
@@ -264,6 +267,8 @@ Middleware.prototype.TweenManager.prototype={
 		if(op.repeat)t.repeat(op.repeat);
 		return t;
 	},
+	// easing[, duration, delay]
+	fadeOutX:function(t,op={}){return this.M.gScn().add.tween(t).to({alpha:0},op.duration,op.easing,!1,op.delay)},
 	// [durations, delay]
 	stressA:function(t,op={}){
 		var sc=this.M.gScn();
@@ -290,9 +295,12 @@ Middleware.prototype.TweenManager.prototype={
 		t.start();
 	},
 };
-Middleware.prototype.SoundManager=function(game,M){this.initialize(game,M)};
+Middleware.prototype.SoundManager=function(game,M){
+	this.sounds={currentBGM:null};
+	this.game=game;
+	this.M=M;
+};
 Middleware.prototype.SoundManager.prototype={
-	initialize:function(game,M){this.sounds={currentBGM:null};this.game=game;this.M=M;},
 	setSounds:function(s){for(var k in s)this.sounds[k]=this.game.add.audio(k);},
 	play:function(k,op={}) {
 		var s=this.sounds[k];
@@ -316,9 +324,8 @@ Middleware.prototype.SoundManager.prototype={
 	},
 	getSound:function(k){return this.sounds[k]||!1;},
 };
-Middleware.prototype.Helper=function(M){this.initialize(M)};
+Middleware.prototype.Helper=function(M){this.M=M;};
 Middleware.prototype.Helper.prototype={
-	initialize:function(M){this.M=M;},
 	getQuery:function(key){
 		var q=window.location.search.slice(1).split('&');
 		for(var i in q){
