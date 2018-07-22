@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=22;
+	var totalCount=23;
 	return {
 		GamesInfo:{
 			1001: {
@@ -242,6 +242,17 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				order: totalCount-22,
 				textColor: '#28ceff',
 				bgColor: '#c8f7f4',
+				scale: 1,
+			},
+			1023: {
+				id: 1023,
+				title: 'MitoDanceRevolution',
+				url: 'https://238g.github.io/Parace/MitoDanceRevolution.html',
+				slideImg: 'MitoShadow',
+				slideImgUrl: 'images/MitoDanceRevolution/MitoShadow.png',
+				order: totalCount-23,
+				textColor: '#ec74af',
+				bgColor: '#012c9e',
 				scale: 1,
 			},
 		},

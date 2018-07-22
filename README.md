@@ -25,3 +25,4 @@
 |#20|あさひさんいじり|https://238g.github.io/Parace/FOckingGlasses.html|2018/6/28|
 |#21|おめシスコマンダーズ|https://238g.github.io/Parace/OmesisCommanders.html|2018/7/04|
 |#22|トラック女神|https://238g.github.io/Parace/TruckGoddess.html|2018/7/15|
+|#23|MitoDanceRevolution|https://238g.github.io/Parace/MitoDanceRevolution.html|2018/7/22|
