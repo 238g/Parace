@@ -5,7 +5,8 @@ BasicGame.Play.prototype={
 		this.curChar=this.M.gGlb('curChar');
 		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
-		this.curWords=this.M.gGlb('Words')[this.M.gGlb('curLang')];
+		this.curLang=this.M.gGlb('curLang');
+		this.curWords=this.M.gGlb('Words')[this.curLang];
 
 		this.startTime=
 		this.playCount=0;
@@ -61,14 +62,16 @@ BasicGame.Play.prototype={
 	timerStop:function(){
 		this.isPlaying=!1;
 		this.PlayLabel.children[0].changeText(this.curWords.Again);
-		this.TweetLabel.visible=!0; // TODO ???? clear tweet
 		this.PlayCountTxtSprite.changeText(this.playCount+this.curWords.PlayCount);
+
 		var elapsedTime=(Date.now()-this.startTime)*.001;
 		var curTime=elapsedTime.toFixed(2);
 		this.TimeTxtSprite.changeText(curTime);
 		this.TimeTxtSprite.show();
+
 		var res=this.checkTime(curTime);
 		this.CharSprite.loadTexture(this.curCharInfo.playImg[res]);
+		res==1&&(this.TweetLabel.visible=!0);
 		var rw=this.curCharInfo.resultWords[res];
 		rw.charX&&(this.CharSprite.x=rw.charX);
 		rw.charY&&(this.CharSprite.y=rw.charY);
@@ -88,15 +91,15 @@ BasicGame.Play.prototype={
 		this.ResWordsTxtSprite.show();
 	},
 	checkTime:function(curTime){
-		if (this.targetTime==curTime) {
+		if(this.targetTime==curTime){
 			return 1;
-		} else if (this.betweenTime(this.targetTime*.05,curTime)) {
+		}else if(this.betweenTime(this.targetTime*.05,curTime)){
 			return 2;
-		} else if (this.betweenTime(this.targetTime*.3,curTime)) {
+		}else if(this.betweenTime(this.targetTime*.3,curTime)){
 			return 3;
-		} else if (this.betweenTime(this.targetTime*.5,curTime)) {
+		}else if(this.betweenTime(this.targetTime*.5,curTime)){
 			return 4;
-		} else {
+		}else{
 			return 5;
 		}
 	},
@@ -109,21 +112,19 @@ BasicGame.Play.prototype={
 	},
 	tweet:function(){
 		this.M.SE.play('SelectSE',{volume:1});
-		var resultText=
-			this.curWords.SelectedChar+this.curCharInfo.charName+'\n'
-			+this.curWords.TweetClearF+this.targetTime+this.curWords.TweetClearB+'\n'
-			+this.playCount+'回目の挑戦！\n'; // TODO
 		var emoji='⏰⏰⏰⏰⏰⏰';
-		var text=this.curWords.TweetTtl+'\n'
+		var txt=this.curWords.TweetTtl+'\n'
 					+emoji+'\n'
-					+resultText
+					+this.curWords.SelectedChar+this.curCharInfo.charName+'\n'
+					+this.curWords.TweetClearF+this.targetTime+this.curWords.TweetClearB+'\n'
+					+this.curWords.TweetTimesF+this.playCount+this.curWords.TweetTimesB+'\n'
 					+emoji+'\n';
-		var hashtags = 'VT秒当てゲーム,Vtuber';
-		this.M.H.tweet(text,hashtags,location.href);
+		var ht=this.curWords.TwHashTag;
+		this.M.H.tweet(txt,ht,location.href+(this.curLang=='en'?'?lang=en':''));
 	},
 	tes:function(){
 		if(__ENV!='prod'){
-			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(function(){this.end();},this);
+			this.input.keyboard.addKey(Phaser.Keyboard.ONE).onDown.add(function(){this.startTime=Date.now()-1000;this.timerStop();},this);
 		}
 	},
 };

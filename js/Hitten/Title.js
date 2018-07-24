@@ -5,13 +5,13 @@ BasicGame.Title.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		this.StartLbl=this.LangLbl=this.OtherGamesLbl=null;
+		this.TtlTxtSp=this.StartLbl=this.LangLbl=this.OtherGamesLbl=null;
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.setBackgroundColor(0xfbf6d5);
 		this.M.SE.playBGM('TitleBGM',{volume:1});
-		this.M.S.genTxt(this.world.centerX,this.world.height*.25,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
+		this.TtlTxtSp=this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.curWords.GameTitle,this.M.S.txtstyl(50));
 		this.StartLbl=this.M.S.genLbl(this.world.centerX,this.world.height*.58,this.start,this.curWords.Start,this.M.S.txtstyl(25),{tint:0xffff00});
 		this.StartLbl.scale.setTo(1.5);
 		this.LangLbl=this.M.S.genLbl(this.world.centerX,this.world.height*.7,this.changeLang,this.curWords.Lang,this.M.S.txtstyl(25),{tint:0xffff00});
@@ -36,6 +36,7 @@ BasicGame.Title.prototype={
 			this.curLang='jp';
 			this.M.sGlb('curLang','jp');
 			this.curWords=this.Words[this.curLang];
+			this.TtlTxtSp.changeText(this.curWords.GameTitle);
 			this.StartLbl.changeText(this.curWords.Start);
 			this.LangLbl.changeText(this.curWords.Lang);
 			this.OtherGamesLbl.changeText(this.curWords.OtherGames);
@@ -43,6 +44,7 @@ BasicGame.Title.prototype={
 			this.curLang='en';
 			this.M.sGlb('curLang','en');
 			this.curWords=this.Words[this.curLang];
+			this.TtlTxtSp.changeText(this.curWords.GameTitle);
 			this.StartLbl.changeText(this.curWords.Start);
 			this.LangLbl.changeText(this.curWords.Lang);
 			this.OtherGamesLbl.changeText(this.curWords.OtherGames);
@@ -51,9 +53,9 @@ BasicGame.Title.prototype={
 	otherGames:function(){
 		this.M.SE.play('SelectSE',{volume:1});
 		if (this.game.device.desktop) {
-			window.open(BasicGame.MY_GAMES_URL,'_blank');
+			window.open(BasicGame.MY_GAMES_URL+(this.curLang=='en'?'?lang=en':''),'_blank');
 		} else {
-			location.href=BasicGame.MY_GAMES_URL;
+			location.href=BasicGame.MY_GAMES_URL+(this.curLang=='en'?'?lang=en':'');
 		}
 	},
 	genHUD:function(){

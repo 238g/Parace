@@ -7,6 +7,12 @@
 	<meta name="theme-color" content="#000000">
 	<meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0 minimal-ui" />
 
+	<meta name="keywords" content="バーチャルYouTuber,Vtuber,バーチャルユーチューバー,VT,キズナアイ,輝夜月,電脳少女シロ,ミライアカリ,のじゃおじ,にじさんじ,YouTube,Vtuberゲーム,ミニゲーム" />
+	<meta name="description" content="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。１週間に１度程度の間隔でミニゲームを公開しています。" />
+
+	<link rel="alternate" href="https://238g.github.io/Parace/238Games2.html" hreflang="jp" />
+	<link rel="alternate" href="https://238g.github.io/Parace/238Games2.html?lang=en" hreflang="en" />
+
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="HandheldFriendly" content="true" />
@@ -20,7 +26,7 @@
 	<meta name="twitter:site" content="@i10v35w33t" />
 	<meta property="og:url" content="https://238g.github.io/Cute/238Games2.html" />
 	<meta property="og:title" content="Vtuberゲームス">
-	<meta property="og:description" content="******************************************************************">
+	<meta property="og:description" content="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。１週間に１度程度の間隔でミニゲームを公開しています。">
 	<meta property="og:image" content="https://238g.github.io/Cute/images/238Games/TwitterCard.jpg">
 	-->
 
@@ -70,15 +76,22 @@
 		}
 
 		footer {
-			margin-top: 30px;
 			background-color: #f2f2f2;
-			padding: 25px;
+			padding: 10px;
 		}
 
 		@media (max-width: 600px) {
 			.carousel-caption {
 				display: none;
 			}
+		}
+
+		.img-responsive {
+			width: 100%;
+		}
+
+		.pages > div {
+			display: none;
 		}
 	</style>
 
@@ -93,13 +106,16 @@
 					<span class="icon-bar"></span>
 					<span class="icon-bar"></span>
 				</button>
-				<a class="navbar-brand" href="#">Vtuberゲームス</a>
+				<a class="navbar-brand" href="238Games2.html">Vtuberゲームス</a>
+				<!-- <a class="navbar-brand to_home" href="#">Vtuberゲームス</a> -->
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
 					<li class="navbar_home active"><a data-page="page_home" href="#">ホーム</a></li>
-					<li><a data-page="page_about" href="#">このサイトについて</a></li>
-					<li><a data-page="page_service" href="#">その他サービス</a></li>
+					<li class="navbar_about"><a data-page="page_about" href="#">このサイトについて</a></li>
+					<li class="navbar_gamelist"><a data-page="page_gamelist" href="#">ゲームリスト</a></li>
+					<li class="navbar_service"><a data-page="page_service" href="#">その他サービス</a></li>
+					<li class="navbar_credit"><a data-page="page_credit" href="#">クレジット</a></li>
 				</ul>
 			</div>
 		</div>
@@ -116,19 +132,15 @@
 				<div class="carousel-inner" role="listbox">
 					<!-- TODO GameInfo i=0<5?? -->
 					<div class="item active">
-						<img src="https://placehold.it/1200x400?text=IMAGE" alt="Image">
-						<div class="carousel-caption">
-							<h3>Sell $</h3>
-							<p>Money Money.</p>
-						</div>
+						<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal">
+							<img src="https://238g.github.io/Parace/images/Nekomiya/TwitterCard.png" alt="Image">
+						</a>
 					</div>
 		
 					<div class="item">
-						<img src="https://placehold.it/1200x400?text=Another Image Maybe" alt="Image">
-						<div class="carousel-caption">
-							<h3>More Sell $</h3>
-							<p>Lorem ipsum...</p>
-						</div>
+						<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal">
+							<img src="https://238g.github.io/Parace/images/Oda/TwitterCard.jpg" alt="Image">
+						</a>
 					</div>
 				</div>
 	
@@ -148,23 +160,16 @@
 				<div class="row">
 					<!-- TODO GameInfo -->
 					<div class="col-sm-4">
-						<img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
+						<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal">
+							<img src="images/FOckingGlasses/favicons/apple-icon.png" class="img-responsive img-thumbnail" alt="Image">
+						</a>
 						<p>Current Project</p>
-					</div>
-					<div class="col-sm-4">
-						<img src="https://placehold.it/150x80?text=IMAGE" class="img-responsive" style="width:100%" alt="Image">
-						<p>Project 2</p>
-					</div>
-					<div class="col-sm-4">
-						<div class="well">
-							<p>Some text..</p>
-						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 
-		<div class="page_about" style="display: none;">
+		<div class="page_about">
 			<br><br>
 			<div class="container text-center">
 				<div class="row">
@@ -183,8 +188,38 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="page_gamelist">
+			<br><br>
+			<div class="container text-center">
+				<table class="table table-striped table-hover">
+					<thead>
+						<tr>
+							<th scope="col">No.</th>
+							<th scope="col">ゲーム名</th>
+							<th scope="col">リンク</th>
+							<th scope="col">公開日</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<th scope="row">1</th>
+							<td>あああああ</td>
+							<td><a href="#" target="_blank">PLAY</a></td>
+							<td>2018-12-12</td>
+						</tr>
+						<tr>
+							<th scope="row">1</th>
+							<td>あああああ</td>
+							<td><a href="#" target="_blank">PLAY</a></td>
+							<td>2018-12-12</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
 	
-		<div class="page_service" style="display: none;">
+		<div class="page_service">
 			<br><br>
 			<div class="container text-center">
 				<div class="row">
@@ -220,40 +255,160 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="page_credit">
+			<br><br>
+			<div class="container text-center">
+				<div class="row">
+					<div class="col-sm-12">
+						<div class="well">
+							<h4>クレジット</h4>
+							<br>
+							<p>フリー無料のBGM素材・音楽素材「甘茶の音楽工房」<br>
+								<a href="http://amachamusic.chagasi.com/" target="_blank">
+									http://amachamusic.chagasi.com/
+								</a>
+							</p>
+							<p>フリーBGM（音楽素材）無料ダウンロード｜DOVA-SYNDROME<br>
+								<a href="https://dova-s.jp/" target="_blank">
+									https://dova-s.jp/
+								</a>
+							</p>
+							<p>BGM素材｜著作権フリーの無料音楽素材ダウンロードサイト「ミュージックノート」<br>
+								<a href="http://www.music-note.jp/bgm/index.html" target="_blank">
+									http://www.music-note.jp/bgm/index.html
+								</a>
+							</p>
+							<p>全曲無料・フリー音楽素材/魔王魂<br>
+								<a href="https://maoudamashii.jokersounds.com/" target="_blank">
+									https://maoudamashii.jokersounds.com/
+								</a>
+							</p>
+							<p>PeriTune - フリー音楽素材<br>
+								<a href="http://peritune.com/" target="_blank">
+									http://peritune.com/
+								</a>
+							</p>
+							<p>近未来的音楽素材屋3104式 RSS Feed<br>
+								<a href="http://cyber-rainforce.net/" target="_blank">
+									http://cyber-rainforce.net/
+								</a>
+							</p>
+							<p>効果音ラボ - フリー、商用無料、報告不用の効果音素材をダウンロード<br>
+								<a href="https://soundeffect-lab.info/" target="_blank">
+									https://soundeffect-lab.info/
+								</a>
+							</p>
+							<p>Kenney &middot; Home<br>
+								<a href="http://www.kenney.nl/" target="_blank">
+									http://www.kenney.nl/
+								</a>
+							</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
-	<!-- TODO fixed??? -->
-	<footer class="container-fluid text-center">
-		<p>Vtuberゲームス</p>
+	<div style="height: 150px;"></div>
+
+	<footer class="text-center navbar-fixed-bottom">
+		<p><a href="238Games2.html">Vtuberゲームス</a></p>
+		<!-- <p><a class="to_home" href="#">Vtuberゲームス</a></p> -->
 		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank">@i10v35w33t</a></p>
 	</footer>
 
+	<div class="modal fade" id="myModal" role="dialog">
+		<div class="modal-dialog modal-lg">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+					<h4 class="modal-title">Modal Header</h4>
+				</div>
+				<div class="modal-body">
+					<p>Modal Body</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-warning">PLAY</button>
+					<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
 	<script type="text/javascript">
+		var __curGame=null;
+
 		$(function(){
+			////// NavHandler
 			$('.navbar-nav a').click(function(){
 				var p=$(this).parent();
+				if(p.hasClass('active'))return;
 				p.addClass('active');
 				p.siblings().removeClass('active');
 				var page=$(this).data('page');
 				$('.pages').children().each(function(){
 					var t=$(this);
-					t.hasClass(page)?t.slideDown("slow"):t.slideUp("slow");
+					t.hasClass(page)?t.slideDown('slow'):t.slideUp('slow');
 				});
-				$(".navbar-toggle").is(":visible")&&$('.navbar-toggle').click();
+				$('.navbar-toggle').is(':visible')&&$('.navbar-toggle').click();
 			});
-			$('.navbar-brand').click(function(){
-				// TODO has active , so is home --> not action
+			/*
+			$('.to_home').click(function(){
 				var h=$('.navbar-nav .navbar_home');
+				if(h.hasClass('active'))return;
 				h.addClass('active');
 				h.siblings().removeClass('active');
 				$('.pages').children().each(function(){
 					var t=$(this);
-					t.hasClass('page_home')?t.slideDown("slow"):t.slideUp("slow");
+					t.hasClass('page_home')?t.slideDown('slow'):t.slideUp('slow');
 				});
-				// TODO toggle , so open!?!? -> whenif open - close ,so close only
-				$(".navbar-toggle").is(":visible")&&$('.navbar-toggle').click();
+				if($('.navbar-toggle').is(':visible')&&$('.navbar-collapse').is(':visible')){
+					$('.navbar-toggle').click();
+				}
 			});
+			*/
+			////// NavHandler
+
+			////// ModalHandler
+			$('#myModal').on('show.bs.modal',function(e){
+				// TODO
+				var m = $(this);
+				/*
+				m.find('.modal-header').css('background-color','blue').css('color','red');
+				m.find('.modal-footer').css('background-color','blue');
+				m.find('.modal-content').css('color','red');
+				*/
+				m.find('.modal-title').text('TEST');
+				m.find('.modal-body').text('TEST BODY');
+
+				__curGame=1;
+			});
+			////// ModalHandler
 		});
+
+		////// Router
+		var showPage=!1;
+		var q=window.location.search.slice(1).split('&');
+		for(var i in q){
+			var a=q[i].split('=');
+			if('page'==a[0]){
+				showPage=!0;
+				var b=$('.page_'+a[1]);
+				if(b.length==1){
+					b.show();
+					var h=$('.navbar-nav .navbar_'+a[1]);
+					h.addClass('active');
+					h.siblings().removeClass('active');
+				}else{
+					$('.page_home').show();
+				}
+				break;
+			}
+		}
+		if(!showPage)$('.page_home').show();
+		////// Router
 	</script>
 
 	<div style="display: none;">

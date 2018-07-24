@@ -9,6 +9,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'ちがうよ！',txtstyl:{fontSize:50},txtOp:null},
 				5:{words:'ふぁっ◯きゅー！',txtstyl:{fontSize:50},txtOp:null},
 			},
+			yt:'',
 		},
 		2:{
 			charName:'ミライアカリ',tint:0x87cefa,txtColor:'#36acd1',
@@ -19,6 +20,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'人間凄いな',txtstyl:{fontSize:70},txtOp:null},
 				5:{words:'はぁ？',txtstyl:{fontSize:50},txtOp:null},
 			},
+			yt:'',
 		},
 		3:{
 			charName:'輝夜月',tint:0xFFFF00,txtColor:'#000000',
@@ -29,6 +31,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'うえ～～\nかわいそ～～～',txtstyl:{fontSize:50},txtOp:null},
 				5:{words:'クソゲーーーーー！！！',txtstyl:{fontSize:'45px',fill:'#e30002',mStroke:'#e30002'},txtOp:{angle:-30,y:this.world.centerY+100},charY:this.world.centerY+100},
 			},
+			yt:'',
 		},
 		4:{
 			charName:'シロ',tint:0xffffff,txtColor:'#999999',
@@ -39,6 +42,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'ﾋｨｲｲ',txtstyl:{fontSize:20},txtOp:null},
 				5:{words:'聖地と呼びたい',txtstyl:{fontSize:50},txtOp:null},
 			},
+			yt:'',
 		},
 		5:{
 			charName:'ねこます',tint:0xF5D0A9,txtColor:'#ff6a05',
@@ -49,6 +53,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'',txtstyl:{fontSize:40},txtOp:null,charY:this.world.centerY+25},
 				5:{words:'ポッキーーーッゲェェェエエエエエーーム（音割れ',txtstyl:{fontSize:40},txtOp:{x:this.world.width*2+50,y:this.world.centerY+100},tween:'PockyGame'},
 			},
+			yt:'',
 		},
 		6:{
 			charName:'ときのそら',tint:0xA9F5F2,txtColor:'#A9F5F2',
@@ -59,6 +64,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'ダメな子が                  \n        多いんだから♡',txtstyl:{fontSize:40,fill:'#8400ea',mStroke:'#0a030c'},txtOp:{y:this.world.centerY+210},scale:.85},
 				5:{words:'えへっ♡',txtstyl:{fontSize:100,fill:'#2b1300',mStroke:'#fdb1af'},txtOp:null},
 			},
+			yt:'',
 		},
 		7:{
 			charName:'富士葵',tint:0xBBFCBD,txtColor:'#0d6cb6',
@@ -69,12 +75,14 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 				4:{words:'うううぅぅぅぅ↑↑↑',txtstyl:{fontSize:50},txtOp:null},
 				5:{words:'はぁあぁあぁあぁあっ！',txtstyl:{fontSize:38},txtOp:{y:this.world.centerY+230},charY:this.world.centerY+30},
 			},
+			yt:'',
 		},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
 	return {
 		jp:{
+			GameTitle:BasicGame.GAME_TITLE,
 			Start:'スタート',
 			OtherGames:'他ゲーム',
 			Lang:'English',
@@ -83,15 +91,19 @@ BasicGame.Boot.prototype.genWords=function(){
 			InstructB:' でピッタリ止めろ',
 			InstructF:'',
 			PlayCount:'回',
-			Tweet:'ツイート',
+			Tweet:'結果をツイート',
 			Again:'もう一度',
 			SelectedChar:'選択キャラクター: ',
 			TweetClearF:'',
 			TweetClearB:'秒クリア！',
+			TweetTimesF:'',
+			TweetTimesB:'回目の挑戦！',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			TwHashTag:'VT秒当てゲーム,Vtuberゲームス',
 			Stop:'STOP',
 		},
 		en:{
+			GameTitle:BasicGame.GAME_TITLE_EN,
 			Start:'START',
 			OtherGames:'OTHER GAMES',
 			Lang:'日本語',
@@ -105,7 +117,10 @@ BasicGame.Boot.prototype.genWords=function(){
 			SelectedChar:'Selected: ',
 			TweetClearF:'Clear ',
 			TweetClearB:'sec',
-			TweetTtl:'I\'d play『'+BasicGame.GAME_EN_TITLE+'』',
+			TweetTimesF:'Challenging ',
+			TweetTimesB:'Times!',
+			TweetTtl:'I\'d play『'+BasicGame.GAME_TITLE_EN+'』',
+			TwHashTag:'VT-Stopwatch,VtuberGames',
 			Stop:'STOP',
 		},
 	};
