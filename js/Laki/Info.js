@@ -1,7 +1,10 @@
 BasicGame.Boot.prototype.genStageInfo=function(){
 	return {
 		1:{
-
+			speed:.06,
+			// speed:.2,
+			target:10,
+			target:2,
 		},
 	};
 };
