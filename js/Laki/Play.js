@@ -25,18 +25,19 @@ BasicGame.Play.prototype={
 		this.LaneHalfWidth=this.LaneWidth*.5;
 
 		this.curSpeed=0;
-		this.respawnTimer=1E3;
+		this.INTERVAL_TIME=this.curStageInfo.interval;
+		this.respawnTimer=this.INTERVAL_TIME;
 
 		this.curPlayerLane=1;
-		this.respawnObstacleLane=1;
+		this.preRespawnFloorLane=1;
 
-		this.viewObstaclesList=[];
+		this.viewFloorsList=[];
 
 		this.onFloorCount=0;
 
 		// Obj
-		this.LeadObstacle=
-		this.Obstacles=
+		this.LeadFloor=
+		this.Floors=
 		this.Player=
 		null;
 	},
@@ -47,7 +48,7 @@ BasicGame.Play.prototype={
 
 		this.genLane();
 
-		this.genObstacles();
+		this.genFloors();
 
 		this.startRespawn();
 
@@ -61,14 +62,16 @@ BasicGame.Play.prototype={
 	update:function(){
 		if(this.isPlaying){
 			this.curSpeed=this.curStageInfo.speed*this.time.physicsElapsedMS;
-			this.Player.y+=this.curSpeed
-			this.Obstacles.forEachAlive(function(e){
-				e.y+=this.curSpeed;
+			this.Player.y+=this.curSpeed;
+			this.Floors.forEachAlive(function(s){
+				s.y+=this.curSpeed;
 			},this);
 
 			this.respawnTimer-=this.time.elapsed;
 			if(this.respawnTimer<0){
-				this.respawnTimer=1E3;
+				this.respawnTimer=this.INTERVAL_TIME;
+
+				if(this.Player.y>this.world.height)return this.gameover();
 
 				this.respawn();
 			}
@@ -98,14 +101,14 @@ BasicGame.Play.prototype={
 	genLane:function(){
 		for(var i=1;i<=this.LaneCount;i++){
 			var laneStartX=(i-1)*this.LaneWidth;
-			var s=this.M.S.genBmpSqrSp(laneStartX,0,this.LaneWidth,this.world.height,this.LaneInfo[i].color);
+			this.M.S.genBmpSqrSp(laneStartX,0,this.LaneWidth,this.world.height,this.LaneInfo[i].color);
 			this.LaneInfo[i].x=laneStartX+this.LaneHalfWidth;
 		}
 	},
-	genObstacles:function(){
-		this.Obstacles=this.add.group();
-		this.Obstacles.createMultiple(30,'Obstacles');
-		this.Obstacles.forEach(function(s){
+	genFloors:function(){
+		this.Floors=this.add.group();
+		this.Floors.createMultiple(30,'Floors');
+		this.Floors.forEach(function(s){
 			s.anchor.setTo(.5);
 			s.checkWorldBounds=!0;
 			s.outOfBoundsKill=!0;
@@ -113,65 +116,61 @@ BasicGame.Play.prototype={
 	},
 	// this.rnd.integerInRange(1,4);
 	respawn:function(){
-		var s=this.rnd.pick(this.Obstacles.children.filter(function(e){return!e.alive;}));
-		if(s){
+		var f=this.rnd.pick(this.Floors.children.filter(function(s){return!s.alive;}));
+		if(f){
 			var rndArr=[];
 			for(var i=1;i<=4;i++){
-				if(i==this.respawnObstacleLane)continue;
+				if(i==this.preRespawnFloorLane)continue;
 				rndArr.push(i);
 			}
-			this.respawnObstacleLane=this.rnd.pick(rndArr);
-			var curLaneInfo=this.LaneInfo[this.respawnObstacleLane];
-			s.reset(curLaneInfo.x,0);
+			this.preRespawnFloorLane=this.rnd.pick(rndArr);
+			var curLaneInfo=this.LaneInfo[this.preRespawnFloorLane];
+			f.reset(curLaneInfo.x,0);
 
-			this.viewObstaclesList.push(s);
+			this.viewFloorsList.push(f);
 		}
 	},
 	startRespawn:function(){
 		this.respawn();
 		this.respawn();
 		this.respawn();
-		
-		this.viewObstaclesList[0].y=this.world.centerY; // TODO speed!!
-		this.viewObstaclesList[1].y=this.viewObstaclesList[0].y*.5; // TODO speed!!!
+
+		this.viewFloorsList[0].y=this.world.centerY; // TODO speed!!
+		this.viewFloorsList[1].y=this.viewFloorsList[0].y*.5; // TODO speed!!!
 	},
 	genPlayer:function(){
-		this.Player=this.M.S.genBmpSqrSp(this.viewObstaclesList[0].x,this.viewObstaclesList[0].y,80,80,'#0000ff');
+		this.Player=this.M.S.genBmpSqrSp(this.viewFloorsList[0].x,this.viewFloorsList[0].y,80,80,'#0000ff');
 		// this.Player=this.M.S.genBmpSqrSp(this.LaneHalfWidth,this.world.centerY,80,80,'#0000ff');
 		this.Player.anchor.setTo(.5);
-		this.viewObstaclesList.shift();
+		this.viewFloorsList.shift();
+		this.curPlayerLane=this.getLaneNum(this.Player.x);
 	},
 	inputHandler:function(){
 
 		this.input.onDown.add(function(pointer){
 			if(this.isPlaying&&this.inputEnabled){
-				var curLane=Math.floor(pointer.x/this.LaneWidth)+1;
+				var curLane=this.getLaneNum(pointer.x);
 				if(curLane==this.curPlayerLane)return;
 
 				this.inputEnabled=!1;
-				// console.log(pointer.x,pointer.y);
 
 				this.curPlayerLane=curLane
-				// console.log(curLane);
 
 				var curLaneInfo=this.LaneInfo[curLane];
-				// this.Player.x=curLaneInfo.x;
 
-				this.LeadObstacle=this.viewObstaclesList[0];
-				// var jump=this.LeadObstacle.y;
-				var jump=this.LeadObstacle.y+(this.curStageInfo.speed*15*this.time.physicsElapsedMS);
-				// var jump=this.LeadObstacle.y+(this.curStageInfo.speed*30*this.time.physicsElapsedMS);
-				this.viewObstaclesList.shift();
+				this.LeadFloor=this.viewFloorsList[0];
+				var jump=this.LeadFloor.y+(this.curStageInfo.speed*15*this.time.physicsElapsedMS);
+				// var jump=this.LeadFloor.y+(this.curStageInfo.speed*30*this.time.physicsElapsedMS);
+				this.viewFloorsList.shift();
 				// var jump='-'+(1.8*this.time.physicsElapsedMS);
 
 				var tw=this.M.T.moveB(this.Player,{xy:{x:curLaneInfo.x,y:jump},duration:500});
-				// var tw=this.M.T.moveB(this.Player,{xy:{x:curLaneInfo.x,y:'-50'},duration:500});
 				tw.onComplete.add(function(){
 					this.inputEnabled=!0;
 					// TODO animation end
 
-					var curObstacleLane=Math.floor(this.LeadObstacle.x/this.LaneWidth)+1;
-					if(curObstacleLane!=this.curPlayerLane){
+					var curFloorLane=this.getLaneNum(this.LeadFloor.x);
+					if(curFloorLane!=this.curPlayerLane){
 						this.gameover();
 						return;
 					}
@@ -184,5 +183,8 @@ BasicGame.Play.prototype={
 				tw.start();
 			}
 		},this);
+	},
+	getLaneNum:function(targetX){
+		return Math.floor(targetX/this.LaneWidth)+1;
 	},
 };
