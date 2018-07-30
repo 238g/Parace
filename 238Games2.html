@@ -63,6 +63,13 @@
 	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" 
 	crossorigin="anonymous">
 
+	<script src="js/238Games/GamesInfo2.js"></script>
+	<script type="text/javascript">
+		var GamesInfo=genGamesInfo().GamesInfo;
+		var GamesInfoLength=0;
+		for(var k in GamesInfo)GamesInfoLength++;
+	</script>
+
 	<style type="text/css">
 		.navbar {
 			margin-bottom: 0;
@@ -76,7 +83,7 @@
 		}
 
 		footer {
-			background-color: #f2f2f2;
+			background-color: #d2d2d2;
 			padding: 10px;
 		}
 
@@ -107,7 +114,6 @@
 					<span class="icon-bar"></span>
 				</button>
 				<a class="navbar-brand" href="238Games2.html">Vtuberゲームス</a>
-				<!-- <a class="navbar-brand to_home" href="#">Vtuberゲームス</a> -->
 			</div>
 			<div class="collapse navbar-collapse" id="myNavbar">
 				<ul class="nav navbar-nav">
@@ -129,19 +135,21 @@
 					<li data-target="#myCarousel" data-slide-to="1"></li>
 				</ol>
 		
+				<!-- TODO ↓の◯の数。js読み込みのため。 -->
 				<div class="carousel-inner" role="listbox">
-					<!-- TODO GameInfo i=0<5?? -->
-					<div class="item active">
-						<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal">
-							<img src="https://238g.github.io/Parace/images/Nekomiya/TwitterCard.png" alt="Image">
-						</a>
-					</div>
-		
-					<div class="item">
-						<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal">
-							<img src="https://238g.github.io/Parace/images/Oda/TwitterCard.jpg" alt="Image">
-						</a>
-					</div>
+					<script type="text/javascript">
+						for(var i=GamesInfoLength;i>(GamesInfoLength-5);i--){
+							var number=10+('0'+i).slice(-2);
+							var info=GamesInfo[number];
+							// TODO alt=Image
+							document.write(
+								'<div class="item'+(i==GamesInfoLength?' active':'')+'">'
+								+'<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
+								+'<img src="'+info.TWC+'" alt="Image">'
+								+'</a>'
+								+'</div>');
+						}
+					</script>
 				</div>
 	
 				<a class="left carousel-control" href="#myCarousel" role="button" data-slide="prev">
@@ -155,8 +163,7 @@
 			</div>
 
 			<div class="container text-center">
-				<!-- TODO words -->
-				<h3>What We Do</h3><br>
+				<h3>新着ゲーム</h3><br>
 				<div class="row">
 					<!-- TODO GameInfo -->
 					<div class="col-sm-4">
@@ -202,6 +209,7 @@
 						</tr>
 					</thead>
 					<tbody>
+						<!-- TODO -->
 						<tr>
 							<th scope="row">1</th>
 							<td>あああああ</td>
@@ -315,7 +323,6 @@
 
 	<footer class="text-center navbar-fixed-bottom">
 		<p><a href="238Games2.html">Vtuberゲームス</a></p>
-		<!-- <p><a class="to_home" href="#">Vtuberゲームス</a></p> -->
 		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank">@i10v35w33t</a></p>
 	</footer>
 
@@ -330,7 +337,7 @@
 					<p>Modal Body</p>
 				</div>
 				<div class="modal-footer">
-					<button type="button" class="btn btn-warning">PLAY</button>
+					<button type="button" class="btn btn-warning play_btn">PLAY</button>
 					<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
 				</div>
 			</div>
@@ -338,7 +345,7 @@
 	</div>
 
 	<script type="text/javascript">
-		var __curGame=null;
+		var __curGameInfo=null;
 
 		$(function(){
 			////// NavHandler
@@ -372,18 +379,26 @@
 			////// NavHandler
 
 			////// ModalHandler
+			$('.carousel-inner a').click(function(){
+				var info=GamesInfo[$(this).data('number')];
+				__curGameInfo=info;
+			});
 			$('#myModal').on('show.bs.modal',function(e){
-				// TODO
 				var m = $(this);
 				/*
-				m.find('.modal-header').css('background-color','blue').css('color','red');
-				m.find('.modal-footer').css('background-color','blue');
-				m.find('.modal-content').css('color','red');
+				m.find('.modal-header').css('background-color',__curGameInfo.bgColor).css('color',__curGameInfo.textColor);
+				m.find('.modal-footer').css('background-color',__curGameInfo.bgColor);
+				m.find('.modal-content').css('color',__curGameInfo.textColor);
 				*/
-				m.find('.modal-title').text('TEST');
-				m.find('.modal-body').text('TEST BODY');
-
-				__curGame=1;
+				m.find('.modal-title').text(__curGameInfo.title);
+				m.find('.modal-body').html(
+					// TODO alt=Image
+					'<img src="'+__curGameInfo.slideImgUrl+'" alt="Image">'
+					// TODO description
+				);
+			});
+			$('#myModal .play_btn').click(function(){
+				window.open('_blank');
 			});
 			////// ModalHandler
 		});

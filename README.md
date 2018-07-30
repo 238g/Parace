@@ -26,3 +26,4 @@
 |#21|おめシスコマンダーズ|https://238g.github.io/Parace/OmesisCommanders.html|2018/7/04|
 |#22|トラック女神|https://238g.github.io/Parace/TruckGoddess.html|2018/7/15|
 |#23|MitoDanceRevolution|https://238g.github.io/Parace/MitoDanceRevolution.html|2018/7/22|
+|#24|ラキぴょこぴょこ|https://238g.github.io/Parace/Laki.html|2018/7/30|

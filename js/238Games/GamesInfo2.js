@@ -1,4 +1,5 @@
-BasicGame.Boot.prototype.genGamesInfo=function(){
+// TODO ALL
+function genGamesInfo(){
 	var totalCount=24;
 	return {
 		GamesInfo:{
@@ -210,6 +211,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#f8978f',
 				bgColor: '#ff7f26',
 				scale: 1,
+				TWC:'https://238g.github.io/Parace/images/Nekomiya/TwitterCard.png',
 			},
 			1020: {
 				id: 1020,
@@ -221,6 +223,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#503110',
 				bgColor: '#aee9f3',
 				scale: 1,
+				TWC:'https://238g.github.io/Parace/images/FOckingGlasses/TwitterCard.jpg',
 			},
 			1021: {
 				id: 1021,
@@ -232,6 +235,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#d16769',
 				bgColor: '#668af6',
 				scale: 1,
+				TWC:'https://238g.github.io/Parace/images/OmesisCommanders/TwitterCard.jpg',
 			},
 			1022: {
 				id: 1022,
@@ -243,6 +247,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#28ceff',
 				bgColor: '#c8f7f4',
 				scale: 1,
+				TWC:'https://238g.github.io/Parace/images/TruckGoddess/TwitterCard.jpg',
 			},
 			1023: {
 				id: 1023,
@@ -254,6 +259,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#ec74af',
 				bgColor: '#012c9e',
 				scale: 1,
+				TWC:'https://238g.github.io/Parace/images/MitoDanceRevolution/TwitterCard.jpg',
 			},
 			1024: {
 				id: 1024,
@@ -265,6 +271,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#7ae66f',
 				bgColor: '#f6d48f',
 				scale: .8,
+				TWC:'https://238g.github.io/Parace/images/Laki/TwitterCard.jpg',
 			},
 		},
 	};
