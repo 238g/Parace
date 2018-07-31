@@ -33,6 +33,7 @@ BasicGame.Play.prototype={
 		this.leftFloorCount=this.curStageInfo.target;
 
 		this.clear=!1;
+		this.isEnd=!0;
 
 		// Obj
 		this.LeadFloor=
@@ -49,6 +50,8 @@ BasicGame.Play.prototype={
 		this.M.SE.playBGM('PlayBGM',{volume:1.5});
 
 		this.add.sprite(0,0,'PlayBg_1');
+
+		this.ifChallenger();
 
 		this.genLane();
 		this.genFloors();
@@ -94,7 +97,7 @@ BasicGame.Play.prototype={
 			this.M.sGlb('endTut',!0);
 			this.start();
 		},this);
-		this.TutSprite.addChild(this.M.S.genTxt(0,0,this.curWords.HowTo,this.M.S.txtstyl(25)));
+		this.TutSprite.addChild(this.M.S.genTxt(0,0,this.isEnd?this.curWords.HowTo:this.curWords.HowToE,this.M.S.txtstyl(25)));
 	},
 	start:function(){
 		var ts=this.M.S.genTxt(this.world.centerX,this.world.centerY,'START',this.M.S.txtstyl(80));
@@ -177,6 +180,18 @@ BasicGame.Play.prototype={
 		}
 	},
 	////////////////////////////////////// PlayContents
+	ifChallenger:function(){
+		if(this.curStage==7){
+			this.isEnd=!1;
+			this.leftFloorCount=0;
+			this.onFloorT=this.onFloorE;
+			this.tweetT=this.tweetE;
+			this.M.sGlb('endTut',!1);
+		}else{
+			this.onFloorT=this.onFloor;
+			this.tweetT=this.tweet;
+		}
+	},
 	genLane:function(){
 		for(var i=1;i<=this.LaneCount;i++){
 			var laneStartX=(i-1)*this.LaneWidth;
@@ -282,24 +297,40 @@ BasicGame.Play.prototype={
 				this.viewFloorsList.shift();
 
 				var tw=this.M.T.moveB(this.Player,{xy:{x:curLaneInfo.x,y:jump},duration:500});
-				tw.onComplete.add(function(){
-					this.Player.loadTexture('Laki_Crouch');
-					this.prePlayerLane=this.curPlayerLane;
-
-					var curFloorLane=this.getLaneNum(this.LeadFloor.x);
-					if(curFloorLane==this.curPlayerLane){
-						this.inputEnabled=!0;
-
-						this.leftFloorCount--;
-						this.LeftFloorCountTxtSprite.changeText(this.leftFloorCount);
-						0==this.leftFloorCount&&this.end();
-					}else{
-						this.gameover();
-					}
-				},this);
+				tw.onComplete.add(this.onFloorT,this);
 				tw.start();
 			}
 		},this);
+	},
+	onFloorT:function(){},
+	onFloor:function(){
+		this.Player.loadTexture('Laki_Crouch');
+		this.prePlayerLane=this.curPlayerLane;
+
+		var curFloorLane=this.getLaneNum(this.LeadFloor.x);
+		if(curFloorLane==this.curPlayerLane){
+			this.inputEnabled=!0;
+
+			this.leftFloorCount--;
+			this.LeftFloorCountTxtSprite.changeText(this.leftFloorCount);
+			0==this.leftFloorCount&&this.end();
+		}else{
+			this.gameover();
+		}
+	},
+	onFloorE:function(){
+		this.Player.loadTexture('Laki_Crouch');
+		this.prePlayerLane=this.curPlayerLane;
+
+		var curFloorLane=this.getLaneNum(this.LeadFloor.x);
+		if(curFloorLane==this.curPlayerLane){
+			this.inputEnabled=!0;
+
+			this.leftFloorCount++;
+			this.LeftFloorCountTxtSprite.changeText(this.leftFloorCount);
+		}else{
+			this.gameover();
+		}
 	},
 	getLaneNum:function(targetX){
 		return Math.floor(targetX/this.LaneWidth)+1;
@@ -316,8 +347,8 @@ BasicGame.Play.prototype={
 
 			s.addChild(this.M.S.genTxt(x,this.world.height*.2,this.clear?'CLEAR!':'GAME\nOVER',this.M.S.txtstyl(50)));
 			s.addChild(this.M.S.genTxt(x,this.world.height*.4,this.curStageInfo.name,this.M.S.txtstyl(50)));
-			if(this.clear){
-				s.addChild(this.M.S.genLbl(x,this.world.centerY,this.tweet,this.curWords.Tweet,tsl));
+			if(this.clear||!this.isEnd){
+				s.addChild(this.M.S.genLbl(x,this.world.centerY,this.tweetT,this.curWords.Tweet,tsl));
 			}else{
 				s.addChild(this.M.S.genLbl(x,this.world.centerY,this.again,this.curWords.Again,tsl));
 			}
@@ -335,10 +366,22 @@ BasicGame.Play.prototype={
 			s.addChild(cB);
 		},this);
 	},
+	tweetT:function(){},
 	tweet:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		var emoji='🐸🐸🐸🐸🐸🐸';
 		var res=this.curStageInfo.name+' CLEAR!';
+		var txt=this.curWords.TweetTtl+'\n'
+				+emoji+'\n'
+				+res+'\n'
+				+emoji+'\n';
+		var ht='ラキゲーム';
+		this.M.H.tweet(txt,ht,location.href);
+	},
+	tweetE:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var emoji='🐸🐸🐸🐸🐸🐸';
+		var res=this.curStageInfo.name+'の記録: '+this.leftFloorCount;
 		var txt=this.curWords.TweetTtl+'\n'
 				+emoji+'\n'
 				+res+'\n'

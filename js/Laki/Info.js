@@ -36,6 +36,12 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			interval:580,
 			obstacleRate:50,
 		},
+		7:{
+			name:'チャレンジャー',//TODO EN
+			speed:.4,target:100,
+			interval:600,
+			obstacleRate:70,
+		},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
@@ -46,6 +52,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			SelectStage:'レベルを選択',
 			Back:'もどる',
 			HowTo:'雲に飛び乗って\n下に落ちないようにしよう！\n\n雲は４つのレーンに\nわかれてるよ！\n\n同じレーンにはジャンプが\nできないので注意！\n\nカウントが０になるとクリア！\n虹河ラキちゃんを\nゴールまで届けよう！',
+			HowToE:'雲に飛び乗って\n下に落ちないようにしよう！\n\n雲は４つのレーンに\nわかれてるよ！\n\n同じレーンにはジャンプが\nできないので注意！\n\n虹河ラキちゃんを\nどこまで行かせることが\nできるのか…\nチャレンジだ！',
 			Tweet:'結果をツイート',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			Again:'もう一度',
@@ -57,6 +64,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			SelectStage:'Select Level',
 			Back:'Back',
 			HowTo:'Let\'s Play!',
+			HowToE:'Let\'s Play!',
 			Tweet:'Tweet',
 			TweetTtl:'"'+BasicGame.GAME_TITLE_EN+'"',
 			Again:'Again',
