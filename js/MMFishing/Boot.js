@@ -15,8 +15,8 @@ init:function(){this.M.BootInit(!0)},
 preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
 create:function(){
 	this.M.dGlb({
-		// endTut:!1,
-		// curStage:1,
+		endTut:!1,
+		curStage:1,
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		StageInfo:this.genStageInfo(),

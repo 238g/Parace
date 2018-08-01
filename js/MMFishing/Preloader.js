@@ -15,6 +15,8 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
 			'Toya_1':'images/MMFIshing/Toya_1.png',
 			'Bg_1':'images/MMFIshing/Bg_1.jpg',
+			'Rod':'images/eff/DeadTree.png',//TODO
+			'Float':'images/cafenozombiko/Shine.png',//TODO
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
