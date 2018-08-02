@@ -21,35 +21,31 @@
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
 	<!-- TwitterCard 876x438 -->
-	<!--
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@i10v35w33t" />
 	<meta property="og:url" content="https://238g.github.io/Cute/238Games2.html" />
 	<meta property="og:title" content="Vtuberゲームス">
 	<meta property="og:description" content="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！">
 	<meta property="og:image" content="https://238g.github.io/Cute/images/238Games/TwitterCard.jpg">
-	-->
 
 	<!-- Icons -->
-	<!--
-	<link rel="apple-touch-icon" sizes="57x57" href="images/238Games/favicons/apple-icon-57x57.png">
-	<link rel="apple-touch-icon" sizes="60x60" href="images/238Games/favicons/apple-icon-60x60.png">
-	<link rel="apple-touch-icon" sizes="72x72" href="images/238Games/favicons/apple-icon-72x72.png">
-	<link rel="apple-touch-icon" sizes="76x76" href="images/238Games/favicons/apple-icon-76x76.png">
-	<link rel="apple-touch-icon" sizes="114x114" href="images/238Games/favicons/apple-icon-114x114.png">
-	<link rel="apple-touch-icon" sizes="120x120" href="images/238Games/favicons/apple-icon-120x120.png">
-	<link rel="apple-touch-icon" sizes="144x144" href="images/238Games/favicons/apple-icon-144x144.png">
-	<link rel="apple-touch-icon" sizes="152x152" href="images/238Games/favicons/apple-icon-152x152.png">
-	<link rel="apple-touch-icon" sizes="180x180" href="images/238Games/favicons/apple-icon-180x180.png">
-	<link rel="icon" type="image/png" sizes="192x192"  href="images/238Games/favicons/android-icon-192x192.png">
-	<link rel="icon" type="image/png" sizes="32x32" href="images/238Games/favicons/favicon-32x32.png">
-	<link rel="icon" type="image/png" sizes="96x96" href="images/238Games/favicons/favicon-96x96.png">
-	<link rel="icon" type="image/png" sizes="16x16" href="images/238Games/favicons/favicon-16x16.png">
-	<link rel="manifest" href="images/238Games/favicons/manifest.json">
+	<link rel="apple-touch-icon" sizes="57x57" href="images/238Games/favicons2/apple-icon-57x57.png">
+	<link rel="apple-touch-icon" sizes="60x60" href="images/238Games/favicons2/apple-icon-60x60.png">
+	<link rel="apple-touch-icon" sizes="72x72" href="images/238Games/favicons2/apple-icon-72x72.png">
+	<link rel="apple-touch-icon" sizes="76x76" href="images/238Games/favicons2/apple-icon-76x76.png">
+	<link rel="apple-touch-icon" sizes="114x114" href="images/238Games/favicons2/apple-icon-114x114.png">
+	<link rel="apple-touch-icon" sizes="120x120" href="images/238Games/favicons2/apple-icon-120x120.png">
+	<link rel="apple-touch-icon" sizes="144x144" href="images/238Games/favicons2/apple-icon-144x144.png">
+	<link rel="apple-touch-icon" sizes="152x152" href="images/238Games/favicons2/apple-icon-152x152.png">
+	<link rel="apple-touch-icon" sizes="180x180" href="images/238Games/favicons2/apple-icon-180x180.png">
+	<link rel="icon" type="image/png" sizes="192x192"  href="images/238Games/favicons2/android-icon-192x192.png">
+	<link rel="icon" type="image/png" sizes="32x32" href="images/238Games/favicons2/favicon-32x32.png">
+	<link rel="icon" type="image/png" sizes="96x96" href="images/238Games/favicons2/favicon-96x96.png">
+	<link rel="icon" type="image/png" sizes="16x16" href="images/238Games/favicons2/favicon-16x16.png">
+	<link rel="manifest" href="images/238Games/favicons2/manifest.json">
 	<meta name="msapplication-TileColor" content="#000000">
-	<meta name="msapplication-TileImage" content="images/238Games/favicons/ms-icon-144x144.png">
-	<link rel="shortcut icon" type="image/x-icon" href="images/238Games/favicons/favicon.ico">
-	-->
+	<meta name="msapplication-TileImage" content="images/238Games/favicons2/ms-icon-144x144.png">
+	<link rel="shortcut icon" type="image/x-icon" href="images/238Games/favicons2/favicon.ico">
 
 	<!-- Vendor -->
 	<script 
@@ -63,7 +59,7 @@
 	integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" 
 	crossorigin="anonymous">	
 
-	<script src="js/public/ENV.js"></script>
+	<script src="js/public/Env.js"></script>
 	<script src="js/238Games/GamesInfo2.js"></script>
 	<script type="text/javascript">
 		var GamesInfo=genGamesInfo().GamesInfo;
@@ -77,10 +73,30 @@
 			border-radius: 0;
 		}
 
+		#myCarousel {
+			margin: auto;
+			max-width: 876px;
+		}
+
+		.carousel-indicators .active {
+			background-color: #000;
+		}
+
+		.carousel-indicators li {
+			height: 10px;
+		}
+
 		.carousel-inner img {
 			width: 100%;
 			margin: auto;
 			min-height:200px;
+		}
+
+		.carousel-control-prev,
+		.carousel-control-next {
+			background-color: #000;
+			opacity: 0.４;
+			width: 8%;
 		}
 
 		footer {
@@ -198,7 +214,7 @@
 						<div class="well">
 							<h3>バーチャルYouTuberの<br>二次創作ゲームを<br>発信しているサイトです。</h3>
 							<br>
-							<p>個人で作ってます！完全に趣味です！</p>
+							<p>個人で作ってます！完全に趣味です！絵が描けないなりのファンアートです！</p>
 							<p>大体１週間に１度新しいゲームを投稿しますのでお見逃しなく！</p>
 							<br>
 							<p>開発者: 抹茶。</p>
