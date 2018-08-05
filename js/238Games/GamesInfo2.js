@@ -122,7 +122,7 @@ function genGamesInfo(){
 			},
 			1025:{id:1025,title:'もちもちフィッシング',url:GI2A('MMFishing'),
 				tColor:'#7ae66f',mColor:'#f6d48f',
-				tc:GI2B('MMFishing'),imgA:GI2C('MMFishing'),imgB:GI2D('MMFishing'),
+				tc:GI2B('MM_Fishing'),imgA:GI2C('MM_Fishing'),imgB:GI2D('MM_Fishing'),
 				caption:'aaaaaaaaaaaaaaa',//TODO
 				release:'2018/8/05',
 			},

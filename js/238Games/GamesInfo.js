@@ -271,7 +271,7 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				title: 'もちもちフィッシング',
 				url: 'https://238g.github.io/Parace/MMFishing.html',
 				slideImg: 'Ichigo_1',
-				slideImgUrl: 'images/MMFIshing/Ichigo_1.png',
+				slideImgUrl: 'images/MM_Fishing/Ichigo_1.png',
 				order: totalCount-25,
 				textColor: '#a981af',
 				bgColor: '#e5c6cd',
