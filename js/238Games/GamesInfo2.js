@@ -113,14 +113,18 @@ function genGamesInfo(){
 			1023:{id:1023,title:'MitoDanceRevolution',url:GI2A('MitoDanceRevolution'),
 				tColor:'#ec74af',mColor:'#012c9e',
 				tc:GI2B('MitoDanceRevolution'),imgA:GI2C('MitoDanceRevolution'),imgB:GI2D('MitoDanceRevolution'),
-				caption:'aaaaaaaaaaaaaaa',//TODO
 				release:'2018/7/22',
 			},
 			1024:{id:1024,title:'ラキぴょこぴょこ',url:GI2A('Laki'),
 				tColor:'#7ae66f',mColor:'#f6d48f',
 				tc:GI2B('Laki'),imgA:GI2C('Laki'),imgB:GI2D('Laki'),
-				caption:'aaaaaaaaaaaaaaa',//TODO
 				release:'2018/7/30',
+			},
+			1025:{id:1025,title:'もちもちフィッシング',url:GI2A('MMFishing'),
+				tColor:'#7ae66f',mColor:'#f6d48f',
+				tc:GI2B('MMFishing'),imgA:GI2C('MMFishing'),imgB:GI2D('MMFishing'),
+				caption:'aaaaaaaaaaaaaaa',//TODO
+				release:'2018/8/05',
 			},
 		},
 	};
