@@ -13,17 +13,43 @@ BasicGame.Preloader.prototype={
 		var i={
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
-			'Toya_1':'images/MMFIshing/Toya_1.png',
+			'Fish_1':'images/MMFIshing/Fish_1.png',
+			'Fish_2':'images/MMFIshing/Fish_2.png',
+			'Fish_3':'images/MMFIshing/Fish_3.png',
+			'Fish_4':'images/MMFIshing/Fish_4.png',
+			'Fish_5':'images/MMFIshing/Fish_5.png',
+			'Fish_6':'images/MMFIshing/Fish_6.png',
 			'Bg_1':'images/MMFIshing/Bg_1.jpg',
-			'Rod':'images/eff/DeadTree.png',//TODO
-			'Float':'images/cafenozombiko/Shine.png',//TODO
+			'PlayBg_1':'images/MMFIshing/PlayBg_1.jpg',
+			'Rod':'images/MMFIshing/Rod_1.png',
+			'Float_1':'images/MMFIshing/Float_1.png',
+			'Float_2':'images/MMFIshing/Float_2.png',
+			'Hit_1':'images/MMFIshing/Hit_1.png',
+			'Hit_2':'images/MMFIshing/Hit_2.png',
+			'Frame':'images/MMFIshing/Frame.png',
+			'Arrow':'images/MMFIshing/Arrow.png',
+			'Ichigo_1':'images/MMFIshing/Ichigo_1.png',
+			'Ichigo_2':'images/MMFIshing/Ichigo_2.png',
+			'Ichigo_3':'images/MMFIshing/Ichigo_3.png',
+			'Ichigo_4':'images/MMFIshing/Ichigo_4.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Laki/fc',
+			BGM:'sounds/BGM/MMFishing/illumination_am300',
+			Hit:'sounds/SE/LabJP/Performance/Anime/feed1',
+			OnStart:'sounds/SE/LabJP/Vehicle/ship-big-whistle1_CUT',
+			OnBtn:'sounds/SE/LabJP/Btn/decision7',
+			Cast:'sounds/SE/LabJP/Battle/Other/whip-gesture1',
+			Water_1:'sounds/SE/Fantasy/Footsteps/Footstep_Water_04',
+			Water_2:'sounds/SE/Fantasy/Footsteps/Footstep_Water_05',
+			Water_3:'sounds/SE/Fantasy/Footsteps/Footstep_Water_06',
+			Miss:'sounds/SE/LabJP/Performance/Anime/stupid3',
+			Splashes:'sounds/SE/S/Splashes',
+			Fishing:'sounds/SE/LabJP/Performance/Anime/shakin1',
+			GetFish:'sounds/SE/LabJP/Performance/Other/trumpet1',
 		};
 		for(var k in s){
 			var p=s[k];

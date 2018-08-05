@@ -2,7 +2,7 @@ function genGamesInfo(){
 	return {GamesInfo:{
 			1001:{id:1001,title:'秒当てゲーム',url:'https://238g.github.io/hitten/index.html',
 				tColor:'#000000',mColor:'#fbf6d5',
-				tc:null,imgA:null,imgB:'https://238g.github.io/hitten/images/favicons/sunny-side-up-32-293206.png',
+				tc:null,imgA:'images/238Games/Hitten_1.png',imgB:'https://238g.github.io/hitten/images/favicons/sunny-side-up-32-293206.png',
 				release:'2018/2/12',
 			},
 			1002:{id:1002,title:'レッツ・あん肝！',url:GI2A('ankimo_drrrr'),

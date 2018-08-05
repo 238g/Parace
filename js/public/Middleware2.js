@@ -33,8 +33,10 @@ Middleware.prototype={
 		sc.scale.parentIsWindow=!0;
 		sc.scale.refresh();
 		sc.load.crossOrigin='Anonymous';
+		this.sGlb('TOUCH_OR_CLICK',(sc.game.device.touch)?'タッチ':'クリック');
+		this.sGlb('EN_TOUCH_OR_CLICK',(sc.game.device.touch)?'TOUCH':'CLICK');
 	},
-	NextScene: function (nextScene) {
+	NextScene:function(nextScene){
 		this.gScn().state.start(nextScene);
 		this.currentScene=nextScene;
 		this.setM();
@@ -167,6 +169,7 @@ Middleware.prototype.SpriteManager.prototype={
 			}
 		}
 		s.setFrames(f,f,f,f);
+		myGa(this.M.currentScene,'volume',f);
 	},
 	genFlScBtn:function(x,y){
 		var sc=this.M.gScn();
@@ -182,11 +185,14 @@ Middleware.prototype.SpriteManager.prototype={
 		if (sc.scale.isFullScreen) {
 			var i='larger';
 			sc.scale.stopFullScreen(!1);
+			var curScreen='Small';
 		} else {
 			var i='smaller';
 			sc.scale.startFullScreen(!1);
+			var curScreen='Large';
 		}
 		s.setFrames(i,i,i,i);
+		myGa(this.M.currentScene,'fullscreen',curScreen);
 	},
 	loadLoadingAssets:function(){
 		var sc=this.M.gScn();
@@ -219,7 +225,7 @@ Middleware.prototype.SpriteManager.prototype={
 		this.M.sGlb('EN_TOUCH_OR_CLICK',e);
 		sc.game.device.desktop&&(document.body.style.cursor='pointer');
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
-		this.genTxt(sc.world.centerX,sc.world.height*.85,j+'してスタート\n'+e+' TO PLAY',this.txtstyl(25));
+		this.genTxt(sc.world.centerX,sc.world.height*.85,this.M.gGlb('TOUCH_OR_CLICK')+'してスタート\n'+this.M.gGlb('EN_TOUCH_OR_CLICK')+' TO PLAY',this.txtstyl(25));
 	},
 };
 Middleware.prototype.TweenManager=function(game,M){
@@ -377,3 +383,8 @@ Middleware.prototype.Helper.prototype={
 		document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',t);
 	},
 };
+
+function myGa(eventCategory,eventAction,eventLabel){
+	if(__ENV!='prod')console.log(eventCategory,eventAction,eventLabel);
+	typeof ga=='function'&&ga('send','event',eventCategory,eventAction,eventLabel);
+}

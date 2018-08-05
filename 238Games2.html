@@ -95,7 +95,8 @@
 		.carousel-control-prev,
 		.carousel-control-next {
 			background-color: #000;
-			opacity: 0.４;
+			opacity: 0.4;
+			filter: alpha(opacity=40);
 			width: 8%;
 		}
 
@@ -119,13 +120,24 @@
 		.goto_gamelist {
 			cursor: pointer;
 		}
+
+		.tweet_btn {
+			width: 68px;
+			height: 18px;
+			cursor: pointer;
+		}
+
+		.tweet_btn img:hover {
+			opacity: 0.6;
+			filter: alpha(opacity=60);
+		}
 	</style>
 
 </head>
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-		<a class="navbar-brand" href="238Games2.html">Vtuberゲームス</a>
+		<a class="navbar-brand" href="238Games2.html" onclick="myGa('Navbar','home','navbar-brand');"><img src="images/238Games/favicons2/favicon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt=""> Vtuberゲームス</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -200,7 +212,8 @@
 				</div>
 				<div class="row">
 					<div class="col">
-						<br><p>仕方ないのでこのサイトを広めてあげる: <a href="https://twitter.com/share" class="twitter-share-button" data-text="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！" data-lang="ja" data-hashtags="Vtuberゲームス">ツイート</a></p><br>
+						<br><p>仕方ないのでこのサイトを広めてあげる: 
+						<a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>
 					</div>
 				</div>
 			</div>
@@ -214,13 +227,15 @@
 						<div class="well">
 							<h3>バーチャルYouTuberの<br>二次創作ゲームを<br>発信しているサイトです。</h3>
 							<br>
-							<p>個人で作ってます！完全に趣味です！絵が描けないなりのファンアートです！</p>
+							<p>個人で作ってます！完全に趣味です！</p>
+							<p>絵が描けないなりのファンアートです！</p>
 							<p>大体１週間に１度新しいゲームを投稿しますのでお見逃しなく！</p>
 							<br>
 							<p>開発者: 抹茶。</p>
-							<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank">@i10v35w33t</a></p>
-							<p>ご意見・ご要望: <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank">匿名投稿マシュマロ</a></p>
-							<p>仕方ないのでこのサイトを広めてあげる: <a href="https://twitter.com/share" class="twitter-share-button" data-text="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！" data-lang="ja" data-hashtags="Vtuberゲームス">ツイート</a></p>
+							<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('About','twitter');">@i10v35w33t</a></p>
+							<p>ご意見・ご要望: <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa('About','marshmallow');">匿名投稿マシュマロ</a></p>
+							<p>仕方ないのでこのサイトを広めてあげる: 
+							<a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>
 						</div>
 					</div>
 				</div>
@@ -251,7 +266,7 @@
 										+'<th scope="row">'+i+'</th>'
 										+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
 										+'<td>'+newBadge+info.title+'</td>'
-										+'<td><a href="'+info.url+'" target="_blank">PLAY</a></td>'
+										+'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'Gamelist\',\'play\',\''+info.title+'\');">PLAY</a></td>'
 										+'<td>'+info.release+'</td>'
 									+'</tr>');
 							}
@@ -269,27 +284,27 @@
 					<div class="col">
 						<ul class="list-group">
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberChronology.html" target="_blank">
+								<a href="https://238g.github.io/Cute/VtuberChronology.html" target="_blank" onclick="myGa('Service','link','VTuber年表');">
 									<button class="btn btn-success">VTuber年表</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberBirthday.html" target="_blank">
+								<a href="https://238g.github.io/Cute/VtuberBirthday.html" target="_blank" onclick="myGa('Service','link','Vtuberバースデー');">
 									<button class="btn btn-success">Vtuberバースデー</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberDebut.html" target="_blank">
+								<a href="https://238g.github.io/Cute/VtuberDebut.html" target="_blank" onclick="myGa('Service','link','Vtuberデビュー表');">
 									<button class="btn btn-success">Vtuberデビュー表</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/Fukutube.html" target="_blank">
+								<a href="https://238g.github.io/Cute/Fukutube.html" target="_blank" onclick="myGa('Service','link','複つべ');">
 									<button class="btn btn-danger">複つべ</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/Raditube.html" target="_blank">
+								<a href="https://238g.github.io/Cute/Raditube.html" target="_blank" onclick="myGa('Service','link','ラジつべ');">
 									<button class="btn btn-danger">ラジつべ</button>
 								</a>
 							</li>
@@ -357,8 +372,8 @@
 	<div style="height: 150px;"></div>
 
 	<footer class="text-center fixed-bottom">
-		<p><a href="238Games2.html">Vtuberゲームス</a></p>
-		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank">@i10v35w33t</a></p>
+		<p><a href="238Games2.html" onclick="myGa('Footer','home');">Vtuberゲームス</a></p>
+		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('Footer','twitter');">@i10v35w33t</a></p>
 	</footer>
 
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
@@ -382,6 +397,7 @@
 	</div>
 
 	<script type="text/javascript">
+		var __curPage=null;
 		var __curGameInfo=null;
 
 		$(function(){
@@ -397,6 +413,8 @@
 					t.hasClass(page)?t.slideDown('slow'):t.slideUp('slow');
 				});
 				$('.navbar-toggler').is(':visible')&&$('.navbar-toggler').click();
+				__curPage=page;
+				myGa('Navbar',page,'nav-item');
 			});
 
 			$('.goto_gamelist').click(function(){
@@ -411,6 +429,7 @@
 				if($('.navbar-toggler').is(':visible')&&$('.navbar-collapse').is(':visible')){
 					$('.navbar-toggler').click();
 				}
+				myGa('Home','more_info','toGamelist');
 			});
 			///// PageHandler
 
@@ -431,11 +450,25 @@
 					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
 					// TODO description
 				);
+				myGa(__curPage,'open_modal',__curGameInfo.title);
 			});
 			$('#myModal .play_btn').click(function(){
 				window.open(__curGameInfo.url,'_blank');
+				myGa('Modal','play',__curGameInfo.title);
 			});
 			////// ModalHandler
+
+			$('.tweet_btn').click(function(){
+				myGa(__curPage,'tweet','share');
+				var t=encodeURIComponent('バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！');
+				var h=encodeURIComponent('Vtuberゲームス');
+				var u='https://238g.github.io/Parace/238Games2.html';
+				window.open(
+					'https://twitter.com/intent/tweet?text='+t+'&hashtags='+h+'&url='+u,
+					'share window', 
+					'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+				return false;
+			});
 		});
 
 		////// Router
@@ -447,22 +480,29 @@
 				showPage=!0;
 				var b=$('.page_'+a[1]);
 				if(b.length==1){
+					__curPage='page_'+a[1];
 					b.show();
 					var h=$('.navbar-nav .navbar_'+a[1]);
 					h.addClass('active');
 					h.siblings().removeClass('active');
 				}else{
+					__curPage='page_home';
 					$('.page_home').show();
 				}
 				break;
 			}
 		}
-		if(!showPage)$('.page_home').show();
+		if(!showPage){
+			__curPage='page_home';
+			$('.page_home').show();
+		}
 		////// Router
-	</script>
 
-	<!-- Tweet Btn -->
-	<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+		function myGa(eventCategory,eventAction,eventLabel){
+			if(__ENV!='prod')console.log(eventCategory,eventAction,eventLabel);
+			typeof ga=='function'&&ga('send','event',eventCategory,eventAction,eventLabel);
+		}
+	</script>
 
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->

@@ -1,17 +1,70 @@
-BasicGame.Boot.prototype.genStageInfo=function(){
-	return {
-		1:{
+BasicGame.Boot.prototype.genFishInfo=function(){
+	return {//TODO EN NAME
+		1:{name:'刀ニ',
+			count:20,rate:500,
+			waitTime:1300,LRTime:5000,floatMvTw:800,
+			catch:0,
+		},
+		2:{name:'アジ',
+			count:30,rate:250,
+			waitTime:1300,LRTime:4000,floatMvTw:800,
+			catch:0,
+		},
+		3:{name:'キツネ',
+			count:60,rate:135,
+			waitTime:1000,LRTime:3000,floatMvTw:300,
+			catch:0,
+		},
+		4:{name:'シロイルカフライ',
+			count:120,rate:55,
+			waitTime:1000,LRTime:2000,floatMvTw:300,
+			catch:0,
+		},
+		5:{name:'ぎるざれんさんせいさまおにーちゃんさま',
+			count:120,rate:55,
+			waitTime:1000,LRTime:2000,floatMvTw:300,
+			catch:0,
+		},
+		6:{name:'うしうみ',
+			count:200,rate:5,
+			waitTime:800,LRTime:1000,floatMvTw:150,
+			catch:0,
 		},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
+	var a=this.M.gGlb('TOUCH_OR_CLICK');
+	// var b=this.M.gGlb('EN_TOUCH_OR_CLICK');
 	return {
 		jp:{
 			Start:'スタート',
+			Again:'もう一度',
+			HowTo:'【遊び方】\nウキの投げたい方向を'+a+'しよう！\nウキを投げたら魚が食いつくのを待とう。\n魚が食いついたら'+a+'！\n\n左右どちらかの画面に矢印が出るよ！\n矢印の出た方を連打して魚をゲットしよう！\n６種類全部集められるかな？',
+			Cast:'画面を'+a+'して\nウキを投げよう！',
+			Blow:'連打！',
+			Tweet:'結果をツイート',
+			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			TweetHT:BasicGame.GAME_TITLE,
+			TweetResDefault:'釣った魚…なし！！\nえ？何してたの？\n',
+			TweetResTop:'釣った魚',
+			TweetResBack:'匹',
+			Back:'もどる',
+			OtherGames:'他のゲーム',
 		},
-		// TODO
-		en:{
+		en:{// TODO
 			Start:'START',
+			Again:'Again',
+			HowTo:'Let\'s Start!',
+			Cast:'Let\'s Cast',
+			Blow:'Blow!!',
+			TweetTtl:'"'+BasicGame.GAME_TITLE_EN+'"',
+			TweetHT:BasicGame.GAME_TITLE,
+			TweetResDefault:'************************',
+			TweetResTop:'************************',
+			TweetResBack:'************************',
+			Tweet:'Tweet',
+			Back:'Back',
+			OtherGames:'OtherGames',
 		},
 	};
 };
