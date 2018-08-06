@@ -137,7 +137,7 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-		<a class="navbar-brand" href="238Games2.html" onclick="myGa('Navbar','home','navbar-brand');"><img src="images/238Games/favicons2/favicon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt=""> Vtuberゲームス</a>
+		<a class="navbar-brand" href="238Games2.html" onclick="myGa('home','Navbar','navbar-brand');"><img src="images/238Games/favicons2/favicon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt=""> Vtuberゲームス</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
@@ -232,8 +232,8 @@
 							<p>大体１週間に１度新しいゲームを投稿しますのでお見逃しなく！</p>
 							<br>
 							<p>開発者: 抹茶。</p>
-							<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('About','twitter');">@i10v35w33t</a></p>
-							<p>ご意見・ご要望: <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa('About','marshmallow');">匿名投稿マシュマロ</a></p>
+							<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('twitter','About');">@i10v35w33t</a></p>
+							<p>ご意見・ご要望: <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa('marshmallow','About');">匿名投稿マシュマロ</a></p>
 							<p>仕方ないのでこのサイトを広めてあげる: 
 							<a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>
 						</div>
@@ -266,7 +266,7 @@
 										+'<th scope="row">'+i+'</th>'
 										+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
 										+'<td>'+newBadge+info.title+'</td>'
-										+'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'Gamelist\',\'play\',\''+info.title+'\');">PLAY</a></td>'
+										+'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
 										+'<td>'+info.release+'</td>'
 									+'</tr>');
 							}
@@ -284,27 +284,27 @@
 					<div class="col">
 						<ul class="list-group">
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberChronology.html" target="_blank" onclick="myGa('Service','link','VTuber年表');">
+								<a href="https://238g.github.io/Cute/VtuberChronology.html" target="_blank" onclick="myGa('view_promotion','Service','VTuber年表');">
 									<button class="btn btn-success">VTuber年表</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberBirthday.html" target="_blank" onclick="myGa('Service','link','Vtuberバースデー');">
+								<a href="https://238g.github.io/Cute/VtuberBirthday.html" target="_blank" onclick="myGa('view_promotion','Service','Vtuberバースデー');">
 									<button class="btn btn-success">Vtuberバースデー</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/VtuberDebut.html" target="_blank" onclick="myGa('Service','link','Vtuberデビュー表');">
+								<a href="https://238g.github.io/Cute/VtuberDebut.html" target="_blank" onclick="myGa('view_promotion','Service','Vtuberデビュー表');">
 									<button class="btn btn-success">Vtuberデビュー表</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/Fukutube.html" target="_blank" onclick="myGa('Service','link','複つべ');">
+								<a href="https://238g.github.io/Cute/Fukutube.html" target="_blank" onclick="myGa('view_promotion','Service','複つべ');">
 									<button class="btn btn-danger">複つべ</button>
 								</a>
 							</li>
 							<li class="list-group-item">
-								<a href="https://238g.github.io/Cute/Raditube.html" target="_blank" onclick="myGa('Service','link','ラジつべ');">
+								<a href="https://238g.github.io/Cute/Raditube.html" target="_blank" onclick="myGa('view_promotion','Service','ラジつべ');">
 									<button class="btn btn-danger">ラジつべ</button>
 								</a>
 							</li>
@@ -372,8 +372,8 @@
 	<div style="height: 150px;"></div>
 
 	<footer class="text-center fixed-bottom">
-		<p><a href="238Games2.html" onclick="myGa('Footer','home');">Vtuberゲームス</a></p>
-		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('Footer','twitter');">@i10v35w33t</a></p>
+		<p><a href="238Games2.html" onclick="myGa('home','Footer');">Vtuberゲームス</a></p>
+		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('twitter','Footer');">@i10v35w33t</a></p>
 	</footer>
 
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
@@ -414,7 +414,7 @@
 				});
 				$('.navbar-toggler').is(':visible')&&$('.navbar-toggler').click();
 				__curPage=page;
-				myGa('Navbar',page,'nav-item');
+				myGa(page,'Navbar','nav-item');
 			});
 
 			$('.goto_gamelist').click(function(){
@@ -429,7 +429,7 @@
 				if($('.navbar-toggler').is(':visible')&&$('.navbar-collapse').is(':visible')){
 					$('.navbar-toggler').click();
 				}
-				myGa('Home','more_info','toGamelist');
+				myGa('more_info','page_home','toGamelist');
 			});
 			///// PageHandler
 
@@ -450,16 +450,16 @@
 					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
 					// TODO description
 				);
-				myGa(__curPage,'open_modal',__curGameInfo.title);
+				myGa('open_modal',__curPage,__curGameInfo.title);
 			});
 			$('#myModal .play_btn').click(function(){
 				window.open(__curGameInfo.url,'_blank');
-				myGa('Modal','play',__curGameInfo.title);
+				myGa('play','Modal',__curGameInfo.title);
 			});
 			////// ModalHandler
 
 			$('.tweet_btn').click(function(){
-				myGa(__curPage,'tweet','share');
+				myGa('tweet',__curPage,'share');
 				var t=encodeURIComponent('バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！');
 				var h=encodeURIComponent('Vtuberゲームス');
 				var u='https://238g.github.io/Parace/238Games2.html';
@@ -498,9 +498,9 @@
 		}
 		////// Router
 
-		function myGa(eventCategory,eventAction,eventLabel){
-			if(__ENV!='prod')console.log(eventCategory,eventAction,eventLabel);
-			typeof ga=='function'&&ga('send','event',eventCategory,eventAction,eventLabel);
+		function myGa(action,category,label){
+			if(__ENV!='prod')console.log(action,category,label);
+			gtag('event',action,{'event_category':category,'event_label':label});
 		}
 	</script>
 
