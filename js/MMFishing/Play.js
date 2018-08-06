@@ -99,6 +99,7 @@ BasicGame.Play.prototype={
 		this.curMode='searching';
 		this.CastTextSprite.visible=!0;
 		this.CharSprite.loadTexture('Ichigo_1');
+		this.FloatTween.isRunning&&this.FloatTween.stop();
 	},
 	end:function(){
 		this.isPlaying=!1;
