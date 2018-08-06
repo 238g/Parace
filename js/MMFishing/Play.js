@@ -115,6 +115,7 @@ BasicGame.Play.prototype={
 		tw.onComplete.add(function(){
 			this.HitTextSprite.visible=!1;
 			this.inputEnabled=!0;
+			this.time.events.removeAll();
 		},this);
 		tw.start();
 
@@ -276,7 +277,8 @@ BasicGame.Play.prototype={
 
 			this.curFish=this.rndFish();
 
-			this.fishingCounter=this.FishInfo[this.curFish].count;
+			var info=this.FishInfo[this.curFish];
+			this.fishingCounter=this.rnd.integerInRange(info.countMin,info.countMax);
 			this.FishingCounterTextSprite.changeText(this.fishingCounter+'m');
 
 			this.tweenYoyoFloat();
@@ -394,7 +396,7 @@ BasicGame.Play.prototype={
 		this.Float.loadTexture('Float_1');
 		this.FishingCounterTextSprite.changeText('');
 		this.start();
-		myGa('Play','restart','playCount_'+this.M.gGlb('playCount'));
+		myGa('restart','Play','',this.M.gGlb('playCount'));
 	},
 	tweet:function(){
 		if(!this.inputEnabled)return;
@@ -417,24 +419,24 @@ BasicGame.Play.prototype={
 				+emoji+'\n';
 		var ht=this.curWords.TweetHT;
 		this.M.H.tweet(txt,ht,location.href);
-		myGa('Play','tweet','playCount_'+this.M.gGlb('playCount'));
+		myGa('tweet','Play','',this.M.gGlb('playCount'));
 	},
 	back:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Title');
-		myGa('Play','back','toTitle.playCount_'+this.M.gGlb('playCount'));
+		myGa('back','Play','toTitle',this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		window.open(BasicGame.YOUTUBE_URL,'_blank');
-		myGa('Play','youtube','playCount_'+this.M.gGlb('playCount'));
+		myGa('youtube','Play','',this.M.gGlb('playCount'));
 	},
 	onOtherGames:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		window.open(BasicGame.MY_GAMES_URL,'_blank');
-		myGa('Play','othergames','playCount_'+this.M.gGlb('playCount'));
+		myGa('othergames','Play','',this.M.gGlb('playCount'));
 	},
 };

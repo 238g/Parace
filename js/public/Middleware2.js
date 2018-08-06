@@ -169,7 +169,7 @@ Middleware.prototype.SpriteManager.prototype={
 			}
 		}
 		s.setFrames(f,f,f,f);
-		myGa(this.M.currentScene,'volume',f);
+		myGa('volume',this.M.currentScene,f);
 	},
 	genFlScBtn:function(x,y){
 		var sc=this.M.gScn();
@@ -192,7 +192,7 @@ Middleware.prototype.SpriteManager.prototype={
 			var curScreen='Large';
 		}
 		s.setFrames(i,i,i,i);
-		myGa(this.M.currentScene,'fullscreen',curScreen);
+		myGa('fullscreen',this.M.currentScene,curScreen);
 	},
 	loadLoadingAssets:function(){
 		var sc=this.M.gScn();
@@ -384,7 +384,7 @@ Middleware.prototype.Helper.prototype={
 	},
 };
 
-function myGa(eventCategory,eventAction,eventLabel){
-	if(__ENV!='prod')console.log(eventCategory,eventAction,eventLabel);
-	typeof ga=='function'&&ga('send','event',eventCategory,eventAction,eventLabel);
+function myGa(action,category,label,value){
+	if(__ENV!='prod')console.log(action,category,label,value);
+	gtag('event',action,{'event_category':category,'event_label':label,'value':value});
 }
