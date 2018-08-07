@@ -32,6 +32,7 @@ BasicGame.Title.prototype={
 					this.M.NextScene('SelectStage');
 				},this);
 				this.Tween.start();
+				myGa('start','Title','toSelectStage',this.M.gGlb('playCount'));
 			}
 		} else {
 			this.M.SE.playBGM('TitleBGM',{volume:1.5});

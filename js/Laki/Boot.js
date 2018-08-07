@@ -16,6 +16,7 @@ preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png
 create:function(){
 	this.M.dGlb({
 		endTut:!1,
+		playCount:0,
 		curStage:1,
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',

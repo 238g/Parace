@@ -883,3 +883,8 @@ Middleware.prototype.Helper.prototype = {
 		}
 	},
 };
+
+function myGa(action,category,label,value){
+	if(__ENV!='prod')console.log(action,category,label,value);
+	gtag('event',action,{'event_category':category,'event_label':label,'value':value});
+}

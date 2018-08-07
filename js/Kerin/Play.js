@@ -128,6 +128,7 @@ BasicGame.Play.prototype = {
 			this.isPlaying = true;
 			this.Enemies.killAll();
 			this.resetPlayer();
+			this.M.setGlobal('playCount', this.M.getGlobal('playCount')+1);
 		}
 	},
 

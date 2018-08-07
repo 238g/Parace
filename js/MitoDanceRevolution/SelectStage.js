@@ -51,6 +51,7 @@ BasicGame.SelectStage.prototype={
 	select:function(b){
 		this.curStage=b.stage;
 		this.M.sGlb('curStage',this.curStage);
+		myGa('play','SelectStage','Stage_'+this.curStage,this.M.gGlb('playCount'));
 		this.start();
 	},
 	start:function(){
@@ -73,10 +74,12 @@ BasicGame.SelectStage.prototype={
 		} else {
 			location.href=BasicGame.MY_GAMES_URL;
 		}
+		myGa('othergames','SelectStage','',this.M.gGlb('playCount'));
 	},
 	back:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Title');
+		myGa('back','SelectStage','toTitle',this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;

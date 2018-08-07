@@ -3,6 +3,7 @@
 |ID|Name|URL|Release|
 |:---:|:---:|:---:|:---:|
 |#0|238Games|https://238g.github.io/Parace/238Games.html|2018/4/8|
+|#0.1|Vtuberゲームス|https://238g.github.io/Parace/238Games2.html|2018/8/5|
 |#1|秒当てゲーム|https://238g.github.io/hitten/index.html|2018/2/12|
 |#2|レッツ・あん肝！|https://238g.github.io/Parace/ankimo_drrrr.html|2018/2/18|
 |#3|シロラン|https://238g.github.io/Parace/sirorun.html|2018/3/2|

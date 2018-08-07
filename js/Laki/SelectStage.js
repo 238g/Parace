@@ -51,12 +51,14 @@ BasicGame.SelectStage.prototype={
 					this.M.NextScene('Play');
 				},this);
 				this.Tween.start();
+				myGa('play','SelectStage','Stage_'+b.stgNum,this.M.gGlb('playCount'));
 			}
 		}
 	},
 	back:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Title');
+		myGa('back','SelectStage','toTitle',this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;

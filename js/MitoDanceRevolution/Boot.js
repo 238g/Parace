@@ -16,6 +16,7 @@ preload:function(){this.load.crossOrigin='Anonymous';this.load.atlasJSONHash('lo
 create:function(){
 	this.M.dGlb({
 		curLang:'jp',
+		playCount:0,
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		Words:this.genWords(),
 		curStage:1,

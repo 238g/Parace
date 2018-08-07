@@ -71,6 +71,7 @@ BasicGame.Play.prototype={
 		},s);
 		tw.onComplete.add(function(){
 			this.isPlaying=!0;
+			this.M.sGlb('playCount',(this.M.gGlb('playCount')+1));
 		},this);
 		tw.start();
 	},
@@ -123,6 +124,7 @@ BasicGame.Play.prototype={
 	again:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Play');
+		myGa('restart','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	respawn:function(){
 		if(this.baseCounter==this.curReach)return this.gameover();
@@ -179,6 +181,7 @@ BasicGame.Play.prototype={
 	back:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('SelectStage');
+		myGa('back','Play','toSelectStage',this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		this.M.SE.play('OnBtn',{volume:1});
@@ -187,6 +190,7 @@ BasicGame.Play.prototype={
 		} else {
 			location.href=BasicGame.YOUTUBE_URL;
 		}
+		myGa('youtube','Play','',this.M.gGlb('playCount'));
 	},
 	tweet:function(){
 		this.M.SE.play('OnBtn',{volume:1});
@@ -199,5 +203,6 @@ BasicGame.Play.prototype={
 				+emoji2+'\n';
 		var hashtags='みとゲーム';
 		this.M.H.tweet(txt,hashtags,location.href);
+		myGa('tweet','Play','',this.M.gGlb('playCount'));
 	},
 };

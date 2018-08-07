@@ -143,17 +143,24 @@ BasicGame.Play.prototype.setTextToSpawnCount = function (val) {
 	this.SpawnCountTextSprite.changeText(val);
 };
 
-BasicGame.Play.prototype.genBtnSprite = function (x,y,text,nextScene,delay) {
+BasicGame.Play.prototype.genBtnSprite = function (x,y,text,nextScene,delay,num) {
 	var btnSprite = this.M.S.BasicWhiteLabelS(x,y,function () {
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene(nextScene);
+		if(num==1){
+			myGa('restart','Play','Level_'+this.curLevelKey,this.M.getGlobal('playCount'));
+		}else if(num==2){
+			myGa('result','Play','Level_'+this.curLevelKey,this.M.getGlobal('playCount'));
+		}else if(num==3){
+			myGa('back','Play','Level_'+this.curLevelKey,this.M.getGlobal('playCount'));
+		}
 	},text,this.M.S.BaseTextStyleS(25),{tint:BasicGame.MAIN_TINT});
 	btnSprite.scale.setTo(0);
 	this.M.T.popUpB(btnSprite,{duration:800,delay:delay}).start();
 };
 
 BasicGame.Play.prototype.showEndBtns = function () {
-	this.genBtnSprite(this.world.centerX,this.world.centerY-100,'もう一度','Play',0);
-	this.genBtnSprite(this.world.centerX,this.world.centerY,'結果画面へ','Result',500);
-	this.genBtnSprite(this.world.centerX,this.world.centerY+100,'タイトル画面へ','Title',1000);
+	this.genBtnSprite(this.world.centerX,this.world.centerY-100,'もう一度','Play',0,1);
+	this.genBtnSprite(this.world.centerX,this.world.centerY,'結果画面へ','Result',500,2);
+	this.genBtnSprite(this.world.centerX,this.world.centerY+100,'タイトル画面へ','Title',1000,3);
 };

@@ -50,6 +50,7 @@ BasicGame.Result.prototype = {
 					+emoji+'\n';
 		var hashtags = 'ケリンゲーム';
 		this.M.H.tweet(text,hashtags,location.href);
+		myGa('tweet','Result','Level_'+this.curLevelKey,this.M.getGlobal('playCount'));
 	},
 
 };

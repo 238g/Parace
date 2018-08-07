@@ -43,43 +43,28 @@
 	<meta name="msapplication-TileImage" content="images/Kerin/favicons/ms-icon-144x144.png">
 	<link rel="shortcut icon" type="image/x-icon" href="images/Kerin/favicons/favicon.ico">
 
-	<!-- <script src="./js/public/phaser2.10.5.js"></script> -->
 	<script src="./js/public/phaser2.10.5.min.js"></script>
 
 	<script src="js/public/Env.js"></script>
-	<script src="js/public/Middleware.js"></script>
+	<script src="js/public/Middleware.js?180807"></script>
 
-	<script src="js/Kerin/Boot.js"></script>
+	<script src="js/Kerin/Boot.js?180807"></script>
 	<script src="js/Kerin/LevelInfo.js?180616"></script>
 	<script src="js/Kerin/Preloader.js?180616"></script>
-	<script src="js/Kerin/Title.js"></script>
-	<script src="js/Kerin/SelectLevel.js?180616"></script>
-	<script src="js/Kerin/Play.js?180616"></script>
-	<script src="js/Kerin/PlayContents.js"></script>
-	<script src="js/Kerin/Result.js"></script>
+	<script src="js/Kerin/Title.js?180807"></script>
+	<script src="js/Kerin/SelectLevel.js?180807"></script>
+	<script src="js/Kerin/Play.js?180807"></script>
+	<script src="js/Kerin/PlayContents.js?180807"></script>
+	<script src="js/Kerin/Result.js?180807"></script>
 
 	<style type="text/css">
-		body {
-			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
-			background: #000;
-		}
-
-		canvas {
-			margin: auto !important;
-		}
+		body {margin: 0px 0px 1px 0px;background: #000;}
+		canvas {margin: auto !important;}
 	</style>
 </head>
 <body>
 
-	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(500, 800, Phaser.AUTO),
-				BasicGame, 
-				'Boot'
-			);
-		};
-	</script>
+	<script type="text/javascript">window.onload=function(){new Middleware(new Phaser.Game(500,800,Phaser.AUTO),BasicGame,'Boot');};</script>
 
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->
