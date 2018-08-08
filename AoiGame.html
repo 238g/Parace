@@ -5,10 +5,14 @@
 	<title>グンッマー葵</title>
 	<meta name="apple-mobile-web-app-title" content="グンッマー葵">
 
+	<meta name="keywords" content="富士葵,キクノジョー,バーチャルYouTuber,Vtuber,ミニゲーム,ゲーム,Vtuberゲームス" />
+	<meta name="description" content="富士葵ちゃんの二次創作ゲームです。キクノジョーをグンッすべく、葵ちゃんが奮闘します！簡単なタッチ操作で遊べるので是非遊んでくださいね！" />
+
+	<link rel="alternate" href="https://238g.github.io/Parace/AoiGame.html" hreflang="jp" />
+	<link rel="alternate" href="https://238g.github.io/Parace/AoiGame.html?lang=en" hreflang="en" />
+
 	<meta name="theme-color" content="#000000">
-
 	<meta name="viewport" content="initial-scale=1 maximum-scale=1 user-scalable=0 minimal-ui" />
-
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="HandheldFriendly" content="true" />
@@ -43,7 +47,6 @@
 	<meta name="msapplication-TileImage" content="images/AoiGame/favicons/ms-icon-144x144.png">
 	<link rel="shortcut icon" type="image/x-icon" href="images/AoiGame/favicons/favicon.ico">
 
-	<!-- <script src="js/public/phaser2.10.5.js"></script> -->
 	<script src="js/public/phaser2.10.5.min.js"></script>
 
 	<script src="js/public/Env.js"></script>
@@ -60,27 +63,13 @@
 	<script src="js/AoiGame/Result.js"></script>
 
 	<style type="text/css">
-		body {
-			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
-			background: #000;
-		}
-
-		canvas {
-			margin: auto !important;
-		}
+		body {margin: 0px 0px 1px 0px;background: #000;}
+		canvas {margin: auto !important;}
 	</style>
 </head>
 <body>
 
-	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(360, 640, Phaser.AUTO),
-				BasicGame, 
-				'Boot'
-			);
-		};
-	</script>
+	<script type="text/javascript">window.onload=function(){new Middleware(new Phaser.Game(360,640,Phaser.AUTO),BasicGame,'Boot')};</script>
 
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->

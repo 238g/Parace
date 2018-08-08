@@ -1,23 +1,19 @@
-BasicGame.Title = function () {};
-BasicGame.Title.prototype = {
-	init: function () {
-		this.inputEnabled = false;
+BasicGame.Title=function(){};
+BasicGame.Title.prototype={
+	init: function(){
+		this.inputEnabled=!1;
 		this.time.events.removeAll();
 	},
-
-	create: function () {
-		this.BgContainer();
+	create: function(){
+		this.stage.backgroundColor=this.M.getConst('WHITE_COLOR');
+		this.genBgCharSprite();
+		this.genTitleTextSprite();
 		this.BtnContainer();
 		this.soundController();
-		this.inputController();
+		this.time.events.add(500,function(){
+			this.inputEnabled=!0; 
+		},this);
 	},
-
-	inputController: function () {
-		this.time.events.add(500, function () {
-			this.inputEnabled = true; 
-		}, this);
-	},
-
 	soundController: function () {
 		var s = this.M.SE;
 		s.stop('currentBGM');
@@ -30,12 +26,6 @@ BasicGame.Title.prototype = {
 			s.stop('currentBGM');
 			s.play('TitleBGM',{isBGM:true,loop:true,volume:1});
 		});
-	},
-
-	BgContainer: function () {
-		this.stage.backgroundColor = this.M.getConst('WHITE_COLOR');
-		this.genBgCharSprite();
-		this.genTitleTextSprite();
 	},
 
 	genBgCharSprite: function () {
@@ -103,16 +93,15 @@ BasicGame.Title.prototype = {
 		},text,textStyle,{tint:tint});
 	},
 
-	genOtherGameBtnSprite: function (x,y,textStyle,tint) {
-		var text = '他のゲームを遊ぶ';
-		var label = this.M.S.BasicGrayLabel(x,y,function () {
-			var url = 'https://238g.github.io/Parace/238Games.html';
-			if (this.game.device.desktop) {
-				window.open(url,'_blank');
-			} else {
-				location.href = url;
+	genOtherGameBtnSprite:function(x,y,textStyle,tint){
+		this.M.S.BasicGrayLabel(x,y,function(){
+			var u='https://238g.github.io/Parace/238Games2.html';
+			if(this.game.device.desktop){
+				window.open(u,'_blank');
+			}else{
+				location.href=u;
 			}
-		},text,textStyle,{tint:tint});
+		},'他のゲームを遊ぶ',textStyle,{tint:tint});
 	},
 
 	genLogoBtnSprite: function () {
