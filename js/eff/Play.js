@@ -148,7 +148,7 @@ BasicGame.Play.prototype = {
 		var x = this.world.centerX;
 		var y = this.world.centerY+260;
 		var btn = s.genButton(x,y,'greySheet',function () {
-			var url = 'https://238g.github.io/Parace/238Games.html';
+			var url = 'https://238g.github.io/Parace/238Games2.html';
 			if (this.game.device.desktop) {
 				window.open(url,'_blank');
 			} else {
