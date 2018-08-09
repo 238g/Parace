@@ -166,15 +166,28 @@
 		
 				<div class="carousel-inner" role="listbox">
 					<script type="text/javascript">
-						for(var i=GamesInfoLength;i>(GamesInfoLength-5);i--){
-							var number=10+('0'+i).slice(-2);
+						var arr=[];
+						for(var i=GamesInfoLength;i>(GamesInfoLength-12);i--)arr.push(10+('0'+i).slice(-2));
+						// arr.push(1014);
+						var a=arr.length;
+						while(a){
+							var j=Math.floor(Math.random()*a);
+							var t=arr[--a];
+							arr[a]=arr[j];
+							arr[j]=t;
+						}
+						var count=0;
+						for(var k in arr){
+							var number=arr[k];
 							var info=GamesInfo[number];
 							document.write(
-								'<div class="carousel-item'+(i==GamesInfoLength?' active':'')+'">'
+								'<div class="carousel-item'+(count==0?' active':'')+'">'
 									+'<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
 										+'<img src="'+info.tc+'" alt="ゲーム『'+info.title+'』のカルーセルイメージ">'
 									+'</a>'
 								+'</div>');
+							count++;
+							if(count==5)break;
 						}
 					</script>
 				</div>

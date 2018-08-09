@@ -11,8 +11,8 @@ BasicGame.Preloader.prototype={
 	loadAssets:function(){
 		this.M.S.loadLoadingAssets();
 		var i={
-			'WP':'images/OmesisCommanders/WhitePaper.jpg',
-			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
+			'WP':'images/TruckGoddess/WhitePaper.jpg',
+			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -34,5 +34,5 @@ BasicGame.Preloader.prototype={
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };
