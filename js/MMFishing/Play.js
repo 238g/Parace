@@ -397,7 +397,7 @@ BasicGame.Play.prototype={
 		this.Float.loadTexture('Float_1');
 		this.FishingCounterTextSprite.changeText('');
 		this.start();
-		myGa('restart','Play','',this.M.gGlb('playCount'));
+		myGa('restart','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	tweet:function(){
 		if(!this.inputEnabled)return;
@@ -420,24 +420,24 @@ BasicGame.Play.prototype={
 				+emoji+'\n';
 		var ht=this.curWords.TweetHT;
 		this.M.H.tweet(txt,ht,location.href);
-		myGa('tweet','Play','',this.M.gGlb('playCount'));
+		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	back:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('Title');
-		myGa('back','Play','toTitle',this.M.gGlb('playCount'));
+		myGa('back','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		window.open(BasicGame.YOUTUBE_URL,'_blank');
-		myGa('youtube','Play','',this.M.gGlb('playCount'));
+		myGa('youtube','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	onOtherGames:function(){
 		if(!this.inputEnabled)return;
 		this.M.SE.play('OnBtn',{volume:1});
 		window.open(BasicGame.MY_GAMES_URL,'_blank');
-		myGa('othergames','Play','',this.M.gGlb('playCount'));
+		myGa('othergames','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 };

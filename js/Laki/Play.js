@@ -389,7 +389,7 @@ BasicGame.Play.prototype={
 				+emoji+'\n';
 		var ht='ラキゲーム';
 		this.M.H.tweet(txt,ht,location.href);
-		myGa('tweet','Play','',this.M.gGlb('playCount'));
+		myGa('tweet','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	again:function(){
 		this.M.SE.play('OnStart',{volume:1});
@@ -399,12 +399,12 @@ BasicGame.Play.prototype={
 	back:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('SelectStage');
-		myGa('back','Play','toSelectStage',this.M.gGlb('playCount'));
+		myGa('back','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.game.device.desktop?window.open(BasicGame.YOUTUBE_URL,'_blank'):location.href=BasicGame.YOUTUBE_URL;
-		myGa('youtube','Play','',this.M.gGlb('playCount'));
+		myGa('youtube','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	onOtherGames:function(){
 		this.M.SE.play('OnBtn',{volume:1});
@@ -413,6 +413,6 @@ BasicGame.Play.prototype={
 		} else {
 			location.href=BasicGame.MY_GAMES_URL;
 		}
-		myGa('othergames','Play','',this.M.gGlb('playCount'));
+		myGa('othergames','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 };

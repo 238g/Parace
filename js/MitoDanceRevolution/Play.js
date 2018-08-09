@@ -181,7 +181,7 @@ BasicGame.Play.prototype={
 	back:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.NextScene('SelectStage');
-		myGa('back','Play','toSelectStage',this.M.gGlb('playCount'));
+		myGa('back','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		this.M.SE.play('OnBtn',{volume:1});
@@ -190,7 +190,7 @@ BasicGame.Play.prototype={
 		} else {
 			location.href=BasicGame.YOUTUBE_URL;
 		}
-		myGa('youtube','Play','',this.M.gGlb('playCount'));
+		myGa('youtube','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 	tweet:function(){
 		this.M.SE.play('OnBtn',{volume:1});
@@ -203,6 +203,6 @@ BasicGame.Play.prototype={
 				+emoji2+'\n';
 		var hashtags='みとゲーム';
 		this.M.H.tweet(txt,hashtags,location.href);
-		myGa('tweet','Play','',this.M.gGlb('playCount'));
+		myGa('tweet','Play','Stage_'+this.curStage,this.M.gGlb('playCount'));
 	},
 };

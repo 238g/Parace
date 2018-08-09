@@ -120,7 +120,7 @@ BasicGame.Title.prototype={
 			} else {
 				location.href = BasicGame.MY_GAMES_URL;
 			}
-			myGa('othergames','Title','',this.M.getGlobal('playCount'));
+			myGa('othergames','Title','othergames',this.M.getGlobal('playCount'));
 		},text,textStyle,{tint:tint});
 	},
 	genLogoBtnSprite:function(x,y){
@@ -131,7 +131,7 @@ BasicGame.Title.prototype={
 			} else {
 				location.href = BasicGame.YOUTUBE_URL;
 			}
-			myGa('youtube','Title','',this.M.getGlobal('playCount'));
+			myGa('youtube','Title','youtube',this.M.getGlobal('playCount'));
 		});
 		logoSprite.anchor.setTo(0,.5);
 	},
