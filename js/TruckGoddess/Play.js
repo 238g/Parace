@@ -132,6 +132,7 @@ BasicGame.Play.prototype={
 			this.respawnEnemy(-1);
 		},this);
 		t.start();
+		this.M.setGlobal('playCount',this.M.getGlobal('playCount')+1);
 	},
 	end:function(){
 		this.isPlaying=!1;

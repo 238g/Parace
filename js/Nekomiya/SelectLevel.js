@@ -23,6 +23,7 @@ BasicGame.SelectLevel.prototype={
 	play:function(b){
 		this.M.SE.play('OnBtn',{volume:1});
 		this.M.setGlobal('curLevel',b.level);
+		myGa('play','SelectLevel','Level_'+b.level,this.M.getGlobal('playCount'));
 		this.M.NextScene('Play');
 	},
 	back:function(){

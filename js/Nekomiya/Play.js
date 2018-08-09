@@ -105,6 +105,7 @@ BasicGame.Play.prototype={
 		this.isPlaying=!0;
 		this.nextClay();
 		this.input.onDown.add(this.onInput,this);
+		this.M.setGlobal('playCount',this.M.getGlobal('playCount')+1);
 	},
 	end:function(type){
 		this.isPlaying=!1;

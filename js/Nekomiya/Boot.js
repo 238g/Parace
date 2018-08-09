@@ -22,6 +22,7 @@ create:function(){
 		endTutorialLevel:!1,
 		endTutorialScore:!1,
 		endTutorialSD:!1,
+		playCount:0,
 	});
 	this.M.defineConf({
 		LevelInfo:this.genLevelInfo(),

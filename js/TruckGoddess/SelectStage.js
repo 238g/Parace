@@ -89,6 +89,7 @@ BasicGame.SelectStage.prototype={
 				this.M.NextScene('Play');
 			},this);
 			tween.start();
+			myGa('play','SelectStage','Stage_'+this.curStage,this.M.getGlobal('playCount'));
 		}
 	},
 	genHUD:function(){

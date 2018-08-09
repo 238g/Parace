@@ -20,6 +20,7 @@ create:function(){
 	this.M.defineGlobal({
 		endTut:!1,
 		curStage:1,
+		playCount:0,
 	});
 	this.M.defineConf({
 		StageInfo:this.genStageInfo(),

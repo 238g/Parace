@@ -79,16 +79,15 @@ BasicGame.Play.prototype.FrontContainer = function () {
 	this.genSpawnCountTextSprite();
 };
 
-BasicGame.Play.prototype.genStartTextSprite = function () {
-	this.StartTextSprite = this.M.S.genText(
+BasicGame.Play.prototype.genStartTextSprite=function(){
+	this.StartTextSprite=this.M.S.genText(
 		this.world.centerX,this.world.centerY,
-		(this.LevelInfo.infinite)?'永遠に\n障害を避けて行け！':'目的地まで\n障害を避けて行け！',
-		this.M.S.BaseTextStyleS(50)
-	);
+		(this.LevelInfo.infinite)?'永遠に\n障害を避けて行け！':'目的地'+this.LevelInfo.clearCount+'まで\n障害を避けて行け！',
+		this.M.S.BaseTextStyleS(50));
 	this.StartTextSprite.setScale(0,0);
-	this.StartTextSprite.addTween('popUpB',{duration: 1200});
-	this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function () {
-		this.time.events.add(800, this.start, this);
+	this.StartTextSprite.addTween('popUpB',{duration:1200});
+	this.M.T.onComplete(this.StartTextSprite.multipleTextTween.popUpB,function(){
+		this.time.events.add(800,this.start,this);
 	});
 	this.StartTextSprite.startTween('popUpB');
 };

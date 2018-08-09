@@ -1,23 +1,12 @@
-BasicGame = {};
-BasicGame.Boot = function() {};
-BasicGame.Boot.prototype = {
-	init: function () {
-		this.M.BootInit(false);
+BasicGame={};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+	init:function(){this.M.BootInit(!1);},
+	preload:function(){
+		this.load.crossOrigin='Anonymous';
+		this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');
 	},
-
-	preload: function () {
-		this.load.crossOrigin = 'Anonymous';
-		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
-	},
-
-	create: function () {
-		this.defineConst();
-		this.defineGlobal();
-		this.defineConf();
-		this.M.NextScene('Preloader');
-	},
-
-	defineConst: function () {
+	create:function(){
 		this.M.defineConst({
 			GAME_TITLE: document.title,
 			MAIN_COLOR: '#fde5b1',
@@ -28,16 +17,11 @@ BasicGame.Boot.prototype = {
 			TOUCH_OR_CLICK: (this.game.device.touch)?'タッチ':'クリック',
 			EN_TOUCH_OR_CLICK: (this.game.device.touch)?'TOUCH':'CLICK',
 		});
-	},
-
-	defineGlobal: function () {
 		this.M.defineGlobal({
-			loadedOnlyFirst: false,
+			playCount:0,
+			loadedOnlyFirst:!1,
 		});
-	},
-
-	defineConf: function () {
-		this.M.defineConf({
-		});
+		this.M.defineConf({});
+		this.M.NextScene('Preloader');
 	},
 };

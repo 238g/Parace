@@ -20,7 +20,7 @@ BasicGame.Play.prototype = {
 		this.test();
 	},
 
-	GameManager: function () {
+	GameManager:function(){
 		this.GM = {
 			inputEnabled: false,
 			isPlaying: false,
@@ -62,15 +62,10 @@ BasicGame.Play.prototype = {
 		};
 	},
 
-	getTrumpInfors: function () {
-		var arr = [];
-		for (var i=1;i<=13;i++) {
-			arr.push('Heart_'+i);
-			arr.push('Spade_'+i);
-			arr.push('Club_'+i);
-			arr.push('Diamond_'+i);
-		}
-		return arr;
+	getTrumpInfors:function(){
+		var a=[];
+		for(var i=1;i<=13;i++)a.push('Heart_'+i);a.push('Spade_'+i);a.push('Club_'+i);a.push('Diamond_'+i);
+		return a;
 	},
 
 	BgContainer: function () {
@@ -426,6 +421,8 @@ BasicGame.Play.prototype = {
 	start: function () {
 		this.GM.isPlaying = true;
 		this.startRound();
+		this.M.setGlobal('playCount',this.M.getGlobal('playCount')+1);
+		myGa('play','Play','Mode_'+this.GM.currentMode,this.M.getGlobal('playCount'));
 	},
 
 	startRound: function () {
