@@ -13,6 +13,8 @@ BasicGame.Preloader.prototype={
 		var i={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+			'AbdominalMuscle':'images/eff/Tree.png',
+
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
