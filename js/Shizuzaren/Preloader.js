@@ -10,11 +10,24 @@ BasicGame.Preloader.prototype={
 	},
 	loadAssets:function(){
 		this.M.S.loadLoadingAssets();
+		this.load.spritesheet('Conveyor','images/Shizuzaren/Conveyor.png',940/4,354/6);
+		this.load.spritesheet('Cords','images/Shizuzaren/Cords.png',16,26);
 		var i={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-			'AbdominalMuscle':'images/eff/Tree.png',
-
+			'AbdominalMuscle':'images/Shizuzaren/AbdominalMuscle.png',
+			'Gilzaren_1':'images/Shizuzaren/Gilzaren_1.png',
+			'Gilzaren_2':'images/Shizuzaren/Gilzaren_2.png',
+			'Bg_1':'images/Shizuzaren/Bg_1.jpg',
+			'Bg_2':'images/Shizuzaren/Bg_2.jpg',
+			'Bg_3':'images/Shizuzaren/Bg_3.jpg',
+			'Bg_4':'images/Shizuzaren/Bg_4.jpg',
+			'Machine_1':'images/Shizuzaren/Machine_1.png',
+			'Bell':'images/Shizuzaren/Bell.png',
+			'LastCord':'images/Shizuzaren/LastCord.png',
+			'Gift':'images/Shizuzaren/Gift.png',
+			'BackArrow':'images/Shizuzaren/BackArrow.png',
+			'AbdominalMuscleIcon':'images/Shizuzaren/AbdominalMuscleIcon.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -32,7 +45,7 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		this.stage.disableVisibilityChange=!1;
+		// this.stage.disableVisibilityChange=!1; // TODO ok
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},

@@ -25,7 +25,7 @@ BasicGame.Boot.prototype.genFishInfo=function(){
 			waitTime:1000,LRTime:2000,floatMvTw:300,
 			catch:0,
 		},
-		6:{name:'うしうみ',
+		6:{name:'うみうし',
 			countMin:90,countMax:200,rate:5,
 			waitTime:800,LRTime:1000,floatMvTw:150,
 			catch:0,
