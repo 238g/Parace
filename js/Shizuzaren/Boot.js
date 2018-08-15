@@ -22,7 +22,9 @@ create:function(){
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		growMuscleCount:1,
 		havingMuscleCount:0,
+		efficiency:1,
 		Words:this.genWords(),
+		GiftInfo:this.genGiftInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

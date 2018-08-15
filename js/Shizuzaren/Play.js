@@ -24,7 +24,7 @@ BasicGame.Play.prototype={
 		this.genContents();
 
 		this.start();
-		this.tes();
+		this.test();
 	},
 	update:function(){
 		if(this.isPlaying){
@@ -47,7 +47,7 @@ BasicGame.Play.prototype={
 	start:function(){
 		this.isPlaying=this.inputEnabled=!0;
 	},
-	tes:function(){
+	test:function(){
 		if(__ENV!='prod'){
 			this.growMuscleCount=8;
 			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.end,this);
@@ -206,6 +206,7 @@ BasicGame.Play2.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
+		this.GiftInfo=this.M.gGlb('GiftInfo');
 		// Glb
 		this.cordLocation='right';
 
@@ -245,6 +246,7 @@ BasicGame.Play2.prototype={
 		this.HavingMCTS=this.M.S.genTxt(this.world.width*.88,this.world.height*.05,'x'+this.M.gGlb('havingMuscleCount'),this.M.S.txtstyl(25));
 
 		this.start();
+		this.test();
 	},
 	update:function(){
 		if(this.isPlaying){
@@ -265,6 +267,11 @@ BasicGame.Play2.prototype={
 	start:function(){
 		this.isPlaying=!0;
 	},
+	test:function(){
+		if(__ENV!='prod'){
+			this.M.sGlb('havingMuscleCount',100);
+		}
+	},
 	////////////////////////////////////// PlayContents
 	genGifts:function(){
 		this.GiftsCollisionGroup=this.physics.p2.createCollisionGroup();
@@ -278,15 +285,6 @@ BasicGame.Play2.prototype={
 			s.body.setCollisionGroup(this.GiftsCollisionGroup);
 			s.body.collides(this.GiftsCollisionGroup);
 			s.body.collideWorldBounds=!0;
-		},this);
-
-		// TODO del TEST
-		return;
-		this.time.events.loop(300,function(){
-			var s=this.Gifts.getFirstDead();
-			if(s){
-				s.reset(this.world.randomX,0);
-			}			
 		},this);
 	},
 	genBellCord:function(){
@@ -345,20 +343,66 @@ BasicGame.Play2.prototype={
 		}
 	},
 	play:function(){
-		if(this.M.gGlb('havingMuscleCount')>0){
-			var havingMuscleCount=this.M.gGlb('havingMuscleCount')-1;
-			this.M.sGlb('havingMuscleCount',havingMuscleCount);
-			this.HavingMCTS.changeText('x'+havingMuscleCount);
+		for(var i=0;i<this.M.gGlb('efficiency');i++){
+			if(this.M.gGlb('havingMuscleCount')>0){
+				var havingMuscleCount=this.M.gGlb('havingMuscleCount')-1;
+				this.M.sGlb('havingMuscleCount',havingMuscleCount);
+				this.HavingMCTS.changeText('x'+havingMuscleCount);
 
-			// TODO select gift
-			// TODO change conf
+				var gift=this.rootbox();
+				// return this.jackpot(this.GiftInfo[1]);//TODO del
+				switch(gift.key){
+					case 1:return this.jackpot(gift);
+					case 2:
+						if(this.GiftInfo[1].rate<=5E3)
+							this.GiftInfo[1].rate++;
+						break;
+					case 3:
+						if(this.M.gGlb('growMuscleCount')<this.GiftInfo[3].effectMax)
+							this.M.sGlb('growMuscleCount',this.M.gGlb('growMuscleCount')+1);
+						break;
+					case 4:
+						if(this.M.gGlb('efficiency')<this.GiftInfo[4].effectMax)
+							this.M.sGlb('efficiency',this.M.gGlb('efficiency')+1);
+						break;
+					case 5:
+						if(this.GiftInfo[5].rate<=5E3)
+							for(var j=2;j<=5;j++)this.GiftInfo[j].rate+=10;
+						break;
+				}
 
-			// TODO for if conf efficiency>1
-			var s=this.Gifts.getFirstDead();
-			if(s){
+				var s=this.Gifts.getFirstDead()||this.Gifts.getRandom();
 				s.reset(this.world.randomX,0);
-				// TODO tint from conf
+				s.tint=gift.tint;
+			}else{
+				break;
 			}
 		}
+	},
+	rootbox:function(){
+		var sumRate=0;
+		for(var k in this.GiftInfo)sumRate+=this.GiftInfo[k].rate;
+		var target=this.rnd.integerInRange(1,sumRate);
+		for(var k in this.GiftInfo){
+			var info=this.GiftInfo[k];
+			if(target<=info.rate)return info;
+			target-=info.rate;
+		}
+		return info;
+	},
+	jackpot:function(gift){
+		this.isPlaying=!1;
+		var s=this.add.sprite(this.world.randomX,0,'GiftL');
+		s.anchor.setTo(.5);
+		s.scale.setTo(0);
+		s.tint=gift.tint;
+		var twA=this.add.tween(s).to({x:this.world.centerX,y:this.world.centerY},3E3,Phaser.Easing.Cubic.Out,!0);
+		twA.onComplete.add(function(){
+			// TODO
+			console.log('おめでとう');
+			// s.destroy();//TODO del
+		},this);
+		twA.start();
+		this.add.tween(s.scale).to({x:1,y:1},3E3,Phaser.Easing.Cubic.Out,!0);
 	},
 };

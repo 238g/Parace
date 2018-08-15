@@ -26,6 +26,7 @@ BasicGame.Preloader.prototype={
 			'Bell':'images/Shizuzaren/Bell.png',
 			'LastCord':'images/Shizuzaren/LastCord.png',
 			'Gift':'images/Shizuzaren/Gift.png',
+			'GiftL':'images/Shizuzaren/GiftL.png',
 			'BackArrow':'images/Shizuzaren/BackArrow.png',
 			'AbdominalMuscleIcon':'images/Shizuzaren/AbdominalMuscleIcon.png',
 		};
