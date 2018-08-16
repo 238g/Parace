@@ -17,9 +17,10 @@ BasicGame.Play.prototype={
 		this.Tween=this.FirstTween=this.LastTween={};
 	},
 	create:function(){
+		this.stage.disableVisibilityChange=!1;
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#ffffff';
-		// this.M.SE.playBGM('PlayBGM',{volume:1});
+		this.M.SE.playBGM('PlayBGM',{volume:.8});
 
 		this.genContents();
 
@@ -120,7 +121,6 @@ BasicGame.Play.prototype={
 	},
 	genFrontConveyor:function(){
 		var s;
-
 		this.Gilzarens=this.add.group();
 		for(var i=0;i<3;i++){
 			s=this.add.sprite(this.world.width*1.5,this.world.centerY,'Gilzaren_1');
@@ -168,6 +168,7 @@ BasicGame.Play.prototype={
 		twE.onComplete.add(this.getMuscle,this);
 		this.FirstTween=twA;
 		this.LastTween=twE;
+		this.M.SE.play('GrabMuscle',{volume:1});
 	},
 	getMuscle:function(){
 		var havingMuscleCount=this.M.gGlb('havingMuscleCount')+1;
@@ -176,13 +177,14 @@ BasicGame.Play.prototype={
 
 		if(!this.FirstTween.isRunning&&!this.LastTween.isRunning){
 			this.inputEnabled=!0;
+			this.M.SE.play('GetMuscle',{volume:3});
 		}
 	},
 	toPlay2:function(){
 		if(this.isPlaying&&this.inputEnabled){
 			if(!this.Tween.isRunning){
 				this.isPlaying=!1;
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('OnStart',{volume:3});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -198,7 +200,7 @@ BasicGame.Play.prototype={
 		if(this.isPlaying&&this.inputEnabled){
 			if(!this.Tween.isRunning){
 				this.isPlaying=!1;
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('OnStart',{volume:3});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -211,13 +213,16 @@ BasicGame.Play.prototype={
 		}
 	},
 	tweet:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
+		this.M.SE.play('OnBtn',{volume:1});
 		var emoji='💪🦇💪🦇💪🦇💪';
-		var res='';
+		var res=this.makeSumText()+'\n';
 		for(var k in this.GiftInfo)res+=(this.GiftInfo[k].effect+': '+this.GiftInfo[k].count+this.curWords.Count+'\n');
 		var txt=this.curWords.TweetTtl+'\n'+emoji+'\n'+res+emoji+'\n';
 		this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
 		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+	},
+	makeSumText:function(){
+		return this.curWords.SumCount+this.M.gGlb('sumCount')+this.curWords.Count;
 	},
 };
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -245,9 +250,10 @@ BasicGame.Play2.prototype={
 		this.Tween={};
 	},
 	create:function(){
+		this.stage.disableVisibilityChange=!1;
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#ffffff';
-		// this.M.SE.playBGM('PlayBGM',{volume:1});
+		this.M.SE.playBGM('Play2BGM',{volume:.8});
 
 		this.physics.startSystem(Phaser.Physics.P2JS);
 		this.physics.p2.gravity.y=1E3;
@@ -303,15 +309,13 @@ BasicGame.Play2.prototype={
 		this.add.sprite(this.world.width*.71,this.world.height*.05,'AbdominalMuscleIcon').anchor.setTo(.5);
 		this.HavingMCTS=this.M.S.genTxt(this.world.width*.88,this.world.height*.05,'x'+this.M.gGlb('havingMuscleCount'),this.M.S.txtstyl(25));
 
-		this.ResSp=this.add.sprite(this.world.width,0,'TWP');
+		this.ResSp=this.add.sprite(this.world.width,0,'Bg_5');
 		var txtstyl=this.M.S.txtstyl(50);
 		txtstyl.fill=txtstyl.mStroke='#FF0040';
 		this.ResSp.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.2,this.curWords.Congratulations,txtstyl));
 		this.ResSp.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.9,this.continue,this.curWords.Continue));
 		this.ResSp.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.9,this.tweet,this.curWords.Tweet));
-		this.ResSp.tint=0x000000;
 		this.ResSp.visible=!1;
-		
 	},
 	genGiftTSs:function(){
 		this.GiftTSs=[];
@@ -344,7 +348,7 @@ BasicGame.Play2.prototype={
 		return info.effect+'('+(info.rate/100)+'%): '+info.count+this.curWords.Count;
 	},
 	makeSumText:function(){
-		return this.curWords.SumCount+this.M.gGlb('sumCount');
+		return this.curWords.SumCount+this.M.gGlb('sumCount')+this.curWords.Count;
 	},
 	genGifts:function(){
 		this.GiftsCollisionGroup=this.physics.p2.createCollisionGroup();
@@ -403,7 +407,7 @@ BasicGame.Play2.prototype={
 		if(this.isPlaying){
 			if(!this.Tween.isRunning){
 				this.isPlaying=!1;
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('OnStart',{volume:3});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -416,7 +420,6 @@ BasicGame.Play2.prototype={
 		}
 	},
 	play:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
 		if(this.M.gGlb('havingMuscleCount')>0){
 			for(var i=0;i<this.M.gGlb('efficiency');i++){
 				if(this.M.gGlb('havingMuscleCount')>0){
@@ -438,15 +441,20 @@ BasicGame.Play2.prototype={
 							if(info.rate<=5E3){
 								info.rate++;
 								this.GiftTSs[1].changeText(this.makeGiftText(info));
+								this.M.SE.play('Gift_2',{volume:1});
 							}
 							break;
 						case 3:
-							if(this.M.gGlb('growMuscleCount')<8)
+							if(this.M.gGlb('growMuscleCount')<8){
 								this.M.sGlb('growMuscleCount',this.M.gGlb('growMuscleCount')+1);
+								this.M.SE.play('Gift_3',{volume:1});
+							}
 							break;
 						case 4:
-							if(this.M.gGlb('efficiency')<8)
+							if(this.M.gGlb('efficiency')<8){
 								this.M.sGlb('efficiency',this.M.gGlb('efficiency')+1);
+								this.M.SE.play('Gift_4',{volume:1});
+							}
 							break;
 						case 5:
 							if(this.GiftInfo[5].rate<=5E3){
@@ -455,6 +463,7 @@ BasicGame.Play2.prototype={
 									info.rate+=10;
 									this.GiftTSs[j].changeText(this.makeGiftText(info));
 								}
+								this.M.SE.play('Gift_5',{volume:1});
 							}
 							break;
 					}
@@ -467,6 +476,7 @@ BasicGame.Play2.prototype={
 				}
 			}
 		}
+		this.M.SE.play('Swing',{volume:3});
 	},
 	rootbox:function(){
 		var sumRate=0;
@@ -491,12 +501,15 @@ BasicGame.Play2.prototype={
 		this.ResSp.visible=!0;
 		twA.onComplete.add(function(){
 			this.M.T.moveB(this.ResSp,{xy:{x:0},duration:500}).start();
+			this.M.SE.play('Jackpot',{volume:1});
 		},this);
 		twA.start();
 		this.add.tween(this.ResGift.scale).to({x:1,y:1},3E3,Phaser.Easing.Cubic.Out,!0);
+
+		this.M.SE.play('Gift_1',{volume:1});
 	},
 	continue:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
+		this.M.SE.play('OnBtn',{volume:1});
 		this.ResSp.visible=!1;
 		this.ResSp.x=this.world.width;
 		this.ResGift.destroy();
@@ -504,11 +517,10 @@ BasicGame.Play2.prototype={
 		myGa('continue','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	tweet:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
+		this.M.SE.play('OnBtn',{volume:1});
 		var emoji='💪🦇💪🦇💪🦇💪';
-		var res='';
+		var res=this.makeSumText()+'\n';
 		for(var k in this.GiftInfo)res+=(this.GiftInfo[k].effect+': '+this.GiftInfo[k].count+this.curWords.Count+'\n');
-		// for(var k in this.GiftTSs)res+=(this.GiftTSs[k].text+'\n');
 		var txt=this.curWords.TweetTtl+'\n'+emoji+'\n'+res+emoji+'\n';
 		this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
 		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));

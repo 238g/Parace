@@ -22,6 +22,7 @@ BasicGame.Preloader.prototype={
 			'Bg_2':'images/Shizuzaren/Bg_2.jpg',
 			'Bg_3':'images/Shizuzaren/Bg_3.jpg',
 			'Bg_4':'images/Shizuzaren/Bg_4.jpg',
+			'Bg_5':'images/Shizuzaren/Bg_5.jpg',
 			'Machine_1':'images/Shizuzaren/Machine_1.png',
 			'Bell':'images/Shizuzaren/Bell.png',
 			'LastCord':'images/Shizuzaren/LastCord.png',
@@ -36,7 +37,20 @@ BasicGame.Preloader.prototype={
 	},
 	loadAudio:function(){
 		var s={
-			// BGM:'sounds/BGM/MMFishing/illumination_am300',
+			TitleBGM:'sounds/BGM/Shizuzaren/amenokoibitotachi_CUT',
+			PlayBGM:'sounds/BGM/Shizuzaren/Factory',
+			Play2BGM:'sounds/BGM/Shizuzaren/CasinoMan',
+			GrabMuscle:'sounds/SE/LabJP/Performance/Anime/puyon1',
+			GetMuscle:'sounds/SE/Digital_SFX/powerUp9',
+			OnBtn:'sounds/SE/LabJP/Btn/decision22',
+			OnStart:'sounds/SE/LabJP/Life/Run/dash-leather-shoes1_SHORT',
+			Swing:'sounds/SE/LabJP/Battle/Fight/punch-swing1',
+			Gift_1:'sounds/SE/LabJP/Performance/Anime/shakin1',
+			Gift_2:'sounds/SE/LabJP/Btn/decision12',
+			Gift_3:'sounds/SE/LabJP/Btn/decision9',
+			Gift_4:'sounds/SE/LabJP/Btn/decision20',
+			Gift_5:'sounds/SE/LabJP/Btn/decision10',
+			Jackpot:'sounds/SE/LabJP/Performance/Other/trumpet1',
 		};
 		for(var k in s){
 			var p=s[k];
@@ -47,7 +61,6 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},

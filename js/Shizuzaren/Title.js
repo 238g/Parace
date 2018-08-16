@@ -9,9 +9,10 @@ BasicGame.Title.prototype={
 		this.HowToSprite=null;
 	},
 	create:function(){
+		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.setBackgroundColor(BasicGame.WHITE_COLOR);
-		// this.M.SE.playBGM('BGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1.8});
 
 		this.add.sprite(0,0,'Bg_1');
 		this.add.sprite(this.world.width*.1,0,'Gilzaren_1').anchor.setTo(.5,.65);
@@ -55,7 +56,7 @@ BasicGame.Title.prototype={
 		if(this.inputEnabled){
 			if(!this.Tween.isRunning){
 				this.inputEnabled=!1;
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('OnStart',{volume:3});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -68,38 +69,39 @@ BasicGame.Title.prototype={
 				myGa('start','Title','toPlay',this.M.gGlb('playCount'));
 			}
 		}else{
-			// this.M.SE.playBGM('BGM',{volume:1});
+			this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},
 	howto:function(){
 		this.inputEnabled=!1;
 		this.HowToSprite.visible=!0;
+		this.M.SE.play('OnBtn',{volume:1});
 	},
 	othg:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			window.open(__VTUBER_GAMES,'_blank');
 			myGa('othergames','Title','othergames',this.M.gGlb('playCount'));
 		}
 	},
 	oth:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			window.open(BasicGame.TW_URL,'_blank');
 			myGa('contributor','Title','四季丸.@sikimaru69',this.M.gGlb('playCount'));
 		}
 	},
 	yt1:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			window.open(BasicGame.YOUTUBE_URL_1,'_blank');
 			myGa('youtube','Title','youtube_1',this.M.gGlb('playCount'));
 		}
 	},
 	yt2:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			window.open(BasicGame.YOUTUBE_URL_2,'_blank');
 			myGa('youtube','Title','youtube_2',this.M.gGlb('playCount'));
 		}
