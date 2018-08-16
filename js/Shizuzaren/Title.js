@@ -17,7 +17,7 @@ BasicGame.Title.prototype={
 		this.add.sprite(this.world.width*.1,0,'Gilzaren_1').anchor.setTo(.5,.65);
 		this.add.sprite(this.world.width*.9,0,'Gilzaren_1').anchor.setTo(.5,.65);
 
-		this.M.S.genTxt(this.world.centerX,this.world.height*.2,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
+		this.M.S.genTxt(this.world.centerX,this.world.height*.17,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 
 		var lx=this.world.width*.25;
 		var rx=this.world.width*.75;
@@ -36,7 +36,10 @@ BasicGame.Title.prototype={
 		this.HowToSprite.tint=0x000000;
 		this.HowToSprite.visible=!1;
 		this.HowToSprite.anchor.setTo(.5);
-		var ts=this.M.S.genTxt(0,0,this.curWords.HowToText);
+		var txtstyl=this.M.S.txtstyl(25);
+		txtstyl.fill='#04B404';
+		txtstyl.mStroke='#04B404';
+		var ts=this.M.S.genTxt(0,0,this.curWords.HowToText,txtstyl);
 		this.HowToSprite.addChild(ts);
 		this.input.onDown.add(function(){
 			if(this.HowToSprite.visible){

@@ -10,7 +10,7 @@ BasicGame.Preloader.prototype={
 	},
 	loadAssets:function(){
 		this.M.S.loadLoadingAssets();
-		this.load.spritesheet('Conveyor','images/Shizuzaren/Conveyor.png',940/4,354/6);
+		this.load.spritesheet('Conveyor','images/Shizuzaren/Conveyor.png',235,59);
 		this.load.spritesheet('Cords','images/Shizuzaren/Cords.png',16,26);
 		var i={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
@@ -29,6 +29,7 @@ BasicGame.Preloader.prototype={
 			'GiftL':'images/Shizuzaren/GiftL.png',
 			'BackArrow':'images/Shizuzaren/BackArrow.png',
 			'AbdominalMuscleIcon':'images/Shizuzaren/AbdominalMuscleIcon.png',
+			'TwitterLogoBlue':'images/Shizuzaren/TwitterLogoBlue.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -46,7 +47,7 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		// this.stage.disableVisibilityChange=!1; // TODO ok
+		this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},

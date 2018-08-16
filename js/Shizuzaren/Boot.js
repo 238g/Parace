@@ -16,8 +16,8 @@ init:function(){this.M.BootInit(!1)},
 preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
 create:function(){
 	this.M.dGlb({
-		endTut:!1,
 		playCount:0,
+		sumCount:0,
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		growMuscleCount:1,
@@ -27,4 +27,4 @@ create:function(){
 		GiftInfo:this.genGiftInfo(),
 	});
 	this.M.NextScene('Preloader');
-},};
+}};
