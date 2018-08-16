@@ -12,7 +12,7 @@ BasicGame.Title.prototype={
 		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.setBackgroundColor(BasicGame.WHITE_COLOR);
-		this.M.SE.playBGM('TitleBGM',{volume:1.8});
+		this.M.SE.playBGM('TitleBGM',{volume:1.5});
 
 		this.add.sprite(0,0,'Bg_1');
 		this.add.sprite(this.world.width*.1,0,'Gilzaren_1').anchor.setTo(.5,.65);
