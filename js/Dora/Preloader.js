@@ -20,7 +20,7 @@ BasicGame.Preloader.prototype={
 
 	loadAudio:function(){
 		var s={
-			TitleBGM:'sounds/BGM/Iincyo/Game-Menu',
+			// TitleBGM:'sounds/BGM/Iincyo/Game-Menu',// TODO
 		};
 		for(var k in s){
 			var p=s[k];
@@ -28,7 +28,6 @@ BasicGame.Preloader.prototype={
 			this.load.audio(k,[p+'.mp3',p+'wav']);
 		}
 	},
-
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);

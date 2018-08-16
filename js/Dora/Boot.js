@@ -1,0 +1,22 @@
+BasicGame={
+	GAME_TITLE:document.title,
+	GAME_TITLE_EN:'',//TODO
+	MAIN_COLOR:'#48468f',//TODO
+	MAIN_TINT:0x48468f,//TODO
+	MAIN_TEXT_COLOR:'#302e31',//TODO
+	MAIN_STROKE_COLOR:'#302e31',//TODO
+	WHITE_COLOR:'#f6f4f5',//TODO
+	YOUTUBE_URL:'',//TODO
+};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+init:function(){this.M.BootInit(!1);},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+create:function(){
+	this.M.dGlb({
+		curLang:'jp',
+		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		Words:this.genWords(),
+	});
+	this.M.NextScene('Preloader');
+},};

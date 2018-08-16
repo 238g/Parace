@@ -12,8 +12,7 @@ BasicGame.Boot.prototype.genWords=function(){
 				+'中にお入りください。\n',
 		},
 		en:{
-			Enter:'ENTER',
-			TitleDescription:'',
+			//TODO
 		},
 	};
 };

@@ -10,9 +10,9 @@ BasicGame.Title.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		this.M.SE.playBGM('TitleBGM',{volume:1});
+		// this.M.SE.playBGM('TitleBGM',{volume:1});
 
-		this.M.S.genTxt(this.world.centerX,this.world.height*.2,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
+		this.M.S.genTxt(this.world.centerX,this.world.height*.2,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 		this.M.S.genTxt(this.world.centerX,this.world.centerY,this.curWords.TitleDescription,this.M.S.txtstylS(20));
 		this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Enter);
 
