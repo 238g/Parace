@@ -121,10 +121,16 @@ function genGamesInfo(){
 				release:'2018/7/30',
 			},
 			1025:{id:1025,title:'もちもちフィッシング',url:GI2A('MMFishing'),
-				tColor:'#7ae66f',mColor:'#f6d48f',
+				tColor:'#a981af',mColor:'#e5c6cd',
 				tc:GI2B('MM_Fishing'),imgA:GI2C('MM_Fishing'),imgB:GI2D('MM_Fishing'),
 				caption:'aaaaaaaaaaaaaaa',//TODO
 				release:'2018/8/05',
+			},
+			1026:{id:1026,title:'シズザレン工場',url:GI2A('Shizuzaren'),
+				tColor:'#4f5790',mColor:'#d0c7cc',
+				tc:GI2B('Shizuzaren'),imgA:GI2C('Shizuzaren'),imgB:GI2D('Shizuzaren'),
+				caption:'aaaaaaaaaaaaaaa',//TODO
+				release:'2018/8/17',
 			},
 		},
 	};

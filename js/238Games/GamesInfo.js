@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=25;
+	var totalCount=26;
 	return {
 		GamesInfo:{
 			1001: {
@@ -276,6 +276,17 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				textColor: '#a981af',
 				bgColor: '#e5c6cd',
 				scale: 1.5,
+			},
+			1026: {
+				id: 1026,
+				title: 'シズザレン工場',
+				url: 'https://238g.github.io/Parace/Shizuzaren.html',
+				slideImg: 'GiftL',
+				slideImgUrl: 'images/Shizuzaren/GiftL.png',
+				order: totalCount-26,
+				textColor: '#4f5790',
+				bgColor: '#d0c7cc',
+				scale: 1,
 			},
 		},
 	};
