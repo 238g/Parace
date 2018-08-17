@@ -18,7 +18,8 @@ BasicGame.Title.prototype={
 		this.add.sprite(this.world.width*.1,0,'Gilzaren_1').anchor.setTo(.5,.65);
 		this.add.sprite(this.world.width*.9,0,'Gilzaren_1').anchor.setTo(.5,.65);
 
-		this.M.S.genTxt(this.world.centerX,this.world.height*.17,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
+		this.add.sprite(this.world.centerX,this.world.height*.17,'Title').anchor.setTo(.5);
+		// this.M.S.genTxt(this.world.centerX,this.world.height*.17,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 
 		var lx=this.world.width*.25;
 		var rx=this.world.width*.75;

@@ -20,7 +20,7 @@ create:function(){
 		sumCount:0,
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
-		growMuscleCount:1,
+		growMuscleCount:2,
 		havingMuscleCount:0,
 		efficiency:1,
 		Words:this.genWords(),

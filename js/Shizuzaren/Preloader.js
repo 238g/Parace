@@ -31,6 +31,7 @@ BasicGame.Preloader.prototype={
 			'BackArrow':'images/Shizuzaren/BackArrow.png',
 			'AbdominalMuscleIcon':'images/Shizuzaren/AbdominalMuscleIcon.png',
 			'TwitterLogoBlue':'images/Shizuzaren/TwitterLogoBlue.png',
+			'Title':'images/Shizuzaren/Title.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
