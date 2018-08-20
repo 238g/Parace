@@ -32,6 +32,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			H_Text_5:'正しくシステムを稼動させるためにコンピューターの再起動をします。',
 			H_Text_6:'※ 最終確認に同意しますか？',
 			Cancel:'キャンセル',
+			GaugeDownload:'ダウンロード: ',
 
 
 

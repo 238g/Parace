@@ -1,12 +1,12 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	GAME_TITLE_EN:'',//TODO
-	MAIN_COLOR:'#48468f',//TODO
-	MAIN_TINT:0x48468f,//TODO
-	MAIN_TEXT_COLOR:'#302e31',//TODO
-	MAIN_STROKE_COLOR:'#302e31',//TODO
-	WHITE_COLOR:'#f6f4f5',//TODO
-	YOUTUBE_URL:'',//TODO
+	GAME_TITLE_EN:'DoraGame',
+	MAIN_COLOR:'#ffa424',
+	MAIN_TINT:0xffa424,
+	MAIN_TEXT_COLOR:'#c42021',
+	MAIN_STROKE_COLOR:'#860404',
+	WHITE_COLOR:'#ffffff',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UC53UDnhAAYwvNO7j_2Ju1cQ',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={

@@ -17,12 +17,13 @@ BasicGame.Play.prototype={
 		this.ignoranceAnswer=0;
 		this.silenceAnswer=0;
 		this.HCount=0;
+		this.gaugeMaxWidth=0;
 		// Obj
 		this.Tween={};
 		this.AGroup=this.BGroup=this.CGroup=this.DGroup=this.EGroup=this.FGroup=this.GGroup=
 		this.HGroup=this.IGroup=this.JGroup=this.KGroup=this.LGroup=this.MGroup=this.NGroup=
 		this.HUD=
-		this.HTS=
+		this.HTS=this.Gauge=this.GaugeTS=this.I_CancelBtn=
 		null;
 	},
 	create:function(){
@@ -179,17 +180,42 @@ BasicGame.Play.prototype={
 	I:function(yn){
 		this.HGroup.pendingDestroy=!0;
 
-		// Loading...
+		this.Gauge=this.genGauge(this.world.width*.1,this.world.height*.28,this.world.width*.8,this.world.height*.15,this.IGroup);
+		this.gaugeMaxWidth=this.Gauge.width;
+		this.Gauge.width*=0;
 
-		// this.LoadingTween
-		var gauge=this.genGauge(this.world.width*.1,this.world.height*.3,this.world.width*.8,this.world.height*.15,this.IGroup);
-		var maxWidth=gauge.width;
-		gauge.width*=0;
+		this.GaugeTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.GaugeDownload+Math.floor(this.Gauge.width/this.gaugeMaxWidth*100)+'%',this.M.S.txtstyl(25));
+		this.IGroup.add(this.GaugeTS);
 
-		var twA=this.add.tween(gauge).to({width:maxWidth},3000);
-		twA.start();
+		var twA=this.add.tween(this.Gauge).to({width:this.gaugeMaxWidth*.2},1000,null,!0,500);
+		var twB=this.add.tween(this.Gauge).to({width:this.gaugeMaxWidth*.6},3000,null,!1,300);
+		var twC=this.add.tween(this.Gauge).to({width:this.gaugeMaxWidth*.9},1500,null,!1,400);
+		var twD=this.add.tween(this.Gauge).to({width:this.gaugeMaxWidth},500,null,!1,300);
+		twA.onComplete.add(function(){this.start()},twB);
+		twB.onComplete.add(function(){this.start()},twC);
+		twC.onComplete.add(function(){this.start()},twD);
+		twD.onComplete.add(this.I_2,this);
 
-		this.IGroup.add(this.M.S.genLbl(this.CX,this.BY,this.cancel_I,this.curWords.Cancel));
+		twA.onUpdateCallback(this.changeGauge,this);
+		twB.onUpdateCallback(this.changeGauge,this);
+		twC.onUpdateCallback(this.changeGauge,this);
+		twD.onUpdateCallback(this.changeGauge,this);
+
+		this.I_CancelBtn=this.M.S.genLbl(this.CX,this.BY,this.cancel_I,this.curWords.Cancel);
+		this.IGroup.add(this.I_CancelBtn);
+	},
+	changeGauge:function(){
+		this.GaugeTS.changeText(this.curWords.GaugeDownload+Math.floor(this.Gauge.width/this.gaugeMaxWidth*100)+'%');
+	},
+	I_2:function(){
+		this.GaugeTS.changeText(this.curWords.GaugeDownload+'100%');
+		this.I_CancelBtn.pendingDestroy=!0;
+		this.time.events.add(1500,function(){
+			this.J();//TODO
+		},this);
+	},
+	J:function(){
+		this.IGroup.pendingDestroy=!0;
 	},
 	unfortunately_H:function(){
 		this.HGroup.pendingDestroy=!0;
@@ -198,6 +224,7 @@ BasicGame.Play.prototype={
 	},
 	cancel_I:function(){
 		this.IGroup.pendingDestroy=!0;
+		// TODO
 	},
 	genGauge:function(x,y,w,h,g){
 		g.add(this.M.S.genBmpSqrSp(x,y,w,h,'#333333'));
