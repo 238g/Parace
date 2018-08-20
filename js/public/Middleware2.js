@@ -150,6 +150,7 @@ Middleware.prototype.SpriteManager.prototype={
 		s.scale.setTo(.5);
 		var f=sc.sound.mute?'VolumeMute':(sc.sound.volume==1)?'VolumeMax':'VolumeHalf';
 		s.setFrames(f,f,f,f);
+		return s;
 	},
 	onDownVolBtn:function(s){
 		var sc=this.M.gScn();
@@ -179,6 +180,7 @@ Middleware.prototype.SpriteManager.prototype={
 		s.setFrames(i,i,i,i);
 		s.anchor.setTo(.5);
 		s.scale.setTo(.5);
+		return s;
 	},
 	onDonwFlScBtn:function(s){
 		var sc=this.M.gScn();

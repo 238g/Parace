@@ -10,11 +10,12 @@ BasicGame={
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
-init:function(){this.M.BootInit(!1);},
-preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json');},
+init:function(){this.M.BootInit(!0)},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
 create:function(){
 	this.M.dGlb({
 		curLang:'jp',
+		playCount:0,
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		Words:this.genWords(),
 	});
