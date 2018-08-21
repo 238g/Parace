@@ -9,10 +9,18 @@ BasicGame.Preloader.prototype={
 		this.load.start();
 	},
 	loadAssets:function(){
+		this.load.atlasJSONHash('DoraJumpRope','images/Dora/DoraJumpRope/DoraJumpRope.png','images/Dora/DoraJumpRope/DoraJumpRope.json');
 		this.M.S.loadLoadingAssets();
 		var i={
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
+			'MiniDora_1':'images/Dora/MiniDora_1.jpg',
+			'MiniDora_2':'images/Dora/MiniDora_2.jpg',
+			'MiniDora_3':'images/Dora/MiniDora_3.jpg',
+			'MiniDora_4':'images/Dora/MiniDora_4.jpg',
+			'Dora_1':'images/Dora/Dora_1.png',
+			'Dora_2':'images/Dora/Dora_2.jpg',
+			'Dora_3':'images/Dora/Dora_3.jpg',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();

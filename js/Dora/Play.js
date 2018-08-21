@@ -14,7 +14,7 @@ BasicGame.Play.prototype={
 		this.CY=this.world.centerY;
 		this.LX=this.world.width*.3;
 		this.RX=this.world.width*.7;
-		this.BY=this.world.height*.8;
+		this.BY=this.world.height*.9;
 		this.selectMiss=!1;
 		this.ignoranceAnswer=0;
 		this.silenceAnswer=0;
@@ -68,17 +68,7 @@ BasicGame.Play.prototype={
 	tes:function(){
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.end,this);
-
-			this.AGroup.pendingDestroy=!0;this.OF();
-
-			/*
-			var d=new Date();
-			var a=d.getFullYear();
-			var b=d.getMonth()+1;
-			var c=d.getDate();
-
-			console.log(a,b,c);
-			*/
+			if(this.M.H.getQuery('f')){this.AGroup.pendingDestroy=!0;this[this.M.H.getQuery('f')]();}
 		}
 	},
 	////////////////////////////////////// PlayContents
@@ -88,12 +78,14 @@ BasicGame.Play.prototype={
 		this.genHUD();
 	},
 	AF:function(){
+		this.AGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.AGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.AreUHost));
 		this.AGroup.add(this.M.S.genLbl(this.LX,this.BY,function(){this.BF('N')},'NO'));
 		this.AGroup.add(this.M.S.genLbl(this.RX,this.BY,function(){this.BF('Y')},'YES'));
 	},
 	BF:function(yn){
 		this.AGroup.pendingDestroy=!0;
+		this.BGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.BGroup.add(this.M.S.genTxt(this.CX,this.CY,yn=='Y'?this.curWords.HostHowTo:this.curWords.NotHostHowTo));
 		this.BGroup.add(this.M.S.genLbl(this.CX,this.BY,this.CF,this.curWords.Next));
 	},
@@ -106,6 +98,14 @@ BasicGame.Play.prototype={
 		this.CGroup.add(this.M.S.genLbl(this.RX,this.world.height*.45,function(){this.DF(1)},this.curWords.OtherDevice));
 		this.CGroup.add(this.M.S.genLbl(this.LX,this.world.height*.6,function(){this.DF(2)},this.curWords.DontKnowDevice));
 		this.CGroup.add(this.M.S.genLbl(this.RX,this.world.height*.6,function(){this.DF(3)},this.curWords.NotSayDevice));
+		var sA=this.add.sprite(0,this.world.height,'Dora_1');
+		sA.anchor.setTo(.2,.65);
+		sA.angle=25;
+		var sB=this.add.sprite(this.world.width,this.world.height,'Dora_1');
+		sB.anchor.setTo(.8,.65);
+		sB.angle=-25;
+		this.CGroup.add(sA);
+		this.CGroup.add(sB);
 	},
 	DF:function(ynw){
 		this.CGroup.pendingDestroy=!0;
@@ -132,6 +132,14 @@ BasicGame.Play.prototype={
 				this.DGroup.add(this.M.S.genLbl(this.RX,this.world.height*.45,function(){this.EF(1)},this.curWords.OtherDevice));
 				this.DGroup.add(this.M.S.genLbl(this.LX,this.world.height*.6,function(){this.EF(2)},this.curWords.DontKnowDevice));
 				this.DGroup.add(this.M.S.genLbl(this.RX,this.world.height*.6,function(){this.EF(3)},this.curWords.NotSayDevice));
+				var sA=this.add.sprite(0,this.world.height,'Dora_1');
+				sA.anchor.setTo(.2,.65);
+				sA.angle=25;
+				var sB=this.add.sprite(this.world.width,this.world.height,'Dora_1');
+				sB.anchor.setTo(.8,.65);
+				sB.angle=-25;
+				this.DGroup.add(sA);
+				this.DGroup.add(sB);
 			}else{this.EF(4)}
 		}
 	},
@@ -141,6 +149,12 @@ BasicGame.Play.prototype={
 		if(ynw===2)this.ignoranceAnswer++;
 		if(ynw===3)this.silenceAnswer++;
 		if(ynw===false)this.selectMiss=!0;
+
+		this.stage.backgroundColor='#5e0e07';
+
+		var s=this.add.sprite(this.world.width,this.world.height,'Dora_3');
+		s.anchor.setTo(1);
+		this.EGroup.add(s);
 
 		this.EGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.WhichUse));
 		this.EGroup.add(this.M.S.genLbl(this.LX,this.world.height*.3,function(){this.FF(this.game.device.chrome)},'Chrome'));
@@ -155,6 +169,7 @@ BasicGame.Play.prototype={
 	},
 	FF:function(ynw){
 		this.EGroup.pendingDestroy=!0;
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 
 		if(ynw===2)this.ignoranceAnswer++;
 		if(ynw===3)this.silenceAnswer++;
@@ -312,7 +327,10 @@ BasicGame.Play.prototype={
 
 		this.OGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.O_Text));
 
-		// TODO btns
+		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+		// TODO
+		// this.OGroup.add(this.M.S.genLbl(this.CX,this.BY,this.back,this.curWords.Back));
+		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.HF,this.curWords.Tweet));
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
@@ -324,3 +342,21 @@ BasicGame.Play.prototype={
 
 // omake -> dark hand
 // omake -> black circle blood
+
+
+/*
+自撮り
+https://twitter.com/___Dola/status/1010111543327928321
+
+スマホ壁紙
+https://twitter.com/___Dola/status/1015117421235982336
+https://twitter.com/___Dola/status/1015126691126042624
+*/
+			/*
+			var d=new Date();
+			var a=d.getFullYear();
+			var b=d.getMonth()+1;
+			var c=d.getDate();
+
+			console.log(a,b,c);
+			*/

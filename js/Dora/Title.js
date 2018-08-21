@@ -9,11 +9,16 @@ BasicGame.Title.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.stage.backgroundColor='#ffffff';
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 
 		this.M.S.genTxt(this.world.centerX,this.world.height*.15,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 		this.M.S.genTxt(this.world.width*.3,this.world.centerY,this.curWords.TitleDescription,this.M.S.txtstyl(20));
+		var s=this.add.sprite(this.world.width*.95,this.world.centerY,'DoraJumpRope');
+		s.anchor.setTo(1,.5);
+		s.animations.add('jumping');
+		s.animations.play('jumping',12,!0);
+		// this.add.sprite(this.world.width*.95,this.world.centerY,'MiniDora_'+this.rnd.integerInRange(1,4)).anchor.setTo(1,.5);
 
 		this.M.S.genLbl(this.world.width*.18,this.world.height*.9,this.start,this.curWords.Enter).num=1;
 		this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.start,this.curWords.Bonus).num=2;
