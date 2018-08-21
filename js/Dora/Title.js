@@ -14,14 +14,18 @@ BasicGame.Title.prototype={
 
 		this.M.S.genTxt(this.world.centerX,this.world.height*.15,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 		this.M.S.genTxt(this.world.width*.3,this.world.centerY,this.curWords.TitleDescription,this.M.S.txtstyl(20));
-		this.M.S.genLbl(this.world.width*.3,this.world.height*.9,this.start,this.curWords.Enter);
+
+		this.M.S.genLbl(this.world.width*.18,this.world.height*.9,this.start,this.curWords.Enter).num=1;
+		this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.start,this.curWords.Bonus).num=2;
+		this.M.S.genLbl(this.world.width*.82,this.world.height*.9,this.start,this.curWords.FortuneTelling).num=3;
 
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 		this.genHUD();
 	},
-	start:function(){
+	start:function(b){
 		if(this.inputEnabled){
 			if (!this.Tween.isRunning) {
+				this.M.sGlb('curStg',b.num);
 				this.inputEnabled=!1;
 				// this.M.SE.play('SelectSE',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
@@ -32,7 +36,7 @@ BasicGame.Title.prototype={
 				this.Tween.start();
 			}
 		}else{
-			this.M.SE.playBGM('TitleBGM',{volume:1});
+			// this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},
