@@ -24,8 +24,6 @@ BasicGame.Title.prototype={
 		s.animations.add('jumping');
 		s.animations.play('jumping',12,!0);
 
-		// this.add.sprite(this.world.width*.95,this.world.centerY,'MiniDora_'+this.rnd.integerInRange(1,4)).anchor.setTo(1,.5);
-
 		this.M.S.genLbl(this.world.width*.18,this.world.height*.9,this.start,this.curWords.Enter).num=1;
 		
 		if(this.M.gGlb('isClear'))this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.start,this.curWords.Bonus).num=2;

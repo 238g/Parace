@@ -183,26 +183,39 @@ BasicGame.Play.prototype={
 		}
 
 		var txt;
+		var bg;
 		if(this.ignoranceAnswer>=2){
+			bg=2;
 			txt=this.curWords.IgnoranceAnswerRes;
 		}else if(this.silenceAnswer>=2||(this.silenceAnswer==1&&this.ignoranceAnswer==1)){
+			bg=2;
 			txt=this.curWords.SilenceAnswerRes;
 		}else if(!this.selectMiss){
-			txt=(this.ignoranceAnswer>0||this.silenceAnswer>0)?this.curWords.RightRoughlyAnswerRes:this.curWords.RightAllAnswerRes;
+			if(this.ignoranceAnswer>0||this.silenceAnswer>0){
+				bg=1;
+				txt=this.curWords.RightRoughlyAnswerRes;
+			}else{
+				bg=2;
+				txt=this.curWords.RightAllAnswerRes;
+			}
 		}else{
+			bg=1;
 			txt=this.curWords.WrongAnswerRes;
 		}
+		this.FGroup.add(this.add.sprite(0,0,'Bg_'+bg));
 		this.FGroup.add(this.M.S.genTxt(this.CX,this.CY,txt));
-		this.FGroup.add(this.M.S.genLbl(this.LX,this.BY,this.back,this.curWords.Back));
-		this.FGroup.add(this.M.S.genLbl(this.RX,this.BY,this.GF,this.curWords.Next));
+		this.FGroup.add(this.M.S.genLbl(this.CX,this.BY,this.GF,this.curWords.Next));
 	},
 	GF:function(){
 		this.FGroup.pendingDestroy=!0;
+		this.GGroup.add(this.add.sprite(0,0,'Bg_1'));
 		this.GGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.G_Text));
-		this.GGroup.add(this.M.S.genLbl(this.CX,this.BY,this.HF,this.curWords.Push));
+		this.GGroup.add(this.M.S.genLbl(this.LX,this.BY,this.back,this.curWords.Back));
+		this.GGroup.add(this.M.S.genLbl(this.RX,this.BY,this.HF,this.curWords.Next));
 	},
 	HF:function(){
 		this.GGroup.pendingDestroy=!0;
+		this.stage.backgroundColor='#000000';
 		this.HTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.H_Text_0);
 		this.HGroup.add(this.HTS);
 		this.HGroup.add(this.M.S.genLbl(this.LX,this.BY,this.unfortunately_H,'NO'));
@@ -219,6 +232,8 @@ BasicGame.Play.prototype={
 	IF:function(){
 		this.HGroup.pendingDestroy=!0;
 		this.HUD.visible=!1;
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.inputEnabled=!0;
 
 		this.Gauge=this.genGauge(this.world.width*.1,this.world.height*.28,this.world.width*.8,this.world.height*.15,this.IGroup);
 		this.gaugeMaxWidth=this.Gauge.width;
@@ -268,7 +283,14 @@ BasicGame.Play.prototype={
 		this.IGroup.pendingDestroy=!0;
 		this.HUD.visible=!0;
 
-		this.JGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.J_Text));
+		var s=this.add.sprite(this.CX,this.world.height*.65,'DoraJumpRope');
+		s.anchor.setTo(.5);
+		s.scale.setTo(.5);
+		s.animations.add('jumping');
+		s.animations.play('jumping',12,!0);
+		this.JGroup.add(s);
+
+		this.JGroup.add(this.M.S.genTxt(this.CX,this.world.height*.3,this.curWords.J_Text));
 		this.JGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_J,this.curWords.Cancel));
 		this.JGroup.add(this.M.S.genLbl(this.RX,this.BY,this.KF,this.curWords.MoveOn));
 	},
@@ -291,11 +313,16 @@ BasicGame.Play.prototype={
 	////////////////////////////////////// PlayContents2
 	KF:function(){
 		this.JGroup.pendingDestroy=!0;
+		var s=this.add.sprite(this.world.width,0,'Bg_1');
+		s.scale.setTo(-1,1);
+		this.KGroup.add(s);
 		this.KGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.K_Text));
-		this.KGroup.add(this.M.S.genLbl(this.CX,this.BY,this.LF,this.curWords.Push));
+		this.KGroup.add(this.M.S.genLbl(this.LX,this.BY,this.back,this.curWords.Back));
+		this.KGroup.add(this.M.S.genLbl(this.RX,this.BY,this.LF,this.curWords.Next));
 	},
 	LF:function(){
 		this.KGroup.pendingDestroy=!0;
+		this.stage.backgroundColor='#000000';
 		this.LTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.L_Text_0);
 		this.LGroup.add(this.LTS);
 		this.LGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_L,'NO'));
@@ -340,10 +367,24 @@ BasicGame.Play.prototype={
 		this.NGroup.pendingDestroy=!0;
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		if(!this.curFullScreen)this.scale.stopFullScreen(!1);
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.sGlb('isClear',!0);
+		this.inputEnabled=!0;
 
-		this.OGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.O_Text));
-		// TODO add jump dora
+		this.OGroup.add(this.add.sprite(0,0,'Bg_3'));
+
+		var sA=this.add.sprite(this.world.width*.95,this.world.height*.6,'MiniDora_'+this.rnd.integerInRange(1,4));
+		sA.anchor.setTo(1,.5);
+		this.OGroup.add(sA);
+
+		this.OGroup.add(this.M.S.genTxt(this.CX,this.world.height*.2,this.curWords.O_Text));
+
+		var sB=this.add.sprite(this.CX,this.world.height*.6,'DoraJumpRope');
+		sB.anchor.setTo(.5);
+		sB.scale.setTo(.5);
+		sB.animations.add('jumping');
+		sB.animations.play('jumping',12,!0);
+		this.OGroup.add(sB);
 
 		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
 		this.OGroup.add(this.M.S.genLbl(this.world.centerX,this.BY,this.PF,this.curWords.Campaign));
