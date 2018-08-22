@@ -2,7 +2,7 @@ BasicGame.Boot.prototype.genWords=function(){
 	return {
 		jp:{
 			Enter:'入り口',
-			Bonus:'おまけ',
+			Bonus:'火炎瓶',
 			FortuneTelling:'今日の運勢',
 			TitleDescription:
 				'かなり恐ろしいことが起こるぞ。\n'
@@ -11,18 +11,19 @@ BasicGame.Boot.prototype.genWords=function(){
 				+'命まで取らないのでご安心を。\n'
 				+'覚悟が出来たら中に入るんだぞ。',
 			AreUHost:'よう人間！\nお主は配信者か？',
-			HostHowTo:'first play->fun.this is 3min fin.',//TODO
-			NotHostHowTo:'fun!',//TODO
+			HostHowTo:'※ 配信される際の注意点\nフルスクリーンモードでお楽しみください。\n（右上のアイコンから設定できます。）\n３分程度で完結いたします。\n度胸試しです。\n初見プレイ以外は面白みに欠けます。\n',
+			NotHostHowTo:'後戻りはできないぞ！\n（※ 実際はできます）\n覚悟ができたら進むのじゃ',
+			SoonPlay:'早速遊ぶ',
 			WhichUse:'お主が使っておるのはどれじゃ？',
 			OtherDevice:'その他',
 			DontKnowDevice:'わからない',
 			NotSayDevice:'教えたくない',
 			Back:'もどる',
-			RightRoughlyAnswerRes:'大体合ってますね…\n次のものがあなたに合えばいいのですが…',//TODO
-			RightAllAnswerRes:'全て正解です！\nあなたにピッタリのものを用意しましたよ。',//TODO
-			IgnoranceAnswerRes:'こういったものはあまり詳しくはないのですね。\nでは次のものは楽しめるかもしれません。',//TODO
-			SilenceAnswerRes:'秘密は大切です。\nでは次のものはお好みにならないかもしれませんね。',//TODO
-			WrongAnswerRes:'嘘をおっしゃるのですね。\n仕方ありません。次へどうぞ。',//TODO
+			RightRoughlyAnswerRes:'大体合っておるの…\n次に用意したものがお主に合えばいいのじゃが…',
+			RightAllAnswerRes:'全て正解じゃ！\nお主にピッタリのものを用意したのじゃ！',
+			IgnoranceAnswerRes:'あまり詳しくはないのじゃな\n次のはどうじゃ？どうなんじゃっ？',
+			SilenceAnswerRes:'秘密は大切だの\nたぶん次のものは好きになれるかのう？',
+			WrongAnswerRes:'嘘をついたな！人間ども！！！\n次は正直にやるんじゃ！頼んだぞーー！',
 			Next:'次へ',
 			G_Text:'勇気がある人は、下のボタンをクリックしてください。\n心臓が弱い人、怒りっぽい人は絶対に押さないでください。',//TODO
 			Push:'押す',
@@ -35,6 +36,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			H_Text_6:'※ 最終確認に同意しますか？',//TODO
 			Cancel:'キャンセル',
 			GaugeDownload:'ウィルスをダウンロード中... ',//TODO
+			GaugeDownloaded:'ウィルスダウンロード完了...',//TODO
 			J_Text:'全部、冗談です。\nよく耐えました。あなたは度胸がありますね。\n\n第二弾も用意してあります。チャレンジしますか？',//TODO
 			MoveOn:'進む',
 			Unfortunately_HRes:'けっ、度胸がないのね',//TODO
@@ -47,8 +49,14 @@ BasicGame.Boot.prototype.genWords=function(){
 			M_Text:'利用規約・・・',//TODO
 			Agree:'同意する',//TODO
 			O_Text:'全部冗談です。製作者は善良なのです。\nよく耐えました。あなたは真の勇者です。\nコーヒーでも飲んで、バクバクしている心臓を落ち着けましょう。',//TODO
-
+			Campaign:'ギャンペーン',
 			Tweet:'ツイートする',
+			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			TweetHT:'ドーラゲーム',
+
+			Q_Text:'オカマに火炎瓶を投げるのはやめてください',
+
+			WatchDora:'眺めるだけ\nドーラ様',
 		},
 		en:{
 			//TODO

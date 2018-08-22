@@ -14,6 +14,7 @@ BasicGame.Preloader.prototype={
 		var i={
 			'WP':'images/OmesisCommanders/WhitePaper.jpg',
 			'TWP':'images/Nekomiya/TranslucentWhitePaper.png',
+			'Bg_horror':'images/Dora/Bg_horror.jpg',
 			'MiniDora_1':'images/Dora/MiniDora_1.jpg',
 			'MiniDora_2':'images/Dora/MiniDora_2.jpg',
 			'MiniDora_3':'images/Dora/MiniDora_3.jpg',
@@ -21,6 +22,7 @@ BasicGame.Preloader.prototype={
 			'Dora_1':'images/Dora/Dora_1.png',
 			'Dora_2':'images/Dora/Dora_2.jpg',
 			'Dora_3':'images/Dora/Dora_3.jpg',
+			'Chaika_1':'images/Dora/Chaika_1.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();

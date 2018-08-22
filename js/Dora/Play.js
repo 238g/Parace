@@ -35,12 +35,11 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.genContents();
-		if(this.curStg==3){
-			// TODO
-		}else if(this.curStg==2){
-			// TODO
-		}else{
-			this.AF();
+		switch(this.curStg){
+			case 4:this.RF();break;
+			case 3:break;//TODO
+			case 2:this.QF();break;
+			default:this.AF();break;
 		}
 		this.start();
 		this.tes();
@@ -54,7 +53,7 @@ BasicGame.Play.prototype={
 	back:function(){
 		if(this.inputEnabled){
 			if(!this.Tween.isRunning){
-				this.isPlaying=this.inputEnabled=!1;
+				this.end();
 				// this.M.SE.play('OnStart',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
@@ -77,6 +76,12 @@ BasicGame.Play.prototype={
 		for(var k in arr)this[arr[k]+'Group']=this.add.group();
 		this.genHUD();
 	},
+	genHUD:function(){
+		this.HUD=this.add.group();
+		var y=this.world.height*.05;
+		this.HUD.add(this.M.S.genVolBtn(this.world.width*.05,y));
+		this.HUD.add(this.M.S.genFlScBtn(this.world.width*.95,y));
+	},
 	AF:function(){
 		this.AGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.AGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.AreUHost));
@@ -87,7 +92,7 @@ BasicGame.Play.prototype={
 		this.AGroup.pendingDestroy=!0;
 		this.BGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.BGroup.add(this.M.S.genTxt(this.CX,this.CY,yn=='Y'?this.curWords.HostHowTo:this.curWords.NotHostHowTo));
-		this.BGroup.add(this.M.S.genLbl(this.CX,this.BY,this.CF,this.curWords.Next));
+		this.BGroup.add(this.M.S.genLbl(this.CX,this.BY,this.CF,this.curWords.SoonPlay));
 	},
 	CF:function(){
 		this.BGroup.pendingDestroy=!0;
@@ -213,6 +218,7 @@ BasicGame.Play.prototype={
 	},
 	IF:function(){
 		this.HGroup.pendingDestroy=!0;
+		this.HUD.visible=!1;
 
 		this.Gauge=this.genGauge(this.world.width*.1,this.world.height*.28,this.world.width*.8,this.world.height*.15,this.IGroup);
 		this.gaugeMaxWidth=this.Gauge.width;
@@ -231,7 +237,10 @@ BasicGame.Play.prototype={
 		twD.onComplete.add(function(){
 			this.I_CancelBtn.pendingDestroy=!0;
 			this.GaugeTS.changeText(this.curWords.GaugeDownload+'100%');
-			this.time.events.add(1500,this.JF,this);
+			this.time.events.add(300,function(){
+				this.GaugeTS.changeText(this.curWords.GaugeDownloaded);
+			},this);
+			this.time.events.add(2000,this.JF,this);
 		},this);
 
 		twA.onUpdateCallback(this.changeGauge,this);
@@ -257,6 +266,7 @@ BasicGame.Play.prototype={
 	},
 	JF:function(){
 		this.IGroup.pendingDestroy=!0;
+		this.HUD.visible=!0;
 
 		this.JGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.J_Text));
 		this.JGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_J,this.curWords.Cancel));
@@ -269,6 +279,7 @@ BasicGame.Play.prototype={
 	},
 	cancel_I:function(){
 		this.IGroup.pendingDestroy=!0;
+		this.time.events.removeAll();
 		this.M.S.genTxt(this.CX,this.CY,this.curWords.Unfortunately_HRes);
 		this.M.S.genLbl(this.CX,this.BY,this.back,this.curWords.Back);
 	},
@@ -287,7 +298,7 @@ BasicGame.Play.prototype={
 		this.KGroup.pendingDestroy=!0;
 		this.LTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.L_Text_0);
 		this.LGroup.add(this.LTS);
-		this.LGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_J,'NO'));
+		this.LGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_L,'NO'));
 		this.LGroup.add(this.M.S.genLbl(this.RX,this.BY,function(){
 			if(this.inputEnabled){
 				this.inputEnabled=!1;
@@ -297,6 +308,11 @@ BasicGame.Play.prototype={
 				this.time.events.add(600,function(){this.inputEnabled=!0},this);
 			}
 		},'YES'));
+	},
+	cancel_L:function(){
+		this.LGroup.pendingDestroy=!0;
+		this.M.S.genTxt(this.CX,this.CY,this.curWords.Unfortunately_JRes);
+		this.M.S.genLbl(this.CX,this.BY,this.back,this.curWords.Back);
 	},
 	MF:function(){
 		this.LGroup.pendingDestroy=!0;
@@ -324,25 +340,90 @@ BasicGame.Play.prototype={
 		this.NGroup.pendingDestroy=!0;
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		if(!this.curFullScreen)this.scale.stopFullScreen(!1);
+		this.M.sGlb('isClear',!0);
 
 		this.OGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.O_Text));
+		// TODO add jump dora
 
 		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
-		// TODO
-		// this.OGroup.add(this.M.S.genLbl(this.CX,this.BY,this.back,this.curWords.Back));
-		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.HF,this.curWords.Tweet));
+		this.OGroup.add(this.M.S.genLbl(this.world.centerX,this.BY,this.PF,this.curWords.Campaign));
+		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
 	},
-	genHUD:function(){
-		this.HUD=this.add.group();
-		var y=this.world.height*.05;
-		this.HUD.add(this.M.S.genVolBtn(this.world.width*.05,y));
-		this.HUD.add(this.M.S.genFlScBtn(this.world.width*.95,y));
+	tweet:function(){
+		// this.M.SE.play('OnBtn',{volume:1});
+		var e1='🐉🐉🐉🐉🐉🐉';
+		var e2='🌋🌋🌋🌋🌋🌋';
+		var res=3333333333+'\n';//TODO
+		var txt=this.curWords.TweetTtl+'\n'+e1+'\n'+res+e2+'\n';
+		this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
+		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
-};
+	////////////////////////////////////// PlayContents3
+	PF:function(){
+		this.OGroup.pendingDestroy=!0;
+		this.HUD.visible=!1;
+		this.stage.backgroundColor='#000000';
+		this.scale.startFullScreen(!1);
 
-// omake -> dark hand
-// omake -> black circle blood
+		var sA=this.add.sprite(0,0,'Bg_horror');
+		this.PGroup.add(sA);
+		var twA=this.M.T.fadeOutA(sA,{delay:2E3});
+		twA.onComplete.add(function(){
+			var sB=this.add.sprite(this.world.randomX,this.world.height,'Chaika_1');
+			sB.anchor.setTo(.5,1);
+			sB.alpha=0;
+			this.PGroup.add(sB);
+			var twB=this.add.tween(sB).to({alpha:.5},500,Phaser.Easing.Exponential.In,!0,1E3);
+			this.add.tween(sB.scale).to({x:5,y:5},500,Phaser.Easing.Cubic.InOut,!0,1E3);
+			twB.onComplete.add(function(){
+				this.time.events.add(3E3,this.QF,this);
+			},this);
+		},this);
+		twA.start();
+	},
+	QF:function(){
+		this.PGroup.pendingDestroy=!0;
+		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		if(!this.curFullScreen)this.scale.stopFullScreen(!1);
+		this.HUD.visible=!0;
 
+		// TODO chaika_2
+		var s=this.add.sprite(this.CX,this.world.height,'Chaika_1');
+		s.anchor.setTo(.5,1);
+		s.scale.setTo(5);
+		this.OGroup.add(s);
+
+		this.OGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.Q_Text));
+
+		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
+
+		this.input.onDown.add(function(p){
+			console.log(p.x,p.y);
+			// TODO cast fire / max 10
+			// tween . start reset randomY, left right which,
+			// tween . end px,py, shake,and fire add
+			// cast count, -> on tweet / cast count text
+			// Global fireCount++
+			// Tweet add fireCount
+		},this);
+	},
+	////////////////////////////////////// PlayContents4
+	RF:function(){
+		var s=this.add.sprite(this.CX,this.CY,'DoraJumpRope');
+		s.anchor.setTo(.5);
+		s.scale.setTo(1.5);
+		s.animations.add('jumping');
+		s.animations.play('jumping',12,!0);
+		this.M.sGlb('isClear',!0);
+		this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back);
+		this.M.S.genTxt(this.world.width*.85,this.BY-20,this.curWords.WatchDora);
+	},
+	////////////////////////////////////// PlayContents5
+	// TODO fortune
+	SF:function(){
+
+	},
 
 /*
 自撮り
@@ -357,6 +438,6 @@ https://twitter.com/___Dola/status/1015126691126042624
 			var a=d.getFullYear();
 			var b=d.getMonth()+1;
 			var c=d.getDate();
-
 			console.log(a,b,c);
 			*/
+};
