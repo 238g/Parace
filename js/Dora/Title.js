@@ -9,16 +9,18 @@ BasicGame.Title.prototype={
 		this.Tween={};
 	},
 	create:function(){
+		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#ffffff';
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:3});
 
 		this.M.S.genTxt(this.world.centerX,this.world.height*.15,BasicGame.GAME_TITLE,this.M.S.txtstyl(40));
 		this.M.S.genTxt(this.world.width*.3,this.world.centerY,this.curWords.TitleDescription,this.M.S.txtstyl(20));
 		
 		var s=this.add.button(this.world.width*.95,this.world.centerY,'DoraJumpRope',function(){
 			this.clickDoraCount++;
-			if(this.clickDoraCount>10)this.start({num:4});
+			if(this.clickDoraCount>10)return this.start({num:4});
+			this.M.SE.play('ClickJump',{volume:1});
 		},this);
 		s.anchor.setTo(1,.5);
 		s.animations.add('jumping');
@@ -40,7 +42,7 @@ BasicGame.Title.prototype={
 				if(!this.Tween.isRunning){
 					this.M.sGlb('curStg',b.num);
 					this.isPlaying=this.inputEnabled=!1;
-					// this.M.SE.play('SelectSE',{volume:1});
+					this.M.SE.play('Enter',{volume:1});
 					var wp=this.add.sprite(0,0,'WP');
 					wp.tint=0x000000;
 					wp.alpha=0;
@@ -51,7 +53,7 @@ BasicGame.Title.prototype={
 					myGa('start','Title','toPlay',this.M.gGlb('playCount'));
 				}
 			}else{
-				// this.M.SE.playBGM('TitleBGM',{volume:1});
+				this.M.SE.playBGM('TitleBGM',{volume:3});
 				this.inputEnabled=!0;
 			}
 		}

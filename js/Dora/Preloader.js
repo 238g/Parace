@@ -26,8 +26,12 @@ BasicGame.Preloader.prototype={
 			'Dora_2':'images/Dora/Dora_2.jpg',
 			'Dora_3':'images/Dora/Dora_3.jpg',
 			'Chaika_1':'images/Dora/Chaika_1.png',
+			'Chaika_2':'images/Dora/Chaika_2.png',
 			'TreasureChest_1':'images/Dora/TreasureChest_1.png',
 			'TreasureChest_2':'images/Dora/TreasureChest_2.png',
+			'Molotov':'images/Dora/Molotov.png',
+			'Fire':'images/Dora/Fire.png',
+			'Cave':'images/Dora/Cave.jpg',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -35,7 +39,21 @@ BasicGame.Preloader.prototype={
 
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Iincyo/Game-Menu',// TODO
+			TitleBGM:'sounds/BGM/Dora/AvantJazz',
+			PlayBGM:'sounds/BGM/Dora/arabiantechno',
+			FireVOMito_1:'sounds/VOICE/Dora/FireVOMito_1',
+			FireVOMito_2:'sounds/VOICE/Dora/FireVOMito_2',
+			FireVOMito_3:'sounds/VOICE/Dora/FireVOMito_3',
+			FireVOMito_4:'sounds/VOICE/Dora/FireVOMito_4',
+			FireVOMito_5:'sounds/VOICE/Dora/FireVOMito_5',
+			ClickJump:'sounds/SE/phaseJump4',
+			Cheer:'sounds/SE/LabJP/People/people_people-performance-cheer1',
+			OnBtn:'sounds/SE/LabJP/Btn/decision1',
+			Enter:'sounds/SE/LabJP/Life/Run/dash-leather-shoes1_SHORT',
+			Okay:'sounds/SE/LabJP/Btn/decision4',
+			Incorrect:'sounds/SE/LabJP/Performance/Quiz/incorrect2',
+			OpenChest:'sounds/SE/Fantasy/Inventory_Open_00',
+			Surprise:'sounds/SE/UISoundLibrary/Click_Electronic/Click_Heavy_00',
 		};
 		for(var k in s){
 			var p=s[k];
@@ -46,7 +64,6 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		// this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},

@@ -1,4 +1,6 @@
 BasicGame.Boot.prototype.genWords=function(){
+	var a=this.M.gGlb('TOUCH_OR_CLICK');
+	// var b=this.M.gGlb('EN_TOUCH_OR_CLICK');
 	return {
 		jp:{
 			Enter:'入り口',
@@ -52,11 +54,15 @@ BasicGame.Boot.prototype.genWords=function(){
 			Tweet:'ツイートする',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TweetHT:'ドーラゲーム',
-			TweetMsg:'',//TODO none,fire,,,
-			Q_Text:'オカマに火炎瓶を投げるのはやめてください',
+			TweetMsgAFront:'今日の運勢: ',
+			TweetMsgBFront:'オカマに火炎瓶を投げた回数: ',
+			TweetMsgBBack:'回',
+			Q_Text_1:'オカマに火炎瓶を投げるのはやめてください',
+			Q_Text_2:'タイトルの縄跳びドーラ様を10回'+a+'すると\nいつでも火炎瓶を投げれるようになるよ！',
 			WatchDora:'眺めるだけ\nドーラ様',
 			SelectChest:'宝箱を選んでください。',
 			GetGift:'プレゼント受取',
+			ResTweet:'結果をツイート',
 		},
 		en:{
 			//TODO
@@ -65,14 +71,23 @@ BasicGame.Boot.prototype.genWords=function(){
 };
 BasicGame.Boot.prototype.genTreasureInfo=function(){
 	return {
-		1:{name:'大吉',msg:'',urls:['']},
-		2:{name:'末吉',msg:'',urls:['']},
-		3:{name:'吉',msg:'',urls:['']},
-		4:{name:'凶',msg:'',urls:['']},
-		5:{name:'中吉',msg:'',urls:['']},
-		6:{name:'小吉',msg:'',urls:['']},
-		7:{name:'大凶',msg:'',urls:['']},
-		8:{name:'大吉',msg:'',urls:['']},
-		9:{name:'中吉',msg:'',urls:['']},
+		1:{name:'大吉',msg:'おめでとう！\nドーラ様の自撮りをプレゼント！',
+			url:'https://twitter.com/___Dola/status/1010111543327928321'},
+		2:{name:'末吉',msg:'ドーラ様のチャンネルに登録する\n権利をプレゼント！',
+			url:'https://www.youtube.com/channel/UC53UDnhAAYwvNO7j_2Ju1cQ?sub_confirmation=1'},
+		3:{name:'吉',msg:'竜宝箱',
+			url:'https://www.youtube.com/watch?v=QBA0Dbbl-4g'},
+		4:{name:'凶',msg:'元気が出るよう『YUME日和』を\nプレゼント！',
+			url:'https://twitter.com/___Dola/status/1008742634880421888'},
+		5:{name:'中吉',msg:'やったね！\nドーラ様のスマホ壁紙をプレゼント！',
+			url:this.game.device.android?'https://twitter.com/___Dola/status/1015126691126042624':'https://twitter.com/___Dola/status/1015117421235982336'},
+		6:{name:'小吉',msg:'他にじさんじメンバーの\nゲームをプレイ！',
+			url:__VTUBER_GAMES},
+		7:{name:'大凶',msg:'きっと良いことがあるさ！\n『Agape』をプレゼント！',
+			url:'https://twitter.com/___Dola/status/1007686656466358272'},
+		8:{name:'大吉',msg:'あれは？誰だ？誰だ？誰だ？\nあれは…ドーラマーーーン！',
+			url:'https://www.youtube.com/watch?v=94Utsy2OzuM'},
+		9:{name:'中吉',msg:'レンチさん作詞・作曲\n『ともだち。』のお歌をプレゼント！',
+			url:'https://www.youtube.com/watch?v=lakZiSXRtyw'},
 	};
 };

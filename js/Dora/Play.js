@@ -22,22 +22,25 @@ BasicGame.Play.prototype={
 		this.gaugeMaxWidth=0;
 		this.LCount=0;
 		this.curFullScreen=this.scale.isFullScreen;
+		this.enableOpenChest=!0;
 		// Obj
 		this.Tween={};
 		this.AGroup=this.BGroup=this.CGroup=this.DGroup=this.EGroup=this.FGroup=this.GGroup=
 		this.HGroup=this.IGroup=this.JGroup=this.KGroup=this.LGroup=this.MGroup=this.NGroup=
-		this.OGroup=this.PGroup=this.QGroup=this.RGroup=this.SGroup=this.TGroup=this.UGroup=
+		this.OGroup=this.PGroup=this.QGroup=this.RGroup=this.SGroup=
 		this.HUD=
 		this.HTS=this.Gauge=this.GaugeTS=this.I_CancelBtn=
+		this.CastMolotovCountTS=this.Molotovs=this.Fires=this.ChaikaS=
 		null;
 	},
 	create:function(){
+		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.genContents();
 		switch(this.curStg){
 			case 4:this.RF();break;
-			case 3:break;//TODO
+			case 3:this.SF();break;
 			case 2:this.QF();break;
 			default:this.AF();break;
 		}
@@ -54,7 +57,7 @@ BasicGame.Play.prototype={
 		if(this.inputEnabled){
 			if(!this.Tween.isRunning){
 				this.end();
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('Enter',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -72,7 +75,7 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		var arr=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U'];
+		var arr=['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S'];
 		for(var k in arr)this[arr[k]+'Group']=this.add.group();
 		this.genHUD();
 	},
@@ -83,18 +86,21 @@ BasicGame.Play.prototype={
 		this.HUD.add(this.M.S.genFlScBtn(this.world.width*.95,y));
 	},
 	AF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.AGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.AGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.AreUHost));
 		this.AGroup.add(this.M.S.genLbl(this.LX,this.BY,function(){this.BF('N')},'NO'));
 		this.AGroup.add(this.M.S.genLbl(this.RX,this.BY,function(){this.BF('Y')},'YES'));
 	},
 	BF:function(yn){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.AGroup.pendingDestroy=!0;
 		this.BGroup.add(this.add.sprite(0,0,'Dora_2'));
 		this.BGroup.add(this.M.S.genTxt(this.CX,this.CY,yn=='Y'?this.curWords.HostHowTo:this.curWords.NotHostHowTo));
 		this.BGroup.add(this.M.S.genLbl(this.CX,this.BY,this.CF,this.curWords.SoonPlay));
 	},
 	CF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.BGroup.pendingDestroy=!0;
 		this.CGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.WhichUse));
 		this.CGroup.add(this.M.S.genLbl(this.LX,this.world.height*.3,function(){this.DF(this.game.device.iOS)},'iOS'));
@@ -145,10 +151,12 @@ BasicGame.Play.prototype={
 				sB.angle=-25;
 				this.DGroup.add(sA);
 				this.DGroup.add(sB);
+				this.M.SE.play('OnBtn',{volume:1});
 			}else{this.EF(4)}
 		}
 	},
 	EF:function(ynw){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.DGroup.pendingDestroy=!0;
 
 		if(ynw===2)this.ignoranceAnswer++;
@@ -187,9 +195,11 @@ BasicGame.Play.prototype={
 		if(this.ignoranceAnswer>=2){
 			bg=2;
 			txt=this.curWords.IgnoranceAnswerRes;
+			this.M.SE.play('Okay',{volume:1});
 		}else if(this.silenceAnswer>=2||(this.silenceAnswer==1&&this.ignoranceAnswer==1)){
 			bg=2;
 			txt=this.curWords.SilenceAnswerRes;
+			this.M.SE.play('Okay',{volume:1});
 		}else if(!this.selectMiss){
 			if(this.ignoranceAnswer>0||this.silenceAnswer>0){
 				bg=1;
@@ -198,15 +208,18 @@ BasicGame.Play.prototype={
 				bg=2;
 				txt=this.curWords.RightAllAnswerRes;
 			}
+			this.M.SE.play('Okay',{volume:1});
 		}else{
 			bg=1;
 			txt=this.curWords.WrongAnswerRes;
+			this.M.SE.play('Incorrect',{volume:1});			
 		}
 		this.FGroup.add(this.add.sprite(0,0,'Bg_'+bg));
 		this.FGroup.add(this.M.S.genTxt(this.CX,this.CY,txt));
 		this.FGroup.add(this.M.S.genLbl(this.CX,this.BY,this.GF,this.curWords.Next));
 	},
 	GF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.FGroup.pendingDestroy=!0;
 		this.GGroup.add(this.add.sprite(0,0,'Bg_1'));
 		this.GGroup.add(this.M.S.genTxt(this.CX,this.CY,this.curWords.G_Text));
@@ -214,6 +227,7 @@ BasicGame.Play.prototype={
 		this.GGroup.add(this.M.S.genLbl(this.RX,this.BY,this.HF,this.curWords.Next));
 	},
 	HF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.GGroup.pendingDestroy=!0;
 		this.stage.backgroundColor='#000000';
 		this.HTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.H_Text_0);
@@ -226,6 +240,7 @@ BasicGame.Play.prototype={
 				if(this.HCount==7)return this.IF();
 				this.HTS.changeText(this.curWords['H_Text_'+this.HCount]);
 				this.time.events.add(600,function(){this.inputEnabled=!0},this);
+				this.M.SE.play('OnBtn',{volume:1});
 			}
 		},'YES'));
 	},
@@ -234,6 +249,7 @@ BasicGame.Play.prototype={
 		this.HUD.visible=!1;
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.inputEnabled=!0;
+		this.M.SE.stop('currentBGM');
 
 		this.Gauge=this.genGauge(this.world.width*.1,this.world.height*.28,this.world.width*.8,this.world.height*.15,this.IGroup);
 		this.gaugeMaxWidth=this.Gauge.width;
@@ -282,6 +298,7 @@ BasicGame.Play.prototype={
 	JF:function(){
 		this.IGroup.pendingDestroy=!0;
 		this.HUD.visible=!0;
+		this.M.SE.playBGM('TitleBGM',{volume:3});
 
 		var s=this.add.sprite(this.CX,this.world.height*.65,'DoraJumpRope');
 		s.anchor.setTo(.5);
@@ -291,8 +308,10 @@ BasicGame.Play.prototype={
 		this.JGroup.add(s);
 
 		this.JGroup.add(this.M.S.genTxt(this.CX,this.world.height*.3,this.curWords.J_Text));
-		this.JGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_J,this.curWords.Cancel));
-		this.JGroup.add(this.M.S.genLbl(this.RX,this.BY,this.KF,this.curWords.MoveOn));
+		this.time.events.add(1E3,function(){
+			this.JGroup.add(this.M.S.genLbl(this.LX,this.BY,this.cancel_J,this.curWords.Cancel));
+			this.JGroup.add(this.M.S.genLbl(this.RX,this.BY,this.KF,this.curWords.MoveOn));
+		},this);
 	},
 	unfortunately_H:function(){
 		this.HGroup.pendingDestroy=!0;
@@ -312,6 +331,7 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents2
 	KF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.JGroup.pendingDestroy=!0;
 		var s=this.add.sprite(this.world.width,0,'Bg_1');
 		s.scale.setTo(-1,1);
@@ -321,6 +341,7 @@ BasicGame.Play.prototype={
 		this.KGroup.add(this.M.S.genLbl(this.RX,this.BY,this.LF,this.curWords.Next));
 	},
 	LF:function(){
+		this.M.SE.play('OnBtn',{volume:1});
 		this.KGroup.pendingDestroy=!0;
 		this.stage.backgroundColor='#000000';
 		this.LTS=this.M.S.genTxt(this.CX,this.CY,this.curWords.L_Text_0);
@@ -330,6 +351,7 @@ BasicGame.Play.prototype={
 			if(this.inputEnabled){
 				this.inputEnabled=!1;
 				this.LCount++;
+				if(this.LCount==1)this.M.SE.stop('currentBGM');
 				if(this.LCount==3)return this.MF();
 				this.LTS.changeText(this.curWords['L_Text_'+this.LCount]);
 				this.time.events.add(600,function(){this.inputEnabled=!0},this);
@@ -370,6 +392,7 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.sGlb('isClear',!0);
 		this.inputEnabled=!0;
+		this.M.SE.playBGM('TitleBGM',{volume:3});
 
 		this.OGroup.add(this.add.sprite(0,0,'Bg_3'));
 
@@ -386,21 +409,30 @@ BasicGame.Play.prototype={
 		sB.animations.play('jumping',12,!0);
 		this.OGroup.add(sB);
 
-		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
-		this.OGroup.add(this.M.S.genLbl(this.world.centerX,this.BY,this.PF,this.curWords.Campaign));
+		this.time.events.add(1E3,function(){
+			this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+			this.OGroup.add(this.M.S.genLbl(this.world.centerX,this.BY,this.PF,this.curWords.Campaign));
+		},this);
 		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
 	},
 	tweet:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
+		this.M.SE.play('OnBtn',{volume:1});
 		var e1='🐉🐉🐉🐉🐉🐉';
 		var e2='🌋🌋🌋🌋🌋🌋';
-		var res=this.curWords.TweetMsg+'\n';
+
+		var res='';
+		var treasureNum=this.M.gGlb('treasureNum');
+		if(treasureNum>0)
+			res+=this.curWords.TweetMsgAFront+this.M.gGlb('TreasureInfo')[treasureNum].name+'\n';
+		if(this.M.gGlb('castMolotovCount')>0)
+			res+=this.curWords.TweetMsgBFront+this.M.gGlb('castMolotovCount')+this.curWords.TweetMsgBBack+'\n';
 		var txt=e1+'\n'+this.curWords.TweetTtl+'\n'+res+e2+'\n';
 		this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
 		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	////////////////////////////////////// PlayContents3
 	PF:function(){
+		this.M.SE.stop('currentBGM');
 		this.OGroup.pendingDestroy=!0;
 		this.HUD.visible=!1;
 		this.stage.backgroundColor='#000000';
@@ -417,36 +449,74 @@ BasicGame.Play.prototype={
 			var twB=this.add.tween(sB).to({alpha:.5},500,Phaser.Easing.Exponential.In,!0,1E3);
 			this.add.tween(sB.scale).to({x:5,y:5},500,Phaser.Easing.Cubic.InOut,!0,1E3);
 			twB.onComplete.add(function(){
+				this.M.SE.play('Surprise',{volume:1});
 				this.time.events.add(3E3,this.QF,this);
 			},this);
 		},this);
 		twA.start();
 	},
 	QF:function(){
+		this.M.SE.playBGM('PlayBGM',{volume:1});
 		this.PGroup.pendingDestroy=!0;
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		if(!this.curFullScreen)this.scale.stopFullScreen(!1);
 		this.HUD.visible=!0;
 
-		// TODO chaika_2
-		var s=this.add.sprite(this.CX,this.world.height,'Chaika_1');
-		s.anchor.setTo(.5,1);
-		s.scale.setTo(5);
-		this.QGroup.add(s);
+		this.ChaikaS=this.add.sprite(this.CX,this.world.height,'Chaika_2');
+		this.ChaikaS.anchor.setTo(.5,1);
+		this.ChaikaS.scale.setTo(5);
+		this.QGroup.add(this.ChaikaS);
 
-		this.QGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.Q_Text));
+		this.QGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.Q_Text_1));
+		
+		if(this.curStg!=2){
+			var txtstyl=this.M.S.txtstyl(15);
+			txtstyl.align='left';
+			var sB=this.M.S.genTxt(this.world.width*.05,this.world.height*.75,this.curWords.Q_Text_2,txtstyl);
+			sB.anchor.setTo(0,.5);
+			sB.children[0].anchor.setTo(0,.5);
+			this.QGroup.add(sB);
+			this.time.events.add(3E3,function(){this.destroy()},sB);
+		}
 
-		this.QGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+		this.time.events.add(1E3,function(){
+			this.QGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+		},this);
 		this.QGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
+		this.CastMolotovCountTS=this.M.S.genTxt(this.CX,this.BY,this.M.gGlb('castMolotovCount')),this.M.S.txtstyl(50);
+		this.QGroup.add(this.CastMolotovCountTS);
+
+		this.Fires=this.add.group();
+		this.Fires.createMultiple(10,'Fire');
+		this.Fires.children.forEach(function(c){c.anchor.setTo(.5)});
+
+		this.Molotovs=this.add.group();
+		this.Molotovs.createMultiple(30,'Molotov');
+		this.Molotovs.children.forEach(function(c){c.anchor.setTo(.5)});
 
 		this.input.onDown.add(function(p){
-			console.log(p.x,p.y);
-			// TODO cast fire / max 10
-			// tween . start reset randomY, left right which,
-			// tween . end px,py, shake,and fire add
-			// cast count, -> on tweet / cast count text
-			// Global fireCount++
-			// Tweet add fireCount
+			var s=this.Molotovs.getFirstDead();
+			if(s){
+				s.reset((this.rnd.between(1,100)>50)?0:this.world.width,this.world.randomY);
+				var tw=this.M.T.moveB(s,{xy:{x:p.x,y:p.y},duration:this.rnd.between(300,1E3)});
+				tw.onComplete.add(function(target){
+					target.kill();
+					(this.Fires.getFirstDead()||this.Fires.getRandom()).reset(target.x,target.y);
+
+					this.M.SE.play('FireVOMito_'+this.rnd.integerInRange(1,5),{volume:2});
+
+					var castMolotovCount=this.M.gGlb('castMolotovCount');
+					castMolotovCount++;
+					this.M.sGlb('castMolotovCount',castMolotovCount)
+					this.CastMolotovCountTS.changeText(castMolotovCount);
+
+					if(castMolotovCount%100==0)this.M.SE.play('Cheer',{volume:1});
+					if(castMolotovCount>200)this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_HORIZONTAL);
+					if(castMolotovCount>300)this.stage.backgroundColor+=this.rnd.between(1,99999);
+					if(castMolotovCount>400)this.ChaikaS.tint=Phaser.Color.getRandomColor();
+				},this);
+				tw.start();
+			}
 		},this);
 	},
 	////////////////////////////////////// PlayContents4
@@ -462,30 +532,40 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents5
 	SF:function(){
+		this.stage.disableVisibilityChange=!1;
+		this.SGroup.removeAll();
+		this.SGroup.add(this.add.sprite(0,0,'Cave'));
 		this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.SelectChest,this.M.S.txtstyl(30));
 		var bA=this.add.button(this.LX,this.world.height*.35,'TreasureChest_1',this.openChest,this);
 		bA.anchor.setTo(.5);
 		bA.num=1;
+		this.SGroup.add(bA);
 		var bB=this.add.button(this.RX,this.world.height*.35,'TreasureChest_1',this.openChest,this);
 		bB.anchor.setTo(.5);
 		bB.num=2;
+		this.SGroup.add(bB);
 		var bC=this.add.button(this.LX,this.world.height*.75,'TreasureChest_1',this.openChest,this);
 		bC.anchor.setTo(.5);
 		bC.num=3;
+		this.SGroup.add(bC);
 		var bD=this.add.button(this.RX,this.world.height*.75,'TreasureChest_1',this.openChest,this);
 		bD.anchor.setTo(.5);
 		bD.num=4;
+		this.SGroup.add(bD);
 
 		if(this.M.gGlb('treasureNum')>0){
-			this.isPlaying=!1;
-			// TODO chest open
+			this.enableOpenChest=!1;
+			this.SGroup.children[this.M.gGlb('treasureBtn')].loadTexture('TreasureChest_2');
 			this.treasureRes(this.M.gGlb('treasureNum'),!0);
 		}
 	},
 	openChest:function(btn){
-		if(this.isPlaying){
-			this.isPlaying=!1;
+		if(this.enableOpenChest){
+			this.enableOpenChest=!1;
 			btn.loadTexture('TreasureChest_2');
+			this.M.sGlb('treasureBtn',btn.num);
+			
+			this.M.SE.play('OpenChest',{volume:1});
 
 			var d=new Date();
 			var a=String(d.getFullYear()).split('');
@@ -511,9 +591,8 @@ BasicGame.Play.prototype={
 			}else{
 				sumF=sumA;
 			}
-
+			
 			this.M.sGlb('treasureNum',sumF);
-
 			this.treasureRes(sumF,!1);
 		}
 	},
@@ -528,25 +607,21 @@ BasicGame.Play.prototype={
 		}
 		sA.tint=0x000000;
 
-		// TODO
-		var ts=this.M.S.genTxt(this.CX,this.CY,curTreasureInfo.name+'\n'+888888888888,this.M.S.txtstyl(40));
+		var ts=this.M.S.genTxt(this.CX,this.CY,curTreasureInfo.name+'\n'+curTreasureInfo.msg,this.M.S.txtstyl(30));
 		sA.addChild(ts);
 
-		var sC=this.M.S.genLbl(this.RX,this.BY,function(){
-			// TODO window open url
+		var sB=this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back);
+		sA.addChild(sB);
+
+		var sC=this.M.S.genLbl(this.CX,this.BY,function(btn){
+			window.open(btn.url,'_blank');
+			myGa('external_link','Play',btn.msg,this.M.gGlb('playCount'));
 		},this.curWords.GetGift);
+		sC.url=curTreasureInfo.url;
+		sC.msg=curTreasureInfo.msg;
 		sA.addChild(sC);
 
-		var sB=this.M.S.genLbl(this.LX,this.BY,this.back,this.curWords.Back);
-		sA.addChild(sB);
+		var sD=this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.ResTweet);
+		sA.addChild(sD);
 	},
-
-/*
-自撮り
-https://twitter.com/___Dola/status/1010111543327928321
-
-スマホ壁紙
-https://twitter.com/___Dola/status/1015117421235982336
-https://twitter.com/___Dola/status/1015126691126042624
-*/
 };
