@@ -394,8 +394,8 @@ BasicGame.Play.prototype={
 		// this.M.SE.play('OnBtn',{volume:1});
 		var e1='🐉🐉🐉🐉🐉🐉';
 		var e2='🌋🌋🌋🌋🌋🌋';
-		var res=3333333333+'\n';//TODO
-		var txt=this.curWords.TweetTtl+'\n'+e1+'\n'+res+e2+'\n';
+		var res=this.curWords.TweetMsg+'\n';
+		var txt=e1+'\n'+this.curWords.TweetTtl+'\n'+res+e2+'\n';
 		this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
 		myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
@@ -432,12 +432,12 @@ BasicGame.Play.prototype={
 		var s=this.add.sprite(this.CX,this.world.height,'Chaika_1');
 		s.anchor.setTo(.5,1);
 		s.scale.setTo(5);
-		this.OGroup.add(s);
+		this.QGroup.add(s);
 
-		this.OGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.Q_Text));
+		this.QGroup.add(this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.Q_Text));
 
-		this.OGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
-		this.OGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
+		this.QGroup.add(this.M.S.genLbl(this.world.width*.18,this.BY,this.back,this.curWords.Back));
+		this.QGroup.add(this.M.S.genLbl(this.world.width*.82,this.BY,this.tweet,this.curWords.Tweet));
 
 		this.input.onDown.add(function(p){
 			console.log(p.x,p.y);
@@ -461,9 +461,84 @@ BasicGame.Play.prototype={
 		this.M.S.genTxt(this.world.width*.85,this.BY-20,this.curWords.WatchDora);
 	},
 	////////////////////////////////////// PlayContents5
-	// TODO fortune
 	SF:function(){
+		this.M.S.genTxt(this.CX,this.world.height*.1,this.curWords.SelectChest,this.M.S.txtstyl(30));
+		var bA=this.add.button(this.LX,this.world.height*.35,'TreasureChest_1',this.openChest,this);
+		bA.anchor.setTo(.5);
+		bA.num=1;
+		var bB=this.add.button(this.RX,this.world.height*.35,'TreasureChest_1',this.openChest,this);
+		bB.anchor.setTo(.5);
+		bB.num=2;
+		var bC=this.add.button(this.LX,this.world.height*.75,'TreasureChest_1',this.openChest,this);
+		bC.anchor.setTo(.5);
+		bC.num=3;
+		var bD=this.add.button(this.RX,this.world.height*.75,'TreasureChest_1',this.openChest,this);
+		bD.anchor.setTo(.5);
+		bD.num=4;
 
+		if(this.M.gGlb('treasureNum')>0){
+			this.isPlaying=!1;
+			// TODO chest open
+			this.treasureRes(this.M.gGlb('treasureNum'),!0);
+		}
+	},
+	openChest:function(btn){
+		if(this.isPlaying){
+			this.isPlaying=!1;
+			btn.loadTexture('TreasureChest_2');
+
+			var d=new Date();
+			var a=String(d.getFullYear()).split('');
+			var b=String(d.getMonth()+1).split('');
+			var c=String(d.getDate()).split('');
+			var sumF=0;
+			var sumA=Number(btn.num);
+			for(var k in a)sumA+=Number(a[k]);
+			for(var k in b)sumA+=Number(b[k]);
+			for(var k in c)sumA+=Number(c[k]);
+			if(sumA>=10){
+				var sumB=0;
+				var e=String(sumA).split('');
+				for(var k in e)sumB+=Number(e[k]);
+				if(sumB>=10){
+					var sumC=0;
+					var f=String(sumB).split('');
+					for(var k in f)sumC+=Number(f[k]);
+					sumF=sumC;
+				}else{
+					sumF=sumB;
+				}
+			}else{
+				sumF=sumA;
+			}
+
+			this.M.sGlb('treasureNum',sumF);
+
+			this.treasureRes(sumF,!1);
+		}
+	},
+	treasureRes:function(num,already){
+		var curTreasureInfo=this.M.gGlb('TreasureInfo')[num];
+
+		if(already){
+			var sA=this.add.sprite(0,0,'TWP');
+		}else{
+			var sA=this.add.sprite(this.world.width,0,'TWP');
+			this.M.T.moveD(sA,{xy:{x:0}}).start();
+		}
+		sA.tint=0x000000;
+
+		// TODO
+		var ts=this.M.S.genTxt(this.CX,this.CY,curTreasureInfo.name+'\n'+888888888888,this.M.S.txtstyl(40));
+		sA.addChild(ts);
+
+		var sC=this.M.S.genLbl(this.RX,this.BY,function(){
+			// TODO window open url
+		},this.curWords.GetGift);
+		sA.addChild(sC);
+
+		var sB=this.M.S.genLbl(this.LX,this.BY,this.back,this.curWords.Back);
+		sA.addChild(sB);
 	},
 
 /*
@@ -474,11 +549,4 @@ https://twitter.com/___Dola/status/1010111543327928321
 https://twitter.com/___Dola/status/1015117421235982336
 https://twitter.com/___Dola/status/1015126691126042624
 */
-			/*
-			var d=new Date();
-			var a=d.getFullYear();
-			var b=d.getMonth()+1;
-			var c=d.getDate();
-			console.log(a,b,c);
-			*/
 };

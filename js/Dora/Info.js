@@ -20,7 +20,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			NotSayDevice:'教えたくない',
 			Back:'もどる',
 			RightRoughlyAnswerRes:'大体合っておるの…\n次に用意したものがお主に合えばいいのじゃが…',
-			RightAllAnswerRes:'全て正解じゃ！\nお主にピッタリのものを用意したのじゃ！',
+			RightAllAnswerRes:'全て正解じゃ！\nお主にピッタリのものを用意したぞ！',
 			IgnoranceAnswerRes:'あまり詳しくはないのじゃな\n次のはどうじゃ？どうなんじゃっ？',
 			SilenceAnswerRes:'秘密は大切だの\nたぶん次のものは好きになれるかのう？',
 			WrongAnswerRes:'嘘をついたな！人間ども！！！\n次は正直にやるんじゃ！頼んだぞーー！',
@@ -47,16 +47,32 @@ BasicGame.Boot.prototype.genWords=function(){
 			L_Text_2:'？？？',
 			M_Text:'※使用条款\ntrække på милый Obrigado\nマさﾗ－OD？ｶｽて゛Iナｸｲワｶ',
 			Agree:'Estoy de acuerdo',
-			O_Text:'全部冗談じゃ！よく耐えたのお！\nコーヒーでも飲んで\nバクバクしている心臓を落ち着けましょう。',
+			O_Text:'全部冗談じゃ！よく耐えたのお！\nコーヒーでも飲んで\nバクバクしておる心臓を落ち着けるのじゃ',
 			Campaign:'ギャンペーン',
 			Tweet:'ツイートする',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TweetHT:'ドーラゲーム',
+			TweetMsg:'',//TODO none,fire,,,
 			Q_Text:'オカマに火炎瓶を投げるのはやめてください',
 			WatchDora:'眺めるだけ\nドーラ様',
+			SelectChest:'宝箱を選んでください。',
+			GetGift:'プレゼント受取',
 		},
 		en:{
 			//TODO
 		},
+	};
+};
+BasicGame.Boot.prototype.genTreasureInfo=function(){
+	return {
+		1:{name:'大吉',msg:'',urls:['']},
+		2:{name:'末吉',msg:'',urls:['']},
+		3:{name:'吉',msg:'',urls:['']},
+		4:{name:'凶',msg:'',urls:['']},
+		5:{name:'中吉',msg:'',urls:['']},
+		6:{name:'小吉',msg:'',urls:['']},
+		7:{name:'大凶',msg:'',urls:['']},
+		8:{name:'大吉',msg:'',urls:['']},
+		9:{name:'中吉',msg:'',urls:['']},
 	};
 };

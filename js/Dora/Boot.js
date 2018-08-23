@@ -19,8 +19,10 @@ create:function(){
 		curStg:1,
 		isClear:!1,
 		fireCount:0,
+		treasureNum:0,
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		Words:this.genWords(),
+		TreasureInfo:this.genTreasureInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

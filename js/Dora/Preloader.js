@@ -26,6 +26,8 @@ BasicGame.Preloader.prototype={
 			'Dora_2':'images/Dora/Dora_2.jpg',
 			'Dora_3':'images/Dora/Dora_3.jpg',
 			'Chaika_1':'images/Dora/Chaika_1.png',
+			'TreasureChest_1':'images/Dora/TreasureChest_1.png',
+			'TreasureChest_2':'images/Dora/TreasureChest_2.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
