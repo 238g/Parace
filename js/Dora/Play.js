@@ -507,7 +507,7 @@ BasicGame.Play.prototype={
 
 					var castMolotovCount=this.M.gGlb('castMolotovCount');
 					castMolotovCount++;
-					this.M.sGlb('castMolotovCount',castMolotovCount)
+					this.M.sGlb('castMolotovCount',castMolotovCount);
 					this.CastMolotovCountTS.changeText(castMolotovCount);
 
 					if(castMolotovCount%100==0)this.M.SE.play('Cheer',{volume:1});
