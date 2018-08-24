@@ -500,7 +500,7 @@
 				m.find('.modal-title').text(__curGameInfo.title);
 				m.find('.modal-body').html(
 					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
-					// TODO description
+					+'<p>'+__curGameInfo.caption+'</p>'
 				);
 				myGa('open_modal',__curPage,__curGameInfo.title);
 			});

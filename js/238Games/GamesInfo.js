@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=26;
+	var totalCount=27;
 	return {
 		GamesInfo:{
 			1001: {
@@ -286,6 +286,17 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				order: totalCount-26,
 				textColor: '#4f5790',
 				bgColor: '#d0c7cc',
+				scale: 1,
+			},
+			1027: {
+				id: 1027,
+				title: 'ドーラ様の度胸試し',
+				url: 'https://238g.github.io/Parace/Dora.html',
+				slideImg: 'Dora_1',
+				slideImgUrl: 'images/Dora/Dora_1.png',
+				order: totalCount-27,
+				textColor: '#c42021',
+				bgColor: '#ffa424',
 				scale: 1,
 			},
 		},
