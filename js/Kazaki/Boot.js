@@ -1,0 +1,24 @@
+BasicGame={
+	GAME_TITLE:document.title,
+	GAME_TITLE_EN:'KazakiGame',
+	MAIN_COLOR:'#cbdc7d',
+	MAIN_TINT:0xcbdc7d,
+	MAIN_TEXT_COLOR:'#64c100',
+	MAIN_STROKE_COLOR:'#64c100',
+	WHITE_COLOR:'#ffffff',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCtpB6Bvhs1Um93ziEDACQ8g',
+};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+init:function(){this.M.BootInit(!1)},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
+create:function(){
+	this.M.dGlb({
+		curLang:'jp',
+		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		playCount:0,
+		Words:this.genWords(),
+		StageInfo:this.genStageInfo(),
+	});
+	this.M.NextScene('Preloader');
+},};
