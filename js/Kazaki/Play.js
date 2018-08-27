@@ -12,7 +12,8 @@ BasicGame.Play.prototype={
 		this.StageInfo=this.M.gGlb('StageInfo');
 		this.curStageInfo=this.StageInfo[this.curStg];
 		// Val
-
+		this.baseTimer=1E3;
+		this.loopingTime=200;
 		// Obj
 		this.Tween={};
 		this.Player=
@@ -25,6 +26,15 @@ BasicGame.Play.prototype={
 		this.genContents();
 		this.start();
 		this.tes();
+	},
+	update:function(){
+		if(this.isPlaying){
+			this.baseTimer-=this.time.elapsed;
+			if(this.baseTimer<0){
+				this.baseTimer=this.loopingTime;
+				this.respawn();
+			}
+		}
 	},
 	start:function(){
 		this.isPlaying=this.inputEnabled=!0;
@@ -59,5 +69,8 @@ BasicGame.Play.prototype={
 		this.Player.anchor.setTo(.5,1);
 
 		// TODO input controller
+	},
+	respawn:function(){
+
 	},
 };
