@@ -13,18 +13,17 @@ BasicGame.Play.prototype={
 		this.curStageInfo=this.StageInfo[this.curStg];
 		// Val
 		this.notesTimer=1E3;
-		this.loopNotesTime=200;//TODO stg
+		this.loopNotesTime=this.curStageInfo.loopNotesTime;
 		this.obstaclesTimer=1E3;
-		this.loopObstaclesTime=1E3;//TODO stg
+		this.loopObstaclesTime=this.curStageInfo.loopObstaclesTime;
 
-		this.playerMoveSpeed=.3; // TODO stg
-
-		this.playerLife=1; //TODO stg
-		// this.playerLife=5; //TODO stg
+		this.playerMoveSpeed=this.curStageInfo.playerMoveSpeed;
+		this.playerLife=this.curStageInfo.playerLife;
 
 		this.score=0;
 		// Obj
 		this.Tween={};
+		this.LeftKey=this.RightKey=
 		this.ArrowRightS=this.ArrowLeftS=this.Player=this.Notes=this.Obstacles=
 		null;
 	},
@@ -61,8 +60,22 @@ BasicGame.Play.prototype={
 				if(this.Player.centerX<0)this.Player.centerX=this.world.width;
 				if(this.Player.centerX>this.world.width)this.Player.centerX=0;
 			}else{
-				if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
-				if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+				if(this.RightKey.isDown){
+					this.Player.body.x+=(this.playerMoveSpeed*this.time.physicsElapsedMS);
+					if(this.ArrowRightS.tint!=16711680)this.ArrowRightS.tint=16711680;//0xff0000
+					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+					if(this.Player.centerX<0)this.Player.centerX=this.world.width;
+					if(this.Player.centerX>this.world.width)this.Player.centerX=0;
+				}else if(this.LeftKey.isDown){
+					this.Player.body.x-=(this.playerMoveSpeed*this.time.physicsElapsedMS);
+					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
+					if(this.ArrowLeftS.tint!=16711680)this.ArrowLeftS.tint=16711680;//0xff0000
+					if(this.Player.centerX<0)this.Player.centerX=this.world.width;
+					if(this.Player.centerX>this.world.width)this.Player.centerX=0;
+				}else{
+					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
+					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+				}
 			}
 			this.physics.arcade.overlap(this.Player,this.Notes,this.collideNotes,null,this);
 			this.physics.arcade.overlap(this.Player,this.Obstacles,this.collideObstacles,null,this);
@@ -93,6 +106,9 @@ BasicGame.Play.prototype={
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.world.enableBody=!0;
 
+		this.LeftKey=this.input.keyboard.addKey(Phaser.Keyboard.LEFT);
+		this.RightKey=this.input.keyboard.addKey(Phaser.Keyboard.RIGHT);
+
 		this.add.sprite(0,0,'Bg_1');
 
 		this.ArrowRightS=this.add.sprite(this.world.width,this.world.height,'GameIconsWhite','arrowRight');
@@ -108,7 +124,7 @@ BasicGame.Play.prototype={
 		this.Notes=this.add.group();
 		this.Notes.enableBody=!0;
 		this.Notes.physicsBodyType=Phaser.Physics.ARCADE;
-		this.Notes.createMultiple(10,['Banana_1','Fruit_1']);
+		this.Notes.createMultiple(10,this.curStageInfo.noteKeys);
 		this.Notes.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
@@ -118,7 +134,7 @@ BasicGame.Play.prototype={
 		this.Obstacles=this.add.group();
 		this.Obstacles.enableBody=!0;
 		this.Obstacles.physicsBodyType=Phaser.Physics.ARCADE;
-		this.Obstacles.createMultiple(10,['Obstacle_1']);
+		this.Obstacles.createMultiple(10,this.curStageInfo.obstacleKeys);
 		this.Obstacles.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
@@ -129,14 +145,14 @@ BasicGame.Play.prototype={
 		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive;}));
 		if(s){
 			s.reset(this.world.randomX,0);
-			s.body.gravity.y=100; // TODO stg rnd range
+			s.body.gravity.y=this.rnd.between(this.curStageInfo.gravityRangeMin,this.curStageInfo.gravityRangeMax);
 		}
 	},
 	respawnObstacles:function(){
 		var s=this.rnd.pick(this.Obstacles.children.filter(function(c){return!c.alive;}));
 		if(s){
 			s.reset(this.world.randomX,0);
-			s.body.gravity.y=100; // TODO stg rnd range
+			s.body.gravity.y=this.rnd.between(this.curStageInfo.gravityRangeMin,this.curStageInfo.gravityRangeMax);
 		}
 	},
 	collideNotes:function(player,note){
@@ -149,6 +165,7 @@ BasicGame.Play.prototype={
 		if(this.playerLife==0){
 			this.Player.alive=!1;
 			// TODO effect
+			// TODO shake
 			return this.end();
 		}
 	},
