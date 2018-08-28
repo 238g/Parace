@@ -15,6 +15,9 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Bg_1':'images/Kazaki/Bg_1.jpg',
 			'Kazaki_1':'images/Kazaki/Kazaki_1.png',
+			'Banana_1':'images/Shizuzaren/AbdominalMuscle.png',//TODO
+			'Fruit_1':'images/Shizuzaren/AbdominalMuscleIcon.png',//TODO
+			'Obstacle_1':'images/Nekomiya/Clay.png',//TODO
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();

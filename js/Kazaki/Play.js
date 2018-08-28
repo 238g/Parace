@@ -12,11 +12,20 @@ BasicGame.Play.prototype={
 		this.StageInfo=this.M.gGlb('StageInfo');
 		this.curStageInfo=this.StageInfo[this.curStg];
 		// Val
-		this.baseTimer=1E3;
-		this.loopingTime=200;
+		this.notesTimer=1E3;
+		this.loopNotesTime=200;//TODO stg
+		this.obstaclesTimer=1E3;
+		this.loopObstaclesTime=1E3;//TODO stg
+
+		this.playerMoveSpeed=.3; // TODO stg
+
+		this.playerLife=1; //TODO stg
+		// this.playerLife=5; //TODO stg
+
+		this.score=0;
 		// Obj
 		this.Tween={};
-		this.Player=
+		this.ArrowRightS=this.ArrowLeftS=this.Player=this.Notes=this.Obstacles=
 		null;
 	},
 	create:function(){
@@ -24,17 +33,45 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.genContents();
-		this.start();
+		this.M.gGlb('endTut')?this.start():this.tut();
 		this.tes();
 	},
 	update:function(){
 		if(this.isPlaying){
-			this.baseTimer-=this.time.elapsed;
-			if(this.baseTimer<0){
-				this.baseTimer=this.loopingTime;
-				this.respawn();
+			this.notesTimer-=this.time.elapsed;
+			if(this.notesTimer<0){
+				this.notesTimer=this.loopNotesTime;
+				this.respawnNotes();
 			}
+			this.obstaclesTimer-=this.time.elapsed;
+			if(this.obstaclesTimer<0){
+				this.obstaclesTimer=this.loopObstaclesTime;
+				this.respawnObstacles();
+			}
+			if(this.input.activePointer.isDown){
+				if(this.input.activePointer.x>this.world.centerX){
+					this.Player.body.x+=(this.playerMoveSpeed*this.time.physicsElapsedMS);
+					if(this.ArrowRightS.tint!=16711680)this.ArrowRightS.tint=16711680;//0xff0000
+					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+				}else{
+					this.Player.body.x-=(this.playerMoveSpeed*this.time.physicsElapsedMS);
+					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
+					if(this.ArrowLeftS.tint!=16711680)this.ArrowLeftS.tint=16711680;//0xff0000
+				}
+				if(this.Player.centerX<0)this.Player.centerX=this.world.width;
+				if(this.Player.centerX>this.world.width)this.Player.centerX=0;
+			}else{
+				if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
+				if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+			}
+			this.physics.arcade.overlap(this.Player,this.Notes,this.collideNotes,null,this);
+			this.physics.arcade.overlap(this.Player,this.Obstacles,this.collideObstacles,null,this);
 		}
+	},
+	tut:function(){
+		this.M.sGlb('endTut',!0);
+		// TODO item list
+		this.start();
 	},
 	start:function(){
 		this.isPlaying=this.inputEnabled=!0;
@@ -42,19 +79,8 @@ BasicGame.Play.prototype={
 	end:function(){
 		this.isPlaying=this.inputEnabled=!1;
 	},
-	back:function(){
-		if(this.inputEnabled){
-			if(!this.Tween.isRunning){
-				this.end();
-				// this.M.SE.play('Enter',{volume:1});
-				var wp=this.add.sprite(0,0,'WP');
-				wp.tint=0x000000;
-				wp.alpha=0;
-				this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
-				this.Tween.onComplete.add(function(){this.M.NextScene('Title')},this);
-				this.Tween.start();
-			}
-		}
+	render:function(){
+		this.game.debug.body(this.Player);
 	},
 	tes:function(){
 		if(__ENV!='prod'){
@@ -64,13 +90,100 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		this.world.enableBody=!0;
+
 		this.add.sprite(0,0,'Bg_1');
-		this.Player=this.add.sprite(0,this.world.height,'Kazaki_1');
+
+		this.ArrowRightS=this.add.sprite(this.world.width,this.world.height,'GameIconsWhite','arrowRight');
+		this.ArrowRightS.anchor.setTo(1);
+		this.ArrowLeftS=this.add.sprite(0,this.world.height,'GameIconsWhite','arrowLeft');
+		this.ArrowLeftS.anchor.setTo(0,1);
+
+		this.Player=this.add.sprite(this.world.centerX,this.world.height,'Kazaki_1');
 		this.Player.anchor.setTo(.5,1);
+		this.physics.arcade.enable(this.Player);
+		this.Player.body.setCircle(this.Player.width*.5,0,0);
 
-		// TODO input controller
+		this.Notes=this.add.group();
+		this.Notes.enableBody=!0;
+		this.Notes.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Notes.createMultiple(10,['Banana_1','Fruit_1']);
+		this.Notes.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+		},this);
+
+		this.Obstacles=this.add.group();
+		this.Obstacles.enableBody=!0;
+		this.Obstacles.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Obstacles.createMultiple(10,['Obstacle_1']);
+		this.Obstacles.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+		},this);
 	},
-	respawn:function(){
+	respawnNotes:function(){
+		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive;}));
+		if(s){
+			s.reset(this.world.randomX,0);
+			s.body.gravity.y=100; // TODO stg rnd range
+		}
+	},
+	respawnObstacles:function(){
+		var s=this.rnd.pick(this.Obstacles.children.filter(function(c){return!c.alive;}));
+		if(s){
+			s.reset(this.world.randomX,0);
+			s.body.gravity.y=100; // TODO stg rnd range
+		}
+	},
+	collideNotes:function(player,note){
+		note.kill();
+		// TODO score++
+	},
+	collideObstacles:function(player,obstacle){
+		obstacle.kill();
+		this.playerLife--;
+		if(this.playerLife==0){
+			this.Player.alive=!1;
+			// TODO effect
+			return this.end();
+		}
+	},
 
+
+
+
+	//TODO res
+	back:function(){
+		if(this.inputEnabled){
+			if(!this.Tween.isRunning){
+				this.end();
+				// this.M.SE.play('Enter',{volume:1});
+				var wp=this.add.sprite(0,0,'WP');
+				wp.tint=0x000000;
+				wp.alpha=0;
+				this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+				this.Tween.onComplete.add(function(){this.M.NextScene('SelectStage')},this);
+				this.Tween.start();
+			}
+		}
+	},
+	yt:function(){
+
+	},
+	tweet:function(){
+
+	},
+	othergames:function(){
+		// this.M.SE.play('OnBtn',{volume:1});
+		if (this.game.device.desktop) {
+			window.open(BasicGame.MY_GAMES_URL,'_blank');
+		} else {
+			location.href=BasicGame.MY_GAMES_URL;
+		}
+		myGa('othergames','Play','Stage_'+this.curStg,this.M.gGlb('playCount'));
 	},
 };

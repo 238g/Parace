@@ -13,7 +13,7 @@ BasicGame.Title.prototype={
 		// this.M.SE.playBGM('TitleBGM',{volume:2});
 		// this.add.sprite(0,0,'Bg_1');
 
-
+		this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start);
 
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 		this.genHUD();
@@ -31,7 +31,6 @@ BasicGame.Title.prototype={
 					this.M.NextScene('SelectStage');
 				},this);
 				this.Tween.start();
-				myGa('start','Title','toSelectStage',this.M.gGlb('playCount'));
 			}
 		} else {
 			// this.M.SE.playBGM('TitleBGM',{volume:2});
@@ -39,7 +38,7 @@ BasicGame.Title.prototype={
 		}
 	},
 	genHUD:function(){
-		var y=this.world.height*.95;
+		var y=this.world.height*.05;
 		this.M.S.genVolBtn(this.world.width*.1,y);
 		this.M.S.genFlScBtn(this.world.width*.9,y);
 	},

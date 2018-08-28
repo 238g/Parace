@@ -1,29 +1,27 @@
 BasicGame.Boot.prototype.genStageInfo=function(){
 	return {
-		1:{
-			notes:this.genNotes(1),
+		1:{name:'Level 1',targetScore:0,closed:!1,
 		},
-		2:{
-			notes:this.genNotes(2),
+		2:{name:'Level 2',targetScore:0,closed:!1,
 		},
-		3:{
-			notes:this.genNotes(3),
+		3:{name:'Level 3',targetScore:0,closed:!1,
 		},
-		4:{
-			notes:this.genNotes(4),
+		4:{name:'Level 4',targetScore:0,closed:!1,
 		},
-		5:{
-			notes:this.genNotes(5),
+		5:{name:'タイムアタック60',targetScore:0,closed:!1,
 		},
-		6:{
-			notes:this.genNotes(6),
+		6:{name:'タイムアタック120',targetScore:0,closed:!1,
+		},
+		7:{name:'サドンデススコア',targetScore:0,closed:!1,
+		},
+		8:{name:'サドンデススコア改',targetScore:0,closed:!0,
 		},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
 	return {
 		jp:{
-			Start:'START',
+			Start:'スタート',
 			OtherGames:'他のゲーム',
 			Back:'もどる',
 			Again:'もういちど',
@@ -34,40 +32,4 @@ BasicGame.Boot.prototype.genWords=function(){
 		},
 		en:{},//TODO
 	};
-};
-BasicGame.Boot.prototype.genNotes=function(num){
-	var a;
-	switch(num){
-		case 1:
-			a='0000'
-			+''
-			+'';
-			break;
-		case 2:
-			a=''
-			+''
-			+'';
-			break;
-		case 3:
-			a=''
-			+''
-			+'';
-			break;
-		case 4:
-			a=''
-			+''
-			+'';
-			break;
-		case 5:
-			a=''
-			+''
-			+'';
-			break;
-		case 6:
-			a=''
-			+''
-			+'';
-			break;
-	}
-	return a;
 };

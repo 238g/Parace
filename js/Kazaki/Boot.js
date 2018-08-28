@@ -17,6 +17,8 @@ create:function(){
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		playCount:0,
+		endTut:!1,
+		curStg:1,
 		Words:this.genWords(),
 		StageInfo:this.genStageInfo(),
 	});
