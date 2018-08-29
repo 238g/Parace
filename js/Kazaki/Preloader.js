@@ -15,6 +15,7 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Bg_1':'images/Kazaki/Bg_1.jpg',
 			'Kazaki_1':'images/Kazaki/Kazaki_1.png',
+			'Kazaki_2':'images/Kazaki/Kazaki_2.png',
 			'Banana_1':'images/Kazaki/Banana_1.png',
 			'Banana_2':'images/Kazaki/Banana_2.png',
 			'Banana_3':'images/Kazaki/Banana_3.png',

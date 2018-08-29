@@ -25,12 +25,13 @@ BasicGame.Play.prototype={
 		this.Tween={};
 		this.LeftKey=this.RightKey=
 		this.ArrowRightS=this.ArrowLeftS=this.Player=this.Notes=this.Obstacles=
+		this.NotesEmitter=
 		null;
 	},
 	create:function(){
 		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
-		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
+		this.stage.backgroundColor='#000';
 		this.genContents();
 		this.M.gGlb('endTut')?this.start():this.tut();
 		this.tes();
@@ -86,12 +87,8 @@ BasicGame.Play.prototype={
 		// TODO item list
 		this.start();
 	},
-	start:function(){
-		this.isPlaying=this.inputEnabled=!0;
-	},
-	end:function(){
-		this.isPlaying=this.inputEnabled=!1;
-	},
+	start:function(){this.isPlaying=this.inputEnabled=!0},
+	end:function(){this.isPlaying=this.inputEnabled=!1},
 	render:function(){
 		this.game.debug.body(this.Player);
 	},
@@ -113,43 +110,54 @@ BasicGame.Play.prototype={
 
 		this.ArrowRightS=this.add.sprite(this.world.width,this.world.height,'GameIconsWhite','arrowRight');
 		this.ArrowRightS.anchor.setTo(1);
+		this.ArrowRightS.smoothed=!1;
 		this.ArrowLeftS=this.add.sprite(0,this.world.height,'GameIconsWhite','arrowLeft');
 		this.ArrowLeftS.anchor.setTo(0,1);
+		this.ArrowLeftS.smoothed=!1;
 
 		this.Player=this.add.sprite(this.world.centerX,this.world.height,'Kazaki_1');
 		this.Player.anchor.setTo(.5,1);
 		this.physics.arcade.enable(this.Player);
 		this.Player.body.setCircle(this.Player.width*.5,0,0);
+		this.Player.smoothed=!1;
 
 		this.Notes=this.add.group();
 		this.Notes.enableBody=!0;
 		this.Notes.physicsBodyType=Phaser.Physics.ARCADE;
-		this.Notes.createMultiple(10,this.curStageInfo.noteKeys);
+		this.Notes.createMultiple(Math.floor(200/this.curStageInfo.noteKeys.length),this.curStageInfo.noteKeys);
 		this.Notes.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
 			c.anchor.setTo(.5);
+			c.smoothed=!1;
 		},this);
 
 		this.Obstacles=this.add.group();
 		this.Obstacles.enableBody=!0;
 		this.Obstacles.physicsBodyType=Phaser.Physics.ARCADE;
-		this.Obstacles.createMultiple(10,this.curStageInfo.obstacleKeys);
+		this.Obstacles.createMultiple(Math.floor(200/this.curStageInfo.obstacleKeys.length),this.curStageInfo.obstacleKeys);
 		this.Obstacles.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
 			c.anchor.setTo(.5);
+			c.smoothed=!1;
 		},this);
+
+		this.NotesEmitter=this.add.emitter(0,0,300);
+		this.NotesEmitter.makeParticles(null,0,300,!0,!0);//TODO null or love
+		this.NotesEmitter.gravity=200;
+		this.NotesEmitter.maxParticleScale=.5;
+		this.NotesEmitter.minParticleScale=.5;
 	},
 	respawnNotes:function(){
-		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive;}));
+		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive}));
 		if(s){
 			s.reset(this.world.randomX,0);
 			s.body.gravity.y=this.rnd.between(this.curStageInfo.gravityRangeMin,this.curStageInfo.gravityRangeMax);
 		}
 	},
 	respawnObstacles:function(){
-		var s=this.rnd.pick(this.Obstacles.children.filter(function(c){return!c.alive;}));
+		var s=this.rnd.pick(this.Obstacles.children.filter(function(c){return!c.alive}));
 		if(s){
 			s.reset(this.world.randomX,0);
 			s.body.gravity.y=this.rnd.between(this.curStageInfo.gravityRangeMin,this.curStageInfo.gravityRangeMax);
@@ -158,14 +166,21 @@ BasicGame.Play.prototype={
 	collideNotes:function(player,note){
 		note.kill();
 		// TODO score++
+
+		// this.NotesEmitter.x=note.x;
+		// this.NotesEmitter.y=note.y;
+		// this.NotesEmitter.explode(500,10);
+		for(var i=0;i<4;i++)this.NotesEmitter.emitParticle(player.x,note.y,note.key);
+
+		// this.M.SE.play('Hit',{volume:1});
 	},
 	collideObstacles:function(player,obstacle){
 		obstacle.kill();
+		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_BOTH);
 		this.playerLife--;
 		if(this.playerLife==0){
 			this.Player.alive=!1;
 			// TODO effect
-			// TODO shake
 			return this.end();
 		}
 	},
