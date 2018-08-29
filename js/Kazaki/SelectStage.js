@@ -21,7 +21,7 @@ BasicGame.SelectStage.prototype={
 		var txtstyl=this.M.S.txtstyl(20);
 		for(var k in this.StageInfo){
 			var info=this.StageInfo[k];
-			if(info.closed)return;
+			if(info.closed)break;
 			var even=k%2;
 			x=this.world.width*.75-(this.world.centerX*(even));
 			var lbl=this.M.S.genLbl(x,y,this.select,info.name,txtstyl);

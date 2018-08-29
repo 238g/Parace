@@ -27,6 +27,7 @@ BasicGame.Preloader.prototype={
 			'Food_6':'images/Kazaki/Food_6.png',
 			'Obstacle_1':'images/Kazaki/Obstacle_1.png',
 			'Obstacle_2':'images/Kazaki/Obstacle_2.png',
+			'HealthHeart':'images/Kazaki/HealthHeart.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
