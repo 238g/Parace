@@ -78,13 +78,12 @@ BasicGame.Boot.prototype.genWords=function(){
 			GameOver:'ゲームオーバー',
 			Clear:'クリア！',
 			Timeout:'終了！',
-
-
-
-			Tweet:'結果をツイート',
-			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			Result:'結果',
 			Again:'もういちど',
 			OtherGames:'他のゲーム',
+			Tweet:'結果をツイート',
+			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
+			TweetHT:'かざゲー',
 		},
 		en:{},//TODO
 	};

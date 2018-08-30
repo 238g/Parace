@@ -24,6 +24,8 @@ BasicGame.Play.prototype={
 
 		this.timeAttackTimer=1E3;
 		this.timeAttackLeftTime=this.curStageInfo.timeAttackLeftTime;
+
+		this.endTxt=null;
 		// Obj
 		this.Tween={};
 		this.LeftKey=this.RightKey=
@@ -31,6 +33,7 @@ BasicGame.Play.prototype={
 		this.NotesEmitter=
 		this.CurScoreTS=this.TargetScoreTS=this.TimeTS=
 		this.Lives=
+		this.HUD=
 		null;
 	},
 	create:function(){
@@ -165,7 +168,6 @@ BasicGame.Play.prototype={
 		this.NotesEmitter.maxParticleScale=.5;
 		this.NotesEmitter.minParticleScale=.5;
 
-
 		if(this.curStageInfo.mode!=2){
 			this.Lives=this.add.group();
 			for(var i=0;i<this.curStageInfo.playerLife;i++){
@@ -176,15 +178,22 @@ BasicGame.Play.prototype={
 			this.Lives.alignIn(this.world.bounds,Phaser.RIGHT_CENTER,-life.width*.5,0);
 		}
 
+		this.HUD=this.add.group();
 		if(this.curStageInfo.mode==1){
-			this.TargetScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.TargetScore+this.M.H.formatComma(this.curStageInfo.targetScore),this.M.S.txtstyl(25));
-			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.1,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
+			this.TargetScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.04,this.curWords.TargetScore+this.M.H.formatComma(this.curStageInfo.targetScore),this.M.S.txtstyl(25));
+			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.11,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
+			this.HUD.add(this.TargetScoreTS);
+			this.HUD.add(this.CurScoreTS);
 		}else if(this.curStageInfo.mode==2){
-			this.TimeTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.TimeAttack+this.curStageInfo.timeAttackLeftTime,this.M.S.txtstyl(25));
-			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.1,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
+			this.TimeTS=this.M.S.genTxt(this.world.centerX,this.world.height*.04,this.curWords.TimeAttack+this.curStageInfo.timeAttackLeftTime,this.M.S.txtstyl(25));
+			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.11,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
+			this.HUD.add(this.TimeTS);
+			this.HUD.add(this.CurScoreTS);
 		}else{
 			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
+			this.HUD.add(this.CurScoreTS);
 		}
+
 	},
 	respawnNotes:function(){
 		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive}));
@@ -209,10 +218,8 @@ BasicGame.Play.prototype={
 		this.CurScoreTS.changeText(this.curWords.CurScore+this.M.H.formatComma(this.score));
 
 		if(this.curStageInfo.mode==1){
-			if(this.score>this.curStageInfo.targetScore){
-				// TODO effect
+			if(this.score>this.curStageInfo.targetScore)
 				return this.clear();
-			}
 		}
 	},
 	collideObstacles:function(player,obstacle){
@@ -254,40 +261,88 @@ BasicGame.Play.prototype={
 		var tw=this.M.T.moveA(ts,{xy:{x:this.world.centerX},delay:500});
 		tw.onComplete.add(this.genRes,this);
 		tw.start();
+		this.endTxt=txt;
+		this.HUD.add(ts);
 	},
 	genRes:function(){
-		
-	},
-
-
-	//TODO res
-	back:function(){
-		if(this.inputEnabled){
-			if(!this.Tween.isRunning){
-				this.end();
-				// this.M.SE.play('Enter',{volume:1});
-				var wp=this.add.sprite(0,0,'WP');
-				wp.tint=0x000000;
-				wp.alpha=0;
-				this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
-				this.Tween.onComplete.add(function(){this.M.NextScene('SelectStage')},this);
-				this.Tween.start();
+		this.time.events.add(500,function(){
+			this.HUD.destroy();
+			var s=this.add.sprite(-this.world.width,0,'TWP');
+			s.tint=0x000000;
+			var tw=this.M.T.moveA(s,{xy:{x:0}});
+			tw.onComplete.add(function(){
+				this.inputEnabled=!0;
+				this.M.S.genLbl(this.world.width*.25,this.world.height*.7,this.again,this.curWords.Again);
+				this.M.S.genLbl(this.world.width*.75,this.world.height*.7,this.tweet,this.curWords.Tweet);
+				this.M.S.genLbl(this.world.width*.25,this.world.height*.82,this.othergames,this.curWords.OtherGames);
+				this.M.S.genLbl(this.world.width*.75,this.world.height*.82,this.back,this.curWords.Back);
+			},this);
+			tw.start();
+			var txtstyl=this.M.S.txtstyl(35);
+			txtstyl.fill=txtstyl.mStroke='#FF0040';
+			s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.15,this.curWords.Result,txtstyl));
+			if(this.curStageInfo.mode==1){
+				txtstyl.fontSize=50;
+				s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.35,this.endTxt,txtstyl));
+			}else if(this.curStageInfo.mode==2){
+				s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.35,this.curWords.CurScore+this.M.H.formatComma(this.score),txtstyl));
+			}else{
+				s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.35,this.curWords.CurScore+this.M.H.formatComma(this.score),txtstyl));
 			}
+		},this);
+	},
+	again:function(){
+		if(!this.Tween.isRunning){
+			this.inputEnabled=!1;
+			// this.M.SE.play('Enter',{volume:1});
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
+			this.Tween.start();
+			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
+			myGa('restart','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		}
+	},
+	back:function(){
+		if(!this.Tween.isRunning){
+			this.inputEnabled=!1;
+			// this.M.SE.play('Enter',{volume:1});
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+			this.Tween.onComplete.add(function(){this.M.NextScene('SelectStage')},this);
+			this.Tween.start();
 		}
 	},
 	yt:function(){
-
+		if(this.inputEnabled){
+			// this.M.SE.play('OnBtn',{volume:1});
+			this.game.device.desktop?window.open(BasicGame.YOUTUBE_URL,"_blank"):location.href=BasicGame.YOUTUBE_URL;
+			myGa('youtube','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		}
 	},
 	tweet:function(){
+		if(this.inputEnabled){
+			// this.M.SE.play('OnBtn',{volume:1});
 
+			var e=['🍌🍌🍌🍌🍌🍌','🦍🦍🦍🦍🦍🦍','🐻🐻🐻🐻🐻🐻',
+				'🍯🍯🍯🍯🍯🍯','🌳🌳🌳🌳🌳🌳','🍓🍓🍓🍓🍓🍓',];
+
+			var res='あああああああああああああああああああああああああ\n';//TODO
+
+			var txt=this.rnd.pick(e)+'\n'+this.curWords.TweetTtl+'\n'+res+this.rnd.pick(e)+'\n';
+			this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
+			myGa('tweet','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		}
 	},
 	othergames:function(){
-		// this.M.SE.play('OnBtn',{volume:1});
-		if (this.game.device.desktop) {
-			window.open(BasicGame.MY_GAMES_URL,'_blank');
-		} else {
-			location.href=BasicGame.MY_GAMES_URL;
+		if(this.inputEnabled){
+			// this.M.SE.play('OnBtn',{volume:1});
+			this.game.device.desktop?window.open(__VTUBER_GAMES,"_blank"):location.href=__VTUBER_GAMES;
+			myGa('othergames','Play','Stage_'+this.curStg,this.M.gGlb('playCount'));
 		}
-		myGa('othergames','Play','Stage_'+this.curStg,this.M.gGlb('playCount'));
 	},
 };
