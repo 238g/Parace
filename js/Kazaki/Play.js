@@ -11,13 +11,17 @@ BasicGame.Play.prototype={
 		this.curStg=this.M.gGlb('curStg');
 		this.StageInfo=this.M.gGlb('StageInfo');
 		this.curStageInfo=this.StageInfo[this.curStg];
+
+		this.curChar=this.M.gGlb('curChar');
+		this.CharInfo=this.M.gGlb('CharInfo');
+		this.curCharInfo=this.CharInfo[this.curChar];
 		// Val
 		this.notesTimer=1E3;
 		this.loopNotesTime=this.curStageInfo.loopNotesTime;
 		this.obstaclesTimer=1E3;
-		this.loopObstaclesTime=this.curStageInfo.loopObstaclesTime;
+		this.loopObstaclesTime=this.curStageInfo.loopObstaclesTime+this.curCharInfo.delayLoopObstaclesTime;
 
-		this.playerMoveSpeed=this.curStageInfo.playerMoveSpeed;
+		this.playerMoveSpeed=this.curStageInfo.playerMoveSpeed*this.curCharInfo.playerMoveSpeed;
 		this.playerLife=this.curStageInfo.playerLife;
 
 		this.score=0;
@@ -26,14 +30,14 @@ BasicGame.Play.prototype={
 		this.timeAttackLeftTime=this.curStageInfo.timeAttackLeftTime;
 
 		this.endTxt=null;
+		this.clearFlag=!1;
 		// Obj
 		this.Tween={};
 		this.LeftKey=this.RightKey=
 		this.ArrowRightS=this.ArrowLeftS=this.Player=this.Notes=this.Obstacles=
 		this.NotesEmitter=
 		this.CurScoreTS=this.TargetScoreTS=this.TimeTS=
-		this.Lives=
-		this.HUD=
+		this.Lives=this.HUD=this.HowToS=this.StartTS=
 		null;
 	},
 	create:function(){
@@ -41,7 +45,7 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#000';
 		this.genContents();
-		this.M.gGlb('endTut')?this.start():this.tut();
+		this.tut();
 		this.tes();
 	},
 	update:function(){
@@ -61,10 +65,12 @@ BasicGame.Play.prototype={
 					this.Player.body.x+=(this.playerMoveSpeed*this.time.physicsElapsedMS);
 					if(this.ArrowRightS.tint!=16711680)this.ArrowRightS.tint=16711680;//0xff0000
 					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
+					if(this.Player.scale.x==1)this.Player.scale.x=-1;
 				}else{
 					this.Player.body.x-=(this.playerMoveSpeed*this.time.physicsElapsedMS);
 					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
 					if(this.ArrowLeftS.tint!=16711680)this.ArrowLeftS.tint=16711680;//0xff0000
+					if(this.Player.scale.x==-1)this.Player.scale.x=1;
 				}
 				if(this.Player.centerX<0)this.Player.centerX=this.world.width;
 				if(this.Player.centerX>this.world.width)this.Player.centerX=0;
@@ -75,12 +81,14 @@ BasicGame.Play.prototype={
 					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
 					if(this.Player.centerX<0)this.Player.centerX=this.world.width;
 					if(this.Player.centerX>this.world.width)this.Player.centerX=0;
+					if(this.Player.scale.x==1)this.Player.scale.x=-1;
 				}else if(this.LeftKey.isDown){
 					this.Player.body.x-=(this.playerMoveSpeed*this.time.physicsElapsedMS);
 					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
 					if(this.ArrowLeftS.tint!=16711680)this.ArrowLeftS.tint=16711680;//0xff0000
 					if(this.Player.centerX<0)this.Player.centerX=this.world.width;
 					if(this.Player.centerX>this.world.width)this.Player.centerX=0;
+					if(this.Player.scale.x==-1)this.Player.scale.x=1;
 				}else{
 					if(this.ArrowRightS.tint!=16777215)this.ArrowRightS.tint=16777215;//0xffffff
 					if(this.ArrowLeftS.tint!=16777215)this.ArrowLeftS.tint=16777215;//0xffffff
@@ -100,13 +108,27 @@ BasicGame.Play.prototype={
 		}
 	},
 	tut:function(){
-		this.M.sGlb('endTut',!0);
-		// TODO item list
-		this.start();
+		if(this.curStageInfo.mode==1){
+			if(!this.M.gGlb('endTut_1')){
+				this.M.sGlb('endTut_1',!0);
+				return this.genTut();
+			}
+		}else if(this.curStageInfo.mode==2){
+			if(!this.M.gGlb('endTut_2')){
+				this.M.sGlb('endTut_2',!0);
+				return this.genTut();
+			}
+		}else{
+			if(!this.M.gGlb('endTut_3')){
+				this.M.sGlb('endTut_3',!0);
+				return this.genTut();
+			}
+		}
+		this.genStart();
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
 	end:function(){this.isPlaying=this.inputEnabled=!1},
-	render:function(){
+	render:function(){//TODO hide
 		this.game.debug.body(this.Player);
 	},
 	tes:function(){
@@ -114,6 +136,10 @@ BasicGame.Play.prototype={
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
 			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear,this);
 			this.input.keyboard.addKey(Phaser.Keyboard.T).onDown.add(this.timeout,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){
+				this.score=2000000;
+				this.gameOver();
+			},this);
 			// if(this.M.H.getQuery('f')){this.AGroup.pendingDestroy=!0;this[this.M.H.getQuery('f')]();}
 		}
 	},
@@ -134,7 +160,7 @@ BasicGame.Play.prototype={
 		this.ArrowLeftS.anchor.setTo(0,1);
 		this.ArrowLeftS.smoothed=!1;
 
-		this.Player=this.add.sprite(this.world.centerX,this.world.height,'Kazaki_1');
+		this.Player=this.add.sprite(this.world.centerX,this.world.height,this.curCharInfo.playerImg);
 		this.Player.anchor.setTo(.5,1);
 		this.physics.arcade.enable(this.Player);
 		this.Player.body.setCircle(this.Player.width*.4,this.Player.width*.1,this.Player.height*.05);
@@ -193,7 +219,6 @@ BasicGame.Play.prototype={
 			this.CurScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.CurScore+this.M.H.formatComma(this.score),this.M.S.txtstyl(30));
 			this.HUD.add(this.CurScoreTS);
 		}
-
 	},
 	respawnNotes:function(){
 		var s=this.rnd.pick(this.Notes.children.filter(function(c){return!c.alive}));
@@ -237,23 +262,25 @@ BasicGame.Play.prototype={
 			this.Lives.getBottom().destroy();
 			if(this.playerLife==0){
 				this.Player.alive=!1;
-				// TODO effect
 				return this.gameOver();
 			}			
 		}
 	},
 	getScore:function(s){
-		var score=(this.rnd.between(111,155)*s.body.gravity.y*this.curStageInfo.scoreRate*.01);
+		var score=(s.body.gravity.y*this.curStageInfo.scoreRate*this.curCharInfo.scoreRate*this.rnd.between(111,123)*.001);
 		switch(s.key){
-			case 'Banana_3':score*=-3;break;
-			case 'Obstacle_1':score*=-5;break;
-			case 'Obstacle_2':score*=-10;break;
+			case 'Banana_3':score*=(-3*this.curCharInfo.minusScoreRate);break;
+			case 'Obstacle_1':score*=(-5*this.curCharInfo.minusScoreRate);break;
+			case 'Obstacle_2':score*=(-10*this.curCharInfo.minusScoreRate);break;
 			default:score*=Number(String(s.key).split('_')[1]);
 		}
 		return Math.floor(score);
 	},
 	gameOver:function(){this.genEnd(this.curWords.GameOver)},
-	clear:function(){this.genEnd(this.curWords.Clear)},
+	clear:function(){
+		this.clearFlag=!0;
+		this.genEnd(this.curWords.Clear);
+	},
 	timeout:function(){this.genEnd(this.curWords.Timeout)},
 	genEnd:function(txt){
 		this.end();
@@ -272,10 +299,15 @@ BasicGame.Play.prototype={
 			var tw=this.M.T.moveA(s,{xy:{x:0}});
 			tw.onComplete.add(function(){
 				this.inputEnabled=!0;
-				this.M.S.genLbl(this.world.width*.25,this.world.height*.7,this.again,this.curWords.Again);
+				if((this.curStg==1||this.curStg==2||this.curStg==3)&&this.clearFlag){
+					this.M.S.genLbl(this.world.width*.25,this.world.height*.7,this.nextStg,this.curWords.NextStg);
+				}else{
+					this.M.S.genLbl(this.world.width*.25,this.world.height*.7,this.again,this.curWords.Again);
+				}
 				this.M.S.genLbl(this.world.width*.75,this.world.height*.7,this.tweet,this.curWords.Tweet);
 				this.M.S.genLbl(this.world.width*.25,this.world.height*.82,this.othergames,this.curWords.OtherGames);
 				this.M.S.genLbl(this.world.width*.75,this.world.height*.82,this.back,this.curWords.Back);
+				this.checkOpenNewInfo();
 			},this);
 			tw.start();
 			var txtstyl=this.M.S.txtstyl(35);
@@ -290,6 +322,21 @@ BasicGame.Play.prototype={
 				s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.35,this.curWords.CurScore+this.M.H.formatComma(this.score),txtstyl));
 			}
 		},this);
+	},
+	nextStg:function(){
+		if(!this.Tween.isRunning){
+			this.inputEnabled=!1;
+			// this.M.SE.play('Enter',{volume:1});
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
+			this.Tween.start();
+			this.M.sGlb('curStg',Number(this.curStg)+1);
+			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
+			myGa('next_level','Play','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		}
 	},
 	again:function(){
 		if(!this.Tween.isRunning){
@@ -331,7 +378,9 @@ BasicGame.Play.prototype={
 			var e=['🍌🍌🍌🍌🍌🍌','🦍🦍🦍🦍🦍🦍','🐻🐻🐻🐻🐻🐻',
 				'🍯🍯🍯🍯🍯🍯','🌳🌳🌳🌳🌳🌳','🍓🍓🍓🍓🍓🍓',];
 
-			var res='あああああああああああああああああああああああああ\n';//TODO
+			var res=this.curWords.TweetResChar+this.curCharInfo.name+'\n'+
+					this.curWords.TweetResStg+this.curStageInfo.name+'\n'+
+					this.curWords.TweetResScore+this.M.H.formatComma(this.score)+'\n';
 
 			var txt=this.rnd.pick(e)+'\n'+this.curWords.TweetTtl+'\n'+res+this.rnd.pick(e)+'\n';
 			this.M.H.tweet(txt,this.curWords.TweetHT,location.href);
@@ -344,5 +393,53 @@ BasicGame.Play.prototype={
 			this.game.device.desktop?window.open(__VTUBER_GAMES,"_blank"):location.href=__VTUBER_GAMES;
 			myGa('othergames','Play','Stage_'+this.curStg,this.M.gGlb('playCount'));
 		}
+	},
+	checkOpenNewInfo:function(){
+		var txt=null;
+		if(this.curStg==7&&this.score>1000000&&this.StageInfo[8].closed==!0){
+			this.StageInfo[8].closed=!1;
+			txt=this.curWords.OpenNewStg;
+		}else if(this.curStg==2&&this.clearFlag&&this.CharInfo[2].closed==!0){
+			this.CharInfo[2].closed=!1;
+			txt=this.curWords.OpenNewChar;
+		}else if(this.curStg==3&&this.clearFlag&&this.CharInfo[3].closed==!0){
+			this.CharInfo[3].closed=!1;
+			txt=this.curWords.OpenNewChar;
+		}else if(this.curStg==4&&this.clearFlag&&this.CharInfo[4].closed==!0){
+			this.CharInfo[4].closed=!1;
+			txt=this.curWords.OpenNewChar;
+		}
+		if(txt){
+			var ts=this.M.S.genTxt(this.world.width*.7,this.world.centerY,txt,this.M.S.txtstyl(40));
+			ts.angle=15;
+			ts.scale.setTo(3);
+			var tw=this.add.tween(ts.scale).to({x:1,y:1},1000,null,!0);
+			tw.onComplete.add(function(){this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_BOTH)},this);
+		}
+	},
+	genTut:function(){
+		this.HowToS=this.add.sprite(0,0,'TWP');
+		this.HowToS.tint=0x000000;
+		var ts=this.M.S.genTxt(this.world.centerX,this.world.height*.3,this.curWords['HowTo_'+this.curStageInfo.mode]);
+		this.HowToS.addChild(ts);
+		this.time.events.add(500,function(){
+			this.input.onDown.addOnce(function(){
+				this.HowToS.destroy();
+				this.genStart();
+			},this);
+		},this);
+		// TODO char
+	},
+	genStart:function(){
+		this.StartTS=this.M.S.genTxt(this.world.centerX,this.world.centerY,this.curWords.Start,this.M.S.txtstyl(50));
+		this.StartTS.scale.setTo(0);
+		var tw=this.M.T.popUpB(this.StartTS);
+		tw.start();
+		tw.onComplete.add(function(){
+			this.time.events.add(300,function(){
+				this.StartTS.destroy();
+				this.start();
+			},this);
+		},this);
 	},
 };

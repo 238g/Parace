@@ -1,3 +1,27 @@
+BasicGame.Boot.prototype.genCharInfo=function(){
+	return {
+		1:{name:'森中花咲',playerMoveSpeed:1,
+			delayLoopObstaclesTime:0,
+			scoreRate:10,minusScoreRate:1,
+			closed:!1,playerImg:'Kazaki_1',introImg:'Kazaki_1',
+		},
+		2:{name:'森中花咲',playerMoveSpeed:.8,
+			delayLoopObstaclesTime:100,
+			scoreRate:8,minusScoreRate:.8,
+			closed:!0,playerImg:'Kazaki_1',introImg:'Kazaki_1',
+		},
+		3:{name:'森中花咲',playerMoveSpeed:1.2,
+			delayLoopObstaclesTime:0,
+			scoreRate:12,minusScoreRate:1.2,
+			closed:!0,playerImg:'Kazaki_1',introImg:'Kazaki_1',
+		},
+		4:{name:'森中花咲',playerMoveSpeed:2,
+			delayLoopObstaclesTime:-100,
+			scoreRate:20,minusScoreRate:2,
+			closed:!0,playerImg:'Kazaki_1',introImg:'Kazaki_1',
+		},
+	};
+};
 BasicGame.Boot.prototype.genStageInfo=function(){
 	return {
 		1:{name:'Level 1',closed:!1,mode:1,
@@ -61,7 +85,7 @@ BasicGame.Boot.prototype.genStageInfo=function(){
 			obstacleKeys:['Banana_3','Obstacle_1','Obstacle_2'],
 			loopNotesTime:400,loopObstaclesTime:200,playerMoveSpeed:.8,
 			playerLife:1,gravityRangeMin:500,gravityRangeMax:1000,
-			targetScore:null,scoreRate:10,
+			targetScore:null,scoreRate:20,
 			timeAttackLeftTime:null,
 		},
 	};
@@ -71,7 +95,11 @@ BasicGame.Boot.prototype.genWords=function(){
 		jp:{
 			Start:'スタート',
 			Back:'もどる',
-			HowTo:'',//TODO
+			// TODO バナナなど -> アイテム？良品？  // 傷んだバナナなど->???
+			// TODO アイテムが悪いとハートがなくなる?
+			HowTo_1:'目標のスコアを目指して\nバナナなどを取ろう！\n右のハートがなくなったら\nゲームオーバー！\n高レベルクリアで\n隠しキャラがオープン！？',
+			HowTo_2:'制限時間まで\nバナナなどを取って\nハイスコアを目指せ！\n傷んだバナナなどは\nスコアが減るよ！\nどこまでスコアを伸ばせるか…\nTwitterのみんなと競争だ！',
+			HowTo_3:'命の限り\nバナナなどを取り続けよう！\nどこまでスコアを伸ばせるか…\nTwitterのみんなと競争だ！\n高スコアで さらなる\n隠しステージが…！',
 			CurScore:'スコア: ',
 			TargetScore:'目標: ',
 			TimeAttack:'制限時間: ',
@@ -84,6 +112,14 @@ BasicGame.Boot.prototype.genWords=function(){
 			Tweet:'結果をツイート',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TweetHT:'かざゲー',
+			TweetResChar:'キャラ: ',
+			TweetResStg:'ステージ: ',
+			TweetResScore:'スコア: ',
+			NextStg:'次のレベルへ',
+			OpenNewStg:'新ステージ\nオープン！',
+			OpenNewChar:'新キャラ\nオープン！',
+			SelectStg:'ステージを選んでね',
+			SelectChar:'キャラを選んでね',
 		},
 		en:{},//TODO
 	};

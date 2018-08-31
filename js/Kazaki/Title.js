@@ -11,7 +11,7 @@ BasicGame.Title.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:2});
-		// this.add.sprite(0,0,'Bg_1');
+		this.add.sprite(0,0,'Bg_1');
 
 		this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start);
 
@@ -27,9 +27,7 @@ BasicGame.Title.prototype={
 				wp.tint=0x000000;
 				wp.alpha=0;
 				this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
-				this.Tween.onComplete.add(function(){
-					this.M.NextScene('SelectStage');
-				},this);
+				this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
 				this.Tween.start();
 			}
 		} else {

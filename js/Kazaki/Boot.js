@@ -17,10 +17,14 @@ create:function(){
 		curLang:'jp',
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		playCount:0,
-		endTut:!1,
+		endTut_1:!1,
+		endTut_2:!1,
+		endTut_3:!1,
 		curStg:1,
+		curChar:1,
 		Words:this.genWords(),
 		StageInfo:this.genStageInfo(),
+		CharInfo:this.genCharInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};
