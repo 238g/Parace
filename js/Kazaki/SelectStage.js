@@ -4,6 +4,10 @@ BasicGame.SelectStage.prototype={
 		this.curStg=this.M.gGlb('curStg');
 		this.StageInfo=this.M.gGlb('StageInfo');
 
+		this.curChar=this.M.gGlb('curChar');
+		this.CharInfo=this.M.gGlb('CharInfo');
+		this.curCharInfo=this.CharInfo[this.curChar];
+
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
@@ -12,8 +16,9 @@ BasicGame.SelectStage.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		// this.M.SE.playBGM('TitleBGM',{volume:2});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.add.sprite(0,0,'Bg_1');
+		this.add.sprite(this.world.centerX,this.world.height,this.curCharInfo.largeImg).anchor.setTo(.5,1);
 
 		this.M.S.genTxt(this.world.centerX,this.world.height*.15,this.curWords.SelectStg,this.M.S.txtstyl(35));
 
@@ -42,7 +47,11 @@ BasicGame.SelectStage.prototype={
 			this.M.sGlb('curStg',this.curStg);
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 
-			// this.M.SE.play('OnBtn',{volume:1});
+			if(this.curChar==3){
+				this.M.SE.play('DecoBeam',{volume:1.5});
+			}else{
+				this.M.SE.play('LetsGo',{volume:1});
+			}
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -54,7 +63,7 @@ BasicGame.SelectStage.prototype={
 	},
 	back:function(){
 		if(!this.Tween.isRunning){
-			// this.M.SE.play('Enter',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;

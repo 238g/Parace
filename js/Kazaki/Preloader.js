@@ -14,8 +14,17 @@ BasicGame.Preloader.prototype={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Bg_1':'images/Kazaki/Bg_1.jpg',
+			'Bg_2':'images/Kazaki/Bg_2.png',
+			'Bg_3':'images/Kazaki/Bg_3.jpg',
+			'Bg_4':'images/Kazaki/Bg_4.png',
 			'Kazaki_1':'images/Kazaki/Kazaki_1.png',
 			'Kazaki_2':'images/Kazaki/Kazaki_2.png',
+			'Kazaki_3':'images/Kazaki/Kazaki_3.png',
+			'Yamada_1':'images/Kazaki/Yamada_1.png',
+			'Kazaki_1_L':'images/Kazaki/Kazaki_1_L.png',
+			'Kazaki_2_L':'images/Kazaki/Kazaki_2_L.png',
+			'Kazaki_3_L':'images/Kazaki/Kazaki_3_L.png',
+			'Yamada_1_L':'images/Kazaki/Yamada_1_L.png',
 			'Banana_1':'images/Kazaki/Banana_1.png',
 			'Banana_2':'images/Kazaki/Banana_2.png',
 			'Banana_3':'images/Kazaki/Banana_3.png',
@@ -28,6 +37,9 @@ BasicGame.Preloader.prototype={
 			'Obstacle_1':'images/Kazaki/Obstacle_1.png',
 			'Obstacle_2':'images/Kazaki/Obstacle_2.png',
 			'HealthHeart':'images/Kazaki/HealthHeart.png',
+			'YouTube':'images/Kazaki/YouTube.png',
+			'Osamu_1':'images/Kazaki/Osamu_1.png',
+			'Hiroshi_1':'images/Kazaki/Hiroshi_1.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -35,8 +47,21 @@ BasicGame.Preloader.prototype={
 
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Dora/AvantJazz',
-			// PlayBGM:'sounds/BGM/Dora/arabiantechno',
+			TitleBGM:'sounds/BGM/Kazaki/Urara',
+			PlayBGM:'sounds/BGM/Kazaki/harunopayapaya',
+			OnStart:'sounds/SE/LabJP/Btn/decision4',
+			OnBtn:'sounds/SE/LabJP/Btn/decision7',
+			Bad_1:'sounds/SE/LabJP/Performance/Anime/feed1',
+			Banana_1:'sounds/VOICE/Kazaki/Banana_1',
+			LetsGo:'sounds/VOICE/Kazaki/LetsGo',
+			DecoBeam:'sounds/VOICE/Kazaki/DecoBeam',
+			AdultVer:'sounds/VOICE/Kazaki/AdultVer',
+			Foo:'sounds/VOICE/Kazaki/Foo',
+			GoodRes_1:'sounds/VOICE/Kazaki/GoodRes_1',
+			BadRes_1:'sounds/VOICE/Kazaki/BadRes_1',
+			GoodItem:'sounds/SE/JRPG_UI/Purchase',
+			TimeoutRes:'sounds/SE/LabJP/Life/Other/police-whistle2',
+			ResOpen:'sounds/SE/GUI_Sound_Effects/save',
 		};
 		for(var k in s){
 			var p=s[k];
