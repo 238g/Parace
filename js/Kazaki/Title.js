@@ -18,7 +18,8 @@ BasicGame.Title.prototype={
 
 		this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.start,this.curWords.Start);
 
-		this.M.S.genTxt(this.world.centerX,this.world.height*.15,BasicGame.GAME_TITLE,this.M.S.txtstyl(30));
+		this.add.sprite(this.world.centerX,this.world.height*.15,'Title').anchor.setTo(.5);
+		// this.M.S.genTxt(this.world.centerX,this.world.height*.15,BasicGame.GAME_TITLE,this.M.S.txtstyl(30));
 
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);

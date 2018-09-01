@@ -40,6 +40,7 @@ BasicGame.Preloader.prototype={
 			'YouTube':'images/Kazaki/YouTube.png',
 			'Osamu_1':'images/Kazaki/Osamu_1.png',
 			'Hiroshi_1':'images/Kazaki/Hiroshi_1.png',
+			'Title':'images/Kazaki/Title.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
