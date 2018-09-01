@@ -162,6 +162,12 @@ function genGamesInfo(){
 				caption:'にじさんじSEEDsドーラ様の二次創作ゲームです！ドーラ様と一緒に度胸試しにチャレンジ！花畑チャイカ殿も火炎瓶と共に登場！？',
 				release:'2018/8/24',
 			},
+			1028:{id:1028,title:'森中花咲のバナ〜ナFight',url:GI2A('Kazaki'),
+				tColor:'#64c100',mColor:'#cbdc7d',
+				tc:GI2B('Kazaki'),imgA:GI2C('Kazaki'),imgB:GI2D('Kazaki'),
+				caption:'にじさんじ森中花咲ちゃんの二次創作ゲーム！木から降ってくるバナナやいちごをキャッチしよう！生放送でお馴染みのキャラクターはキャッチしたら大変なことに！？',
+				release:'2018/9/1',
+			},
 		},
 	};
 };

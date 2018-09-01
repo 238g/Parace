@@ -28,6 +28,7 @@
 |#22|トラック女神|https://238g.github.io/Parace/TruckGoddess.html|2018/7/15|
 |#23|MitoDanceRevolution|https://238g.github.io/Parace/MitoDanceRevolution.html|2018/7/22|
 |#24|ラキぴょこぴょこ|https://238g.github.io/Parace/Laki.html|2018/7/30|
-|#25|もちもちフィッシング|https://238g.github.io/Parace/MMFishing.html|2018/8/05|
+|#25|もちもちフィッシング|https://238g.github.io/Parace/MMFishing.html|2018/8/5|
 |#26|シズザレン工場|https://238g.github.io/Parace/Shizuzaren.html|2018/8/17|
 |#27|ドーラ様の度胸試し|https://238g.github.io/Parace/Dora.html|2018/8/24|
+|#28|森中花咲のバナ〜ナFight|https://238g.github.io/Parace/Kazaki.html|2018/9/1|

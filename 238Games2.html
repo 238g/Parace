@@ -285,7 +285,8 @@
 										+'<th scope="row">'+i+'</th>'
 										+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
 										+'<td>'+newBadge+info.title+'</td>'
-										+'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
+										// +'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
+										+'<td><a href="#" class="game_list_play" data-toggle="modal" data-target="#myModal" data-number="'+number+'">PLAY</a></td>'
 										+'<td>'+info.release+'</td>'
 									+'</tr>');
 							}
@@ -488,6 +489,7 @@
 			////// ModalHandler
 			$('.carousel-inner a').click(popupDetail);
 			$('.game_thumbnail').click(popupDetail);
+			$('.game_list_play').click(popupDetail);
 			function popupDetail () {
 				var info=GamesInfo[$(this).data('number')];
 				__curGameInfo=info;
