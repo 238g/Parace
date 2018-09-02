@@ -25,14 +25,15 @@ BasicGame.SelectChar.prototype={
 		var c=0;
 		for(var k in this.CharInfo){
 			var info=this.CharInfo[k];
-			if(info.closed)continue;
-			var even=k%2;
-			x= baseX-(this.world.centerX*(even));
-			var b=this.add.button(x,baseY+marginY*c,info.largeImg,this.select,this);
-			b.char=k;
-			b.anchor.setTo(.5);
-			b.scale.setTo(.4);
-			this.M.S.genTxt(x,baseTSY+marginY*c-20,info.name,txtstyl);
+			if(!info.closed){
+				var even=k%2;
+				x= baseX-(this.world.centerX*(even));
+				var b=this.add.button(x,baseY+marginY*c,info.largeImg,this.select,this);
+				b.char=k;
+				b.anchor.setTo(.5);
+				b.scale.setTo(.4);
+				this.M.S.genTxt(x,baseTSY+marginY*c-20,info.name,txtstyl);
+			}
 			if(k==2)c++;
 		}
 
