@@ -22,8 +22,16 @@ BasicGame.Preloader.prototype={
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
+		this.loadChars();
 	},
-
+	loadChars:function(){
+		var CharInfo=this.M.gGlb('CharInfo');
+		for(var k in CharInfo){
+			// var info=CharInfo[k];
+			this.load.image('Card'+k,'images/upd8Game/card/'+k+'.jpg');
+			this.load.image('Frame'+k,'images/upd8Game/frame/'+k+'.jpg');
+		}
+	},
 	loadAudio:function(){
 		var s={
 			// TitleBGM:'sounds/BGM/Kazaki/Urara',

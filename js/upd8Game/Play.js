@@ -56,10 +56,9 @@ BasicGame.Play.prototype={
 		var size=60;
 		for(var i=0;i<5;i++){
 			for(var j=0;j<6;j++){
-				var panel=this.add.button(0,0,'test',this.selectPanel,this);
 				var card=cards[cardCount];
+				var panel=this.add.button(0,0,'Card'+card.cId,this.selectPanel,this);
 				panel.cId=card.cId;
-				panel.cName=card.cName;
 				panels.add(panel);
 				cardCount++;
 			}
@@ -69,23 +68,31 @@ BasicGame.Play.prototype={
 
 		var txtstyl=this.M.S.txtstyl(30);
 		this.FirstSelectedTS=this.M.S.genTxt(this.world.width*.05,this.world.height*.87,'',txtstyl);
-		this.FirstSelectedTS.anchor.setTo(0,.5);
+		this.FirstSelectedTS.anchor.setTo(.01,.5);
 		this.FirstSelectedTS.children[0].anchor.setTo(0,.5);
 		this.SecoundSelectedTS=this.M.S.genTxt(this.world.width*.95,this.world.height*.95,'',txtstyl);
-		this.SecoundSelectedTS.anchor.setTo(1,.5);
+		this.SecoundSelectedTS.anchor.setTo(.99,.5);
 		this.SecoundSelectedTS.children[0].anchor.setTo(1,.5);
 	},
 	selectPanel:function(b){
-		console.log(b.cId,b.cName);
 		b.inputEnabled=!1;
+		var info=this.CharInfo[b.cId];
+
+		var txtstyl=this.M.S.txtstyl(30);
+		txtstyl.stroke='#333333';
+		txtstyl.fill=info.color;
+		txtstyl.mStroke='#fff';
+
 		if(this.oneSelected){
 			this.SecoundSelecter=b;
-			this.SecoundSelectedTS.changeText(b.cName);
+			this.SecoundSelectedTS.changeText(info.cName);
+			this.SecoundSelectedTS.changeStyle(txtstyl);
 			this.checkCards();
 		}else{
 			this.oneSelected=!0;
 			this.FirstSelecter=b;
-			this.FirstSelectedTS.changeText(b.cName);
+			this.FirstSelectedTS.changeText(info.cName);
+			this.FirstSelectedTS.changeStyle(txtstyl);
 		}
 
 		// TODO open card
