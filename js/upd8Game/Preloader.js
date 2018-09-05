@@ -15,6 +15,10 @@ BasicGame.Preloader.prototype={
 			'Logo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+
+
+			
+			'test':'images/Kazaki/Food_6.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -34,6 +38,7 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
+		return this.play();//TODO del
 		this.game.input.onDown.add(this.start,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
@@ -49,7 +54,8 @@ BasicGame.Preloader.prototype={
 			twA.start();
 			var twB=this.M.T.fadeOutA(logo,{duration:400,delay:300});
 			twA.chain(twB);
-			twB.onComplete.add(function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},this);
+			twB.onComplete.add(this.play,this);
 		}
 	},
+	play:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };
