@@ -1,12 +1,9 @@
-BasicGame.Preloader = function () {};
-
-BasicGame.Preloader.prototype = {
-
-	create: function () {
-		this.loadManager();
+BasicGame.Preloader=function(){};
+BasicGame.Preloader.prototype={
+	init:function(){
+		this.inputEnabled=!0;
 	},
-
-	loadManager: function () {
+	create:function(){
 		this.loadingAnim();
 
 		var textStyle = { font: '30px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
@@ -19,7 +16,6 @@ BasicGame.Preloader.prototype = {
 		this.loadAssets();
 		this.load.start();
 	},
-
 	loadingAnim: function () {
 		var loadingSprite = this.add.sprite(this.world.centerX, this.world.centerY, 'loading');
 		loadingSprite.anchor.setTo(.5);
@@ -28,47 +24,63 @@ BasicGame.Preloader.prototype = {
 		var loadingAnim = loadingSprite.animations.add('loading');
 		loadingAnim.play(18, true);
 	},
-
 	loadComplete: function () {
 		this.loadOnlyFirst();
 		var textStyle = { font: '80px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
-		var textSprite = this.add.text(this.world.centerX, this.world.centerY*1.7,
+		var textSprite = this.add.text(this.world.centerX,this.world.centerY*1.7,
 			this.game.const.TOUCH_OR_CLICK+'してスタート\n'+this.game.const.EN_TOUCH_OR_CLICK+' TO PLAY', textStyle);
 		textSprite.anchor.setTo(.5);
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.add(this.showLogo,this);
 	},
-
-	start:function(){this.state.start(this.game.global.nextSceen);},
-
-	loadAssets: function () {
-		var ip = './images/ankimo_drrrr/'
-		this.load.image('player', ip+'player.png');
-		for (var key in this.game.conf.soundAssets) {
-			this.load.audio(key, this.game.conf.soundAssets[key]);
-		}
-		this.load.atlasXML('roundAnimals', ip+'/roundAnimals.png', ip+'/roundAnimals.xml');
-		this.load.atlasXML('squareAnimals', ip+'/squareAnimals.png', ip+'/squareAnimals.xml');
-		this.load.atlasXML('greySheet', 
-			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+	loadAssets:function(){
+		this.load.image('PubLogo','images/public/logo/logo.png');
+		this.load.image('player','images/ankimo_drrrr/player.png');
+		this.load.atlasXML('roundAnimals','images/ankimo_drrrr/roundAnimals.png','images/ankimo_drrrr/roundAnimals.xml');
+		this.load.atlasXML('squareAnimals','images/ankimo_drrrr/squareAnimals.png','images/ankimo_drrrr/squareAnimals.xml');
+		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
+		for(var k in this.game.conf.soundAssets)this.load.audio(k,this.game.conf.soundAssets[k]);
 	},
-
-	loadOnlyFirst: function () {
+	loadOnlyFirst:function(){
 		if (!this.game.global.loadedOnlyFirst) {
-			if (this.game.device.desktop) { document.body.style.cursor = 'pointer'; }
-			this.game.global.SoundManager = new SoundManager(this);
+			if(this.game.device.desktop)document.body.style.cursor='pointer';
+			this.game.global.SoundManager=new SoundManager(this);
 			// this.userDatasController();
-			this.game.global.loadedOnlyFirst = true;
+			this.game.global.loadedOnlyFirst=!0;
 		}
 	},
-
-	userDatasController: function () {
-		var udc = new UserDatasController(this.game.const.STORAGE_NAME);
-		var datas = udc.get('0.0.0') || udc.init('0.0.0', {
-			total_score: 0,
-			best_score: 0,
+	userDatasController:function(){
+		var udc=new UserDatasController(this.game.const.STORAGE_NAME);
+		var datas=udc.get('0.0.0')||udc.init('0.0.0',{
+			total_score:0,
+			best_score:0,
 		}/*, '0.0.0'*/);
-
 		this.game.global.UserDatasController = udc;
 		// ENHANCE set totalscore,bestscore to global
-	}
+	},
+	showLogo:function(){
+		if(this.inputEnabled){
+			this.inputEnabled=!1;
+			this.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
+			var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+			logo.alpha=0;
+			logo.anchor.setTo(.5);
+			var twA=this.fadeInA(logo,{duration:1000,alpha:1});
+			twA.start();
+			var twB=this.fadeOutA(logo,{duration:500,delay:300});
+			twA.chain(twB);
+			twB.onComplete.add(this.start,this);
+		}
+	},
+	start:function(){this.state.start(this.game.global.nextSceen)},
+	genBmpSqrSp:function(x,y,w,h,f){
+		var b=this.add.bitmapData(w,h);
+		b.ctx.fillStyle=f;
+		b.ctx.beginPath();
+		b.ctx.rect(0,0,w,h);
+		b.ctx.fill();
+		b.update();
+		return this.add.sprite(x,y,b);
+	},
+	fadeInA:function(t,op={}){return this.add.tween(t).to({alpha:op.alpha||1}, op.duration,Phaser.Easing.Linear.None,!1,op.delay)},
+	fadeOutA:function(t,op={}){return this.add.tween(t).to({alpha:0},op.duration,Phaser.Easing.Linear.None,!1,op.delay)},
 };
