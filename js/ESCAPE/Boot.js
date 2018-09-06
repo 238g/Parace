@@ -1,3 +1,4 @@
+//TODO all delete and copy newest each js
 BasicGame={
 	GAME_TITLE:document.title,
 	MAIN_COLOR:'#fef106', // TODO

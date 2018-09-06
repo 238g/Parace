@@ -1,3 +1,4 @@
+// TODO re-refer newest each js
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:'VT-Stopwatch',

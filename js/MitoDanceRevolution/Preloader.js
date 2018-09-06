@@ -11,6 +11,7 @@ BasicGame.Preloader.prototype={
 	loadAssets:function(){
 		this.M.S.loadLoadingAssets();
 		var i={
+			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Title':'images/MitoDanceRevolution/Title.png',
@@ -54,13 +55,23 @@ BasicGame.Preloader.prototype={
 			this.load.audio(k,[p+'.mp3',p+'wav']);
 		}
 	},
-
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
 		// this.stage.disableVisibilityChange=!1;
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
+	showLogo:function(){
+		this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
+	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

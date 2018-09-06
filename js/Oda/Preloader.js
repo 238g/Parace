@@ -5,15 +5,10 @@ BasicGame.Preloader.prototype={
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
 		if(this.M.getGlobal('curLang')=='en'){
-			// THIS IS TEST FOR TWITTER => OGP CAN'T
 			var title='Odadadadadadadadadada';
 			document.title=title;
 			BasicGame.GAME_TITLE=title;
 			document.getElementsByName('apple-mobile-web-app-title')[0].setAttribute('content',title);
-			// document.getElementsByName('og:url')[0].setAttribute('content','https://238g.github.io/Parace/Odadadadadadadadadada.html?lang=en');
-			// document.getElementsByName('og:title')[0].setAttribute('content',title);
-			// document.getElementsByName('og:description')[0].setAttribute('content',
-				// 'Oda\'s doujin game! Overcome the prepared 50 levels of trials! Well, just stick the Oda Army!');
 		}else{//jp
 			this.M.S.genText(this.world.centerX,this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
 		}
@@ -27,6 +22,7 @@ BasicGame.Preloader.prototype={
 		this.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
+			'PubLogo':'images/public/logo/logo.png',
 			'TWP': 'images/Oda/TranslucentWhitePaper.png',
 			'Blade': 'images/Oda/Blade.png',
 			'Title_jp': 'images/Oda/Title_jp.png',
@@ -98,10 +94,6 @@ BasicGame.Preloader.prototype={
 				'sounds/VOICE/Nobuhime/NobuhimeLaugh.mp3',
 				'sounds/VOICE/Nobuhime/NobuhimeLaugh.wav',
 			],
-			// 'Pew':[
-				// 'sounds/SE/P/Pew.mp3',
-				// 'sounds/SE/P/Pew.wav',
-			// ],
 			'RipPaper':[
 				'sounds/SE/Paper_rip/paper-rip-3.mp3',
 				'sounds/SE/Paper_rip/paper-rip-3.wav',
@@ -134,7 +126,18 @@ BasicGame.Preloader.prototype={
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		this.stage.disableVisibilityChange=!1;
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
+	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

@@ -5,7 +5,7 @@
 	<title>アズリム節</title>
 	<meta name="apple-mobile-web-app-title" content="アズリム節">
 
-	<meta name="keywords" content="アズリム,アズマリム,バーチャルYouTuber,Vtuber,ミニゲーム,ゲーム,Vtuberゲームス,ソーラン節" />
+	<meta name="keywords" content="アズリム,アズマリム,ソーラン節,バーチャルYouTuber,Vtuber,ミニゲーム,ゲーム,Vtuberゲームス" />
 	<meta name="description" content="アズマリムちゃんの二次創作ゲームです！たくさんの魚を捕まえて高得点を目指せ！センパイたち～ぃ、やってくれよ！(  ˙༥˙  )♪♪" />
 
 	<link rel="alternate" href="https://238g.github.io/Parace/AzlimBushi.html" hreflang="jp" />
@@ -61,14 +61,8 @@
 	<script src="js/AzlimBushi/Play.js?180327_1"></script>
 
 	<style type="text/css">
-		body {
-			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
-			background: #000;
-		}
-
-		canvas {
-			margin: auto !important;
-		}
+		body {margin: 0px 0px 1px 0px;background: #000;}
+		canvas {margin: auto !important;}
 	</style>
 </head>
 <body>
@@ -76,7 +70,7 @@
 	<script type="text/javascript">
 		window.onload = function() {
 			var game = new Phaser.Game(900, 1600, Phaser.AUTO);
-			for (var className in BasicGame) game.state.add(className, BasicGame[className]);
+			for (var c in BasicGame) game.state.add(c, BasicGame[c]);
 			game.state.start('Boot');
 		};
 	</script>

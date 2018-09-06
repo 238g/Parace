@@ -9,7 +9,6 @@ BasicGame.Preloader.prototype={
 		this.loadAssets();
 		this.load.start();
 	},
-
 	loadAssets:function(){
 		this.load.spritesheet('CircleBtn','images/AoiGame/CircleBtn.png',200,200);
 		this.load.spritesheet('Aoi_Title','images/AoiGame/Aoi_Title.png',360,640);
@@ -18,6 +17,7 @@ BasicGame.Preloader.prototype={
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		this.load.atlasJSONHash('PushAnim','images/AoiGame/PushAnim/PushAnim.png','images/AoiGame/PushAnim/PushAnim.json');
 		var imageAssets = {
+			'PubLogo':'images/public/logo/logo.png',
 			'Title': 'images/AoiGame/Title.png',
 			'Logo': 'images/AoiGame/Logo.png',
 			'WhitePaper': 'images/PeanutNinja/WhitePaper.jpg',
@@ -38,7 +38,6 @@ BasicGame.Preloader.prototype={
 		for(var i=0;i<=this.M.getConst('BG_COUNT');i++)this.load.image('Bg_'+i,'images/AoiGame/Bg/Bg_'+i+'.jpg');
 		this.loadAudio();
 	},
-
 	loadAudio:function(){
 		this.sounds = {
 			'TitleBGM': [
@@ -108,7 +107,6 @@ BasicGame.Preloader.prototype={
 		};
 		for(var k in this.sounds)this.load.audio(k,this.sounds[k]);
 	},
-
 	loadComplete:function(){
 		this.game.device.desktop&&(document.body.style.cursor='pointer');
 		this.M.SE.setSounds(this.sounds);
@@ -116,8 +114,18 @@ BasicGame.Preloader.prototype={
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		this.stage.disableVisibilityChange=!1;
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
-
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
+	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

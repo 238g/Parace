@@ -1,18 +1,17 @@
-BasicGame.Preloader = function () {};
-BasicGame.Preloader.prototype = {
-	init: function () { this.sounds = null; },
-	create: function () {
+BasicGame.Preloader=function(){};
+BasicGame.Preloader.prototype={
+	init:function(){this.sounds=null;},
+	create:function(){
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
 		this.load.onLoadComplete.add(this.loadComplete, this);
 		this.loadAssets();
 		this.load.start();
 	},
-
-	loadAssets: function () {
-		this.load.atlasXML('greySheet', 
-			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
+	loadAssets:function(){
+		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
 		var imageAssets = {
+			'PubLogo':'images/public/logo/logo.png',
 			'Dialog_1': './images/public/dialogs/Dialog_1.png',
 			'Logo': './images/kashikomari/Logo.png',
 		};
@@ -77,9 +76,18 @@ BasicGame.Preloader.prototype = {
 		this.loadOnlyFirst();
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:80});
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
-
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
-
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
+	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

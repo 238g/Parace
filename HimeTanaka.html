@@ -16,7 +16,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="HandheldFriendly" content="true" />
-
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -47,7 +46,7 @@
 	<meta name="msapplication-TileImage" content="images/HimeTanaka/favicons/ms-icon-144x144.png">
 	<link rel="shortcut icon" type="image/x-icon" href="images/HimeTanaka/favicons/favicon.ico">
 
-	<script src="./js/public/phaser2.10.1.js"></script>
+	<script src="js/public/phaser2.10.1.js"></script>
 
 	<script src="js/public/Env.js"></script>
 	<script src="js/public/Middleware.js"></script>
@@ -72,13 +71,7 @@
 <body>
 
 	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(900, 1600, Phaser.AUTO), 
-				BasicGame, 
-				'Boot'
-			);
-		};
+		window.onload=function(){new Middleware(new Phaser.Game(900,1600,Phaser.AUTO),BasicGame,'Boot')};
 	</script>
 
 	<div style="display: none;">

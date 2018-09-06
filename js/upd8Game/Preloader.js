@@ -2,7 +2,6 @@ BasicGame.Preloader=function(){};
 BasicGame.Preloader.prototype={
 	create:function(){
 		this.sounds={};
-		this.inputEnabled=!0;
 		this.M.S.genLoading();
 		this.M.gGlb('curLang')=='en'?this.M.H.changeTtl(BasicGame.GAME_EN_TITLE):this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.rnd.pick(__ADVICE_WORDS),this.M.S.txtstyl(25));
 		this.load.onLoadComplete.add(this.loadComplete,this);
@@ -47,22 +46,19 @@ BasicGame.Preloader.prototype={
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
 		return this.start();//TODO del
-		this.game.input.onDown.add(this.showLogo,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
 	showLogo:function(){
-		if(this.inputEnabled){
-			this.inputEnabled=!1;
-			this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
-			var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
-			logo.alpha=0;
-			logo.anchor.setTo(.5);
-			var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
-			twA.start();
-			var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
-			twA.chain(twB);
-			twB.onComplete.add(this.start,this);
-		}
+		this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
 	},
 	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

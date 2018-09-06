@@ -16,7 +16,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="HandheldFriendly" content="true" />
-
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -84,20 +83,8 @@
 	</style>
 </head>
 <body>
-
-	<div id="gameContainer">
-		<div id="orientation"></div> 
-	</div>
-
-	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(640,400,Phaser.AUTO,'gameContainer'),
-				BasicGame, 
-				'Boot'
-			);
-		};
-	</script>
+	<div id="gameContainer"><div id="orientation"></div></div>
+	<script>window.onload=function(){new Middleware(new Phaser.Game(640,400,Phaser.AUTO,'gameContainer'),BasicGame,'Boot')};</script>
 
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->

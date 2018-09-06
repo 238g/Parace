@@ -1,8 +1,5 @@
 BasicGame.Preloader=function(){};
 BasicGame.Preloader.prototype={
-	init:function(){
-		this.inputEnabled=!0;
-	},
 	create:function(){
 		this.loadingAnim();
 
@@ -30,7 +27,7 @@ BasicGame.Preloader.prototype={
 		var textSprite = this.add.text(this.world.centerX,this.world.centerY*1.7,
 			this.game.const.TOUCH_OR_CLICK+'してスタート\n'+this.game.const.EN_TOUCH_OR_CLICK+' TO PLAY', textStyle);
 		textSprite.anchor.setTo(.5);
-		this.game.input.onDown.add(this.showLogo,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
 	loadAssets:function(){
 		this.load.image('PubLogo','images/public/logo/logo.png');
@@ -58,18 +55,15 @@ BasicGame.Preloader.prototype={
 		// ENHANCE set totalscore,bestscore to global
 	},
 	showLogo:function(){
-		if(this.inputEnabled){
-			this.inputEnabled=!1;
-			this.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
-			var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
-			logo.alpha=0;
-			logo.anchor.setTo(.5);
-			var twA=this.fadeInA(logo,{duration:1000,alpha:1});
-			twA.start();
-			var twB=this.fadeOutA(logo,{duration:500,delay:300});
-			twA.chain(twB);
-			twB.onComplete.add(this.start,this);
-		}
+		this.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
 	},
 	start:function(){this.state.start(this.game.global.nextSceen)},
 	genBmpSqrSp:function(x,y,w,h,f){

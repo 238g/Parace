@@ -16,7 +16,6 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="format-detection" content="telephone=no">
 	<meta name="HandheldFriendly" content="true" />
-
 	<meta name="apple-mobile-web-app-capable" content="yes" />
 	<meta name="apple-mobile-web-app-status-bar-style" content="black">
 
@@ -47,7 +46,7 @@
 	<meta name="msapplication-TileImage" content="images/tiatia/favicons/ms-icon-144x144.png">
 	<link rel="shortcut icon" type="image/x-icon" href="images/tiatia/favicons/favicon.ico">
 
-	<script src="./js/public/phaser2.10.1.js"></script>
+	<script src="js/public/phaser2.10.1.js"></script>
 
 	<script src="js/public/Env.js"></script>
 	<script src="js/public/Middleware.js"></script>
@@ -59,14 +58,8 @@
 	<script src="js/tiatia/EnemyInfo.js"></script>
 
 	<style type="text/css">
-		body {
-			margin: 0px 0px 1px 0px; /* the extra 1px allows the iOS inner/outer check to work */
-			background: #000;
-		}
-
-		canvas {
-			margin: auto !important;
-		}
+		body {margin: 0px 0px 1px 0px;background: #000;}
+		canvas {margin: auto !important;}
 
 		#orientation {
 			margin: 0 auto;
@@ -75,7 +68,7 @@
 			left: 0;
 			width: 100%;
 			height: 100%;
-			background-image: url('./images/public/orientation.png'); 
+			background-image: url('images/public/orientation.png'); 
 			background-repeat: no-repeat;
 			background-position: center;
 			background-color: rgb(0, 0, 0);
@@ -86,19 +79,9 @@
 </head>
 <body>
 
-	<div id="gameContainer">
-		<div id="orientation"></div> 
-	</div>
+	<div id="gameContainer"><div id="orientation"></div></div>
 
-	<script type="text/javascript">
-		window.onload = function() {
-			new Middleware(
-				new Phaser.Game(1600, 900, Phaser.AUTO, 'gameContainer'), 
-				BasicGame, 
-				'Boot'
-			);
-		};
-	</script>
+	<script>window.onload=function(){new Middleware(new Phaser.Game(1600,900,Phaser.AUTO,'gameContainer'),BasicGame,'Boot')};</script>
 
 	<div style="display: none;">
 		<!-- Global site tag (gtag.js) - Google Analytics -->

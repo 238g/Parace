@@ -17,6 +17,7 @@ BasicGame.Preloader.prototype={
 		this.load.spritesheet('Obstacles','images/TruckGoddess/Obstacles.png',32,32);
 		this.load.atlasJSONHash('Explode_1','images/TruckGoddess/Explode_1/Explode_1.png','images/TruckGoddess/Explode_1/Explode_1.json');
 		var imageAssets={
+			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Handle':'images/TruckGoddess/Handle.png',
@@ -82,8 +83,19 @@ BasicGame.Preloader.prototype={
 		this.M.S.genText(this.world.centerX,this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
 		// this.stage.disableVisibilityChange=!1;
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 	},
-	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');},
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
+	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

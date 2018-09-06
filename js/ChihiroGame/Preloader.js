@@ -1,7 +1,7 @@
 BasicGame.Preloader = function () {};
 BasicGame.Preloader.prototype = {
 	init: function () { 
-		this.sounds = null;
+		this.sounds=null;
 		// this.touchOrClick = (this.game.device.touch)?'タッチ':'クリック';
 	},
 	create: function () {
@@ -11,16 +11,13 @@ BasicGame.Preloader.prototype = {
 		this.loadAssets();
 		this.load.start();
 	},
-
 	loadAssets: function () {
 		this.load.spritesheet('WhiteBtnS','images/public/Btns/WhiteBtnsS.png',215,50);
-		this.load.atlasXML('greySheet', 
-			'./images/public/sheets/greySheet.png', './images/public/sheets/greySheet.xml');
-		this.load.atlasXML('GameIconsBlack', 
-			'./images/public/sheets/GameIconsBlack.png', './images/public/sheets/GameIconsBlack.xml');
-		this.load.atlasJSONHash('VolumeIcon', 
-			'./images/public/VolumeIcon/VolumeIcon.png', './images/public/VolumeIcon/VolumeIcon.json');
+		this.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
+		this.load.atlasXML('GameIconsBlack','images/public/sheets/GameIconsBlack.png','images/public/sheets/GameIconsBlack.xml');
+		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
+			'PubLogo':'images/public/logo/logo.png',
 			'Dialog': './images/public/dialogs/Dialog_5.jpg',
 			'Logo': './images/ChihiroGame/Logo.jpg',
 			'Chihiro_1': './images/ChihiroGame/Chihiro_1.png',
@@ -45,10 +42,9 @@ BasicGame.Preloader.prototype = {
 		this.M.setGlobal('CharInfoLength', CharInfoLength);
 	},
 
-	loadAlbum: function () {
+	loadAlbum:function(){
 		var albumCount = BasicGame.ALBUM_COUNT;
-		for (var i=1;i<=albumCount;i++) 
-			this.load.image('Album_'+i, './images/ChihiroGame/Albums/Album_'+i+'.jpg');
+		for(var i=1;i<=albumCount;i++)this.load.image('Album_'+i,'./images/ChihiroGame/Albums/Album_'+i+'.jpg');
 	},
 
 	loadAudio: function () {
@@ -108,10 +104,18 @@ BasicGame.Preloader.prototype = {
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:80});
 		// this.M.S.genText(this.world.centerX, this.world.centerY*1.5,this.touchOrClick+'してスタート',{fontSize:80});
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
-
-	start: function () {
-		this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
 	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };

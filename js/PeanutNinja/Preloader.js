@@ -1,25 +1,20 @@
-BasicGame.Preloader = function () {};
-BasicGame.Preloader.prototype = {
-	create: function () {
-		this.sounds = null;
-		this.chars = null;
+BasicGame.Preloader=function(){};
+BasicGame.Preloader.prototype={
+	create:function(){
+		this.sounds=this.chars=null;
 		this.M.S.BasicLoadingAnim();
 		this.M.S.BasicLoadingText();
-		this.genAdviceTextSprite();
+		this.M.S.genText(this.world.centerX, this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
 		this.load.onLoadComplete.add(this.loadComplete, this);
 		this.loadAssets();
 		this.load.start();
 	},
-
-	genAdviceTextSprite: function () {
-		this.M.S.genText(this.world.centerX, this.world.centerY*.5,this.rnd.pick(__ADVICE_WORDS),{fontSize:25});
-	},
-
-	loadAssets: function () {
+	loadAssets:function(){
 		this.load.atlasXML('greySheet','./images/public/sheets/greySheet.png','./images/public/sheets/greySheet.xml');
 		this.load.atlasXML('GameIconsBlack','images/public/sheets/GameIconsBlack.png','images/public/sheets/GameIconsBlack.xml');
 		this.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 		var imageAssets = {
+			'PubLogo':'images/public/logo/logo.png',
 			'Logo': 'images/PeanutNinja/Logo.png',
 			'Logo2': 'images/PeanutNinja/Logo2.png',
 			'Title': 'images/PeanutNinja/Title.png',
@@ -38,26 +33,23 @@ BasicGame.Preloader.prototype = {
 		this.loadTargetInfo();
 		this.loadAudio();
 	},
-
-	loadSubChars: function () {
+	loadSubChars:function(){
 		this.chars = this.M.getConst('SUB_CHARS');
 		for (var key in this.chars) {
 			var char = this.chars[key];
 			this.load.image(char,'images/PeanutNinja/Chars/'+char+'.png');
 		}
 	},
-
-	loadTargetInfo: function () {
-		var TargetInfo = this.M.getConf('TargetInfo');
+	loadTargetInfo:function(){
+		var TargetInfo=this.M.getConf('TargetInfo');
 		for (var key in TargetInfo) {
 			var info = TargetInfo[key];
 			this.load.spritesheet(info.name+'_Cut','images/PeanutNinja/Chars/'+info.name+'.png',info.halfWidth,info.halfHeight);
 			this.load.image(info.name,'images/PeanutNinja/Chars/'+info.name+'.png');
 		}
 	},
-
-	loadAudio: function () {
-		this.sounds = {
+	loadAudio:function(){
+		this.sounds={
 			'TitleBGM': [
 				'sounds/BGM/H/hiyokonokakekko.mp3',
 				'sounds/BGM/H/hiyokonokakekko.wav',
@@ -105,19 +97,26 @@ BasicGame.Preloader.prototype = {
 		};
 		for (var key in this.sounds) this.load.audio(key, this.sounds[key]);
 	},
-
-	loadComplete: function () {
-		if (this.game.device.desktop) document.body.style.cursor = 'pointer';
+	loadComplete:function(){
+		if(this.game.device.desktop)document.body.style.cursor='pointer';
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.add.sprite(0,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(0,1);
 		this.add.sprite(this.world.width,this.world.height,this.rnd.pick(this.chars)).anchor.setTo(1,1);
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:30});
-		this.game.input.onDown.add(this.start,this);
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
-
-	start: function () {
-		this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title');
+	showLogo:function(){
+		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
+		var logo=this.add.sprite(this.world.centerX,this.world.centerY,'PubLogo');
+		logo.alpha=0;
+		logo.anchor.setTo(.5);
+		var twA=this.M.T.fadeInA(logo,{duration:1000,alpha:1});
+		twA.start();
+		var twB=this.M.T.fadeOutA(logo,{duration:500,delay:300});
+		twA.chain(twB);
+		twB.onComplete.add(this.start,this);
 	},
+	start:function(){this.M.NextScene((__ENV!='prod')?this.M.H.getQuery('s')||'Title':'Title')},
 };
