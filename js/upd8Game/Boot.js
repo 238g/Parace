@@ -1,10 +1,10 @@
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:'upd8Game',
-	MAIN_COLOR:'#cbdc7d', // TODO
-	MAIN_TINT:0xcbdc7d, // TODO
-	MAIN_TEXT_COLOR:'#64c100', // TODO
-	MAIN_STROKE_COLOR:'#64c100', // TODO
+	MAIN_COLOR:'#ffffff',
+	MAIN_TINT:0xffffff,
+	MAIN_TEXT_COLOR:'#6e6d6b',
+	MAIN_STROKE_COLOR:'#6e6d6b',
 	WHITE_COLOR:'#ffffff',
 };
 BasicGame.Boot=function(){};

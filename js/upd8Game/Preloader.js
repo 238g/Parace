@@ -14,6 +14,8 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+			'Card0':'images/upd8Game/card/0.jpg',
+			'Frame0':'images/upd8Game/frame/0.jpg',
 
 
 			

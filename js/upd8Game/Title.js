@@ -13,6 +13,8 @@ BasicGame.Title.prototype={
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		// this.add.sprite(0,0,'Bg_1');
 
+		this.M.S.genLbl(this.world.centerX,this.world.centerY,this.start,this.curWords.Start,this.M.S.txtstyl(30));
+
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 	},
@@ -25,8 +27,10 @@ BasicGame.Title.prototype={
 				wp.tint=0x000000;
 				wp.alpha=0;
 				this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
-				this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
+				this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 				this.Tween.start();
+				this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
+				myGa('play','Title','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 			}
 		} else {
 			// this.M.SE.playBGM('TitleBGM',{volume:1});
