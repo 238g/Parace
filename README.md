@@ -32,3 +32,4 @@
 |#26|シズザレン工場|https://238g.github.io/Parace/Shizuzaren.html|2018/8/17|
 |#27|ドーラ様の度胸試し|https://238g.github.io/Parace/Dora.html|2018/8/24|
 |#28|森中花咲のバナ〜ナFight|https://238g.github.io/Parace/Kazaki.html|2018/9/1|
+|#29|upd8神経衰弱|https://238g.github.io/Parace/upd8Game.html|2018/9/8|

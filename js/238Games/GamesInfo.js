@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=28;
+	var totalCount=29;
 	return {
 		GamesInfo:{
 			1001:{id:1001,title:'秒当てゲーム',url:'https://238g.github.io/hitten/',
@@ -140,6 +140,11 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				slideImg:'Bg_4',slideImgUrl:'images/Kazaki/Bg_4.png',
 				order:totalCount-28,
 				textColor:'#64c100',bgColor:'#cbdc7d',scale:.6,},
+			1029: {
+				id: 1029,title:'upd8神経衰弱',url:'https://238g.github.io/Parace/upd8Game.html',
+				slideImg:'upd8Game_icon',slideImgUrl:'images/upd8Game/favicons/android-icon-192x192.png',
+				order:totalCount-29,
+				textColor:'#6e6d6b',bgColor:'#ffffff',scale:1,},
 		},
 	};
 };

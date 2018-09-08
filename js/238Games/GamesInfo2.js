@@ -168,6 +168,12 @@ function genGamesInfo(){
 				caption:'にじさんじ森中花咲ちゃんの二次創作ゲーム！木から降ってくるバナナやいちごをキャッチしよう！生放送でお馴染みのキャラクターはキャッチしたら大変なことに！？',
 				release:'2018/9/1',
 			},
+			1029:{id:1029,title:'upd8神経衰弱',url:GI2A('upd8Game'),
+				tColor:'#6e6d6b',mColor:'#ffffff',
+				tc:GI2B('upd8Game'),imgA:GI2C('upd8Game'),imgB:GI2D('upd8Game'),
+				caption:'upd8の二次創作ゲームです！総勢41組を神経衰弱で覚えよう！',
+				release:'2018/9/8',
+			},
 		},
 	};
 };
