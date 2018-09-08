@@ -16,10 +16,9 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'Card0':'images/upd8Game/card/0.jpg',
 			'Frame0':'images/upd8Game/frame/0.jpg',
-
-
-			
-			'test':'images/Kazaki/Food_6.png',
+			'Bg_1':'images/upd8Game/Bg_1.jpg',
+			'Bg_2':'images/upd8Game/Bg_2.jpg',
+			'Bg_3':'images/upd8Game/Bg_3.jpg',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -28,15 +27,19 @@ BasicGame.Preloader.prototype={
 	loadChars:function(){
 		var CharInfo=this.M.gGlb('CharInfo');
 		for(var k in CharInfo){
-			// var info=CharInfo[k];
 			this.load.image('Card'+k,'images/upd8Game/card/'+k+'.jpg');
 			this.load.image('Frame'+k,'images/upd8Game/frame/'+k+'.jpg');
 		}
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Kazaki/Urara',
-			// PlayBGM:'sounds/BGM/Kazaki/harunopayapaya',
+			TitleBGM:'sounds/BGM/Upd8Game/TranceMenu',
+			OnStart:'sounds/SE/LabJP/Btn/decision4',
+			OnBtn:'sounds/SE/LabJP/Btn/decision7',
+			CardSlide:'sounds/SE/Casino/Pack_1/cardSlide8',
+			MatchCard:'sounds/SE/LabJP/Btn/decision24',
+			NoneMatchCard:'sounds/SE/LabJP/Btn/decision19',
+			Res:'sounds/SE/GUI_Sound_Effects/positive',
 		};
 		for(var k in s){
 			var p=s[k];
@@ -47,9 +50,9 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		return this.start();//TODO del
-		this.game.input.onDown.addOnce(this.showLogo,this);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
+		// return this.start();
+		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
 	showLogo:function(){
 		this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');

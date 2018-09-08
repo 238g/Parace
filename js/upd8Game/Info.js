@@ -44,25 +44,26 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
-	// var a=this.M.gGlb('TOUCH_OR_CLICK');
+	var a=this.M.gGlb('TOUCH_OR_CLICK');
 	// var b=this.M.gGlb('EN_TOUCH_OR_CLICK');
 	return {
 		jp:{
 			Start:'スタート',
+			HowTo:'41人いるupd8のメンバーで\n神経衰弱！\nランダムで15人が隠れてるよ！\n同じVtuberを\n'+a+'で引き当てよう！\nどれだけお手つきしないで\nクリアできるかな？',
 			FalseCards:'お手つき！',
+			End:'終了！',
+			Result:'結果',
+			FirstGotCard:'最初にゲットしたVtuber',
+			Again:'もういちど',
+			Back:'もどる',
+			Tweet:'結果をツイート',
+			OtherGames:'他のゲーム',
 			TweetTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TweetFirstGotCard:'最初にゲットしたVtuber: \n',
 			TweetFalseCount:'お手つき: ',
-			TweetClearTime:'クリアタイム: ',
+			TweetClearTimeFront:'クリアタイム: ',
+			TweetClearTimeBack:'秒',
 			TweetHT:'upd8ゲーム',
-			// Back:'もどる',
-			// HowTo:'41人いるupd8のメンバーで神経衰弱！\n同じVtuberを'+a+'引き当てよう！',
-			// Clear:'クリア！',
-			// Result:'結果',
-			// Again:'もういちど',
-			// OtherGames:'他のゲーム',
-			// Tweet:'結果をツイート',
-			// TweetRes:'',
 		},
 		en:{},//TODO
 	};
