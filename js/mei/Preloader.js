@@ -14,6 +14,12 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+
+
+
+			'todo':'images/upd8Game/card/0.jpg',
+			'todo2':'images/Kazaki/Food_4.png',
+			'todo3':'images/Shizuzaren/AbdominalMuscleIcon.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
@@ -34,7 +40,7 @@ BasicGame.Preloader.prototype={
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
-		return this.start();
+		return this.start();//TODO
 		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
 	showLogo:function(){

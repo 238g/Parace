@@ -10,25 +10,35 @@ BasicGame.Play.prototype={
 		// this.CharInfo=this.M.gGlb('CharInfo');
 		// Val
 		// Obj
+		this.Tofu=this.Fire=this.TofuOnFire=
+		null;
 		this.Tween={};
 	},
 	create:function(){
-		this.stage.disableVisibilityChange=!0;
+		this.stage.disableVisibilityChange=!1;
+		// this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
-		return;
+		return this.start(); // TODO del
 		this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.tes();
 	},
-	updateT:function(){
+	update:function(){
 		if(this.isPlaying){
-			if(this.clearTimer<0){
-				this.clearTimer=1E3;
-				this.clearTime++;
-			}
-			this.clearTimer-=this.time.elapsed
+			this.physics.arcade.overlap(this.Tofu,this.Fire,function(tofu,fire){
+				fire.kill();
+				tofu.kill();
+
+				var tofuOnFire=this.TofuOnFire.getFirstDead();
+				if(tofuOnFire){
+					tofuOnFire.reset(fire.x,fire.y);
+					var duration=1E3;
+					this.M.T.moveB(tofuOnFire,{xy:{y:50},duration:duration}).start();
+					this.add.tween(tofuOnFire).to({x:50},duration,Phaser.Easing.Cubic.Out,!0);
+				}
+			},null,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -40,10 +50,71 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		return;
-		this.add.sprite(0,0,'Bg_2');
-		this.genHUD();
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+
+		var img,bounds;
+		img=this.cache.getImage('todo');
+		bounds={r:img.width*.2,w:img.width*.3,h:img.height*.3};
+		this.Fire=this.add.group();
+		this.Fire.enableBody=!0;
+		this.Fire.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Fire.createMultiple(1,'todo');
+		this.Fire.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+			c.body.setCircle(this.r,this.w,this.h);
+			c.events.onKilled.add(function(s){console.log(s.x,s.y,s)}); // TODO think....
+		},bounds);
+
+		img=this.cache.getImage('todo2');
+		bounds={r:img.width*.2,w:img.width*.3,h:img.height*.3};
+		this.Tofu=this.add.group();
+		this.Tofu.enableBody=!0;
+		this.Tofu.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Tofu.createMultiple(20,'todo2');
+		this.Tofu.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+			c.body.setCircle(this.r,this.w,this.h);
+		},bounds);
+
+		this.TofuOnFire=this.add.group();
+		this.TofuOnFire.createMultiple(100,'todo3');
+		this.TofuOnFire.children.forEach(function(c){
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+		});
+
+		this.input.onDown.add(function(p){
+			var tofu=this.Tofu.getFirstDead();
+			if(tofu){
+				tofu.reset(p.x,this.world.height*.2);
+				tofu.body.velocity.y=500;
+			}
+		},this);
+
+		this.time.events.loop(1000,function(){
+			var fire=this.Fire.getFirstDead();
+			if(fire){
+				fire.reset(this.world.width,this.world.height*.7);
+				fire.body.velocity.x=-300;
+			}
+		},this);
 	},
+	render:function(){//TODO
+		// this.game.debug.body(this.Player);
+		// this.Fire.forEach(function(c){this.game.debug.body(c)},this);
+		this.Fire.forEachAlive(function(c){this.game.debug.body(c)},this);
+		// this.Tofu.forEach(function(c){this.game.debug.body(c)},this);
+		this.Tofu.forEachAlive(function(c){this.game.debug.body(c)},this);
+	},
+
+
+	////////////////////////////////////////////////////////////////////////
 	genHUD:function(){
 		var txtstyl=this.M.S.txtstyl(30);
 		this.FirstSelectedTS=this.M.S.genTxt(this.world.width*.05,this.world.height*.87,'',txtstyl);

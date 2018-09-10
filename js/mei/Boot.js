@@ -1,6 +1,6 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	GAME_TITLE_EN:'TofuOnFire',
+	GAME_TITLE_EN:document.title,
 	MAIN_COLOR:'#ffffff', // TODO
 	MAIN_TINT:0xffffff, // TODO
 	MAIN_TEXT_COLOR:'#6e6d6b', // TODO

@@ -7,6 +7,7 @@ BasicGame.Boot.prototype.genWords=function(){
 	return {
 		jp:{
 			Start:'スタート',
+			Lang:'English',
 			/*
 			HowTo:'',
 			Result:'結果',
@@ -22,6 +23,9 @@ BasicGame.Boot.prototype.genWords=function(){
 			TweetHT:'upd8ゲーム',
 			*/
 		},
-		en:{},//TODO
+		en:{
+			Start:'START',
+			Lang:'日本語',
+		},
 	};
 };
