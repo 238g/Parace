@@ -52,6 +52,14 @@ BasicGame.Play.prototype={
 	genContents:function(){
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 
+		// OK
+		/*
+		this.physics.arcade.gravity.x=200;
+		this.time.events.add(1E3,function(){
+			this.physics.arcade.gravity.x=-200;
+		},this);
+		*/
+
 		var img,bounds;
 		img=this.cache.getImage('todo');
 		bounds={r:img.width*.2,w:img.width*.3,h:img.height*.3};
