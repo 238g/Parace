@@ -7,9 +7,22 @@ BasicGame.Play.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		// this.CharInfo=this.M.gGlb('CharInfo');
+		this.curStg=this.M.gGlb('curStg');
+		this.StageInfo=this.M.gGlb('StageInfo');
+		this.curStageInfo=this.StageInfo[this.curStg];
 		// Val
+		this.secTimer=1E3;
+		this.secTime=0;
+		this.chgWindTime=10;
+
+		this.windGravityRate=this.rnd.integerInRange(-this.curStageInfo.windGravityRate,this.curStageInfo.windGravityRate);
+		this.windGravity=this.windGravityRate*100;
+		this.targetCount=this.curStageInfo.targetCount;
+		this.scoreCount=0;
+
 		// Obj
+		this.Player=this.WindArrow=
+		this.ScoreCountTS=
 		this.Tofu=this.Fire=this.TofuOnFire=
 		null;
 		this.Tween={};
@@ -21,24 +34,29 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		this.genContents();
-		return this.start(); // TODO del
 		this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.tes();
 	},
 	update:function(){
 		if(this.isPlaying){
-			this.physics.arcade.overlap(this.Tofu,this.Fire,function(tofu,fire){
-				fire.kill();
-				tofu.kill();
+			this.Player.x=this.input.activePointer.x;
 
-				var tofuOnFire=this.TofuOnFire.getFirstDead();
-				if(tofuOnFire){
-					tofuOnFire.reset(fire.x,fire.y);
-					var duration=1E3;
-					this.M.T.moveB(tofuOnFire,{xy:{y:50},duration:duration}).start();
-					this.add.tween(tofuOnFire).to({x:50},duration,Phaser.Easing.Cubic.Out,!0);
+			if(this.secTimer<0){
+				this.secTimer=1E3;
+				this.secTime++;
+				
+				this.chgWind();
+
+				// TODO
+				var fire=this.Fire.getFirstDead();
+				if(fire){
+					fire.reset(this.world.width,this.world.height*.7);
+					fire.body.velocity.x=-this.curStageInfo.fireVelocity;
 				}
-			},null,this);
+			}
+			this.secTimer-=this.time.elapsed;
+
+			this.physics.arcade.overlap(this.Tofu,this.Fire,this.burnTofu,null,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -46,19 +64,15 @@ BasicGame.Play.prototype={
 	tes:function(){
 		if(__ENV!='prod'){
 			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.genEnd,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(function(){this.chgWindTime=this.secTime+1},this);
 		}
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 
-		// OK
-		/*
-		this.physics.arcade.gravity.x=200;
-		this.time.events.add(1E3,function(){
-			this.physics.arcade.gravity.x=-200;
-		},this);
-		*/
+		this.Player=this.add.sprite(0,this.world.height*.2,'todoP');
+		this.Player.anchor.setTo(.5);
 
 		var img,bounds;
 		img=this.cache.getImage('todo');
@@ -73,7 +87,6 @@ BasicGame.Play.prototype={
 			c.anchor.setTo(.5);
 			c.smoothed=!1;
 			c.body.setCircle(this.r,this.w,this.h);
-			c.events.onKilled.add(function(s){console.log(s.x,s.y,s)}); // TODO think....
 		},bounds);
 
 		img=this.cache.getImage('todo2');
@@ -81,7 +94,7 @@ BasicGame.Play.prototype={
 		this.Tofu=this.add.group();
 		this.Tofu.enableBody=!0;
 		this.Tofu.physicsBodyType=Phaser.Physics.ARCADE;
-		this.Tofu.createMultiple(20,'todo2');
+		this.Tofu.createMultiple(15,'todo2');
 		this.Tofu.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
@@ -90,6 +103,16 @@ BasicGame.Play.prototype={
 			c.body.setCircle(this.r,this.w,this.h);
 		},bounds);
 
+		this.WindArrow=this.add.sprite(this.world.width*.9,this.world.height*.1,'GameIconsWhite','arrowDown');
+		this.WindArrow.tint=0xff0000;
+		this.WindArrow.anchor.setTo(.5);
+		this.WindArrow.angle=(-this.windGravityRate*10);
+
+		this.WindPowerTS=this.M.S.genTxt(this.world.width*.9,this.world.height*.05,this.windGravityRate);
+
+		this.ScoreCountTS=this.M.S.genTxt(this.world.width*.1,this.world.height*.15,this.genScoreCountTxt());
+
+		this.add.sprite(50,50,'todo3').anchor.setTo(.5);
 		this.TofuOnFire=this.add.group();
 		this.TofuOnFire.createMultiple(100,'todo3');
 		this.TofuOnFire.children.forEach(function(c){
@@ -97,21 +120,7 @@ BasicGame.Play.prototype={
 			c.smoothed=!1;
 		});
 
-		this.input.onDown.add(function(p){
-			var tofu=this.Tofu.getFirstDead();
-			if(tofu){
-				tofu.reset(p.x,this.world.height*.2);
-				tofu.body.velocity.y=500;
-			}
-		},this);
-
-		this.time.events.loop(1000,function(){
-			var fire=this.Fire.getFirstDead();
-			if(fire){
-				fire.reset(this.world.width,this.world.height*.7);
-				fire.body.velocity.x=-300;
-			}
-		},this);
+		this.game.device.touch?this.input.onUp.add(this.castTofu,this):this.input.onDown.add(this.castTofu,this);
 	},
 	render:function(){//TODO
 		// this.game.debug.body(this.Player);
@@ -120,6 +129,62 @@ BasicGame.Play.prototype={
 		// this.Tofu.forEach(function(c){this.game.debug.body(c)},this);
 		this.Tofu.forEachAlive(function(c){this.game.debug.body(c)},this);
 	},
+	castTofu:function(p){
+		var tofu=this.Tofu.getFirstDead();
+		if(tofu){
+			tofu.reset(p.x,this.world.height*.2);
+			tofu.body.velocity.y=500;
+			tofu.body.gravity.x=this.windGravity;
+		}
+	},
+	burnTofu:function(tofu,fire){
+		fire.kill();
+		tofu.kill();
+
+		this.scoreCount++;
+		if(this.scoreCount==this.targetCount){
+			this.end();
+		}
+
+		var tofuOnFire=this.TofuOnFire.getFirstDead();
+		if(tofuOnFire){
+			tofuOnFire.reset(fire.x,fire.y);
+			var duration=1E3;
+			var tw=this.M.T.moveB(tofuOnFire,{xy:{y:50},duration:duration});
+			tw.start();
+			tw.onComplete.add(function(){
+				this.ScoreCountTS.changeText(this.genScoreCountTxt());
+			},this);
+			this.add.tween(tofuOnFire).to({x:50},duration,Phaser.Easing.Cubic.Out,!0);
+		}
+	},
+	chgWind:function(){
+		console.log('this.secTime:'+this.secTime,'this.chgWindTime:'+this.chgWindTime); // TODO del
+		if(this.secTime==this.chgWindTime){
+			this.chgWindTime+=this.rnd.integerInRange(5,15); // TOOD stg
+			var rnd=this.rnd.integerInRange(-this.curStageInfo.windGravityRate,this.curStageInfo.windGravityRate);
+			if(this.windGravityRate==rnd){
+				if(this.windGravityRate==0){
+					this.windGravityRate=this.rnd.integerInRange(-this.curStageInfo.windGravityRate,this.curStageInfo.windGravityRate);
+				}else{
+					this.windGravityRate=(-1*this.windGravityRate);
+				}
+			}else{
+				this.windGravityRate=rnd;
+			}
+			this.windGravity=this.windGravityRate*100;
+			this.WindArrow.angle=(-this.windGravityRate*10);
+			this.WindPowerTS.changeText(this.windGravityRate);
+		}
+	},
+	genScoreCountTxt:function(){
+		return this.scoreCount+'/'+this.targetCount;
+	},
+
+
+
+
+
 
 
 	////////////////////////////////////////////////////////////////////////
@@ -223,6 +288,8 @@ BasicGame.Play.prototype={
 		myGa('othergames','Play','char_'+this.firstGotCharInfo.cId,this.M.gGlb('playCount'));
 	},
 	genTut:function(){
+		return this.start();
+		// TODO
 		this.M.sGlb('endTut',!0);
 		this.HowToS=this.add.sprite(0,0,'TWP');
 		this.HowToS.tint=0x000000;
@@ -236,6 +303,8 @@ BasicGame.Play.prototype={
 		},this);
 	},
 	genStart:function(){
+		return this.start();
+		// TODO
 		this.Panels.visible=!0;
 		var s=this.M.S.genTxt(this.world.width*1.5,this.world.centerY,this.curWords.Start,this.M.S.txtstyl(50));
 		var twA=this.M.T.moveA(s,{xy:{x:this.world.centerX}});

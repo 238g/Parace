@@ -1,5 +1,7 @@
-BasicGame.Boot.prototype.genCharInfo=function(){
-	return {};
+BasicGame.Boot.prototype.genStageInfo=function(){
+	return {
+		1:{targetCount:10,windGravityRate:1,fireVelocity:300},
+	};
 };
 BasicGame.Boot.prototype.genWords=function(){
 	var a=this.M.gGlb('TOUCH_OR_CLICK');
@@ -8,6 +10,8 @@ BasicGame.Boot.prototype.genWords=function(){
 		jp:{
 			Start:'スタート',
 			Lang:'English',
+			Back:'もどる',
+			SelectStg:'ステージを選択',
 			/*
 			HowTo:'',
 			Result:'結果',
@@ -24,8 +28,10 @@ BasicGame.Boot.prototype.genWords=function(){
 			*/
 		},
 		en:{
-			Start:'START',
+			Start:'Start',
 			Lang:'日本語',
+			Back:'Back',
+			SelectStg:'Select Stage',
 		},
 	};
 };

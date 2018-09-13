@@ -16,10 +16,10 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 
 
-
 			'todo':'images/upd8Game/card/0.jpg',
 			'todo2':'images/Kazaki/Food_4.png',
 			'todo3':'images/Shizuzaren/AbdominalMuscleIcon.png',
+			'todoP':'images/Kazaki/Obstacle_1.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
