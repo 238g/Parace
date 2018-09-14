@@ -1,7 +1,6 @@
 BasicGame.SelectStage=function(){};
 BasicGame.SelectStage.prototype={
 	init:function(){
-		this.curStg=this.M.gGlb('curStg');
 		this.StageInfo=this.M.gGlb('StageInfo');
 
 		this.curLang=this.M.gGlb('curLang');
@@ -15,17 +14,25 @@ BasicGame.SelectStage.prototype={
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		// this.add.sprite(0,0,'Bg_1');
 
+		var y=this.world.height*.45;
+		for(var k in this.StageInfo){
+			var txt='Level: '+k;
+			if(k%2==0){
+				this.M.S.genLbl(this.world.width*.75,y,this.select,txt).stg=k;
+				y+=this.world.height*.1;
+			}else{
+				this.M.S.genLbl(this.world.width*.25,y,this.select,txt).stg=k;
+			}
+		}
+
 		this.M.S.genTxt(this.world.centerX,this.world.height*.1,this.curWords.SelectStg,this.M.S.txtstyl(35));
 		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
-
-		// TODO stage lbl b.stg
 
 		this.genHUD();
 	},
 	select:function(b){
 		if (!this.Tween.isRunning) {
-			this.curStg=b.stg;
-			this.M.sGlb('curStg',this.curStg);
+			this.M.sGlb('curStg',b.stg);
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 
 			// this.M.SE.play('DecoBeam',{volume:1.5});
@@ -35,7 +42,7 @@ BasicGame.SelectStage.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
-			myGa('play','SelectStage','Stage_'+this.curStg,this.M.gGlb('playCount'));
+			myGa('play','SelectStage','Stage_'+b.stg,this.M.gGlb('playCount'));
 		}
 	},
 	back:function(){

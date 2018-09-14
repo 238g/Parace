@@ -6,6 +6,7 @@ BasicGame={
 	MAIN_TEXT_COLOR:'#6e6d6b', // TODO
 	MAIN_STROKE_COLOR:'#6e6d6b', // TODO
 	WHITE_COLOR:'#ffffff',
+	YOUTUBE_URL:'',//TODO
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
