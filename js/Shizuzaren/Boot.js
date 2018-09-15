@@ -1,6 +1,6 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	GAME_EN_TITLE:'Shizuzaren',
+	GAME_TITLE_EN:'Shizuzaren',
 	MAIN_COLOR:'#d0c7cc',
 	MAIN_TINT:0xd0c7cc,
 	MAIN_TEXT_COLOR:'#4f5790',

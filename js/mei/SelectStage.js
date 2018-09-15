@@ -11,12 +11,12 @@ BasicGame.SelectStage.prototype={
 	},
 	create:function(){
 		this.time.events.removeAll();
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
-		// this.add.sprite(0,0,'Bg_1');
+		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.add.sprite(0,0,'Bg_5');
 
 		var y=this.world.height*.45;
 		for(var k in this.StageInfo){
-			var txt='Level: '+k;
+			var txt='Level '+k;
 			if(k%2==0){
 				this.M.S.genLbl(this.world.width*.75,y,this.select,txt).stg=k;
 				y+=this.world.height*.1;
@@ -35,7 +35,7 @@ BasicGame.SelectStage.prototype={
 			this.M.sGlb('curStg',b.stg);
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 
-			// this.M.SE.play('DecoBeam',{volume:1.5});
+			this.M.SE.play('OnStart',{volume:1.5});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -47,7 +47,7 @@ BasicGame.SelectStage.prototype={
 	},
 	back:function(){
 		if(!this.Tween.isRunning){
-			// this.M.SE.play('OnBtn',{volume:1});
+			this.M.SE.play('OnBtn',{volume:1});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;

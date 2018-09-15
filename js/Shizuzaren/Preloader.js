@@ -3,7 +3,7 @@ BasicGame.Preloader.prototype={
 	create:function(){
 		this.sounds={};
 		this.M.S.genLoading();
-		this.M.gGlb('curLang')=='en'?this.M.H.changeTtl(BasicGame.GAME_EN_TITLE):this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.rnd.pick(__ADVICE_WORDS),this.M.S.txtstyl(25));
+		this.M.gGlb('curLang')=='en'?this.M.H.changeTtl(BasicGame.GAME_TITLE_EN):this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.rnd.pick(__ADVICE_WORDS),this.M.S.txtstyl(25));
 		this.load.onLoadComplete.add(this.loadComplete,this);
 		this.loadAssets();
 		this.load.start();

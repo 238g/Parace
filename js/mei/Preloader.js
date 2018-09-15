@@ -3,7 +3,7 @@ BasicGame.Preloader.prototype={
 	create:function(){
 		this.sounds={};
 		this.M.S.genLoading();
-		this.M.gGlb('curLang')=='en'?this.M.H.changeTtl(BasicGame.GAME_EN_TITLE):this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.rnd.pick(__ADVICE_WORDS),this.M.S.txtstyl(25));
+		this.M.gGlb('curLang')=='en'?this.M.H.changeTtl(BasicGame.GAME_TITLE_EN):this.M.S.genTxt(this.world.centerX,this.world.height*.25,this.rnd.pick(__ADVICE_WORDS),this.M.S.txtstyl(25));
 		this.load.onLoadComplete.add(this.loadComplete,this);
 		this.loadAssets();
 		this.load.start();
@@ -14,23 +14,44 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-
-
-			'Tofu':'images/upd8Game/card/0.jpg',
-			'Fire':'images/Kazaki/Food_4.png',
-			'TofuOnFire':'images/Shizuzaren/AbdominalMuscleIcon.png',
-			'todoP':'images/Kazaki/Obstacle_1.png',
-			'Satellite':'images/Kazaki/Banana_3.png',
-			'BurnedSatellite':'images/Kazaki/Banana_2.png',
+			'TofuOnFire':'images/mei/TofuOnFire.png',
+			'Fire':'images/mei/Fire.png',
+			'Tofu_1':'images/mei/Tofu_1.png',
+			'Tofu_2':'images/mei/Tofu_2.jpg',
+			'Bg_1':'images/mei/Bg_1.jpg',
+			'Bg_2':'images/mei/Bg_2.jpg',
+			'Bg_3':'images/mei/Bg_3.jpg',
+			'Bg_4':'images/mei/Bg_4.jpg',
+			'Bg_5':'images/mei/Bg_5.jpg',
+			'Earth_1':'images/mei/Earth_1.png',
+			'Earth_2':'images/mei/Earth_2.png',
+			'Earth_3':'images/mei/Earth_3.png',
+			'Earth_4':'images/mei/Earth_4.png',
+			'Satellite':'images/mei/Misosita_1.png',
+			'BurnedSatellite':'images/mei/Misosita_2.png',
+			'Mei_1':'images/mei/Mei_1.png',
+			'Mei_2':'images/mei/Mei_2.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
+		for(var i=1;i<=14;i++)this.load.image('Album_'+i,'images/mei/Album/'+i+'.jpg');
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/Upd8Game/TranceMenu',
-			// OnStart:'sounds/SE/LabJP/Btn/decision4',
-			// OnBtn:'sounds/SE/LabJP/Btn/decision7',
+			TitleBGM:'sounds/BGM/mei/comicalpizzicato',
+			PlayBGM:'sounds/BGM/mei/MagicSpace',
+			OnStart:'sounds/SE/LabJP/Btn/decision27',
+			OnBtn:'sounds/SE/LabJP/Btn/decision26',
+			CastFire:'sounds/SE/Fire/Flame_1',
+			Get:'sounds/SE/Digital_SFX/powerUp8',
+			Hit:'sounds/SE/JRPG_UI/Open',
+			Damage:'sounds/SE/Fire/FireImpact_1',
+			ChgGravity:'sounds/SE/SpellSet2/teleport',
+			Clear:'sounds/SE/GUI_Sound_Effects/positive',
+			GameOver:'sounds/SE/SpellSet1/explode1',
+			Start:'sounds/SE/JingleSet1/receive',
+			End:'sounds/SE/JingleSet1/arrive',
+			Miss:'sounds/VOICE/VSEL/Human/Human_Good_06',
 		};
 		for(var k in s){
 			var p=s[k];
@@ -42,7 +63,6 @@ BasicGame.Preloader.prototype={
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
-		return this.start();//TODO
 		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
 	showLogo:function(){

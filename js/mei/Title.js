@@ -12,12 +12,18 @@ BasicGame.Title.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 
-		// TODO rain tofuOnFire
-		// TODO beat bg VTLife Mei
+		var g=this.add.group();
+		for(var i=1;i<=14;i++){
+			var s=this.add.sprite(0,0,'Album_'+i);
+			s.alpha=0;
+			g.add(s);
+		}
+		g.shuffle();
+		this.M.T.slideshow(g,{duration:1500,delay:1500});
 
-		this.M.S.genTxt(this.world.centerX,this.world.height*.2,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
+		this.M.S.genTxt(this.world.width*.6,this.world.height*.7,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
 
 		this.StartTS=this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
 		this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
@@ -29,7 +35,7 @@ BasicGame.Title.prototype={
 		if (this.inputEnabled) {
 			if (!this.Tween.isRunning) {
 				this.inputEnabled=!1;
-				// this.M.SE.play('OnStart',{volume:1});
+				this.M.SE.play('OnStart',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -38,7 +44,7 @@ BasicGame.Title.prototype={
 				this.Tween.start();
 			}
 		} else {
-			// this.M.SE.playBGM('TitleBGM',{volume:1});
+			this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},
@@ -54,6 +60,7 @@ BasicGame.Title.prototype={
 		}
 		this.StartTS.changeText(this.curWords.Start);
 		this.LangTS.changeText(this.curWords.Lang);
+		this.M.SE.play('OnBtn',{volume:1});
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;

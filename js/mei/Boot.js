@@ -1,12 +1,12 @@
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:document.title,
-	MAIN_COLOR:'#ffffff', // TODO
-	MAIN_TINT:0xffffff, // TODO
-	MAIN_TEXT_COLOR:'#6e6d6b', // TODO
-	MAIN_STROKE_COLOR:'#6e6d6b', // TODO
-	WHITE_COLOR:'#ffffff',
-	YOUTUBE_URL:'',//TODO
+	MAIN_COLOR:'#cbd7ea',
+	MAIN_TINT:0xcbd7ea,
+	MAIN_TEXT_COLOR:'#f62018',
+	MAIN_STROKE_COLOR:'#f62018',
+	WHITE_COLOR:'#fbf0ee',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCZx7wgGNs2UFyRRtLoNur9Q',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
@@ -18,6 +18,7 @@ create:function(){
 		playCount:0,
 		endTut:!1,
 		curStg:1,
+		totalToFCount:0,
 		Words:this.genWords(),
 		StageInfo:this.genStageInfo(),
 	});
