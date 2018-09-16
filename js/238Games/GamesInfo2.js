@@ -174,6 +174,12 @@ function genGamesInfo(){
 				caption:'upd8の二次創作ゲームです！総勢41組を神経衰弱で覚えよう！',
 				release:'2018/9/8',
 			},
+			1030:{id:1030,title:'Tofu On Fire',url:GI2A('mei'),
+				tColor:'#f62018',mColor:'#cbd7ea',
+				tc:GI2B('mei'),imgA:GI2C('mei'),imgB:GI2D('mei'),
+				caption:'upd8小山内めいちゃんの二次創作ゲームです！豆腐を燃やして📛をゲットしよう！そう！これこそTofuOnFire！ミソシタも友情出演！？',
+				release:'2018/9/16',
+			},
 		},
 	};
 };

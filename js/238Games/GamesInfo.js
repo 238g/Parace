@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=29;
+	var totalCount=30;
 	return {
 		GamesInfo:{
 			1001:{id:1001,title:'秒当てゲーム',url:'https://238g.github.io/hitten/',
@@ -145,6 +145,11 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				slideImg:'upd8Game_icon',slideImgUrl:'images/upd8Game/favicons/android-icon-192x192.png',
 				order:totalCount-29,
 				textColor:'#6e6d6b',bgColor:'#ffffff',scale:1,},
+			1030: {
+				id: 1030,title:'Tofu On Fire',url:'https://238g.github.io/Parace/mei.html',
+				slideImg:'mei_icon',slideImgUrl:'images/mei/favicons/android-icon-192x192.png',
+				order:totalCount-30,
+				textColor:'#f62018',bgColor:'#cbd7ea',scale:1,},
 		},
 	};
 };
