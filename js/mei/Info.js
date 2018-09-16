@@ -29,10 +29,11 @@ BasicGame.Boot.prototype.genWords=function(){
 			TwClearLevel:'クリアレベル: ',
 			TwChallengeLevel:'チャレンジレベル: ',
 			TwToFCount:'クリアまでに集めた📛の数: ',
-			HowTo:'豆腐をめがけて\n火を投げつけよう！\n📛を目的数獲得してね！\n\n火を外したり\nミソシタに当てたら\n地球が危ない！\n\n右上の重力値や\n時間制限もあるので注意！',
+			HowTo:'豆腐をめがけて\n小山内めいちゃんと一緒に\n火を投げつけよう！\n📛を目的数獲得してね！\n\n火を外したり\nミソシタに当てたら\n地球が危ない！\n\n右上の重力値や\n時間制限もあるので注意！',
 			Result:'結果',
 			TweetHT:'めいゲーム',
 			AllClear:'全て達成！',
+			CharTw:'小山内めい',
 		},
 		en:{
 			Start:'Start',
@@ -47,10 +48,11 @@ BasicGame.Boot.prototype.genWords=function(){
 			TwClearLevel:'ClearLevel: ',
 			TwChallengeLevel:'ChallengeLevel: ',
 			TwToFCount:'Total📛Count: ',
-			HowTo:'Let\'s throw fire against Tofu!\nPlease earn 📛 \nthe purpose number!\n\nThe earth is dangerous \nif you remove the fire or \nhit the Mr.Missoshita\'s head!\n\nBe careful as there is \ngravity value \non the upper right \nand time limit!',
+			HowTo:'Let\'s throw fire against Tofu\nwith OsanaiMei!\nPlease earn 📛 \nthe purpose number!\n\nThe earth is dangerous \nif you remove the fire or \nhit the Mr.Missoshita\'s head!\n\nBe careful as there is \ngravity value \non the upper right \nand time limit!',
 			Result:'Result',
 			TweetHT:'MeiGame',
 			AllClear:'ALL CLEAR',
+			CharTw:'Mei Osanai',
 		},
 	};
 };

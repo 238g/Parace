@@ -23,9 +23,11 @@ BasicGame.Title.prototype={
 		g.shuffle();
 		this.M.T.slideshow(g,{duration:1500,delay:1500});
 
-		this.M.S.genTxt(this.world.width*.6,this.world.height*.7,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
+		this.add.sprite(this.world.width*.95,this.world.height*.7,'Title').anchor.setTo(1,.5);
+		// this.M.S.genTxt(this.world.width*.6,this.world.height*.7,BasicGame.GAME_TITLE,this.M.S.txtstyl(50));
 
-		this.StartTS=this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
+		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
+		this.CharTwTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.meiTw,this.curWords.CharTw,this.M.S.txtstyl(25));
 		this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
 
 		this.genHUD();
@@ -48,6 +50,12 @@ BasicGame.Title.prototype={
 			this.inputEnabled=!0;
 		}
 	},
+	meiTw:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var url='https://twitter.com/osanai_mei';
+		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		myGa('external_link','Title','Mei Twitter',this.M.gGlb('playCount'));
+	},
 	chgLang:function(){
 		if(this.curLang=='en'){
 			this.curLang='jp';
@@ -59,12 +67,13 @@ BasicGame.Title.prototype={
 			this.curWords=this.Words[this.curLang];
 		}
 		this.StartTS.changeText(this.curWords.Start);
+		this.CharTwTS.changeText(this.curWords.CharTw);
 		this.LangTS.changeText(this.curWords.Lang);
 		this.M.SE.play('OnBtn',{volume:1});
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;
-		this.M.S.genVolBtn(this.world.width*.1,y);
-		this.M.S.genFlScBtn(this.world.width*.9,y);
+		this.M.S.genVolBtn(this.world.width*.1,y).tint=0xFF0080;
+		this.M.S.genFlScBtn(this.world.width*.9,y).tint=0xFF0080;
 	},
 };

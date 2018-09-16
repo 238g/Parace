@@ -202,6 +202,13 @@ Middleware.prototype.SpriteManager.prototype={
 		sc.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
 		sc.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIcon.png','images/public/VolumeIcon/VolumeIcon.json');
 	},
+	loadLoadingAssetsW:function(){
+		var sc=this.M.gScn();
+		sc.load.atlasXML('greySheet','images/public/sheets/greySheet.png','images/public/sheets/greySheet.xml');
+		sc.load.atlasXML('GameIconsWhite','images/public/sheets/GameIconsWhite.png','images/public/sheets/GameIconsWhite.xml');
+		sc.load.atlasJSONHash('VolumeIcon','images/public/VolumeIcon/VolumeIconW.png','images/public/VolumeIcon/VolumeIconW.json');
+
+	},
 	genLoading:function(){
 		this.genLoadAnim();
 		this.genLoadTxt();

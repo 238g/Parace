@@ -9,7 +9,7 @@ BasicGame.Preloader.prototype={
 		this.load.start();
 	},
 	loadAssets:function(){
-		this.M.S.loadLoadingAssets();
+		this.M.S.loadLoadingAssetsW();
 		var i={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
@@ -31,6 +31,7 @@ BasicGame.Preloader.prototype={
 			'BurnedSatellite':'images/mei/Misosita_2.png',
 			'Mei_1':'images/mei/Mei_1.png',
 			'Mei_2':'images/mei/Mei_2.png',
+			'Title':'images/mei/Title.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		for(var i=1;i<=14;i++)this.load.image('Album_'+i,'images/mei/Album/'+i+'.jpg');
