@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=30;
+	var totalCount=31;
 	return {
 		GamesInfo:{
 			1001:{id:1001,title:'秒当てゲーム',url:'https://238g.github.io/hitten/',
@@ -150,6 +150,11 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				slideImg:'mei_icon',slideImgUrl:'images/mei/favicons/android-icon-192x192.png',
 				order:totalCount-30,
 				textColor:'#f62018',bgColor:'#cbd7ea',scale:1,},
+			1031: {
+				id: 1031,title:'夜叉太郎',url:'https://238g.github.io/Parace/UMI.html',
+				slideImg:'UMI_icon',slideImgUrl:'images/UMI/favicons/android-icon-192x192.png',
+				order:totalCount-31,
+				textColor:'#ad253a',bgColor:'#60b1ec',scale:1,},
 		},
 	};
 };

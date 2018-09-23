@@ -180,6 +180,12 @@ function genGamesInfo(){
 				caption:'upd8小山内めいちゃんの二次創作ゲームです！豆腐を燃やして📛をゲットしよう！そう！これこそTofuOnFire！ミソシタも友情出演！？',
 				release:'2018/9/16',
 			},
+			1031:{id:1031,title:'夜叉太郎',url:GI2A('UMI'),
+				tColor:'#ad253a',mColor:'#60b1ec',
+				tc:GI2B('UMI'),imgA:GI2C('UMI'),imgB:GI2D('UMI'),
+				caption:'にじさんじSEEDs海夜叉神の二次創作ゲームです！敵を操り海夜叉神へあんなことやこんなことを…！生かすも殺すもアナタ次第！',
+				release:'2018/9/23',
+			},
 		},
 	};
 };
