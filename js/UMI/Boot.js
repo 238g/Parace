@@ -1,0 +1,25 @@
+BasicGame={
+	GAME_TITLE:document.title,
+	GAME_TITLE_EN:'YashaTaro',
+	MAIN_COLOR:'#60b1ec',
+	MAIN_TINT:0x60b1ec,
+	MAIN_TEXT_COLOR:'#ad253a',
+	MAIN_STROKE_COLOR:'#ad253a',
+	WHITE_COLOR:'#f2edea',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCqEp6RdtsMbUNrCdCswr6pA',
+};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+init:function(){this.M.BootInit(!1)},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
+create:function(){
+	this.M.dGlb({
+		curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		playCount:0,
+		endTut:!1,
+		curStg:1,
+		Words:this.genWords(),
+		StageInfo:this.genStageInfo(),
+	});
+	this.M.NextScene('Preloader');
+},};
