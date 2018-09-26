@@ -1,0 +1,25 @@
+BasicGame={
+	GAME_TITLE:document.title,
+	GAME_TITLE_EN:'AniMareGame',
+	MAIN_COLOR:'#60b1ec',//TODO
+	MAIN_TINT:0x60b1ec,//TODO
+	MAIN_TEXT_COLOR:'#ad253a',//TODO
+	MAIN_STROKE_COLOR:'#ad253a',//TODO
+	WHITE_COLOR:'#ffffff',
+};
+BasicGame.Boot=function(){};
+BasicGame.Boot.prototype={
+init:function(){this.M.BootInit(!1)},
+preload:function(){this.load.atlasJSONHash('loading','images/loading/loading.png','images/loading/loading.json')},
+create:function(){
+	this.M.dGlb({
+		curLang:'jp',
+		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
+		playCount:0,
+		endTut:!1,
+		curChar:1,
+		Words:this.genWords(),
+		CharInfo:this.genCharInfo(),
+	});
+	this.M.NextScene('Preloader');
+},};

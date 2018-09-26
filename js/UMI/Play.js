@@ -22,7 +22,7 @@ BasicGame.Play.prototype={
 
 		// Obj
 		this.MouseSp=this.MouseBody=this.Line=this.Enemy=
-		this.PlayerCollisionGroup=this.BulletCollisionGroup=
+		this.PlayerCollisionGroup=this.EnemyCollisionGroup=this.BulletCollisionGroup=
 		this.BgSp=this.HPTS=this.HUD=
 		null;
 		this.Tween={};
