@@ -20,6 +20,7 @@ create:function(){
 		curChar:1,
 		Words:this.genWords(),
 		CharInfo:this.genCharInfo(),
+		LevelInfo:this.genLevelInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

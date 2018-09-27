@@ -10,15 +10,21 @@ BasicGame.Play.prototype={
 		this.curChar=this.M.gGlb('curChar');
 		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
+		this.curLevel=1;
+		this.LevelInfo=this.M.gGlb('LevelInfo');
+		this.curLevelInfo=this.LevelInfo[this.curLevel];
 		// Val
+		this.hp=100;
 		this.worldGravity=1000;
 		this.jumpX=200;
 		this.jumpY=-500;
+		this.score=0;
 
 		// Obj
-		this.Player=this.LeftWall=this.RightWall=
-		this.PlayerCollisionGroup=this.WallCollisionGroup=this.ThornCollisionGroup=
-		this.HUD=this.HitEff=
+		this.Player=this.LeftWall=this.RightWall=this.Thorns=
+		this.PlayerCollisionGroup=this.WallCollisionGroup=this.ThornCollisionGroup=this.ObstacleCollisionGroup=
+		this.HUD=this.HPTS=this.ScoreTS=this.PlayLbl=
+		this.HitEff=
 		null;
 		this.Tween={};
 	},
@@ -28,10 +34,11 @@ BasicGame.Play.prototype={
 		// this.stage.backgroundColor='#000';
 		// this.M.SE.playBGM('PlayBGM',{volume:1});
 		this.genContents();
-		this.start();//TODO
+		// this.start();//TODO
 		// this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.tes();
 	},
+	//TODO
 	updateT:function(){
 		if(this.isPlaying){
 		}
@@ -41,12 +48,17 @@ BasicGame.Play.prototype={
 	tes:function(){
 		if(__ENV!='prod'){
 			this.Player.body.debug=!0;
+			this.Thorns.forEach(function(c){c.body.debug=!0});
 			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1},this);
+			
 		}
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
+		this.BgS=this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#ffffff');
 		this.setPhysics();
+		this.genThorn();
 		this.genPlayer();
 		this.genWall();
 		this.genEffect();
@@ -61,24 +73,78 @@ BasicGame.Play.prototype={
 		this.PlayerCollisionGroup=this.physics.p2.createCollisionGroup();
 		this.WallCollisionGroup=this.physics.p2.createCollisionGroup();
 		this.ThornCollisionGroup=this.physics.p2.createCollisionGroup();
+		this.ObstacleCollisionGroup=this.physics.p2.createCollisionGroup();
 		this.physics.p2.updateBoundsCollisionGroup();
+	},
+	genThorn:function(){
+		this.Thorns=this.add.group();
+		this.Thorns.physicsBodyType=Phaser.Physics.P2JS;
+		this.Thorns.enableBody=!0;
+		this.Thorns.createMultiple(20,'WB');
+		this.Thorns.forEach(function(s){
+			s.smoothed=!1;
+			// s.outOfBoundsKill=!0;
+			// s.checkWorldBounds=!0;
+			s.body.static=!0;
+			s.body.collides(this.PlayerCollisionGroup);
+			// s.body.collideWorldBounds=!1;
+			s.scale.setTo(10);
+			s.body.setRectangle(s.width,s.height);
+			s.body.angle=45;
+			// s.angle=45;
+			s.body.setCollisionGroup(this.ThornCollisionGroup);
+		},this);
+
+		// TODO del
+		for(var i=0;i<10;i++){
+			if(i==5)continue;
+			// var s=this.M.S.genBmpSqrSp(this.world.width,i*64,50,50,'#ff00ff');
+			var s=this.rnd.pick(this.Thorns.children.filter(function(c){return!c.alive}));
+			s.reset(this.world.width,i*64+32,50);
+			// s.angle=45;
+		}
 	},
 	genPlayer:function(){
 		this.Player=this.add.sprite(this.world.centerX,this.world.centerY,'todo1');
 		this.Player.smoothed=!1;
 		this.physics.p2.enable(this.Player,!1);
 		this.Player.body.setCircle(20);
+		////// TODO Level Up
+		/*
+		this.time.events.add(3000,function(){
+			this.Player.body.setRectangle(this.Player.width*.5,this.Player.height*.5);
+			this.Player.body.setCollisionGroup(this.PlayerCollisionGroup);
+		},this);
+		*/
+		////// TODO Level Up
+		/*
+		this.time.events.add(1000,function(){
+			var s=this.M.S.genBmpSqrSp(this.world.centerX,this.world.centerY,50,50,'#ffffff');
+			s.smoothed=!1;
+			this.physics.p2.enable(s,!1);
+			s.body.static=!0;
+			s.body.setCollisionGroup(this.ObstacleCollisionGroup);
+			// s.body.setCollisionGroup(this.WallCollisionGroup);
+			s.body.collides(this.PlayerCollisionGroup);
+			// s.body.rotation=1;
+			// s.body.angle=1;
+			// s.body.rotateLeft(45);
+			s.body.angularVelocity=5;
+			// s.body.angularVelocity=10;
+		},this);
+		*/
 		this.Player.body.collideWorldBounds=!0;
 		this.Player.body.setCollisionGroup(this.PlayerCollisionGroup);
 		this.Player.body.collides(this.WallCollisionGroup,this.hitWall,this);
 		this.Player.body.collides(this.ThornCollisionGroup,this.hitThorn,this);
-		// this.Player.body.static=!0; // TODO first start when on / after click off and jump / this.Player.body.static=!1;
+		this.Player.body.collides(this.ObstacleCollisionGroup);
+		this.Player.body.static=!0;
 
 		this.input.onDown.add(this.jump,this);
 	},
 	hitWall:function(p,w){
 		console.log(this.jumpX);
-		if(p.x<this.world.centerX){
+		if(p.sprite.x<this.world.centerX){
 			//left
 			// TODO appear thorn
 			this.HitEff.setXSpeed(0,200);
@@ -89,12 +155,33 @@ BasicGame.Play.prototype={
 		this.LeftWall.tint=this.RightWall.tint=this.TopWall.tint=this.BottomWall.tint=Math.random()*0xffffff;
 		this.jumpX*=-1;
 
-		this.HitEff.x=w.x;
-		this.HitEff.y=p.y-this.Player.height*.5;
+		this.HitEff.x=w.sprite.x;
+		this.HitEff.y=p.sprite.y-this.Player.height*.5;
 		this.HitEff.explode(500,10);
+
+		this.score++;
+		this.ScoreTS.changeText(this.curWords.Score+this.score);
+
+		this.checkLevelUp();
 	},
-	hitThorn:function(){
-		console.log(this.time.time);
+	hitThorn:function(p,t){
+		p.sprite.kill();
+		this.isPlaying=!1;
+		this.camera.shake(.03,200,!0,Phaser.Camera.SHAKE_BOTH);
+
+		// TODO tiuntiun animation
+
+		console.log('DMG!!!!!'+this.time.time);
+		this.hp--;
+		this.HPTS.changeText('HP: '+this.hp);
+		if(this.hp==0)return this.end();
+
+		// TODO tween
+		this.time.events.add(1000,function(){
+			this.Player.reset(this.world.centerX,this.world.centerY);
+			this.Player.body.static=!0;
+			this.PlayLbl.visible=!0;
+		},this);
 	},
 	jump:function(){
 		if(this.isPlaying&&this.inputEnabled){
@@ -127,13 +214,43 @@ BasicGame.Play.prototype={
 		this.HitEff.maxParticleScale=2;
 		this.HitEff.setYSpeed(-300,100);
 		this.HitEff.gravity.y=600;
+		this.HitEff.lifespan=500;
 		// TODO per char color
 		this.HitEff.forEach(function(c){c.tint=this[0]},[0x00ff00]);
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
 
-		this.HUD.visible=!1;
+		this.HPTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,'HP: '+this.hp,this.M.S.txtstyl(30));
+		this.HUD.add(this.HPTS);
+
+		this.ScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.95,this.curWords.Score+this.score,this.M.S.txtstyl(30));
+		this.HUD.add(this.ScoreTS);
+
+		this.PlayLbl=this.M.S.genLbl(this.world.centerX,this.world.height*.75,function(b){
+			b.visible=!1;
+			this.Player.body.static=!1;
+			this.start();
+		},'GO!');
+		this.HUD.add(this.PlayLbl);
+
+		// this.HUD.visible=!1;
+	},
+	checkLevelUp:function(){
+		if(this.score==this.curLevelInfo.nextLevel){
+			this.curLevel++;
+			this.curLevelInfo=this.LevelInfo[this.curLevel];
+
+			// TODO each change / color and so on
+
+			this.BgS.colorBlend={step:0};
+			var tw=this.add.tween(this.BgS.colorBlend).to({step:100},1000,Phaser.Easing.Linear.None,!0,0);
+			this.BgS.startColor=this.BgS.tint;
+			this.BgS.endColor=Math.random()*0xffffff;//TODO level info color
+			tw.onUpdateCallback(function(){
+				this.tint=Phaser.Color.interpolateColor(this.startColor,this.endColor,100,this.colorBlend.step);
+			},this.BgS);
+		}
 	},
 
 	////////////////////////////////////////////////////////////////////////////////////
