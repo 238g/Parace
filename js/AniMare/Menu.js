@@ -6,7 +6,7 @@ BasicGame.Title.prototype={
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
 		// Obj
-		this.StartTS=this.LangTS=this.CharTwTS=this.CreditTS=null;
+		this.StartTS=this.LangTS=this.IntroTS=this.CreditTS=null;
 		this.Tween={};
 	},
 	create:function(){
@@ -20,10 +20,10 @@ BasicGame.Title.prototype={
 		// title.anchor.setTo(.5);
 		// this.M.T.beatA(title,{duration:182}).start();
 
-		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
-		// this.CharTwTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.charTw,this.curWords.CharTw,this.M.S.txtstyl(25));
+		this.StartTS=this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
+		////// this.IntroTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoIntro,this.curWords.IntroBtn,this.M.S.txtstyl(25));
 		////// this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
-		// this.CreditTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
+		////// this.CreditTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
@@ -45,14 +45,6 @@ BasicGame.Title.prototype={
 			this.inputEnabled=!0;
 		}
 	},
-	/*
-	charTw:function(){
-		this.M.SE.play('OnBtn',{volume:1.5});
-		var url='https://twitter.com/god_yaksa23';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-		myGa('external_link','Title','海夜叉神 Twitter',this.M.gGlb('playCount'));
-	},
-	*/
 	chgLang:function(){
 		if(this.curLang=='en'){
 			this.curLang='jp';
@@ -68,8 +60,14 @@ BasicGame.Title.prototype={
 		//////// this.LangTS.changeText(this.curWords.Lang);
 		//////// this.M.SE.play('OnBtn',{volume:1});
 	},
+	gotoIntro:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var url='';
+		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		myGa('external_link','Title','AAAAAAAA Page',this.M.gGlb('playCount'));
+	},
 	gotoCredit:function(){
-		this.M.SE.play('OnBtn',{volume:1.5});
+		this.M.SE.play('OnBtn',{volume:1});
 		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
 		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
@@ -95,14 +93,15 @@ BasicGame.SelectChar.prototype={
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		// this.add.sprite(0,0,'Bg_A');
 
-		/*
-		var y=this.world.height*.4;
+		var x=this.rnd.between(1,100)>50?this.world.width*1.5:-this.world.centerX;
+		var y=this.world.height*.25;
 		for(var k in this.CharInfo){
 			var info=this.CharInfo[k];
-			if(info.open)this.M.S.genLbl(this.world.width*.75,y,this.select,info.name).char=k;
-			y+=this.world.height*.1;
+			var s=this.M.S.genLbl(x,y,this.select,info.charName);
+			s.char=k;
+			this.M.T.moveA(s,{xy:{x:this.world.centerX},delay:k*200}).start();
+			y+=this.world.height*.13;
 		}
-		*/
 
 		// TODO orIMG
 		this.M.S.genTxt(this.world.centerX,this.world.height*.1,'Select',this.M.S.txtstyl(35));
@@ -121,7 +120,7 @@ BasicGame.SelectChar.prototype={
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
 			myGa('play','SelectChar','Char_'+b.char,this.M.gGlb('playCount'));
-			this.M.SE.play('OnStart',{volume:1});
+			// this.M.SE.play('OnStart',{volume:1});
 		}
 	},
 	back:function(){
@@ -132,7 +131,7 @@ BasicGame.SelectChar.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('Title')},this);
 			this.Tween.start();
-			this.M.SE.play('OnBtn',{volume:1.5});
+			// this.M.SE.play('OnBtn',{volume:1});
 		}
 	},
 	genHUD:function(){
