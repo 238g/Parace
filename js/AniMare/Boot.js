@@ -1,10 +1,10 @@
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:'AniMareGame',
-	MAIN_COLOR:'#60b1ec',//TODO
-	MAIN_TINT:0x60b1ec,//TODO
-	MAIN_TEXT_COLOR:'#ad253a',//TODO
-	MAIN_STROKE_COLOR:'#ad253a',//TODO
+	MAIN_COLOR:'#ffffff',
+	MAIN_TINT:0xffffff,
+	MAIN_TEXT_COLOR:'#000000',
+	MAIN_STROKE_COLOR:'#000000',
 	WHITE_COLOR:'#ffffff',
 };
 BasicGame.Boot=function(){};

@@ -14,20 +14,63 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-
 			'WB':'images/AniMare/WhiteBlock5x5.jpg',
 			
-			'todo1':'images/UMI/Bg_5.jpg',
+			'Title':'images/AniMare/Title.png',
+
+			'Bg_1':'images/AniMare/Bg_1.jpg',
+			'Bg_2':'images/AniMare/Bg_2.jpg',
+			'Bg_3':'images/AniMare/Bg_3.jpg',
+			'Bg_4':'images/AniMare/Bg_4.jpg',
+			'Bg_5':'images/AniMare/Bg_5.jpg',
+			'Bg_6':'images/AniMare/Bg_6.jpg',
+			'Bg_7':'images/AniMare/Bg_7.jpg',
+			'Bg_8':'images/AniMare/Bg_8.jpg',
+			'Bg_9':'images/AniMare/Bg_9.jpg',
+			'Bg_10':'images/AniMare/Bg_10.jpg',
+
+			'BgP_1':'images/AniMare/BgP_1.jpg',
+			'BgP_2':'images/AniMare/BgP_2.jpg',
+			'BgP_3':'images/AniMare/BgP_3.jpg',
+			'BgP_4':'images/AniMare/BgP_4.jpg',
+			'BgP_5':'images/AniMare/BgP_5.jpg',
+
+			'Select':'images/AniMare/Select.png',
+			'Select_1':'images/AniMare/Select_1.png',
+			'Select_2':'images/AniMare/Select_2.png',
+			'Select_3':'images/AniMare/Select_3.png',
+			'Select_4':'images/AniMare/Select_4.png',
+			'Select_5':'images/AniMare/Select_5.png',
+
+			'Nanashi_1':'images/AniMare/Nanashi_1.png',
+
+			'Player_1':'images/AniMare/Player_1.png',
+			'Player_2':'images/AniMare/Player_2.png',
+			'Player_3':'images/AniMare/Player_3.png',
+			'Player_4':'images/AniMare/Player_4.png',
+			'Player_5':'images/AniMare/Player_5.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/UMI/TitleBGM',
-			// PlayBGM:'sounds/BGM/UMI/Raid2_Short',
-			// OnBtn:'sounds/SE/LabJP/Performance/Japan/kotsudumi1',
-			// OnStart:'sounds/SE/LabJP/Performance/Japan/drum-japanese2',
+			TitleBGM:'sounds/BGM/Animare/chocolatedaisakusen',
+			PlayBGM_1:'sounds/BGM/Animare/kikaikoujou',
+			PlayBGM_2:'sounds/BGM/Animare/koritokanenoodori',
+			PlayBGM_3:'sounds/BGM/Animare/latenightbridge',
+			OnBtn:'sounds/SE/LabJP/Btn/decision9',
+			OnStart:'sounds/SE/LabJP/Btn/decision4',
+			Dmg:'sounds/SE/LabJP/Battle/Fight/kick-high1',
+			Jump:'sounds/SE/LabJP/Battle/Fight/punch-swing1',
+			WallJump:'sounds/SE/LabJP/Battle/Fight/highspeed-movement1',
+			End:'sounds/SE/LabJP/Life/Other/police-whistle2',
+			Res:'sounds/SE/Cartoon/ApricotJumpBounce',
+			GenStart:'sounds/SE/LabJP/Life/Other/police-whistle1',
+			Go:'sounds/SE/LabJP/Battle/Fight/setup1',
+			HitOb_1:'sounds/SE/LabJP/Performance/Anime/nyu1',
+			HitOb_2:'sounds/SE/LabJP/Performance/Anime/nyu2',
+			HitOb_3:'sounds/SE/LabJP/Performance/Anime/nyu3',
 		};
 		for(var k in s){
 			var p=s[k];
