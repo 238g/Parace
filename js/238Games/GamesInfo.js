@@ -1,5 +1,5 @@
 BasicGame.Boot.prototype.genGamesInfo=function(){
-	var totalCount=31;
+	var totalCount=32;
 	return {
 		GamesInfo:{
 			1001:{id:1001,title:'秒当てゲーム',url:'https://238g.github.io/hitten/',
@@ -155,6 +155,12 @@ BasicGame.Boot.prototype.genGamesInfo=function(){
 				slideImg:'UMI_icon',slideImgUrl:'images/UMI/favicons/android-icon-192x192.png',
 				order:totalCount-31,
 				textColor:'#ad253a',bgColor:'#60b1ec',scale:1,},
+			1032: {
+				id: 1032,title:'ぴょこぴょこあにまーれ',url:'https://238g.github.io/Parace/AniMare.html',
+				slideImg:'AniMare_icon',slideImgUrl:'images/AniMare/favicons/android-icon-192x192.png',
+				order:totalCount-32,
+				textColor:'#000000',bgColor:'#ffffff',scale:1,},
+			// 180930 include redirect, so this is end
 		},
 	};
 };

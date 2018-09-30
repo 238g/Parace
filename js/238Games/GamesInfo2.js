@@ -186,6 +186,12 @@ function genGamesInfo(){
 				caption:'にじさんじSEEDs海夜叉神の二次創作ゲームです！敵を操り海夜叉神へあんなことやこんなことを…！生かすも殺すもアナタ次第！',
 				release:'2018/9/23',
 			},
+			1032:{id:1032,title:'ぴょこぴょこあにまーれ',url:GI2A('AniMare'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B('AniMare'),imgA:GI2C('AniMare'),imgB:GI2D('AniMare'),
+				caption:'あにまーれの二次創作ゲームです！あにまーれのメンバーを黒猫ななしさんから逃がそう！どこまで逃げ切れるか…高スコアを目指せ！',
+				release:'2018/9/30',
+			},
 		},
 	};
 };

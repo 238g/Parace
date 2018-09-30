@@ -35,3 +35,4 @@
 |#29|upd8神経衰弱|https://238g.github.io/Parace/upd8Game.html|2018/9/8|
 |#30|Tofu On Fire|https://238g.github.io/Parace/mei.html|2018/9/16|
 |#31|夜叉太郎|https://238g.github.io/Parace/UMI.html|2018/9/23|
+|#32|ぴょこぴょこあにまーれ|https://238g.github.io/Parace/AniMare.html|2018/9/30|
