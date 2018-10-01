@@ -64,7 +64,9 @@ BasicGame.Play.prototype = {
 
 	getTrumpInfors:function(){
 		var a=[];
-		for(var i=1;i<=13;i++)a.push('Heart_'+i);a.push('Spade_'+i);a.push('Club_'+i);a.push('Diamond_'+i);
+		for(var i=1;i<=13;i++){
+			a.push('Heart_'+i);a.push('Spade_'+i);a.push('Club_'+i);a.push('Diamond_'+i);
+		}
 		return a;
 	},
 
