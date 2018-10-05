@@ -16,19 +16,20 @@ BasicGame.Play.prototype={
 		// Val
 		this.earthRad=250;
 		this.playerRad=25;
-		this.worldG=.8;
-		this.playerSpeed=1.5;
+		this.worldG=.5;
+		this.playerSpeed=1;
 		this.closeToSpike=5;
-		this.farFromSpike=25;
+		this.farFromSpike=35;
 		this.revolutions=this.earthRad/this.playerRad+1;
 		this.spikeW=5;
 		this.spikeH=30;
-		this.jumpForce=[12,9,6];
+		this.jumpForce=[10,7,4];
+		this.playerRespawnPos={x:0,y:0};
 
 		// Obj
 		this.Earth=this.Player=this.Spikes=
 		// this.Graphics=
-		// this.FollowEff=this.DmgEff=
+		this.FollowEff=this.DmgEff=
 		null;
 		this.Tween={};
 	},
@@ -67,38 +68,7 @@ BasicGame.Play.prototype={
 
 			// this.Graphics.clear();
 
-			this.Spikes.forEach(function(spike){
-				var angleDiff=this.getAngleDifference(spike.angle,this.Player.curAngle);
-				if(!spike.approaching&&angleDiff<this.closeToSpike){
-					spike.approaching=!0;
-				}
-
-				if(spike.approaching){
-					/*
-					this.Graphics.beginFill(0xff0000);
-					this.Graphics.lineStyle(4,0xff0000,1);
-					this.Graphics.moveTo(spike.topA.x,spike.topA.y);
-					this.Graphics.lineTo(spike.base1.x,spike.base1.y);
-					this.Graphics.endFill();
-					this.Graphics.beginFill(0xff0000);
-					this.Graphics.moveTo(spike.topA.x,spike.topA.y);
-					this.Graphics.lineTo(spike.base2.x,spike.base2.y);
-					this.Graphics.endFill();
-					*/
-					if(this.distToSegmentSquared(
-						new Phaser.Point(this.Player.x,this.Player.y),
-						this.playerRad,spike.topA,spike.base1)
-						||this.distToSegmentSquared(
-							new Phaser.Point(this.Player.x,this.Player.y),
-							this.playerRad,spike.topA,spike.base2)){
-						this.hitSpike();
-					}
-
-					if(angleDiff>this.farFromSpike){
-						this.placeSpike(spike,(spike.quadrant+3)%4);
-					}
-				}
-			},this);
+			this.Spikes.forEach(this.passingSpike,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -124,7 +94,8 @@ BasicGame.Play.prototype={
 		// this.Graphics=this.add.graphics();
 		this.Spikes=this.add.group();
 		for(var i=0;i<9;i++){
-			var spike=this.M.S.genBmpSqrSp(0,0,this.spikeH,this.spikeW,'#ffffff');
+			var spike=this.M.S.genBmpSqrSp(0,0,this.spikeH*1.5,this.spikeW*1.5,'#ffffff');
+			// var spike=this.M.S.genBmpSqrSp(0,0,this.spikeH,this.spikeW,'#ffffff');
 			spike.anchor.setTo(0,.5);
 			this.Spikes.add(spike);
 			this.placeSpike(spike,Math.floor(i/3));
@@ -135,33 +106,40 @@ BasicGame.Play.prototype={
 	genEff:function(){
 		// TODO
 		// this.FollowEff=this.add.emitter();
+		// this.FollowEff.frequency=100;
 
-		/*
-		this.DmgEff=this.add.emitter();
-		this.DmgEff.minParticleScale=0;
-		this.DmgEff.maxParticleScale=1;
-		this.DmgEff.minParticleAlpha=0;
-		this.DmgEff.maxParticleAlpha=1;
-		this.DmgEff.frequency=100;
-		this.DmgEff.lifespan=1E3;
-		*/
+		
+		this.DmgEff=this.add.emitter(0,0,100);
+		this.DmgEff.makeParticles('WB');
+		this.DmgEff.setScale(1,3);
+		this.DmgEff.setAlpha(.2,1);
+		this.DmgEff.setXSpeed(-50,50);
+		this.DmgEff.setYSpeed(-50,50);
+		this.DmgEff.gravity.x=0;
+		this.DmgEff.gravity.y=0;
 	},
 	genPlayer:function(){
 		this.Player=this.M.S.genBmpCclSp(0,0,this.playerRad,'#00ff00');
-		// this.Player=this.M.S.genBmpCclSp(this.world.centerX,this.world.height-this.earthRad*.5-this.playerRad,this.playerRad,'#00ff00');
 		this.Player.anchor.setTo(.5);
-		this.Player.curAngle=-80;
-		this.Player.jumpOffset=0;
-		this.Player.jumps=0;
-		this.Player.jumpForce=0;
 
 		var rad=Phaser.Math.degToRad(this.Player.curAngle);
 		var distanceFromCenter=(this.earthRad+this.playerRad)/2+this.Player.jumpOffset;
 		this.Player.x=this.Earth.x+distanceFromCenter*Math.cos(rad);
 		this.Player.y=this.Earth.y+distanceFromCenter*Math.sin(rad);
 
+		this.resetPlayer();
+		
+		this.playerRespawnPos.x=this.Player.x;
+		this.playerRespawnPos.y=this.Player.y;
+
 		this.input.onDown.add(this.jump,this);
 		this.Player.addChild(this.M.S.genBmpCclSp(0,0,10,'#ff0000'));//TODO del
+	},
+	resetPlayer:function(){
+		this.Player.curAngle=-80;
+		this.Player.jumpOffset=0;
+		this.Player.jumps=0;
+		this.Player.jumpForce=0;
 	},
 	jump:function(){
 		if(this.Player.jumps<this.jumpForce.length){
@@ -183,6 +161,8 @@ BasicGame.Play.prototype={
 		spike.topA=new Phaser.Point(spikeX+this.spikeH*Math.cos(rndAngleRad),spikeY+this.spikeH*Math.sin(rndAngleRad));
 		spike.base1=new Phaser.Point(spikeX+this.spikeW/2*Math.cos(rndAngleRad+Math.PI/2),spikeY+this.spikeW/2*Math.sin(rndAngleRad+Math.PI/2));
 		spike.base2=new Phaser.Point(spikeX+this.spikeW/2*Math.cos(rndAngleRad-Math.PI/2),spikeY+this.spikeW/2*Math.sin(rndAngleRad-Math.PI/2));
+
+		/////// this.M.S.genBmpCclSp(spike.topA.x,spike.topA.y,10,'#00ff00').anchor.setTo(.5);
 	},
 	getAngleDifference:function(a1,a2){
 		var angleDifference=a1-a2;
@@ -204,14 +184,61 @@ BasicGame.Play.prototype={
 	hitSpike:function(){
 		if(this.isPlaying){
 			this.camera.shake(.01,800,!0,Phaser.Camera.SHAKE_BOTH);
-			// TODO eff
+			
 			console.log('END');
+
 			this.end();
-			this.time.events.add(1E3,function(){
-				this.M.NextScene('Play');
-			},this);
 			this.Player.visible=!1;
+			this.time.events.add(1E3,this.nextPlay,this);
+
+			this.DmgEff.x=this.Player.x;
+			this.DmgEff.y=this.Player.y;
+			this.DmgEff.explode(800,50);
 		}
+	},
+	nextPlay:function(){
+		// this.M.NextScene('Play');
+		// this.Player.reset(this.Player.x,this.Player.y);
+		this.Player.reset(this.playerRespawnPos.x,this.playerRespawnPos.y);
+		this.resetPlayer();
+
+		this.Spikes.forEach(this.restartSpike,this);
+		this.start();
+	},
+	passingSpike:function(spike){
+		var angleDiff=this.getAngleDifference(spike.angle,this.Player.curAngle);
+		if(!spike.approaching&&angleDiff<this.closeToSpike){
+			spike.approaching=!0;
+		}
+
+		if(spike.approaching){
+			/*
+			this.Graphics.beginFill(0xff0000);
+			this.Graphics.lineStyle(4,0xff0000,1);
+			this.Graphics.moveTo(spike.topA.x,spike.topA.y);
+			this.Graphics.lineTo(spike.base1.x,spike.base1.y);
+			this.Graphics.endFill();
+			this.Graphics.beginFill(0xff0000);
+			this.Graphics.moveTo(spike.topA.x,spike.topA.y);
+			this.Graphics.lineTo(spike.base2.x,spike.base2.y);
+			this.Graphics.endFill();
+			*/
+			if(this.distToSegmentSquared(
+				new Phaser.Point(this.Player.x,this.Player.y),
+				this.playerRad,spike.topA,spike.base1)
+				||this.distToSegmentSquared(
+					new Phaser.Point(this.Player.x,this.Player.y),
+					this.playerRad,spike.topA,spike.base2)){
+				this.hitSpike();
+			}
+
+			if(angleDiff>this.farFromSpike){
+				this.placeSpike(spike,(spike.quadrant+3)%4);
+			}
+		}
+	},
+	restartSpike:function(spike){
+		this.placeSpike(spike,spike.quadrant);
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
