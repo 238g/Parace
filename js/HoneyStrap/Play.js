@@ -16,20 +16,24 @@ BasicGame.Play.prototype={
 		// Val
 		this.earthRad=250;
 		this.playerRad=25;
-		this.worldG=.5;
-		this.playerSpeed=1;
+		this.worldG=this.curCharInfo.worldG;
+		this.playerSpeed=this.curCharInfo.speed;
 		this.closeToSpike=5;
-		this.farFromSpike=35;
+		this.farFromSpike=this.curCharInfo.farFromSpike;
 		this.revolutions=this.earthRad/this.playerRad+1;
 		this.spikeW=5;
-		this.spikeH=30;
-		this.jumpForce=[10,7,4];
+		this.spikeH=25;
+		this.jumpForce=this.curCharInfo.jumpForce;
 		this.playerRespawnPos={x:0,y:0};
+		this.hp=this.curCharInfo.HP;
+		this.score=0;
+		this.nextLevel=this.curLevelInfo.nextLevel+this.curCharInfo.levelUpAdd;
 
 		// Obj
-		this.Earth=this.Player=this.Spikes=
-		// this.Graphics=
-		this.FollowEff=this.DmgEff=
+		this.Earth=this.Player=this.Spikes=this.BgS=
+		this.FollowEff=this.DmgEff=this.MaskS=
+		this.FrontG=this.ScoreTS=this.HPTS=
+		this.Kanikama=
 		null;
 		this.Tween={};
 	},
@@ -37,11 +41,9 @@ BasicGame.Play.prototype={
 		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
 		this.stage.backgroundColor='#000';
-		// this.playBgm();
+		this.playBgm();
 		this.genContents();
-		// this.M.gGlb('endTut')?this.genStart():this.genTut();
-		// this.time.events.add(500,this.start,this);//TODO del
-		this.start();//TODO del
+		this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.tes();
 	},
 	update:function(){
@@ -57,16 +59,16 @@ BasicGame.Play.prototype={
 			}
 			this.Player.curAngle=Phaser.Math.wrapAngle(this.Player.curAngle+this.playerSpeed);
 
-			// this.maskImage.angle = this.player.currentAngle + 90;
+			if(this.MaskS.visible)this.MaskS.angle=this.Player.curAngle+90;
 
 			var rad=Phaser.Math.degToRad(this.Player.curAngle);
 			var distanceFromCenter=(this.earthRad+this.playerRad)/2+this.Player.jumpOffset;
 			this.Player.x=this.Earth.x+distanceFromCenter*Math.cos(rad);
 			this.Player.y=this.Earth.y+distanceFromCenter*Math.sin(rad);
-			// var revolutions=this.earthRad/this.playerRad+1;
 			this.Player.angle=this.Player.curAngle*this.revolutions;
 
-			// this.Graphics.clear();
+			this.FollowEff.x=this.Player.x;
+			this.FollowEff.y=this.Player.y;
 
 			this.Spikes.forEach(this.passingSpike,this);
 		}
@@ -75,51 +77,53 @@ BasicGame.Play.prototype={
 	end:function(){this.isPlaying=this.inputEnabled=!1},
 	tes:function(){
 		if(__ENV!='prod'){
-			// this.Player.body.debug=!0;
-			// this.Thorns.forEach(function(c){c.body.debug=!0});
-			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
-			// this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1;this.nextLevel=this.curLevelInfo.nextLevel;},this);
-			// this.curLevel=this.M.H.getQuery('level')||1;this.curLevelInfo=this.LevelInfo[this.curLevel];
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1;this.nextLevel=this.curLevelInfo.nextLevel;},this);
+			this.curLevel=this.M.H.getQuery('level')||1;this.curLevelInfo=this.LevelInfo[this.curLevel];
 		}
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		this.Earth=this.M.S.genBmpCclSp(this.world.centerX,this.world.centerY,this.earthRad,'#fff');
+		this.BgS=this.add.sprite(0,0,'PlayBg_'+this.curChar);
+		this.Earth=this.add.sprite(this.world.centerX,this.world.centerY,'Earth_'+this.curChar+'_1');
 		this.Earth.anchor.setTo(.5);
-
-		this.genEff();
-
-		this.genPlayer();
-
-		// this.Graphics=this.add.graphics();
 		this.Spikes=this.add.group();
-		for(var i=0;i<9;i++){
-			var spike=this.M.S.genBmpSqrSp(0,0,this.spikeH*1.5,this.spikeW*1.5,'#ffffff');
-			// var spike=this.M.S.genBmpSqrSp(0,0,this.spikeH,this.spikeW,'#ffffff');
-			spike.anchor.setTo(0,.5);
-			this.Spikes.add(spike);
-			this.placeSpike(spike,Math.floor(i/3));
-		}
-
-		// this.maskImage = this.add.sprite(game.config.width / 2, game.config.height / 2, "mask");
+		this.genFollowEff();
+		this.genPlayer();
+		this.genSpikes();
+		this.genMask();
+		this.FrontG=this.add.group();
+		this.FrontG.add(this.Earth);
+		this.genDmgEff();
+		this.genHUD();
+		this.Kanikama=this.add.sprite(0,0,'Kanikama');
+		this.Kanikama.anchor.setTo(.5);
+		this.Kanikama.visible=!1;
 	},
-	genEff:function(){
-		// TODO
-		// this.FollowEff=this.add.emitter();
-		// this.FollowEff.frequency=100;
-
-		
-		this.DmgEff=this.add.emitter(0,0,100);
+	genFollowEff:function(){
+		this.FollowEff=this.add.emitter(100,100,10);
+		this.FollowEff.makeParticles('WC');
+		this.FollowEff.setScale(.5,0,.5,0,500);
+		this.FollowEff.setAlpha(1,0,800);
+		this.FollowEff.setXSpeed(0,0);
+		this.FollowEff.setYSpeed(0,0);
+		this.FollowEff.gravity.x=0;
+		this.FollowEff.gravity.y=0;
+		////// this.FollowEff.forEach(function(c){c.tint=this[0]},[this.curCharInfo.tint]);
+	},
+	genDmgEff:function(){
+		this.DmgEff=this.add.emitter(0,0,50);
 		this.DmgEff.makeParticles('WB');
-		this.DmgEff.setScale(1,3);
-		this.DmgEff.setAlpha(.2,1);
-		this.DmgEff.setXSpeed(-50,50);
-		this.DmgEff.setYSpeed(-50,50);
+		this.DmgEff.setScale(3,.3,3,.3,800);
+		this.DmgEff.setAlpha(1,0,800);
+		this.DmgEff.setXSpeed(-100,100);
+		this.DmgEff.setYSpeed(-100,100);
 		this.DmgEff.gravity.x=0;
 		this.DmgEff.gravity.y=0;
+		////// this.DmgEff.forEach(function(c){c.tint=this[0]},[this.curCharInfo.tint]);
 	},
 	genPlayer:function(){
-		this.Player=this.M.S.genBmpCclSp(0,0,this.playerRad,'#00ff00');
+		this.Player=this.add.sprite(0,0,'Player_'+this.curChar);
 		this.Player.anchor.setTo(.5);
 
 		var rad=Phaser.Math.degToRad(this.Player.curAngle);
@@ -133,7 +137,6 @@ BasicGame.Play.prototype={
 		this.playerRespawnPos.y=this.Player.y;
 
 		this.input.onDown.add(this.jump,this);
-		this.Player.addChild(this.M.S.genBmpCclSp(0,0,10,'#ff0000'));//TODO del
 	},
 	resetPlayer:function(){
 		this.Player.curAngle=-80;
@@ -142,18 +145,30 @@ BasicGame.Play.prototype={
 		this.Player.jumpForce=0;
 	},
 	jump:function(){
-		if(this.Player.jumps<this.jumpForce.length){
-			this.Player.jumps++;
-			this.Player.jumpForce=this.jumpForce[this.Player.jumps-1];
+		if(this.isPlaying){
+			if(this.Player.jumps<this.jumpForce.length){
+				this.Player.jumps++;
+				this.M.SE.play('Jump_'+this.Player.jumps,{volume:2});
+				this.Player.jumpForce=this.jumpForce[this.Player.jumps-1];
+			}
+		}
+	},
+	genSpikes:function(){
+		for(var i=0;i<9;i++){
+			var spike=this.add.sprite(0,0,'Nanashi_1');
+			spike.anchor.setTo(0,.5);
+			spike.firstPlace=Math.floor(i/3);
+			this.Spikes.add(spike);
+			this.placeSpike(spike,spike.firstPlace);
 		}
 	},
 	placeSpike:function(spike,quadrant){
 		var rndAngle=Phaser.Math.between(quadrant*90,(quadrant+1)*90);
 		rndAngle=Phaser.Math.wrapAngle(rndAngle);
 		var rndAngleRad=Phaser.Math.degToRad(rndAngle);
-		var spikeX=this.Earth.x+(this.earthRad*.5-this.rnd.between(4,25))*Math.cos(rndAngleRad);
+		var spikeX=this.Earth.x+(this.earthRad*.5-this.rnd.between(2,20))*Math.cos(rndAngleRad);
 		spike.x=spikeX;
-		var spikeY=this.Earth.y+(this.earthRad*.5-this.rnd.between(4,25))*Math.sin(rndAngleRad);
+		var spikeY=this.Earth.y+(this.earthRad*.5-this.rnd.between(2,20))*Math.sin(rndAngleRad);
 		spike.y=spikeY;
 		spike.quadrant=quadrant;
 		spike.angle=rndAngle;
@@ -184,23 +199,33 @@ BasicGame.Play.prototype={
 	hitSpike:function(){
 		if(this.isPlaying){
 			this.camera.shake(.01,800,!0,Phaser.Camera.SHAKE_BOTH);
-			
-			console.log('END');
 
+			this.FollowEff.on=!1;
+			
 			this.end();
 			this.Player.visible=!1;
-			this.time.events.add(1E3,this.nextPlay,this);
 
 			this.DmgEff.x=this.Player.x;
 			this.DmgEff.y=this.Player.y;
-			this.DmgEff.explode(800,50);
+			this.DmgEff.explode(800,Math.floor(800/this.time.physicsElapsedMS));
+
+			this.Earth.loadTexture('Earth_'+this.curChar+'_2');
+
+			this.M.SE.play('Dmg',{volume:1});
+
+			this.hp--;
+			this.HPTS.changeText('HP: '+this.hp);
+			if(this.hp==0)return this.gameOver();
+
+			this.time.events.add(1E3,this.nextPlay,this);
 		}
 	},
 	nextPlay:function(){
-		// this.M.NextScene('Play');
-		// this.Player.reset(this.Player.x,this.Player.y);
 		this.Player.reset(this.playerRespawnPos.x,this.playerRespawnPos.y);
 		this.resetPlayer();
+		
+		this.FollowEff.on=!0;
+		this.Earth.loadTexture('Earth_'+this.curChar+'_1');
 
 		this.Spikes.forEach(this.restartSpike,this);
 		this.start();
@@ -212,17 +237,6 @@ BasicGame.Play.prototype={
 		}
 
 		if(spike.approaching){
-			/*
-			this.Graphics.beginFill(0xff0000);
-			this.Graphics.lineStyle(4,0xff0000,1);
-			this.Graphics.moveTo(spike.topA.x,spike.topA.y);
-			this.Graphics.lineTo(spike.base1.x,spike.base1.y);
-			this.Graphics.endFill();
-			this.Graphics.beginFill(0xff0000);
-			this.Graphics.moveTo(spike.topA.x,spike.topA.y);
-			this.Graphics.lineTo(spike.base2.x,spike.base2.y);
-			this.Graphics.endFill();
-			*/
 			if(this.distToSegmentSquared(
 				new Phaser.Point(this.Player.x,this.Player.y),
 				this.playerRad,spike.topA,spike.base1)
@@ -234,11 +248,68 @@ BasicGame.Play.prototype={
 
 			if(angleDiff>this.farFromSpike){
 				this.placeSpike(spike,(spike.quadrant+3)%4);
+
+				this.score++;
+				this.ScoreTS.changeText(this.curWords.Score+this.score);
+
+				this.checkLevelUp();
+				this.appearKanikama();
+			}
+		}
+	},
+	checkLevelUp:function(){
+		if(this.nextLevel==this.score){
+			this.curLevel++;
+			this.curLevelInfo=this.LevelInfo[this.curLevel];
+			this.nextLevel=this.curLevelInfo.nextLevel+this.curCharInfo.levelUpAdd;
+
+			if(this.curLevelInfo.mask){
+				if(this.MaskS.visible==!1)this.MaskS.visible=!0;
+
+				this.MaskS.angle=this.Player.curAngle+90;
+
+				if(this.MaskS.num!=this.curLevelInfo.mask){
+					this.MaskS.loadTexture('Mask_'+this.curLevelInfo.mask);
+					this.MaskS.num=this.curLevelInfo.mask;
+				}
+			}else{
+				if(this.MaskS.visible==!0)this.MaskS.visible=!1;
+			}
+
+			this.playerSpeed=this.playerSpeed+this.curLevelInfo.addSpeed;
+
+			this.BgS.colorBlend={step:0};
+			var tw=this.add.tween(this.BgS.colorBlend).to({step:100},1E3,Phaser.Easing.Linear.None,!0,0);
+			this.BgS.startColor=this.BgS.tint;
+			this.BgS.endColor=this.curLevelInfo.tint;
+			tw.onUpdateCallback(function(){
+				this.tint=Phaser.Color.interpolateColor(this.startColor,this.endColor,100,this.colorBlend.step);
+			},this.BgS);
+		}
+	},
+	appearKanikama:function(){
+		if(this.rnd.between(1,100)<this.curLevelInfo.obRate*this.curCharInfo.obRate){
+			if(!this.Kanikama.visible){
+				this.Kanikama.visible=!0;
+				var x=this.world.randomX;
+				var y=this.world.randomY;
+				this.Kanikama.x=x;
+				this.Kanikama.y=y;
+				var tw=this.M.T.moveA(this.Kanikama,{xy:{x:this.Player.x,y:this.Player.y},duration:this.rnd.between(500,1E3)});
+				tw.start();
+				tw.onComplete.add(function(){this.time.events.add(500,function(){this.Kanikama.visible=!1},this)},this);
+				this.M.SE.play('Appear',{volume:1});
 			}
 		}
 	},
 	restartSpike:function(spike){
-		this.placeSpike(spike,spike.quadrant);
+		this.placeSpike(spike,spike.firstPlace);
+	},
+	genMask:function(){
+		this.MaskS=this.add.sprite(this.world.centerX,this.world.centerY,'Mask_1');
+		this.MaskS.anchor.setTo(.5);
+		this.MaskS.visible=!1;
+		this.MaskS.num=1;
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
@@ -248,10 +319,6 @@ BasicGame.Play.prototype={
 
 		this.HPTS=this.M.S.genTxt(this.world.centerX,this.world.height*.95,'HP: '+this.hp,this.M.S.txtstyl(30));
 		this.HUD.add(this.HPTS);
-
-		this.PlayLbl=this.M.S.genLbl(this.world.centerX,this.world.height*.75,this.go,'GO!');
-		this.HUD.add(this.PlayLbl);
-
 		this.HUD.visible=!1;
 	},
 	gameOver:function(){
@@ -259,15 +326,17 @@ BasicGame.Play.prototype={
 		this.genEnd();
 	},
 	playBgm:function(){
-		this.M.SE.stop('currentBGM');
-		var bgm=this.M.SE.play('PlayBGM_1',{volume:1,isBGM:!0});
-		bgm.onStop.add(this.loopBgm,this);
+		if(!this.M.SE.isPlaying('currentBGM')||this.M.SE.isPlaying('TitleBGM')){
+			this.M.SE.stop('currentBGM');
+			var bgm=this.M.SE.play('PlayBGM_1',{volume:1,isBGM:!0});
+			bgm.onStop.add(this.loopBgm,this);
+		}
 	},
 	loopBgm:function(){
 		if(this.M.currentScene=='Play'){
-			this.curBgmNum++;
-			if(this.curBgmNum==4)this.curBgmNum=1;
-			var bgm=this.M.SE.play('PlayBGM_'+this.curBgmNum,{volume:1,isBGM:!0});
+			this.M.sGlb('curBgmNum',this.M.gGlb('curBgmNum')+1);
+			if(this.M.gGlb('curBgmNum')==4)this.M.sGlb('curBgmNum',1);;
+			var bgm=this.M.SE.play('PlayBGM_'+this.M.gGlb('curBgmNum'),{volume:1,isBGM:!0});
 			bgm.onStop.add(this.loopBgm,this);
 		}
 	},
@@ -299,7 +368,7 @@ BasicGame.Play.prototype={
 		txtstyl.fill=txtstyl.mStroke=this.curCharInfo.color;
 		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.4,this.curWords.ResScore+this.score,txtstyl));
 
-		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.65,this.tw,'Twitter'));
+		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.65,this.again,this.curWords.Again));
 		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.65,this.tweet,this.curWords.TwBtn));
 		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.75,this.back,this.curWords.Back));
 		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.othergames,this.curWords.OtherGames));
@@ -307,7 +376,7 @@ BasicGame.Play.prototype={
 		var b=this.add.button(0,this.world.height-120,'Select_'+this.curChar,this.yt,this);
 		txtstyl.fontSize=30;
 		txtstyl.fill=txtstyl.mStroke='#ff0000';
-		b.addChild(this.M.S.genTxt((this.curChar==4)?300:100,40,'YouTube',txtstyl));
+		b.addChild(this.M.S.genTxt((this.curChar==1||this.curChar==4)?300:100,40,'YouTube',txtstyl));
 		s.addChild(b);
 	},
 	yt:function(){
@@ -318,12 +387,27 @@ BasicGame.Play.prototype={
 			myGa('youtube','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
 		}
 	},
+	/*
 	tw:function(){
 		if(this.inputEnabled){
 			this.M.SE.play('OnBtn',{volume:1});
 			var url=this.curCharInfo.tw;
 			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 			myGa('twitter','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
+		}
+	},
+	*/
+	again:function(){
+		if(this.inputEnabled&&!this.Tween.isRunning){
+			this.M.SE.play('OnStart',{volume:1});
+			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
+			this.Tween.start();
+			myGa('again','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
 		}
 	},
 	othergames:function(){
@@ -381,5 +465,7 @@ BasicGame.Play.prototype={
 		twA.onComplete.add(function(){this.destroy},s);
 		this.M.SE.play('GenStart',{volume:1});
 		this.HUD.visible=!0;
+		this.start();
+		this.FollowEff.start(!1,1E3,6*this.time.physicsElapsedMS);
 	},
 };

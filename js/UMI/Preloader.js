@@ -87,8 +87,8 @@ BasicGame.Preloader.prototype={
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
-		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		this.sound.volume=.5;
+		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		this.game.input.onDown.addOnce(this.showLogo,this);
 	},
 	showLogo:function(){

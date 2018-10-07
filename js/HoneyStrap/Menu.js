@@ -12,12 +12,8 @@ BasicGame.Title.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		
-
-		return;
-		
-
 		this.showBg();
 		this.rain();
 		
@@ -28,7 +24,7 @@ BasicGame.Title.prototype={
 		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
 		////// this.IntroTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoIntro,this.curWords.IntroBtn,this.M.S.txtstyl(25));
 		////// this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
-		////// this.CreditTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
+		this.CreditTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
@@ -44,15 +40,15 @@ BasicGame.Title.prototype={
 		this.M.T.slideshow(g,{duration:2E3,delay:2E3});
 	},
 	rain:function(){
-		var x=0,minX=200,maxX=500;
-		if(this.rnd.between(0,100)<50)x=this.world.width,minX=-500,maxX=-200;
-		var e=this.add.emitter(x,this.world.centerY,100);
-		e.height=this.world.height;
-		e.makeParticles(['Player_1','Player_2','Player_3','Player_4','Player_5','Nanashi_1']);
+		var y=0,minY=200,maxY=500;
+		if(this.rnd.between(0,100)<50)y=this.world.height,minY=-500,maxY=-200;
+		var e=this.add.emitter(this.world.centerX,y,100);
+		e.width=this.world.width;
+		e.makeParticles(['Player_1','Player_2','Player_3','Player_4','Player_5','Nanashi_1','Kanikama']);
 		e.minParticleScale=.5;
-		e.maxParticleScale=1;
-		e.setXSpeed(minX,maxX);
-		e.start(!1,2E3,this.time.physicsElapsedMS*5,0);
+		e.maxParticleScale=2;
+		e.setYSpeed(minY,maxY);
+		e.start(!1,3E3,this.time.physicsElapsedMS*5,0);
 	},
 	start:function(){
 		if (this.inputEnabled) {
