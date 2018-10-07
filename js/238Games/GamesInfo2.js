@@ -192,6 +192,12 @@ function genGamesInfo(){
 				caption:'あにまーれの二次創作ゲームです！あにまーれのメンバーを黒猫ななしさんから逃がそう！どこまで逃げ切れるか…高スコアを目指せ！',
 				release:'2018/9/30',
 			},
+			1033:{id:1033,title:'ハニスト・エンドレス・ランナー',url:GI2A('HoneyStrap'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B('HoneyStrap'),imgA:GI2C('HoneyStrap'),imgB:GI2D('HoneyStrap'),
+				caption:'ハニストの二次創作ゲームです！ハニストのメンバーを灰猫ななしさんから逃がそう！どこまで逃げ切れるか…高スコアを目指せ！',
+				release:'2018/10/7',
+			},
 		},
 	};
 };

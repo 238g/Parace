@@ -36,3 +36,4 @@
 |#30|Tofu On Fire|https://238g.github.io/Parace/mei.html|2018/9/16|
 |#31|夜叉太郎|https://238g.github.io/Parace/UMI.html|2018/9/23|
 |#32|ぴょこぴょこあにまーれ|https://238g.github.io/Parace/AniMare.html|2018/9/30|
+|#33|ハニスト・エンドレス・ランナー|https://238g.github.io/Parace/HoneyStrap.html|2018/10/7|
