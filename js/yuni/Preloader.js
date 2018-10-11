@@ -17,10 +17,10 @@ BasicGame.Preloader.prototype={
 
 			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
 
-			'test1':'images/HoneyStrap/Player_1.png',
-			'test2':'images/HoneyStrap/Player_2.png',
-			'test3':'images/HoneyStrap/Player_3.png',
-			'test4':'images/HoneyStrap/Player_4.png',
+			'Ob':'images/yuni/obstacle.png',
+			'Tg':'images/yuni/target.png',
+			'Player_1':'images/yuni/YuNi_1.png',
+			'Player_2':'images/yuni/YuNi_1.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();

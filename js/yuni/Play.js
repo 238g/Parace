@@ -27,7 +27,7 @@ BasicGame.Play.prototype={
 	create:function(){
 		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#000';
+		// this.stage.backgroundColor='#000';
 		// this.playBgm();
 		this.genContents();
 		// this.M.gGlb('endTut')?this.genStart():this.genTut();
@@ -56,6 +56,11 @@ BasicGame.Play.prototype={
 		}
 	},
 	////////////////////////////////////// PlayContents
+	render:function(){
+		this.PlayerGroup.forEachAlive(function(c){this.game.debug.body(c)},this);
+		this.ObGroup.forEachAlive(function(c){this.game.debug.body(c)},this);
+		this.TgGroup.forEachAlive(function(c){this.game.debug.body(c)},this);
+	},
 	genContents:function(){
 		this.physics.startSystem(Phaser.Physics.ARCADE);
 		this.genOb();
@@ -66,7 +71,7 @@ BasicGame.Play.prototype={
 		this.ObGroup=this.add.group();
 		this.ObGroup.enableBody=!0;
 		this.ObGroup.physicsBodyType=Phaser.Physics.ARCADE;
-		this.ObGroup.createMultiple(10,'test3');
+		this.ObGroup.createMultiple(10,'Ob');
 		this.ObGroup.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
@@ -78,7 +83,7 @@ BasicGame.Play.prototype={
 		this.TgGroup=this.add.group();
 		this.TgGroup.enableBody=!0;
 		this.TgGroup.physicsBodyType=Phaser.Physics.ARCADE;
-		this.TgGroup.createMultiple(10,'test4');
+		this.TgGroup.createMultiple(10,'Tg');
 		this.TgGroup.children.forEach(function(c){
 			c.checkWorldBounds=!0;
 			c.outOfBoundsKill=!0;
@@ -91,7 +96,7 @@ BasicGame.Play.prototype={
 		var laneW=this.world.width/8;
 		this.PlayerGroup=this.add.group();
 		for(var i=0;i<2;i++){//0right_1left
-			var s=this.add.sprite(0,y,'test'+(i+1));//TODO
+			var s=this.add.sprite(0,y,'Player_'+(i+1));
 			s.anchor.setTo(.5);
 			s.smoothed=!1;
 			s.side=i;
@@ -104,6 +109,7 @@ BasicGame.Play.prototype={
 			this.physics.enable(s,Phaser.Physics.ARCADE);
 			s.body.allowRotation=!1;
 			s.body.moves=!1;
+			s.body.setSize(s.width*.4,s.height*.5,s.width*.3,s.height*.5);
 			this.PlayerGroup.add(s);
 		}
 		this.input.onDown.add(this.movePlayer,this);
