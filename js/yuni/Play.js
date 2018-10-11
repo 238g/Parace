@@ -14,8 +14,13 @@ BasicGame.Play.prototype={
 		this.LevelInfo=this.M.gGlb('LevelInfo');
 		this.curLevelInfo=this.LevelInfo[this.curLevel];
 		// Val
-
+		this.respawnInterval=1E3;
+		this.respawnTimer=1E3;
+		this.playerCanMove=!0;
+		this.playerTurnSpeed=250;
+		this.lanePosX=[];
 		// Obj
+		this.PlayerGroup=this.ObGroup=this.TgGroup=
 		null;
 		this.Tween={};
 	},
@@ -26,10 +31,19 @@ BasicGame.Play.prototype={
 		// this.playBgm();
 		this.genContents();
 		// this.M.gGlb('endTut')?this.genStart():this.genTut();
+		this.start();
 		this.tes();
 	},
-	updateT:function(){
+	update:function(){
 		if(this.isPlaying){
+			this.respawnTimer-=this.time.elapsed;
+			if(this.respawnTimer<0){
+				this.respawnTimer=this.respawnInterval;
+				this.respawnObj();
+			}
+
+			this.physics.arcade.collide(this.PlayerGroup,this.ObGroup,this.collideOb,null,this);
+			this.physics.arcade.collide(this.PlayerGroup,this.TgGroup,this.collideTg,null,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -43,7 +57,119 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		// TODO
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		this.genOb();
+		this.genTg();
+		this.genPlayer();
+	},
+	genOb:function(){
+		this.ObGroup=this.add.group();
+		this.ObGroup.enableBody=!0;
+		this.ObGroup.physicsBodyType=Phaser.Physics.ARCADE;
+		this.ObGroup.createMultiple(10,'test3');
+		this.ObGroup.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+		},this);
+	},
+	genTg:function(){
+		this.TgGroup=this.add.group();
+		this.TgGroup.enableBody=!0;
+		this.TgGroup.physicsBodyType=Phaser.Physics.ARCADE;
+		this.TgGroup.createMultiple(10,'test4');
+		this.TgGroup.children.forEach(function(c){
+			c.checkWorldBounds=!0;
+			c.outOfBoundsKill=!0;
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+		},this);
+	},
+	genPlayer:function(){
+		var y=this.world.height*.2;
+		var laneW=this.world.width/8;
+		this.PlayerGroup=this.add.group();
+		for(var i=0;i<2;i++){//0right_1left
+			var s=this.add.sprite(0,y,'test'+(i+1));//TODO
+			s.anchor.setTo(.5);
+			s.smoothed=!1;
+			s.side=i;
+			var la=laneW*(1+4*i);
+			var lb=laneW*(3+4*i);
+			s.lanePosX=[la,lb];
+			this.lanePosX[i*2]=la;
+			this.lanePosX[i*2+1]=lb;
+			s.x=s.lanePosX[s.side];
+			this.physics.enable(s,Phaser.Physics.ARCADE);
+			s.body.allowRotation=!1;
+			s.body.moves=!1;
+			this.PlayerGroup.add(s);
+		}
+		this.input.onDown.add(this.movePlayer,this);
+	},
+	movePlayer:function(p){
+		if(this.playerCanMove){
+			this.playerCanMove=!1;
+			if(this.world.centerX<p.x){//left
+				var num=1;
+			}else{//right
+				var num=0;
+			}
+			var s=this.PlayerGroup.children[num];
+			var twA=this.add.tween(s).to({angle:20-40*s.side},this.playerTurnSpeed*.5,Phaser.Easing.Linear.None,!0);
+			twA.onComplete.add(function(s){
+				this.add.tween(s).to({angle:0},this.playerTurnSpeed*.5,Phaser.Easing.Linear.None,!0);
+			},this);
+			s.side=1-s.side;
+			var twB=this.add.tween(s).to({x:s.lanePosX[s.side]},this.playerTurnSpeed,Phaser.Easing.Linear.None,!0);
+			twB.onComplete.add(function(){
+				this.playerCanMove=!0;
+			},this);
+		}
+	},
+	collideOb:function(){
+		// this.end();
+		console.log('END');
+		this.M.NextScene('Play');
+	},
+	collideTg:function(p,t){
+		t.kill();
+		// TODO add score???
+		// console.log(p,t);
+	},
+	respawnObj:function(){
+		var s,laneNum;
+		for(var i=0;i<2;i++){
+			if(this.rnd.between(1,100)<50){
+				s=this.ObGroup.getFirstDead();
+				laneNum=i*2+this.rnd.between(0,1);
+				if(s)this.moveObj(s,laneNum);
+			}else{
+				s=this.TgGroup.getFirstDead();
+				laneNum=i*2+this.rnd.between(0,1);
+				if(s)this.moveObj(s,laneNum);
+			}
+
+			// TODO level
+			/*
+				s=this.ObGroup.getFirstDead();
+				if(s)this.moveObj(s,i*2);
+				s=this.TgGroup.getFirstDead();
+				if(s)this.moveObj(s,i*2+1);
+				////
+				s=this.TgGroup.getFirstDead();
+				if(s)this.moveObj(s,i*2);
+				s=this.ObGroup.getFirstDead();
+				if(s)this.moveObj(s,i*2+1);
+			*/
+
+			// TODO level tint
+		}
+	},
+	moveObj:function(s,laneNum){
+		s.reset(this.lanePosX[laneNum],this.world.height);
+		s.body.velocity.y=-300;//TODO
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
