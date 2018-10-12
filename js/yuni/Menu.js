@@ -6,7 +6,9 @@ BasicGame.Title.prototype={
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
 		// Obj
-		this.StartTS=this.LangTS=this.IntroTS=this.CreditTS=null;
+		this.StartTS=
+		////// this.IntroTS=this.CreditTS=
+		null;
 		this.Tween={};
 	},
 	create:function(){
@@ -14,40 +16,28 @@ BasicGame.Title.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 		
-		// this.showBg();
-		// this.rain();
+		// this.sliderBg();
 		
 		var title=this.add.sprite(this.world.centerX,this.world.height*.92,'Title');
 		title.anchor.setTo(.5);
 
 		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
 		////// this.IntroTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoIntro,this.curWords.IntroBtn,this.M.S.txtstyl(25));
-		////// this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
-		this.CreditTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
+		////// this.CreditTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 	},
-	showBg:function(){
-		var g=this.add.group();
-		for(var i=1;i<=10;i++){
-			var s=this.add.sprite(0,0,'Bg_'+i);
-			s.alpha=0;
-			g.add(s);
+	sliderBg:function(){
+		// TODO slide show
+		// movie thumbnail and movie title
+		var arr=['SlideBg_1','SlideBg_2','SlideBg_3'];
+		for(var k in arr){
+			var s=this.add.sprite(0,0,arr[k]);
+			s.visible=!1;
+			// TODO TS
 		}
-		g.shuffle();
-		this.M.T.slideshow(g,{duration:2E3,delay:2E3});
-	},
-	rain:function(){
-		var y=0,minY=200,maxY=500;
-		if(this.rnd.between(0,100)<50)y=this.world.height,minY=-500,maxY=-200;
-		var e=this.add.emitter(this.world.centerX,y,100);
-		e.width=this.world.width;
-		e.makeParticles(['Player_1','Player_2','Player_3','Player_4','Player_5','Nanashi_1','Kanikama']);
-		e.minParticleScale=.5;
-		e.maxParticleScale=2;
-		e.setYSpeed(minY,maxY);
-		e.start(!1,3E3,this.time.physicsElapsedMS*5,0);
+		//TODO...
 	},
 	start:function(){
 		if (this.inputEnabled) {
@@ -58,7 +48,7 @@ BasicGame.Title.prototype={
 				wp.tint=0x000000;
 				wp.alpha=0;
 				this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
-				this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
+				this.Tween.onComplete.add(function(){this.M.NextScene('SelectLevel')},this);
 				this.Tween.start();
 			}
 		} else {
@@ -66,21 +56,7 @@ BasicGame.Title.prototype={
 			this.inputEnabled=!0;
 		}
 	},
-	chgLang:function(){
-		if(this.curLang=='en'){
-			this.curLang='jp';
-			this.M.sGlb('curLang',this.curLang);
-			this.curWords=this.Words[this.curLang];
-		}else{
-			this.curLang='en';
-			this.M.sGlb('curLang',this.curLang);
-			this.curWords=this.Words[this.curLang];
-		}
-		//////// this.StartTS.changeText(this.curWords.Start);
-		//////// this.CharTwTS.changeText(this.curWords.CharTw);
-		//////// this.LangTS.changeText(this.curWords.Lang);
-		//////// this.M.SE.play('OnBtn',{volume:1});
-	},
+	//TODO del?
 	gotoIntro:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		var url='';
@@ -100,13 +76,15 @@ BasicGame.Title.prototype={
 	},
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
-BasicGame.SelectChar=function(){};
-BasicGame.SelectChar.prototype={
+BasicGame.SelectLevel=function(){};
+BasicGame.SelectLevel.prototype={
 	init:function(){
-		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
+		// this.curLevel=this.M.gGlb('curLevel');
+		this.LevelInfo=this.M.gGlb('LevelInfo');
+		// this.curStageInfo=this.StageInfo[this.curLevel];
 		this.Tween={};
 	},
 	create:function(){
@@ -114,20 +92,9 @@ BasicGame.SelectChar.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
 
-		/*
-		var x=this.rnd.between(1,100)>50?this.world.width*1.5:-this.world.centerX;
-		var y=this.world.height*.2;
-		for(var k in this.CharInfo){
-			var info=this.CharInfo[k];
-			var s=this.add.button(x,y,'Select_'+k,this.select,this);
-			s.anchor.setTo(.5);
-			s.char=k;
-			s.onInputOver.add(function(b){b.alpha=.8});
-			s.onInputOut.add(function(b){b.alpha=1});
-			this.M.T.moveA(s,{xy:{x:this.world.centerX},delay:k*200}).start();
-			y+=s.height;
-		}
-		*/
+		//TODO this.curWords.Select;
+
+		// TODO level label list
 
 		this.add.sprite(this.world.centerX,this.world.height*.065,'Select').anchor.setTo(.5);
 		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
@@ -136,7 +103,7 @@ BasicGame.SelectChar.prototype={
 	},
 	select:function(b){
 		if (!this.Tween.isRunning) {
-			this.M.sGlb('curChar',b.char);
+			this.M.sGlb('curLevel',b.level);
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
@@ -144,7 +111,7 @@ BasicGame.SelectChar.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
-			myGa('play','SelectChar','Char_'+b.char,this.M.gGlb('playCount'));
+			myGa('play','SelectLevel','Level_'+b.level,this.M.gGlb('playCount'));
 			this.M.SE.play('OnStart',{volume:1});
 		}
 	},

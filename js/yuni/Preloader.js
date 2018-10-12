@@ -17,6 +17,11 @@ BasicGame.Preloader.prototype={
 
 			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
 
+			//TODO
+			'SlideBg_1':'images/mei/Bg_1.jpg',
+			'SlideBg_2':'images/mei/Bg_2.jpg',
+			'SlideBg_3':'images/mei/Bg_3.jpg',
+
 			'Ob':'images/yuni/obstacle.png',
 			'Tg':'images/yuni/target.png',
 			'Player_1':'images/yuni/YuNi_1.png',

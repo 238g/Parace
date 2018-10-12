@@ -1,11 +1,12 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	GAME_TITLE_EN:'Hololive',
+	GAME_TITLE_EN:'YuNi-Game',
 	MAIN_COLOR:'#ffffff',
 	MAIN_TINT:0xffffff,
 	MAIN_TEXT_COLOR:'#000000',
 	MAIN_STROKE_COLOR:'#000000',
 	WHITE_COLOR:'#ffffff',
+	YOUTUBE_URL:'',//TODO
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
@@ -17,11 +18,10 @@ create:function(){
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		playCount:0,
 		endTut:!1,
-		curChar:1,
+		curLevel:1,
 		curBgmNum:1,//TODO
 		Words:this.genWords(),
-		CharInfo:this.genCharInfo(),//TODO
-		LevelInfo:this.genLevelInfo(),//TODO
+		LevelInfo:this.genLevelInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};
