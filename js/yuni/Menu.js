@@ -130,10 +130,12 @@ BasicGame.SelectLevel.prototype={
 		}
 	},
 	yt:function(){
-		this.M.SE.play('OnBtn',{volume:1});
-		var url=BasicGame.YOUTUBE_URL;
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-		myGa('youtube','SelectLevel','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		if(!this.Tween.isRunning){
+			this.M.SE.play('OnBtn',{volume:1});
+			var url=BasicGame.YOUTUBE_URL;
+			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+			myGa('youtube','SelectLevel','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
+		}
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;

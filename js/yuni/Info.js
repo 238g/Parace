@@ -7,7 +7,7 @@ BasicGame.Boot.prototype.genLevelInfo=function(){
 		5:{objVel:-300,objGrv:-300,playerTurnSpeed:150,objMode:2,tint:0x00ff7f,respawnInterval:1600,goalCount:20,mode:'score',},
 		6:{objVel:-400,objGrv:-300,playerTurnSpeed:150,objMode:2,tint:0x4169e1,respawnInterval:1200,goalCount:20,mode:'score',},
 		7:{objVel:-500,objGrv:0,playerTurnSpeed:120,objMode:3,tint:0x0000cd,respawnInterval:1E3,goalCount:30,mode:'score',},
-		8:{objVel:-500,objGrv:-200,playerTurnSpeed:120,objMode:3,tint:0xff7f50,respawnInterval:900,goalCount:30,mode:'score',},
+		8:{objVel:-500,objGrv:-300,playerTurnSpeed:120,objMode:3,tint:0xff7f50,respawnInterval:900,goalCount:30,mode:'score',},
 		9:{objVel:-500,objGrv:-500,playerTurnSpeed:100,objMode:3,tint:0xff4500,respawnInterval:800,goalCount:50,mode:'score',},
 		10:{objVel:-500,objGrv:-700,playerTurnSpeed:100,objMode:3,tint:0xdc143c,respawnInterval:700,goalCount:100,mode:'score',},
 		11:{objVel:-500,objGrv:-200,playerTurnSpeed:100,objMode:3,tint:0xffffff,respawnInterval:800,goalCount:0,mode:'endless',},

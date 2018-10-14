@@ -17,7 +17,13 @@ BasicGame.Play.prototype={
 		this.playerCanMoveRight=!0;
 		this.playerTurnSpeed=this.curLevelInfo.playerTurnSpeed;
 		this.objVel=this.curLevelInfo.objVel;
-		this.objGrv=this.curLevelInfo.objGrv;
+
+		if(!this.game.device.desktop&&this.curLevel>=8){
+			this.objGrv=this.curLevelInfo.objGrv+200;
+		}else{
+			this.objGrv=this.curLevelInfo.objGrv;
+		}
+
 		this.lanePosX=[];
 		this.hp=3;
 		this.score=0;
