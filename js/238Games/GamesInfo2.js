@@ -198,6 +198,12 @@ function genGamesInfo(){
 				caption:'ハニストの二次創作ゲームです！ハニストのメンバーを灰猫ななしさんから逃がそう！どこまで逃げ切れるか…高スコアを目指せ！',
 				release:'2018/10/7',
 			},
+			1034:{id:1034,title:'ユニノヨゾラ',url:GI2A('yuni'),
+				tColor:'#5bb1a0',mColor:'#ebfcac',
+				tc:GI2B('yuni'),imgA:GI2C('yuni'),imgB:GI2D('yuni'),
+				caption:'YuNiちゃんの二次創作ゲームです。空から落ちるYuNiちゃんと乙女丸を操作してスコアを稼ごう！',
+				release:'2018/10/14',
+			},
 		},
 	};
 };
