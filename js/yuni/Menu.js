@@ -6,38 +6,35 @@ BasicGame.Title.prototype={
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
 		// Obj
-		this.StartTS=
-		////// this.IntroTS=this.CreditTS=
-		null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		
-		// this.sliderBg();
+		this.rainBg();
 		
-		var title=this.add.sprite(this.world.centerX,this.world.height*.92,'Title');
+		var title=this.add.sprite(this.world.centerX,this.world.height*.7,'Title');
 		title.anchor.setTo(.5);
+		this.M.T.stressA(title).start();
 
-		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
-		////// this.IntroTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoIntro,this.curWords.IntroBtn,this.M.S.txtstyl(25));
-		////// this.CreditTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
+		this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.start,this.curWords.Start,this.M.S.txtstyl(25));
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 	},
-	sliderBg:function(){
-		// TODO slide show
-		// movie thumbnail and movie title
-		var arr=['SlideBg_1','SlideBg_2','SlideBg_3'];
-		for(var k in arr){
-			var s=this.add.sprite(0,0,arr[k]);
-			s.visible=!1;
-			// TODO TS
-		}
-		//TODO...
+	rainBg:function(){
+		var arr=[];
+		for(var i=1;i<=41;i++)arr.push('Bg_'+i);
+		var e=this.add.emitter(this.world.centerX,0,82);
+		e.width=this.world.width;
+		e.makeParticles(arr);
+		e.setRotation(0,0);
+		e.minParticleSpeed.set(0,300);
+		e.maxParticleSpeed.set(0,500);
+		e.gravity=-200;
+		e.start(!1,4E3,this.time.physicsElapsedMS*30,0);
 	},
 	start:function(){
 		if (this.inputEnabled) {
@@ -56,19 +53,6 @@ BasicGame.Title.prototype={
 			this.inputEnabled=!0;
 		}
 	},
-	//TODO del?
-	gotoIntro:function(){
-		this.M.SE.play('OnBtn',{volume:1});
-		var url='';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-		myGa('external_link','Title','AAAAAAAA Page',this.M.gGlb('playCount'));
-	},
-	gotoCredit:function(){
-		this.M.SE.play('OnBtn',{volume:1});
-		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
-	},
 	genHUD:function(){
 		var y=this.world.height*.95;
 		this.M.S.genVolBtn(this.world.width*.1,y).tint=0x000000;
@@ -82,24 +66,43 @@ BasicGame.SelectLevel.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		// this.curLevel=this.M.gGlb('curLevel');
 		this.LevelInfo=this.M.gGlb('LevelInfo');
-		// this.curStageInfo=this.StageInfo[this.curLevel];
+		this.BGMTS=null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 
-		//TODO this.curWords.Select;
-
-		// TODO level label list
-
-		this.add.sprite(this.world.centerX,this.world.height*.065,'Select').anchor.setTo(.5);
+		this.M.S.genTxt(this.world.centerX,this.world.height*.08,this.curWords.Select,this.M.S.txtstyl(40));
+		this.genLevelList();
+		if(this.M.gGlb('endTut')){
+			var b=this.add.button(this.world.width*.25,this.world.height*.75,'Otomemaru_2',this.select,this);
+			b.anchor.setTo(.5);
+			b.level=11;
+			this.M.S.genTxt(this.world.width*.6,this.world.height*.75,'<< '+this.curWords.TwMode);
+		}else{
+			this.add.button(this.world.centerX,this.world.height*.8,'YuNi_2',this.yt,this).anchor.setTo(.5);
+		}
 		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
 
 		this.genHUD();
+	},
+	genLevelList:function(){
+		var mY=this.world.height*.1;
+		var lX=this.world.width*.25;
+		var rX=this.world.width*.75;
+		var count=0;
+		for(var k in this.LevelInfo){
+			if(k==11)continue;
+			if(k%2==0){
+				this.M.S.genLbl(rX,mY+mY+mY*count,this.select,'Level '+k).level=k;
+				count++;
+			}else{
+				this.M.S.genLbl(lX,mY+mY+mY*count,this.select,'Level '+k).level=k;
+			}
+		}
 	},
 	select:function(b){
 		if (!this.Tween.isRunning) {
@@ -125,6 +128,12 @@ BasicGame.SelectLevel.prototype={
 			this.Tween.start();
 			this.M.SE.play('OnBtn',{volume:1});
 		}
+	},
+	yt:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var url=BasicGame.YOUTUBE_URL;
+		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		myGa('youtube','SelectLevel','playCount_'+this.M.gGlb('playCount'),this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;

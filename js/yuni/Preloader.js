@@ -14,28 +14,34 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-
-			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
-
-			//TODO
-			'SlideBg_1':'images/mei/Bg_1.jpg',
-			'SlideBg_2':'images/mei/Bg_2.jpg',
-			'SlideBg_3':'images/mei/Bg_3.jpg',
-
+			'Title':'images/yuni/Title.png',
 			'Ob':'images/yuni/obstacle.png',
 			'Tg':'images/yuni/target.png',
 			'Player_1':'images/yuni/YuNi_1.png',
-			'Player_2':'images/yuni/YuNi_1.png',
+			'Player_2':'images/yuni/Otomemaru_1.png',
+			'YuNi_2':'images/yuni/YuNi_2.png',
+			'Otomemaru_2':'images/yuni/Otomemaru_2.png',
+			'Drop_1':'images/yuni/Drop_1.png',
+			'Drop_2':'images/yuni/Drop_2.png',
+			'PlayBg_1':'images/yuni/PlayBg_1.jpg',
 		};
 		for(var k in i)this.load.image(k,i[k]);
+		for(var i=1;i<=41;i++)this.load.image('Bg_'+i,'images/yuni/Bg/Bg_'+i+'.jpg');
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/HoneyStrap/Tea_party',
-			// PlayBGM_1:'sounds/BGM/HoneyStrap/neorock72',
-			// OnBtn:'sounds/SE/LabJP/Btn/decision9',
-			// OnStart:'sounds/SE/LabJP/Btn/decision4',
+			TitleBGM:'sounds/BGM/yuni/ukiukilalala',
+			PlayBGM:'sounds/BGM/yuni/tsukitoiruka',
+			OnBtn:'sounds/SE/LabJP/Btn/decision22',
+			OnStart:'sounds/SE/LabJP/Btn/decision24',
+			GetScore:'sounds/SE/LabJP/Btn/decision9',
+			Damage:'sounds/SE/LabJP/Btn/decision18',
+			Clear:'sounds/SE/LabJP/Btn/decision24',
+			GameOver:'sounds/SE/JingleSet1/lose',
+			Res:'sounds/SE/LabJP/Btn/decision25',
+			GenStart:'sounds/SE/LabJP/Btn/decision8',
+			Move:'sounds/SE/LabJP/Battle/Fight/setup1',
 		};
 		for(var k in s){
 			var p=s[k];

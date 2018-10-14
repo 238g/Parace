@@ -1,12 +1,12 @@
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:'YuNi-Game',
-	MAIN_COLOR:'#ffffff',
-	MAIN_TINT:0xffffff,
-	MAIN_TEXT_COLOR:'#000000',
-	MAIN_STROKE_COLOR:'#000000',
-	WHITE_COLOR:'#ffffff',
-	YOUTUBE_URL:'',//TODO
+	MAIN_COLOR:'#ebfcac',
+	MAIN_TINT:0xebfcac,
+	MAIN_TEXT_COLOR:'#5bb1a0',
+	MAIN_STROKE_COLOR:'#439587',
+	WHITE_COLOR:'#ebe6e3',
+	YOUTUBE_URL:'https://www.youtube.com/channel/UCHTnX0CSX_KObo5I9WuZ64g',
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={
@@ -19,7 +19,6 @@ create:function(){
 		playCount:0,
 		endTut:!1,
 		curLevel:1,
-		curBgmNum:1,//TODO
 		Words:this.genWords(),
 		LevelInfo:this.genLevelInfo(),
 	});
