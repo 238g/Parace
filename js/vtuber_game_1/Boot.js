@@ -1,6 +1,6 @@
 BasicGame={
 	GAME_TITLE:document.title,
-	GAME_TITLE_EN:'Hololive',
+	GAME_TITLE_EN:'Hodgepodge',
 	MAIN_COLOR:'#ffffff',
 	MAIN_TINT:0xffffff,
 	MAIN_TEXT_COLOR:'#000000',
@@ -17,7 +17,7 @@ create:function(){
 		// curLang:(this.M.H.getQuery('lang')=='en')?'en':'jp',
 		playCount:0,
 		endTut:!1,
-		curChar:1,//TODO
+		curFirstChar:1,
 		curBgmNum:1,//TODO
 		Words:this.genWords(),
 		CharInfo:this.genCharInfo(),//TODO
