@@ -1,13 +1,13 @@
 BasicGame.Boot.prototype.genCharInfo=function(){
 	//hp,vel,hdr - 10
 	return {
-		1:{cName:'日向ヒマリ',hp:1,vel:1,hdr:1,
+		1:{cName:'ウル＝ケン・ノース',hp:1,vel:1,hdr:1,
 			tw:'',
 			yt:''},
 		2:{cName:'紅花カレン',hp:1,vel:1,hdr:1,
 			tw:'',
 			yt:''},
-		3:{cName:'もこ田めめめ',hp:1,vel:1,hdr:1,
+		3:{cName:'日向ヒマリ',hp:1,vel:1,hdr:1,
 			tw:'',
 			yt:''},
 		4:{cName:'赤井はあと',hp:1,vel:1,hdr:1,
@@ -166,7 +166,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		55:{cName:'仔犬丸ララ',hp:1,vel:1,hdr:1,
 			tw:'',
 			yt:''},
-		56:{cName:'ウル＝ケン・ノース',hp:1,vel:1,hdr:1,
+		56:{cName:'もこ田めめめ',hp:1,vel:1,hdr:1,
 			tw:'',
 			yt:''},
 		57:{cName:'水底みなみ',hp:1,vel:1,hdr:1,
