@@ -70,6 +70,7 @@ BasicGame.SelectChar.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
+		this.M.sGlb('curCharList',this.setCharList);//TODO reset ??? or first set...
 
 		this.TileS=this.add.tileSprite(0,0,this.world.width*this.maxPage,this.world.height,'WP');
 		this.TileS.tint=0x00ff00;
@@ -243,6 +244,7 @@ BasicGame.SelectChar.prototype={
 	play:function(b){
 		if (!this.Tween.isRunning) {
 			this.M.sGlb('curFirstChar',this.setCharList[1]);
+			this.M.sGlb('curCharList',this.setCharList);
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;

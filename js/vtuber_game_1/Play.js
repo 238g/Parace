@@ -7,34 +7,50 @@ BasicGame.Play.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		this.curChar=this.M.gGlb('curChar');
+		this.curFirstChar=this.M.gGlb('curFirstChar');
+		this.curCharList=this.M.gGlb('curCharList');//{1:*,2:*,3:*,4:*};
 		this.CharInfo=this.M.gGlb('CharInfo');
-		this.curCharInfo=this.CharInfo[this.curChar];
 		this.curLevel=1;
 		this.LevelInfo=this.M.gGlb('LevelInfo');
 		this.curLevelInfo=this.LevelInfo[this.curLevel];
 		// Val
+		this.secTimer=1E3;
+		this.secTimeInterval=100;//TODO del
+		// this.secTimeInterval=1E3;//TODO
+		this.hp=9999;//TODO
+		this.charKeysArr=[];
+		this.appearCharList={1:[],2:[],3:[],4:[]};
 
 		// Obj
+		this.ParachuteCollisionGroup=this.FloorCollisionGroup=
+		this.HUD=this.HPTS=
 		null;
 		this.Tween={};
 	},
 	create:function(){
-		this.stage.disableVisibilityChange=!0;
+		this.stage.disableVisibilityChange=!1;//TODO
+		// this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#000';
+		// this.stage.backgroundColor='#000';
 		// this.playBgm();
 		this.genContents();
 		// this.M.gGlb('endTut')?this.genStart():this.genTut();
-		this.tes();
+		// this.genStart();//TODO
+		this.start();//TODO
+		this.test();
 	},
-	updateT:function(){
+	update:function(){
 		if(this.isPlaying){
+			this.secTimer-=this.time.elapsed;
+			if(this.secTimer<0){
+				this.secTimer=this.secTimeInterval;
+				this.respawnParachute();
+			}
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
 	end:function(){this.isPlaying=this.inputEnabled=!1},
-	tes:function(){
+	test:function(){
 		if(__ENV!='prod'){
 			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
 			// this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1;this.nextLevel=this.curLevelInfo.nextLevel;},this);
@@ -44,17 +60,101 @@ BasicGame.Play.prototype={
 	////////////////////////////////////// PlayContents
 	genContents:function(){
 		// TODO
+		this.setPhysics();
+		this.setCharInfo();
+		this.genParachute();
+
+		this.genBtns();
+		this.genHUD();
+	},
+	setPhysics:function(){
+		this.physics.startSystem(Phaser.Physics.P2JS);
+		this.physics.p2.setImpactEvents(!0);
+		this.physics.p2.restitution=.8;
+		this.ParachuteCollisionGroup=this.physics.p2.createCollisionGroup();
+		this.FloorCollisionGroup=this.physics.p2.createCollisionGroup();
+		this.physics.p2.updateBoundsCollisionGroup();
+	},
+	setCharInfo:function(){
+		this.curCharList={1:9,2:3,3:25,4:1};//TODO TEST
+		for(var k in this.curCharList){
+			// TODO
+			// this.charKeysArr.push();//TODO
+		}
+		this.charKeysArr=['todo_2','todo_3','todo_4','todo_5'];//TODO del
+	},
+	genParachute:function(){
+		this.Parachute=this.add.group();
+		this.Parachute.physicsBodyType=Phaser.Physics.P2JS;
+		this.Parachute.enableBody=!0;
+		// this.Parachute.createMultiple(5,this.charKeysArr);//TODO
+		this.Parachute.createMultiple(1,this.charKeysArr);//TODO
+		this.Parachute.forEach(function(s){
+			s.smoothed=!1;
+			s.outOfBoundsKill=!0;
+			s.checkWorldBounds=!0;
+			s.body.setCollisionGroup(this.ParachuteCollisionGroup);
+			s.body.collides(this.FloorCollisionGroup);
+			s.body.collideWorldBounds=!0;
+			for(var k in this.charKeysArr)if(s.key==this.charKeysArr[k])s.charListNum=Number(k)+1;
+		},this);
+	},
+	respawnParachute:function(){
+		var s=this.rnd.pick(this.Parachute.children.filter(function(e){return!e.alive}));
+		if(s){
+			s.reset(this.world.randomX,s.height);
+			// TODO
+			// s.body.velocity.y=500;
+			// s.body.damping=.5;
+			s.body.setZeroRotation();
+			s.body.debug=!0;
+
+			this.appearCharList[s.charListNum].push(s);
+			console.log(this.appearCharList);
+		}
+	},
+	genBtns:function(){
+		//TODO
+		var y=this.world.height*.9;
+		for(var i=0;i<4;i++){
+			var x=i*100+50;
+			var b=this.add.button(x,y,'todo_1',this.shoot,this);//TODO
+			b.anchor.setTo(.5);
+			b.width=90;
+			b.height=90;
+			b.charNum=this.curCharList[i+1];
+			b.charListNum=i+1;
+		}
+	},
+	shoot:function(b){
+		// TODO
+		// console.log(this.CharInfo[b.charNum]);
+		// console.log(this.appearCharList[b.charListNum]);
+		// console.log(this.appearCharList[b.charListNum][0]);
+
+		var list=this.appearCharList[b.charListNum];
+		var s=list[0];
+		if(s){
+			s.kill();
+			// TODO score++
+			list.shift();
+		}
+
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
 
-		this.ScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.Score+this.score,this.M.S.txtstyl(30));
-		this.HUD.add(this.ScoreTS);
+		//TODO
+		// this.ScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.Score+this.score,this.M.S.txtstyl(30));
+		// this.HUD.add(this.ScoreTS);
 
-		this.HPTS=this.M.S.genTxt(this.world.centerX,this.world.height*.95,'HP: '+this.hp,this.M.S.txtstyl(30));
+		this.HPTS=this.M.S.genTxt(this.world.width*.2,this.world.height*.05,'HP: '+this.hp,this.M.S.txtstyl(30));
 		this.HUD.add(this.HPTS);
-		this.HUD.visible=!1;
+		// this.HUD.visible=!1;//TODO
 	},
+
+	// TODO
+	///////////////////////////////////////
 	gameOver:function(){
 		this.end();
 		this.genEnd();
@@ -190,16 +290,15 @@ BasicGame.Play.prototype={
 	genStart:function(){
 		var txtstyl=this.M.S.txtstyl(50);
 		txtstyl.fill=txtstyl.mStroke='#0080FF';
-		var s=this.M.S.genTxt(this.world.width*1.5,this.world.centerY,this.curWords.Start,txtstyl);
-		var twA=this.M.T.moveA(s,{xy:{x:this.world.centerX}});
-		var twB=this.M.T.moveA(s,{xy:{x:-this.world.centerX},delay:300});
+		var s=this.M.S.genTxt(this.world.centerX,-this.world.centerY,this.curWords.Start,txtstyl);
+		var twA=this.M.T.moveA(s,{xy:{y:this.world.centerY},duration:800});
+		var twB=this.add.tween(s).to({y:this.world.height*1.5},600,Phaser.Easing.Back.In,!1,300);
 		twA.chain(twB);
 		twA.start();
 		twA.onComplete.add(function(){this.inputEnabled=!0},this);
 		twA.onComplete.add(function(){this.destroy},s);
-		this.M.SE.play('GenStart',{volume:1});
+		// this.M.SE.play('GenStart',{volume:1});//TODO
 		this.HUD.visible=!0;
 		this.start();
-		this.FollowEff.start(!1,1E3,6*this.time.physicsElapsedMS);
 	},
 };

@@ -18,6 +18,7 @@ create:function(){
 		playCount:0,
 		endTut:!1,
 		curFirstChar:1,
+		curCharList:{},
 		Words:this.genWords(),
 		CharInfo:this.genCharInfo(),
 		LevelInfo:this.genLevelInfo(),

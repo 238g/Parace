@@ -19,6 +19,10 @@ BasicGame.Preloader.prototype={
 
 			//TODO
 			'todo_1':'images/yuni/Otomemaru_1.png',
+			'todo_2':'images/HoneyStrap/Player_2.png',
+			'todo_3':'images/HoneyStrap/Player_3.png',
+			'todo_4':'images/HoneyStrap/Player_4.png',
+			'todo_5':'images/HoneyStrap/Player_5.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
