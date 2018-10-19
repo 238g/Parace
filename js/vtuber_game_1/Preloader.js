@@ -14,8 +14,7 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-
-			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
+			'WB':'images/AniMare/WhiteBlock5x5.jpg',
 
 			//TODO
 			'todo_1':'images/yuni/Otomemaru_1.png',

@@ -15,15 +15,16 @@ BasicGame.Play.prototype={
 		this.curLevelInfo=this.LevelInfo[this.curLevel];
 		// Val
 		this.secTimer=1E3;
-		this.secTimeInterval=100;//TODO del
+		this.secTimeInterval=500;//TODO del
 		// this.secTimeInterval=1E3;//TODO
-		this.hp=9999;//TODO
+		this.hp=0;
 		this.charKeysArr=[];
 		this.appearCharList={1:[],2:[],3:[],4:[]};
 
 		// Obj
+		this.DmgEff=this.Parachute=
 		this.ParachuteCollisionGroup=this.FloorCollisionGroup=
-		this.HUD=this.HPTS=
+		this.HUD=this.HPTS=this.EndTS=
 		null;
 		this.Tween={};
 	},
@@ -52,7 +53,7 @@ BasicGame.Play.prototype={
 	end:function(){this.isPlaying=this.inputEnabled=!1},
 	test:function(){
 		if(__ENV!='prod'){
-			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
 			// this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1;this.nextLevel=this.curLevelInfo.nextLevel;},this);
 			// this.curLevel=this.M.H.getQuery('level')||1;this.curLevelInfo=this.LevelInfo[this.curLevel];
 		}
@@ -60,12 +61,25 @@ BasicGame.Play.prototype={
 	////////////////////////////////////// PlayContents
 	genContents:function(){
 		// TODO
-		this.setPhysics();
 		this.setCharInfo();
+		this.setPhysics();
+		this.genDmgEff();
+		this.genFloor();
 		this.genParachute();
 
 		this.genBtns();
 		this.genHUD();
+	},
+	setCharInfo:function(){
+		this.curCharList={1:9,2:3,3:25,4:1};//TODO TEST
+		for(var k in this.curCharList){
+			var charNum=this.curCharList[k];
+			var info=this.CharInfo[charNum];
+			// TODO
+			this.hp+=info.hp;
+			// this.charKeysArr.push();//TODO
+		}
+		this.charKeysArr=['todo_2','todo_3','todo_4','todo_5'];//TODO del
 	},
 	setPhysics:function(){
 		this.physics.startSystem(Phaser.Physics.P2JS);
@@ -75,13 +89,39 @@ BasicGame.Play.prototype={
 		this.FloorCollisionGroup=this.physics.p2.createCollisionGroup();
 		this.physics.p2.updateBoundsCollisionGroup();
 	},
-	setCharInfo:function(){
-		this.curCharList={1:9,2:3,3:25,4:1};//TODO TEST
-		for(var k in this.curCharList){
-			// TODO
-			// this.charKeysArr.push();//TODO
+	genDmgEff:function(){
+		this.DmgEff=this.add.emitter(0,0,200);
+		this.DmgEff.makeParticles('WB');
+		this.DmgEff.setScale(3,.3,3,.3,800);
+		this.DmgEff.setAlpha(1,0,800);
+		this.DmgEff.setXSpeed(-100,100);
+		this.DmgEff.setYSpeed(-100,100);
+		this.DmgEff.gravity.x=0;
+		this.DmgEff.gravity.y=1E3;
+		////// this.DmgEff.forEach(function(c){c.tint=this[0]},[this.curCharInfo.tint]);
+	},
+	genFloor:function(){
+		var f=this.M.S.genBmpSqrSp(this.world.centerX,this.world.height,this.world.width,this.world.height*.08,'#ff00ff');
+		f.anchor.setTo(.5);
+		this.physics.p2.enable(f);
+		f.body.static=!0;
+		f.body.setCollisionGroup(this.FloorCollisionGroup);
+		f.body.collides(this.ParachuteCollisionGroup,this.hitFloor,this);
+	},
+	hitFloor:function(f,p){
+		if(p.sprite.alive){
+			p.sprite.kill();
+			// TODO SE
+			this.damaged();
 		}
-		this.charKeysArr=['todo_2','todo_3','todo_4','todo_5'];//TODO del
+	},
+	damaged:function(){
+		this.hp--;
+		this.HPTS.changeText('HP:'+this.hp);
+		if(this.hp<=0){
+			//TODO
+			// this.gameOver();
+		}
 	},
 	genParachute:function(){
 		this.Parachute=this.add.group();
@@ -93,6 +133,7 @@ BasicGame.Play.prototype={
 			s.smoothed=!1;
 			s.outOfBoundsKill=!0;
 			s.checkWorldBounds=!0;
+			s.body.setCircle(s.width*.5);
 			s.body.setCollisionGroup(this.ParachuteCollisionGroup);
 			s.body.collides(this.FloorCollisionGroup);
 			s.body.collideWorldBounds=!0;
@@ -104,13 +145,13 @@ BasicGame.Play.prototype={
 		if(s){
 			s.reset(this.world.randomX,s.height);
 			// TODO
-			// s.body.velocity.y=500;
+			s.body.velocity.y=100;
 			// s.body.damping=.5;
 			s.body.setZeroRotation();
-			s.body.debug=!0;
+			s.body.debug=!0;//TODO del
 
 			this.appearCharList[s.charListNum].push(s);
-			console.log(this.appearCharList);
+			// console.log(this.appearCharList);
 		}
 	},
 	genBtns:function(){
@@ -136,10 +177,27 @@ BasicGame.Play.prototype={
 		var s=list[0];
 		if(s){
 			s.kill();
+			this.DmgEff.x=s.x;
+			this.DmgEff.y=s.y;
+			this.DmgEff.explode(800,Math.floor(400/this.time.physicsElapsedMS));
+
 			// TODO score++
 			list.shift();
+		}else{
+			this.damaged();
+			this.genMissTS();			
 		}
-
+	},
+	genMissTS:function(){
+		// TODO SE
+		// TODO image!!!make!!!
+		var x=this.world.randomX*.5+this.world.width*.25;
+		var y=this.world.randomY*.5+this.world.height*.25;
+		var s=this.M.S.genTxt(x,y,'MISS');
+		s.scale.setTo(3);
+		var tw=this.add.tween(s.scale).to({x:1,y:1},500,null,!0);//TODO easing
+		tw.onComplete.add(function(){this.destroy()},s);
+		s.angle=this.rnd.between(-45,45);
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
@@ -182,7 +240,7 @@ BasicGame.Play.prototype={
 		var tw=this.M.T.moveA(this.EndTS,{xy:{y:this.world.centerY}});
 		tw.onComplete.add(this.genRes,this);
 		tw.start();
-		this.M.SE.play('End',{volume:1});
+		// this.M.SE.play('End',{volume:1});//TODO
 	},
 	genRes:function(){
 		var s=this.add.sprite(0,-this.world.height,'TWP');
@@ -190,7 +248,7 @@ BasicGame.Play.prototype={
 		var tw=this.M.T.moveD(s,{xy:{y:0},delay:600});
 		tw.onComplete.add(function(){this.inputEnabled=!0},this);
 		tw.onComplete.add(function(){this.visible=!1},this.EndTS);
-		tw.onStart.add(function(){this.M.SE.play('Res',{volume:2})},this);
+		// tw.onStart.add(function(){this.M.SE.play('Res',{volume:2})},this);//TODO
 		tw.start();
 		this.HUD.visible=!1;
 
@@ -199,7 +257,9 @@ BasicGame.Play.prototype={
 		txtstyl.fill=txtstyl.mStroke='#01DF3A';
 		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.2,this.curWords.Result,txtstyl));
 
-		txtstyl.fill=txtstyl.mStroke=this.curCharInfo.color;
+		return;
+		////////////TODO////////////
+		txtstyl.fill=txtstyl.mStroke='#01DF3A';
 		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.4,this.curWords.ResScore+this.score,txtstyl));
 
 		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.65,this.again,this.curWords.Again));

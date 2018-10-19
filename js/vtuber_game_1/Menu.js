@@ -62,7 +62,7 @@ BasicGame.SelectChar.prototype={
 		this.curPanel=-1;
 		//Obj
 		this.StartL=this.TileS=this.LeftB=this.RightB=
-		this.WPS=this.CharS=this.CharNameTS=this.SetLbl=
+		this.WPS=this.CharS=this.CharNameTS=this.SetLbl=this.AbilityTS=
 		null;
 		this.Tween={};
 	},
@@ -108,6 +108,26 @@ BasicGame.SelectChar.prototype={
 		var arr=[];
 		for(var i=1;i<=this.charInfoLen;i++)arr.push(i);
 		Phaser.ArrayUtils.shuffle(arr);
+
+		//// special
+		var posArr=[];
+		for(var i=0;i<this.charInfoLen;i++){
+			if(arr[i]==2||arr[i]==3||arr[i]==4){
+				posArr.push(i);
+			}
+		}
+		var specialPos=[
+			this.rnd.between(0,3),
+			this.rnd.between(4,7),
+			this.rnd.between(8,11)
+		];
+		Phaser.ArrayUtils.shuffle(specialPos);
+		for(var k in posArr){
+			var tmp=arr[specialPos[k]];
+			arr[specialPos[k]]=arr[posArr[k]];
+			arr[posArr[k]]=tmp;
+		}
+		//// special
 
 		var sX=10;
 		var sY=this.world.height*.3;
@@ -163,17 +183,23 @@ BasicGame.SelectChar.prototype={
 		}
 	},
 	openDialog:function(b){
-		this.curChar=b.charNum;
-		this.curCharInfo=this.CharInfo[b.charNum];
+		if(!this.WPS.visible){
+			this.curChar=b.charNum;
+			this.curCharInfo=this.CharInfo[b.charNum];
 
-		this.curPanel=b.panelNum;
-		var panel=this.TileS.children[b.panelNum];
-		panel.tint=0x000000;
-		panel.inputEnabled=!1;
+			this.curPanel=b.panelNum;
+			var panel=this.TileS.children[b.panelNum];
+			panel.tint=0x000000;
+			panel.inputEnabled=!1;
 
-		this.CharS.loadTexture('todo_1');//TODO img
-		this.CharNameTS.changeText(this.curCharInfo.cName);
-		this.WPS.visible=!0;
+			this.CharS.loadTexture('todo_1');//TODO img
+			this.CharNameTS.changeText(this.curCharInfo.cName);
+			this.AbilityTS.changeText(
+				'HP: '+this.curCharInfo.hp+'\n'+
+				this.curWords.Speed+': '+this.curCharInfo.vel+'\n'+
+				this.curWords.Difficulty+': '+this.curCharInfo.hdr);
+			this.WPS.visible=!0;
+		}
 	},
 	genDialog:function(){
 		this.WPS=this.add.sprite(0,0,'TWP');
@@ -181,18 +207,24 @@ BasicGame.SelectChar.prototype={
 		this.WPS.tint=0x000000;
 
 		// TODO adjust pos
-		this.CharS=this.add.sprite(this.world.centerX,this.world.centerY,'');
+		this.CharS=this.add.sprite(this.world.centerX,this.world.height*.4,'');
 		this.CharS.anchor.setTo(.5);
 		this.WPS.addChild(this.CharS);
 
 		// TODO adjust pos and fontsize
-		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.world.height*.3,'',this.M.S.txtstyl(40));
+		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.world.height*.2,'',this.M.S.txtstyl(40));
 		this.WPS.addChild(this.CharNameTS);
+
+		// TODO adjust pos and fontsize
+		var txtstyl=this.M.S.txtstyl(25);
+		txtstyl.align='left';
+		this.AbilityTS=this.M.S.genTxt(this.world.width*.3,this.world.height*.6,'',txtstyl);
+		this.WPS.addChild(this.AbilityTS);
 
 		// TODO ENHANCE caption per char
 
-		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.closeDialog,'CLOSE'));//TODO
-		this.SetLbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.setChar,'SET');//TODO
+		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.closeDialog,this.curWords.Close));
+		this.SetLbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.setChar,this.curWords.Set);
 		this.WPS.addChild(this.SetLbl);
 		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.9,this.tw,'Twitter'));
 		this.WPS.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.9,this.yt,'YouTube'));
@@ -257,7 +289,7 @@ BasicGame.SelectChar.prototype={
 		}
 	},
 	back:function(){
-		if(!this.Tween.isRunning){
+		if(!this.Tween.isRunning&&!this.WPS.visible){
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
