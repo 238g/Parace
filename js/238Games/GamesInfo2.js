@@ -204,6 +204,12 @@ function genGamesInfo(){
 				caption:'YuNiちゃんの二次創作ゲームです。空から落ちるYuNiちゃんと乙女丸を操作してスコアを稼ごう！',
 				release:'2018/10/14',
 			},
+			1035:{id:1035,title:'GOTTA煮VTパラシューター',url:GI2A('vtuber_game_1'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B('vtuber_game_1'),imgA:GI2C('vtuber_game_1'),imgB:GI2D('vtuber_game_1'),
+				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！落ちてくるパラシュートに吊るされたVtuberを使ってスコアを稼ごう！目指せレベルMAX！',
+				release:'2018/10/21',
+			},
 		},
 	};
 };

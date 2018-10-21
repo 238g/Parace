@@ -10,28 +10,43 @@ BasicGame.Preloader.prototype={
 	},
 	loadAssets:function(){
 		this.M.S.loadLoadingAssetsW();
-		var i={
+		var a={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
+			'70TWP':'images/vtuber_game_1/70TranslucentWhitePaper.png',
 			'WB':'images/AniMare/WhiteBlock5x5.jpg',
-
-			//TODO
-			'todo_1':'images/yuni/Otomemaru_1.png',
-			'todo_2':'images/HoneyStrap/Player_2.png',
-			'todo_3':'images/HoneyStrap/Player_3.png',
-			'todo_4':'images/HoneyStrap/Player_4.png',
-			'todo_5':'images/HoneyStrap/Player_5.png',
+			'Title':'images/vtuber_game_1/Title.png',
+			'intro_2_2':'images/vtuber_game_1/frame/2_2.png',
+			'intro_3_2':'images/vtuber_game_1/frame/3_2.png',
+			'Parachute':'images/vtuber_game_1/Parachute.png',
+			'PlayBg_1':'images/vtuber_game_1/PlayBg_1.jpg',
+			'PlayBg_2':'images/vtuber_game_1/PlayBg_2.jpg',
+			'PlayBg_3':'images/Laki/PlayBg_1.jpg',
+			'Floor':'images/vtuber_game_1/Floor.png',
 		};
-		for(var k in i)this.load.image(k,i[k]);
+		for(var k in a)this.load.image(k,a[k]);
+		for(var i=1;i<=57;i++)this.load.image('intro_'+i,'images/vtuber_game_1/frame/'+i+'.png');
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/HoneyStrap/Tea_party',
-			// PlayBGM_1:'sounds/BGM/HoneyStrap/neorock72',
-			// OnBtn:'sounds/SE/LabJP/Btn/decision9',
-			// OnStart:'sounds/SE/LabJP/Btn/decision4',
+			TitleBGM:'sounds/BGM/vtuber_game_1/store',
+			PlayBGM_1:'sounds/BGM/vtuber_game_1/zangyousenshi',
+			PlayBGM_2:'sounds/BGM/vtuber_game_1/brightening',
+			PlayBGM_3:'sounds/BGM/vtuber_game_1/wild-king',
+			OnBtn:'sounds/SE/LabJP/Btn/decision22',
+			OnStart:'sounds/SE/LabJP/Btn/decision5',
+			OnCancel:'sounds/SE/LabJP/Btn/decision6',
+			OnSelect:'sounds/SE/LabJP/Btn/decision26',
+			OnPlay:'sounds/SE/LabJP/Btn/decision24',
+			OnPanel:'sounds/SE/LabJP/Btn/decision9',
+			GenStart:'sounds/SE/LabJP/Life/Other/police-whistle1',
+			End:'sounds/SE/LabJP/Life/Other/police-whistle2',
+			Miss:'sounds/SE/LabJP/Btn/decision19',
+			Shoot:'sounds/SE/LabJP/Btn/decision20',
+			HitFloor:'sounds/SE/LabJP/Btn/decision18',
+			Res:'sounds/SE/Cartoon/ApricotJumpBounce',
 		};
 		for(var k in s){
 			var p=s[k];

@@ -18,6 +18,7 @@ create:function(){
 		playCount:0,
 		endTut:!1,
 		curFirstChar:1,
+		curBgmNum:this.rnd.between(1,3),
 		curCharList:{},
 		Words:this.genWords(),
 		CharInfo:this.genCharInfo(),
