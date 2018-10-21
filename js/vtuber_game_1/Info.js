@@ -39,7 +39,7 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 			yt:'https://www.youtube.com/channel/UC5u-VD8k8i8xneMtnWet_9Q'},
 		12:{cName:'わいみ',hp:1,vel:8,hdr:1,
 			tw:'https://twitter.com/ymetyan',
-			yt:'http://virtual-youtuber.userlocal.jp/user/E62F4478B6448677_40c28a'},
+			yt:'https://www.youtube.com/channel/UCsnGIHKfwKbbM5IRG3pF5oQ'},
 		13:{cName:'YuNi',hp:5,vel:2,hdr:3,
 			tw:'https://twitter.com/yuni_vsinger',
 			yt:'https://www.youtube.com/channel/UCHTnX0CSX_KObo5I9WuZ64g'},
