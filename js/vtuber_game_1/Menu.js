@@ -9,6 +9,7 @@ BasicGame.Title.prototype={
 		this.Tween={};
 	},
 	create:function(){
+		if(this.game.device.touch)this.input.maxPointers=2;
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.SE.playBGM('TitleBGM',{volume:1});
