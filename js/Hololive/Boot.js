@@ -20,8 +20,8 @@ create:function(){
 		curChar:1,
 		curBgmNum:1,//TODO
 		Words:this.genWords(),
-		CharInfo:this.genCharInfo(),//TODO
-		LevelInfo:this.genLevelInfo(),//TODO
+		CharInfo:this.genCharInfo(),
+		LevelInfo:this.genLevelInfo(),
 	});
 	this.M.NextScene('Preloader');
 },};

@@ -6,54 +6,28 @@ BasicGame.Title.prototype={
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
 		// Obj
-		this.StartTS=this.LangTS=this.IntroTS=this.CreditTS=null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
 		
-		// this.showBg();
-		// this.rain();
-		
-		var title=this.add.sprite(this.world.centerX,this.world.height*.92,'Title');
-		title.anchor.setTo(.5);
+		//TODO
+		// var title=this.add.sprite(this.world.centerX,this.world.height*.92,'Title');
+		// title.anchor.setTo(.5);
 
-		this.StartTS=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
-		////// this.IntroTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoIntro,this.curWords.IntroBtn,this.M.S.txtstyl(25));
-		////// this.LangTS=this.M.S.genLbl(this.world.centerX,this.world.height*.9,this.chgLang,this.curWords.Lang,this.M.S.txtstyl(25));
-		this.CreditTS=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
+		this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.start,this.curWords.Start,this.M.S.txtstyl(25));
+		this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.gotoCredit,'Credit',this.M.S.txtstyl(25));
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
-	},
-	showBg:function(){
-		var g=this.add.group();
-		for(var i=1;i<=10;i++){
-			var s=this.add.sprite(0,0,'Bg_'+i);
-			s.alpha=0;
-			g.add(s);
-		}
-		g.shuffle();
-		this.M.T.slideshow(g,{duration:2E3,delay:2E3});
-	},
-	rain:function(){
-		var y=0,minY=200,maxY=500;
-		if(this.rnd.between(0,100)<50)y=this.world.height,minY=-500,maxY=-200;
-		var e=this.add.emitter(this.world.centerX,y,100);
-		e.width=this.world.width;
-		e.makeParticles(['Player_1','Player_2','Player_3','Player_4','Player_5','Nanashi_1','Kanikama']);
-		e.minParticleScale=.5;
-		e.maxParticleScale=2;
-		e.setYSpeed(minY,maxY);
-		e.start(!1,3E3,this.time.physicsElapsedMS*5,0);
 	},
 	start:function(){
 		if (this.inputEnabled) {
 			if (!this.Tween.isRunning) {
 				this.inputEnabled=!1;
-				this.M.SE.play('OnStart',{volume:1});
+				// this.M.SE.play('OnStart',{volume:1});//TODO
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -62,33 +36,12 @@ BasicGame.Title.prototype={
 				this.Tween.start();
 			}
 		} else {
-			this.M.SE.playBGM('TitleBGM',{volume:1});
+			// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
 			this.inputEnabled=!0;
 		}
 	},
-	chgLang:function(){
-		if(this.curLang=='en'){
-			this.curLang='jp';
-			this.M.sGlb('curLang',this.curLang);
-			this.curWords=this.Words[this.curLang];
-		}else{
-			this.curLang='en';
-			this.M.sGlb('curLang',this.curLang);
-			this.curWords=this.Words[this.curLang];
-		}
-		//////// this.StartTS.changeText(this.curWords.Start);
-		//////// this.CharTwTS.changeText(this.curWords.CharTw);
-		//////// this.LangTS.changeText(this.curWords.Lang);
-		//////// this.M.SE.play('OnBtn',{volume:1});
-	},
-	gotoIntro:function(){
-		this.M.SE.play('OnBtn',{volume:1});
-		var url='';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-		myGa('external_link','Title','AAAAAAAA Page',this.M.gGlb('playCount'));
-	},
 	gotoCredit:function(){
-		this.M.SE.play('OnBtn',{volume:1});
+		// this.M.SE.play('OnBtn',{volume:1});//TODO
 		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
 		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
@@ -112,24 +65,11 @@ BasicGame.SelectChar.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
 
-		/*
-		var x=this.rnd.between(1,100)>50?this.world.width*1.5:-this.world.centerX;
-		var y=this.world.height*.2;
-		for(var k in this.CharInfo){
-			var info=this.CharInfo[k];
-			var s=this.add.button(x,y,'Select_'+k,this.select,this);
-			s.anchor.setTo(.5);
-			s.char=k;
-			s.onInputOver.add(function(b){b.alpha=.8});
-			s.onInputOut.add(function(b){b.alpha=1});
-			this.M.T.moveA(s,{xy:{x:this.world.centerX},delay:k*200}).start();
-			y+=s.height;
-		}
-		*/
+		//TODO
+		this.M.S.genTxt(this.world.centerX,this.world.height*.065,'Select');
 
-		this.add.sprite(this.world.centerX,this.world.height*.065,'Select').anchor.setTo(.5);
 		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
 
 		this.genHUD();
@@ -145,7 +85,7 @@ BasicGame.SelectChar.prototype={
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
 			myGa('play','SelectChar','Char_'+b.char,this.M.gGlb('playCount'));
-			this.M.SE.play('OnStart',{volume:1});
+			// this.M.SE.play('OnStart',{volume:1});//TODO
 		}
 	},
 	back:function(){
@@ -156,7 +96,7 @@ BasicGame.SelectChar.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('Title')},this);
 			this.Tween.start();
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 		}
 	},
 	genHUD:function(){

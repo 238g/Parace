@@ -9,14 +9,15 @@ BasicGame.Boot.prototype.genLevelInfo=function(){
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
-	var touchJP=this.M.gGlb('TOUCH_OR_CLICK');
-	// var touchEN=this.M.gGlb('EN_TOUCH_OR_CLICK');
+	////// var touchJP=this.M.gGlb('TOUCH_OR_CLICK');
+	////// var touchEN=this.M.gGlb('EN_TOUCH_OR_CLICK');
 	return {
 		jp:{
 			Start:'スタート',
+			Back:'もどる',
+			/*
 			Score:'スコア: ',
 			ResScore:'スコア\n',
-			Back:'もどる',
 			GameOver:'ゲームオーバー！',
 			OtherGames:'他のゲーム',
 			HowTo:'bbbbbbbbbbbbbbbbbb',
@@ -26,6 +27,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			Result:'結果',
 			SelectTw:'選んだメンバー: ',
 			Again:'もう一度',
+			*/
 		},
 		// TODO
 		en:{

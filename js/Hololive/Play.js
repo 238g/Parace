@@ -14,36 +14,161 @@ BasicGame.Play.prototype={
 		this.LevelInfo=this.M.gGlb('LevelInfo');
 		this.curLevelInfo=this.LevelInfo[this.curLevel];
 		// Val
+		this.respawnTimer=500;//TODO
+		this.respawnInterval=500;//TODO
+		this.isHit=!1;
+		this.isPenetrate=!1;
+		this.isReviving=!1;
+		this.score=0;
+
+
 
 		// Obj
+		this.Player=this.Enemies=
+		this.PlayerCollisionGroup=this.EnemyCollisionGroup=
 		null;
 		this.Tween={};
 	},
 	create:function(){
 		this.stage.disableVisibilityChange=!0;
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#000';
-		// this.playBgm();
+		// this.stage.backgroundColor='#000';//TODO
+		// this.playBgm();//TODO
 		this.genContents();
-		// this.M.gGlb('endTut')?this.genStart():this.genTut();
+		// this.M.gGlb('endTut')?this.genStart():this.genTut();//TODO
+		this.start();//TODO del
 		this.tes();
 	},
-	updateT:function(){
+	update:function(){
 		if(this.isPlaying){
+			this.respawnTimer-=this.time.elapsed;
+			if(this.respawnTimer<0){
+				this.respawnTimer=this.respawnInterval;
+				this.respawnEnemy();
+			}
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
 	end:function(){this.isPlaying=this.inputEnabled=!1},
 	tes:function(){
 		if(__ENV!='prod'){
-			// this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
-			// this.input.keyboard.addKey(Phaser.Keyboard.S).onDown.add(function(){this.score=this.curLevelInfo.nextLevel-1;this.nextLevel=this.curLevelInfo.nextLevel;},this);
-			// this.curLevel=this.M.H.getQuery('level')||1;this.curLevelInfo=this.LevelInfo[this.curLevel];
+			this.input.keyboard.addKey(Phaser.Keyboard.E).onDown.add(this.gameOver,this);
 		}
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
 		// TODO
+		this.setPhysics();
+		this.genEnemy();
+		this.genPlayer();
+	},
+	setPhysics:function(){
+		this.physics.startSystem(Phaser.Physics.P2JS);
+		this.physics.p2.setImpactEvents(!0);
+		this.physics.p2.restitution=.8;
+		this.PlayerCollisionGroup=this.physics.p2.createCollisionGroup();
+		this.EnemyCollisionGroup=this.physics.p2.createCollisionGroup();
+		this.physics.p2.updateBoundsCollisionGroup();
+	},
+	genEnemy:function(){
+		this.Enemies=this.add.group();
+		this.Enemies.physicsBodyType=Phaser.Physics.P2JS;
+		this.Enemies.enableBody=!0;
+		this.Enemies.createMultiple(10,['todo_1']);//TODO
+		this.Enemies.forEach(function(s){
+			s.smoothed=!1;
+			s.outOfBoundsKill=!0;
+			s.checkWorldBounds=!0;
+			s.body.collideWorldBounds=!1;
+			s.body.setCircle(s.width*.5);
+			s.body.setCollisionGroup(this.EnemyCollisionGroup);
+			s.body.collides(this.PlayerCollisionGroup);
+		},this);
+
+		var s=this.rnd.pick(this.Enemies.children.filter(function(e){return!e.alive}));
+		s.reset(this.world.centerX-30,300);
+		var s=this.rnd.pick(this.Enemies.children.filter(function(e){return!e.alive}));
+		s.reset(this.world.centerX+30,300);
+	},
+	respawnEnemy:function(){
+		var s=this.rnd.pick(this.Enemies.children.filter(function(e){return!e.alive}));
+		if(s){
+			var rnd=this.rnd.between(0,100);
+			if(rnd<50){
+				var y=this.rnd.between(100,400);//TODO adjust
+				s.reset(this.world.width,y);
+				s.body.moveLeft(200);//TODO rnd
+			}else{
+				var y=this.rnd.between(100,400);//TODO adjust
+				s.reset(0,y);
+				s.body.moveRight(200);//TODO rnd
+			}
+			s.body.debug=!0
+		}
+	},
+	genPlayer:function(){
+		this.Player=this.M.S.genBmpCclSp(this.world.centerX,this.world.height*.8,50,'#ff6347');
+		this.Player.anchor.setTo(.5);
+		this.physics.p2.enable(this.Player);
+		this.Player.smoothed=!1;
+		this.Player.body.setCircle(this.Player.width*.5);
+		this.Player.outOfBoundsKill=!0;
+		this.Player.checkWorldBounds=!0;
+		this.Player.body.collideWorldBounds=!1;
+		this.Player.events.onKilled.add(this.miss,this);
+		this.Player.body.static=!0;
+		this.Player.body.setCollisionGroup(this.PlayerCollisionGroup);
+		this.Player.body.collides(this.EnemyCollisionGroup,this.hitEnemy,this);
+
+		this.Player.body.debug=!0;//TODO comment out
+
+		this.input.onDown.add(this.fire,this);
+	},
+	hitEnemy:function(p,e){
+		this.isHit=!0;
+		e.sprite.kill();
+
+		this.score++;//TODO Use--this.Player.y
+
+		console.log('HIT'+this.score);
+
+		if(!this.isPenetrate){
+			p.sprite.kill();
+			this.resetPlayer();
+		}
+	},
+	fire:function(p){
+		if(this.inputEnabled&&this.Player.alive){
+			this.inputEnabled=!1;
+			this.Player.body.velocity.y=-500;//TODO per char? and level?
+			this.Player.body.velocity.x=(p.x-this.Player.x)*1.5;
+		}
+	},
+	miss:function(){
+		if(this.isPenetrate)return this.resetPlayer();
+
+		if(!this.isHit){
+			console.log('MISS'+this.score);//TODO
+
+			this.score--;//TODO
+
+			this.resetPlayer();
+		}
+	},
+	resetPlayer:function(){
+		if(!this.isReviving){
+			this.isReviving=!0;
+			this.isHit=!1;
+			// console.log(this.time.time);
+			// TODO margin time
+			this.time.events.add(500,function(){
+				this.isReviving=!1;
+				this.isHit=!1;
+				this.inputEnabled=!0;
+				console.log('reset');
+				this.Player.reset(this.world.centerX,this.world.height*.8);//TODO rnd pos???
+			},this);
+		}
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();

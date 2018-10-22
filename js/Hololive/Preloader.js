@@ -16,6 +16,7 @@ BasicGame.Preloader.prototype={
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 
 			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
+			'todo_1':'images/yuni/target.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
