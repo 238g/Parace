@@ -1,11 +1,39 @@
 BasicGame.Boot.prototype.genCharInfo=function(){
 	return {
-		1:{},
+		/////////// 0
+		1:{cName:'',
+			scoreRate:1,addRespawnCount:0,playerSpeed:-500,reviveInterval:800,appearItemInterval:500,
+			// scoreRate:1,addRespawnCount:0,playerSpeed:-500,reviveInterval:800,appearItemInterval:1E4,
+			tw:'',
+			yt:'',},
+		2:{},
+		3:{},
+		4:{},
+		/////////// 1
+		5:{},
+		6:{},
+		7:{},
+		8:{},
+		9:{},
+		/////////// 2
+		10:{},
+		11:{},
+		12:{},
+		13:{},
+		14:{},
 	};
 };
 BasicGame.Boot.prototype.genLevelInfo=function(){
 	return {
-		1:{},
+		// TODO level 1~6?time attack60/120
+		1:{leftTime:99,timeAttack:!1,},
+		2:{leftTime:99,timeAttack:!1,},
+		3:{leftTime:99,timeAttack:!1,},
+		4:{leftTime:99,timeAttack:!1,},
+		5:{leftTime:99,timeAttack:!1,},
+		6:{leftTime:99,timeAttack:!1,},
+		7:{leftTime:99,timeAttack:!0,},
+		8:{leftTime:99,timeAttack:!0,},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
@@ -15,19 +43,22 @@ BasicGame.Boot.prototype.genWords=function(){
 		jp:{
 			Start:'スタート',
 			Back:'もどる',
-			/*
 			Score:'スコア: ',
-			ResScore:'スコア\n',
+			LeftTime:'タイム: ',
+			Clear:'クリア！',
+			NotClear:'残念！',
 			GameOver:'ゲームオーバー！',
-			OtherGames:'他のゲーム',
 			HowTo:'bbbbbbbbbbbbbbbbbb',
+			Result:'結果',
+			ResScore:'スコア\n',
+			Again:'もう一度',
+			NextLevel:'次のレベルへ',
 			TwBtn:'結果をツイート',
+			OtherGames:'他のゲーム',
 			TwTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TwHT:'aaaaaaaaaaa',
-			Result:'結果',
-			SelectTw:'選んだメンバー: ',
-			Again:'もう一度',
-			*/
+			TimeUp:'タイムアップ！',
+			TimeAttack:'タイムアタック',
 		},
 		// TODO
 		en:{

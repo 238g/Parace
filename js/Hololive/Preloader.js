@@ -17,6 +17,7 @@ BasicGame.Preloader.prototype={
 
 			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
 			'todo_1':'images/yuni/target.png',
+			'todo_2':'images/yuni/obstacle.png',
 		};
 		for(var k in i)this.load.image(k,i[k]);
 		this.loadAudio();
