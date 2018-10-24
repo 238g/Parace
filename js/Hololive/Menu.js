@@ -188,7 +188,8 @@ BasicGame.SelectLevel.prototype={
 
 		var lbl,text,row=0,
 			txtstyl=this.M.S.txtstylS(20),
-			x=this.world.width*.75,
+			lx=this.world.width*.25,
+			rx=this.world.width*.75,
 			mY=this.world.height*.1,
 			sY=this.world.height*.4;
 
@@ -197,10 +198,10 @@ BasicGame.SelectLevel.prototype={
 			text=info.timeAttack?this.curWords.TimeAttack+info.leftTime:'Level '+k;
 
 			if(k%2==0){
-				lbl=this.M.S.genLbl(x,mY*row+sY,this.select,text,txtstyl);
+				lbl=this.M.S.genLbl(rx,mY*row+sY,this.select,text,txtstyl);
 				row++;
 			}else{
-				lbl=this.M.S.genLbl(x,mY*row+sY,this.select,text,txtstyl);
+				lbl=this.M.S.genLbl(lx,mY*row+sY,this.select,text,txtstyl);
 			}
 			lbl.level=k;
 		}

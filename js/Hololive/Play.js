@@ -213,7 +213,7 @@ BasicGame.Play.prototype={
 		// penetrateBig/penetrateSpeed/reviveInterval/playerSpeed/ScoreUP/poison
 	},
 	fire:function(p){
-		if(this.inputEnabled&&this.Player.alive){
+		if(this.isPlaying&&this.inputEnabled&&this.Player.alive){
 			this.inputEnabled=!1;
 			this.Player.body.velocity.y=this.playerSpeed;
 			this.Player.body.velocity.x=(p.x-this.Player.x)*1.5;
@@ -223,7 +223,7 @@ BasicGame.Play.prototype={
 		if(this.isPenetrate)return this.resetPlayer();
 
 		if(!this.isHit){
-			this.score+=Math.floor(
+			this.score-=Math.floor(
 				this.world.centerY
 				*this.curCharInfo.scoreRate
 				*this.curLevel
@@ -437,7 +437,7 @@ BasicGame.Play.prototype={
 			wp.tint=0x000000;
 			wp.alpha=0;
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
-			this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
+			this.Tween.onComplete.add(function(){this.M.NextScene('SelectLevel')},this);
 			this.Tween.start();
 		}
 	},

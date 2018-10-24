@@ -32,8 +32,8 @@ BasicGame.Boot.prototype.genLevelInfo=function(){
 		4:{leftTime:99,timeAttack:!1,},
 		5:{leftTime:99,timeAttack:!1,},
 		6:{leftTime:99,timeAttack:!1,},
-		7:{leftTime:99,timeAttack:!0,},
-		8:{leftTime:99,timeAttack:!0,},
+		7:{leftTime:60,timeAttack:!0,},
+		8:{leftTime:120,timeAttack:!0,},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
