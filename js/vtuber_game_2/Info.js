@@ -1,5 +1,6 @@
 BasicGame.Boot.prototype.genCharInfo=function(){
 	// TODO star 1~5// movie SS // watch this movie btn // so,,, need each mv url
+	// TODO rare?? -> N,R,SR,SSR,UR
 	return {
 		1:{cName:'1'},
 		2:{cName:'2'},
@@ -39,6 +40,9 @@ BasicGame.Boot.prototype.genWords=function(){
 			Back:'もどる',
 			Collection:'図鑑',
 			Close:'とじる',
+			Again:'もう一度！',
+			TwBtn:'結果をツイート',
+			OtherGames:'他のゲーム',
 			/*
 			Select:'４人選んでね！',
 			Set:'セット',
@@ -48,12 +52,9 @@ BasicGame.Boot.prototype.genWords=function(){
 			Result:'結果',
 			Score:'スコア: ',
 			ResScore:'スコア\n',
-			OtherGames:'他のゲーム',
 			HowTo:'aaaaaaaaaaaaaaa',
-			TwBtn:'結果をツイート',
 			TwTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TwHT:'Vtuberゲーム',
-			Again:'もう一度',
 			SelectTw:'最初に選んだVtuber: ',
 			*/
 		},

@@ -16,7 +16,7 @@ BasicGame.Play.prototype={
 		// this.gachaCount=1;
 
 		// Obj
-		// this.PlayB=this.BigCard=
+		// this.PlayB=this.BigCard=this.ResS=
 		this.SkipB=
 		//this.WPS=this.MoveCardS=this.ResPanel=
 		null;
@@ -27,7 +27,7 @@ BasicGame.Play.prototype={
 		this.time.events.removeAll();
 		// this.stage.backgroundColor='#000';
 		this.genContents();
-		// this.M.gGlb('endTut')?this.genStart():this.genTut();
+		this.start();//TODO
 		this.test();
 	},
 	updateT:function(){
@@ -57,6 +57,8 @@ BasicGame.Play.prototype={
 
 		this.SkipB=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.skip,'Skip');
 		this.SkipB.visible=!1;
+
+		this.genRes();
 
 		this.BigCard=this.add.sprite(this.world.centerX,this.world.centerY,'todo_1');
 		this.BigCard.anchor.setTo(.5);
@@ -96,6 +98,8 @@ BasicGame.Play.prototype={
 
 
 		// TODO res btn gen / visible!1
+
+		//TODO skip btn on off
 	},
 	playGacha:function(b){
 		this.PlayB.visible=!1;
@@ -169,6 +173,7 @@ BasicGame.Play.prototype={
 			this.ResPanel.visible=!0;
 		}
 	},
+	// TODO star??? Rare???
 	showStar:function(){
 		var arr=[];
 		//TODO 5->char info
@@ -188,7 +193,7 @@ BasicGame.Play.prototype={
 					//TODO SE
 					console.log('BOMB');
 					//TODO next play OK
-					this.showRes();
+					this.ResS.visible=!0;
 				},this);
 			}else{
 				tw.onComplete.add(function(){
@@ -197,13 +202,6 @@ BasicGame.Play.prototype={
 				},this);
 			}
 		}
-	},
-	zoomCard:function(b){
-		// console.log(b.panelNum);
-		var s=this.ResPanel.children[b.panelNum];
-		this.BigCard.loadTexture(s.key);
-		this.BigCard.visible=!0;
-		this.showRes();
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
@@ -234,41 +232,48 @@ BasicGame.Play.prototype={
 		this.end();
 		this.genEnd();
 	},
-
-	////////////////////////////////////////////////////////////////////////////////////
-	showRes:function(){
-		//TODO show res
-		// TODO if 10, close btn
+	zoomCard:function(b){
+		// console.log(b.panelNum);
+		var card=this.ResPanel.children[b.panelNum];
+		this.BigCard.loadTexture(card.key);
+		this.BigCard.visible=!0;
+		
+		this.ResS.visible=!0;
 	},
+	////////////////////////////////////////////////////////////////////////////////////
 	genRes:function(){
-		var s=this.add.sprite(0,-this.world.height,'TWP');
+		var s=this.add.sprite(0,0,'TWP');
 		s.tint=0x000000;
-		var tw=this.M.T.moveD(s,{xy:{y:0},delay:600});
-		tw.onComplete.add(function(){this.inputEnabled=!0},this);
-		tw.onComplete.add(function(){this.visible=!1},this.EndTS);
-		tw.onStart.add(function(){this.M.SE.play('Res',{volume:2})},this);
-		tw.start();
-		this.HUD.visible=!1;
 
 		var txtstyl=this.M.S.txtstyl(40);
 
-		txtstyl.fill=txtstyl.mStroke='#01DF3A';
-		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.Result,txtstyl));
+		// txtstyl.fill=txtstyl.mStroke='#01DF3A';
 
-		txtstyl.fill=txtstyl.mStroke='#01DF3A';
-		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.2,this.curWords.ResScore+this.formatScore(),txtstyl));
-
-
+		if(1){//TODO if 10
+			// TODO Close Btn ???
+			s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.15,this.closeDialog,this.curWords.Close));
+		}
 		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.75,this.again,this.curWords.Again));
 		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.tweet,this.curWords.TwBtn));
 		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.85,this.back,this.curWords.Back));
-		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.othergames,this.curWords.OtherGames));
+		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.gotoCollection,this.curWords.Collection));
 		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.95,this.tw,'Twitter'));
 		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.95,this.yt,'YouTube'));
+
+		s.visible=!1;
+		this.ResS=s;
+	},
+	closeDialog:function(){
+		//TODO
+		this.BigCard.visible=!1;
+		this.ResS.visible=!1;
+	},
+	gotoCollection:function(){
+		//TODO
 	},
 	yt:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curFirstCharInfo.yt;
 			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 			myGa('youtube','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
@@ -276,15 +281,16 @@ BasicGame.Play.prototype={
 	},
 	tw:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curFirstCharInfo.tw;
 			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 			myGa('twitter','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},
 	again:function(){
+		//TODO goto play or again function
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			this.M.SE.play('OnPlay',{volume:1});
+			// this.M.SE.play('OnPlay',{volume:1});//TODO
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
@@ -295,23 +301,11 @@ BasicGame.Play.prototype={
 			myGa('again','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},
-	othergames:function(){
-		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
-			var url=__VTUBER_GAMES;
-			if(this.curLang=='en')url+='?lang=en';
-			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
-			myGa('othergames','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
-		}
-	},
 	tweet:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
-			var e='🎮🍲🎈🍲🎈🍲🎮';
-			var res=
-				this.curWords.SelectTw+this.curFirstCharInfo.cName+'\n'+
-				'Level: '+(this.curLevel==21?'MAX':this.curLevel)+'\n'+
-				this.curWords.Score+this.formatScore()+'\n';
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			var e='***********';//TODO
+			var res='********:';//TODO
 			var txt=e+'\n'+this.curWords.TwTtl+'\n'+res+e+'\n';
 			this.M.H.tweet(txt,this.curWords.TwHT,location.href);
 			myGa('tweet','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
@@ -319,7 +313,7 @@ BasicGame.Play.prototype={
 	},
 	back:function(){
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -327,32 +321,5 @@ BasicGame.Play.prototype={
 			this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
 			this.Tween.start();
 		}
-	},
-	genTut:function(){
-		this.HowToS=this.add.sprite(0,0,'TWP');
-		this.HowToS.tint=0x000000;
-		var ts=this.M.S.genTxt(this.world.centerX,this.world.centerY,this.curWords.HowTo,this.M.S.txtstyl(30));
-		this.HowToS.addChild(ts);
-		this.time.events.add(300,function(){
-			this.input.onDown.addOnce(function(){
-				this.M.sGlb('endTut',!0);
-				this.HowToS.destroy();
-				this.genStart();
-			},this);
-		},this);
-	},
-	genStart:function(){
-		var txtstyl=this.M.S.txtstyl(50);
-		txtstyl.fill=txtstyl.mStroke='#0080FF';
-		var s=this.M.S.genTxt(this.world.centerX,-this.world.centerY,this.curWords.Start,txtstyl);
-		var twA=this.M.T.moveA(s,{xy:{y:this.world.centerY},duration:800});
-		var twB=this.add.tween(s).to({y:this.world.height*1.5},600,Phaser.Easing.Back.In,!1,300);
-		twA.chain(twB);
-		twA.start();
-		twA.onComplete.add(function(){this.inputEnabled=!0},this);
-		twA.onComplete.add(function(){this.destroy},s);
-		this.M.SE.play('GenStart',{volume:1});
-		this.HUD.visible=!0;
-		this.start();
 	},
 };

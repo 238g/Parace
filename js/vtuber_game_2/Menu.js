@@ -19,9 +19,11 @@ BasicGame.Title.prototype={
 		// var title=this.add.sprite(this.world.centerX,this.world.height*.2,'Title');
 		// title.anchor.setTo(.5);
 
+		//TODO pos adjust
 		var txtstyl=this.M.S.txtstyl(25);
 		this.M.S.genLbl(this.world.width*.25,this.world.height*.85,this.start,this.curWords.Start,txtstyl).tint=0x00ff00;
 		this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.credit,'Credit',txtstyl).tint=0xffd700;
+		this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.othergames,this.curWords.OtherGames,txtstyl).tint=0xffd700;
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
@@ -56,6 +58,13 @@ BasicGame.Title.prototype={
 		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
 		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
 		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
+	},
+	othergames:function(){
+		// this.M.SE.play('OnBtn',{volume:1});//TODO
+		var url=__VTUBER_GAMES;
+		if(this.curLang=='en')url+='?lang=en';
+		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		myGa('othergames','Title','OtherGames',this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;
@@ -200,6 +209,7 @@ BasicGame.CollectionPage.prototype={
 				sX+=this.world.width;
 			}
 			count++;
+			//TODO for 3
 		}
 	},
 	genArrowBtn:function(){
@@ -250,7 +260,10 @@ BasicGame.CollectionPage.prototype={
 		// var txtstyl=this.M.S.txtstyl(25);
 		// txtstyl.align='left';
 
+		// TODO Close Btn ???
 		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.closeDialog,this.curWords.Close));
+		//TODO tweet
+		// TODO download image
 		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.9,this.tw,'Twitter'));
 		this.WPS.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.9,this.yt,'YouTube'));
 	},
