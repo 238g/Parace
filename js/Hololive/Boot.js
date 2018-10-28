@@ -1,10 +1,10 @@
 BasicGame={
 	GAME_TITLE:document.title,
 	GAME_TITLE_EN:'Hololive',
-	MAIN_COLOR:'#ffffff',
-	MAIN_TINT:0xffffff,
-	MAIN_TEXT_COLOR:'#000000',
-	MAIN_STROKE_COLOR:'#000000',
+	MAIN_COLOR:'#49c8f0',
+	MAIN_TINT:0x49c8f0,
+	MAIN_TEXT_COLOR:'#49c8f0',
+	MAIN_STROKE_COLOR:'#49c8f0',
 	WHITE_COLOR:'#ffffff',
 };
 BasicGame.Boot=function(){};
@@ -19,7 +19,6 @@ create:function(){
 		endTut:!1,
 		curChar:1,
 		curLevel:1,
-		curBgmNum:1,//TODO
 		Words:this.genWords(),
 		CharInfo:this.genCharInfo(),
 		LevelInfo:this.genLevelInfo(),

@@ -10,24 +10,37 @@ BasicGame.Preloader.prototype={
 	},
 	loadAssets:function(){
 		this.M.S.loadLoadingAssetsW();
-		var i={
+		var i,a={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-
-			// 'WB':'images/AniMare/WhiteBlock5x5.jpg',
-			'todo_1':'images/yuni/target.png',
-			'todo_2':'images/yuni/obstacle.png',
+			'Bg_1':'images/Hololive/Bg_1.jpg',
+			'Bg_2':'images/Hololive/Bg_2.jpg',
+			'Bg_3':'images/Hololive/Bg_3.jpg',
+			'Bg_4':'images/Hololive/Bg_4.jpg',
+			'eff':'images/Hololive/eff.png',
+			'Title':'images/Hololive/Title.png',
 		};
-		for(var k in i)this.load.image(k,i[k]);
+		for(var k in a)this.load.image(k,a[k]);
+		for(i=1;i<=15;i++)this.load.image('circle_'+i,'images/Hololive/circle/'+i+'.png');
+		for(i=1;i<=15;i++)this.load.image('panel_'+i,'images/Hololive/panel/'+i+'.jpg');
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			// TitleBGM:'sounds/BGM/HoneyStrap/Tea_party',
-			// PlayBGM_1:'sounds/BGM/HoneyStrap/neorock72',
-			// OnBtn:'sounds/SE/LabJP/Btn/decision9',
-			// OnStart:'sounds/SE/LabJP/Btn/decision4',
+			TitleBGM:'sounds/BGM/Hololive/song17',
+			PlayBGM_1:'sounds/BGM/Hololive/hoshinonagare',
+			PlayBGM_2:'sounds/BGM/Hololive/technorhythm',
+			OnBtn:'sounds/SE/LabJP/Btn/decision8',
+			OnStart:'sounds/SE/LabJP/Btn/decision25',
+			Back:'sounds/SE/LabJP/Btn/decision6',
+			Catch:'sounds/SE/LabJP/Performance/Anime/nyu2',
+			Shoot:'sounds/SE/LabJP/Battle/Other/knife-throw1',
+			Miss:'sounds/SE/LabJP/Battle/Fight/highspeed-movement1',
+			GenStart:'sounds/SE/LabJP/Btn/decision24',
+			GenEnd:'sounds/SE/LabJP/Btn/decision27',
+			Res:'sounds/SE/LabJP/Btn/decision26',
+			GetItem:'sounds/SE/LabJP/Performance/Anime/jump-anime1',
 		};
 		for(var k in s){
 			var p=s[k];
