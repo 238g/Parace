@@ -210,6 +210,12 @@ function genGamesInfo(){
 				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！落ちてくるパラシュートに吊るされたVtuberを使ってスコアを稼ごう！目指せレベルMAX！',
 				release:'2018/10/21',
 			},
+			1036:{id:1036,title:'タッチタッチ・ホロライブ',url:GI2A('Hololive'),
+				tColor:'#49c8f0',mColor:'#49c8f0',
+				tc:GI2B('Hololive'),imgA:GI2C('Hololive'),imgB:GI2D('Hololive'),
+				caption:'ホロライブメンバーの二次創作ゲームです！能力の違うメンバーを使って全レベルクリアを目指そう！タイムアタックもあるよ！',
+				release:'2018/10/28',
+			},
 		},
 	};
 };

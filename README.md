@@ -39,3 +39,4 @@
 |#33|ハニスト・エンドレス・ランナー|https://238g.github.io/Parace/HoneyStrap.html|2018/10/7|
 |#34|ユニノヨゾラ|https://238g.github.io/Parace/yuni.html|2018/10/14|
 |#35|GOTTA煮VTパラシューター|https://238g.github.io/Parace/vtuber_game_1.html|2018/10/21|
+|#36|タッチタッチ・ホロライブ|https://238g.github.io/Parace/Hololive.html|2018/10/28|
