@@ -53,6 +53,11 @@ BasicGame.Play.prototype={
 		this.stage.backgroundColor='#000';
 		this.M.SE.playBGM('PlayBGM_'+this.rnd.between(1,2),{volume:1});
 
+		if(this.game.device.touch){
+			this.respawnCount--;
+			this.baseScoreRate=1.2;
+		}
+
 		this.genContents();
 		this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.test();
@@ -148,10 +153,10 @@ BasicGame.Play.prototype={
 		if(s)this.moveTarget(s);
 	},
 	moveTarget:function(s){
-		var rnd=this.rnd.between(0,100);
 		var speedMin=this.curLevelInfo.targetMoveSpeedMin;
-		var speed=this.rnd.between(speedMin,speedMin+100);
-		if(rnd<50){
+		var speed=this.rnd.between(speedMin,speedMin*1.5)*this.time.physicsElapsedMS;
+
+		if(this.rnd.between(0,100)<50){
 			var y=this.rnd.between(this.moveTargetStartY,this.moveTargetEndY);
 			s.reset(this.world.width,y);
 			s.body.moveLeft(speed);

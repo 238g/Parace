@@ -67,14 +67,14 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 };
 BasicGame.Boot.prototype.genLevelInfo=function(){
 	return {
-		1:{leftTime:120,timeAttack:!1,targetScore:10000,respawnCount:0,respawnInterval:800,targetMoveSpeedMin:100,},
-		2:{leftTime:120,timeAttack:!1,targetScore:30000,respawnCount:0,respawnInterval:800,targetMoveSpeedMin:100,},
-		3:{leftTime:100,timeAttack:!1,targetScore:40000,respawnCount:0,respawnInterval:650,targetMoveSpeedMin:150,},
-		4:{leftTime:100,timeAttack:!1,targetScore:80000,respawnCount:1,respawnInterval:650,targetMoveSpeedMin:150,},
-		5:{leftTime:80,timeAttack:!1,targetScore:100000,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:200,},
-		6:{leftTime:80,timeAttack:!1,targetScore:200000,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:200,},
-		7:{leftTime:60,timeAttack:!0,targetScore:null,respawnCount:0,respawnInterval:500,targetMoveSpeedMin:150,},
-		8:{leftTime:120,timeAttack:!0,targetScore:null,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:150,},
+		1:{leftTime:120,timeAttack:!1,targetScore:10000,respawnCount:0,respawnInterval:800,targetMoveSpeedMin:6,},
+		2:{leftTime:120,timeAttack:!1,targetScore:30000,respawnCount:0,respawnInterval:800,targetMoveSpeedMin:6,},
+		3:{leftTime:100,timeAttack:!1,targetScore:40000,respawnCount:0,respawnInterval:650,targetMoveSpeedMin:9,},
+		4:{leftTime:100,timeAttack:!1,targetScore:80000,respawnCount:1,respawnInterval:650,targetMoveSpeedMin:9,},
+		5:{leftTime:80,timeAttack:!1,targetScore:100000,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:12,},
+		6:{leftTime:80,timeAttack:!1,targetScore:200000,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:12,},
+		7:{leftTime:60,timeAttack:!0,targetScore:null,respawnCount:0,respawnInterval:500,targetMoveSpeedMin:10,},
+		8:{leftTime:120,timeAttack:!0,targetScore:null,respawnCount:1,respawnInterval:500,targetMoveSpeedMin:10,},
 	};
 };
 BasicGame.Boot.prototype.genWords=function(){
