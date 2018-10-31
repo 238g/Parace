@@ -14,18 +14,10 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-			/*
-			'Bg_1':'images/Hololive/Bg_1.jpg',
-			'Bg_2':'images/Hololive/Bg_2.jpg',
-			'Bg_3':'images/Hololive/Bg_3.jpg',
-			'Bg_4':'images/Hololive/Bg_4.jpg',
-			'eff':'images/Hololive/eff.png',
-			'Title':'images/Hololive/Title.png',
-			*/
+			
+			'todo_1':'images/yuni/Otomemaru_1.png',
 		};
 		for(var k in a)this.load.image(k,a[k]);
-		// for(i=1;i<=15;i++)this.load.image('circle_'+i,'images/Hololive/circle/'+i+'.png');
-		// for(i=1;i<=15;i++)this.load.image('panel_'+i,'images/Hololive/panel/'+i+'.jpg');
 		this.loadAudio();
 	},
 	loadAudio:function(){

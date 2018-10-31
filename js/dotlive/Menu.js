@@ -113,9 +113,7 @@ BasicGame.SelectChar.prototype={
 
 		this.M.S.genTxt(this.world.centerX,this.world.height*.065,this.curWords.SelectChar,this.M.S.txtstyl(30));
 
-		// this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.ToTitle);
-		// this.BackSlideL=this.M.S.genLbl(this.world.centerX,this.world.height*.85,this.backSlide,this.curWords.Back);
-		// this.BackSlideL.visible=!1;
+		this.M.S.genLbl(this.world.centerX,this.world.height*.85,this.back,this.curWords.Back);
 
 		this.genHUD();
 	},

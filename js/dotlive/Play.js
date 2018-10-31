@@ -11,44 +11,40 @@ BasicGame.Play.prototype={
 		this.CharInfo=this.M.gGlb('CharInfo');
 		this.curCharInfo=this.CharInfo[this.curChar];
 		// Val
+		this.tickTimer=1E3;
+		this.waveTime=99;//TODO per char
+
+		this.jumpLineY=this.world.centerY;
+		this.score=0;
 
 		// Obj
-		// this.Player=this.Enemies=this.Items=this.BgS=this.FlashS=
-		// this.PlayerCollisionGroup=this.EnemyCollisionGroup=this.ItemCollisionGroup=
-		// this.HUD=this.ScoreTS=this.LeftTimeTS=this.HowToS=
+		this.Chars=this.Thorn=
+		this.HUD=this.ScoreTS=this.WaveTimeTS=this.HowToS=this.EndTS=
 		null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#000';
+		// this.stage.backgroundColor='#000';
 		// this.M.SE.playBGM('PlayBGM_'+this.rnd.between(1,2),{volume:1});//TODO
 
 		this.genContents();
 		// this.M.gGlb('endTut')?this.genStart():this.genTut();
-		this.start();//TODO del
+		this.genStart();//TODO del
 		this.test();
 	},
-	//TODO
-	updateT:function(){
+	update:function(){
 		if(this.isPlaying){
-			this.respawnTimer-=this.time.elapsed;
-			if(this.respawnTimer<0){
-				this.respawnTimer=this.respawnInterval;
-				for(var i=0;i<this.respawnCount;i++)this.respawnEnemy();
-			}
-			this.appearItemTimer-=this.time.elapsed;
-			if(this.appearItemTimer<0){
-				this.appearItemTimer=this.appearItemInterval;
-				this.appearItem();
-			}
 			this.tickTimer-=this.time.elapsed;
 			if(this.tickTimer<0){
 				this.tickTimer=1E3;
-				this.leftTime--;
-				this.LeftTimeTS.changeText(this.curWords.LeftTime+this.leftTime);
-				if(this.leftTime==0)this.gameOver();
+
+				this.waveTime--;
+				this.WaveTimeTS.changeText(this.curWords.WaveTime+this.waveTime);
+				// if(this.waveTime==0)this.respawn();
 			}
+
+			this.physics.arcade.overlap(this.Thorn,this.Chars,this.collideThorn,null,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -56,50 +52,91 @@ BasicGame.Play.prototype={
 	test:function(){
 		if(__ENV!='prod'){
 			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
-			this.input.keyboard.addKey(Phaser.Keyboard.C).onDown.add(this.clear,this);
-			// this.Player.body.debug=!0;
 		}
+	},
+	render:function(){
+		this.Chars.forEachAlive(function(c){this.game.debug.body(c)},this);
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		// this.genHUD();
-		//this.M.H.formatComma(this.score);
+		this.setPhysics();
+
+		this.genLine();
+		this.genThorn();
+		this.genChars();
+
+		this.genHUD();
+	},
+	setPhysics:function(){
+		this.physics.startSystem(Phaser.Physics.ARCADE);
+		// this.world.enableBody=!0;
+	},
+	genLine:function(){
+		this.M.S.genBmpSqrSp(0,this.jumpLineY,this.world.width,10,'#ff0000');
+	},
+	genThorn:function(){
+		// TODO
+		this.Thorn=this.M.S.genBmpSqrSp(0,this.world.height,this.world.width,50,'#00ff00');
+		this.Thorn.anchor.setTo(0,1);
+		this.physics.enable(this.Thorn,Phaser.Physics.ARCADE);
+	},
+	genChars:function(){
+		this.Chars=this.add.group();
+		this.Chars.enableBody=!0;
+		this.Chars.physicsBodyType=Phaser.Physics.ARCADE;
+		this.Chars.createMultiple(1,'todo_1');
+		this.Chars.forEach(function(c){
+			c.anchor.setTo(.5);
+			c.smoothed=!1;
+			c.inputEnabled=!0;
+			c.events.onInputDown.add(this.jump,this);
+			c.body.collideWorldBounds=!0;
+			c.body.bounce.set(.8);//TODO
+			c.body.gravity.set(0,180);//TODO
+			// TODO circle body
+		},this);
+
+		//TODO
+		var s=this.rnd.pick(this.Chars.children.filter(function(c){return!c.alive}));
+		s.reset(this.world.centerX,this.world.height*.2);
+	},
+	jump:function(b,p){
+		if(b.y>this.jumpLineY){
+			console.log(b);
+			b.body.velocity.x=(b.x-p.x)*10;
+			b.body.velocity.y=-300;
+
+			//TODO double click, mash click...
+			this.score++;//TODO per char
+			this.ScoreTS.changeText(this.curWords.Score+this.M.H.formatComma(this.score));
+		}
+	},
+	collideThorn:function(thorn,char){
+		char.kill();
+		this.gameOver();
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
 
-		//TODO Score / next time
-
-		var txtstyl=this.M.S.txtstyl(30);
+		var txtstyl=this.M.S.txtstyl(20);
 		txtstyl.fill=txtstyl.mStroke='#008000';
-		this.ScoreTS=this.M.S.genTxt(this.world.centerX,this.world.height*.97,this.curWords.Score+this.score,txtstyl);
+		this.ScoreTS=this.M.S.genTxt(0,this.world.height*.01,this.curWords.Score+0,txtstyl);
+		this.ScoreTS.anchor.setTo(0);
+		this.ScoreTS.children[0].anchor.setTo(0);
 		this.HUD.add(this.ScoreTS);
-		if(this.targetScore){
-			this.HUD.add(this.M.S.genTxt(this.world.centerX,this.world.height*.9,this.curWords.TargetScore+this.M.H.formatComma(this.targetScore),txtstyl));
-		}
 
 		txtstyl.fill=txtstyl.mStroke='#2E2EFE';
-		this.LeftTimeTS=this.M.S.genTxt(this.world.centerX,this.world.height*.05,this.curWords.LeftTime+this.leftTime,txtstyl);
-		this.HUD.add(this.LeftTimeTS);
-		this.HUD.visible=!1;
+		this.WaveTimeTS=this.M.S.genTxt(0,this.world.height*.06,this.curWords.WaveTime+this.waveTime,txtstyl);
+		this.WaveTimeTS.anchor.setTo(0);
+		this.WaveTimeTS.children[0].anchor.setTo(0);
+		this.HUD.add(this.WaveTimeTS);
+		// this.HUD.visible=!1;//TODO OK
 	},
 	////////////////////////////////////////////////////////////////////////////////////
 	gameOver:function(){
 		if(this.isPlaying){
-			this.isClear=!1;
 			this.end();
-			if(this.isTimeAttack){
-				this.genEnd(this.curWords.TimeUp,'#DF0101');
-			}else{
-				this.genEnd(this.curWords.GameOver,'#DF0101');
-			}
-		}
-	},
-	clear:function(){
-		if(this.isPlaying){
-			this.isClear=!0;
-			this.end();
-			this.genEnd(this.curWords.Clear,'#FACC2E');	
+			this.genEnd();
 		}
 	},
 	genTut:function(){
@@ -118,25 +155,25 @@ BasicGame.Play.prototype={
 	genStart:function(){
 		var txtstyl=this.M.S.txtstyl(50);
 		txtstyl.fill=txtstyl.mStroke='#0080FF';
-		var s=this.M.S.genTxt(this.world.width*1.5,this.world.centerY,this.curWords.Start,txtstyl);
-		var twA=this.M.T.moveA(s,{xy:{x:this.world.centerX}});
-		var twB=this.M.T.moveA(s,{xy:{x:-this.world.centerX},delay:300});
+		var s=this.M.S.genTxt(this.world.centerX,-this.world.centerY,this.curWords.Start,txtstyl);
+		var twA=this.M.T.moveA(s,{xy:{y:this.world.centerY}});
+		var twB=this.M.T.moveA(s,{xy:{x:-this.world.centerX},delay:200});
 		twA.chain(twB);
 		twA.start();
 		twA.onComplete.add(function(){this.inputEnabled=!0},this);
 		twA.onComplete.add(function(){this.destroy},s);
-		this.M.SE.play('GenStart',{volume:1});
+		// this.M.SE.play('GenStart',{volume:1});//TODO
 		this.HUD.visible=!0;
 		this.start();
 	},
-	genEnd:function(text,color){
+	genEnd:function(){
 		var txtstyl=this.M.S.txtstyl(45);
-		txtstyl.fill=txtstyl.mStroke=color;
-		this.EndTS=this.M.S.genTxt(this.world.centerX,this.world.height*2,text,txtstyl);
+		txtstyl.fill=txtstyl.mStroke='#ff0000';//TODO color
+		this.EndTS=this.M.S.genTxt(this.world.centerX,this.world.height*2,'TODO',txtstyl);
 		var tw=this.M.T.moveA(this.EndTS,{xy:{y:this.world.centerY}});
 		tw.onComplete.add(this.genRes,this);
 		tw.start();
-		this.M.SE.play('GenEnd',{volume:1});
+		// this.M.SE.play('GenEnd',{volume:1});//TODO
 	},
 	////////////////////////////////////////////////////////////////////////////////////
 	genRes:function(){
@@ -145,7 +182,7 @@ BasicGame.Play.prototype={
 		var tw=this.M.T.moveD(s,{xy:{y:0},delay:600});
 		tw.onComplete.add(function(){this.inputEnabled=!0},this);
 		tw.onComplete.add(function(){this.visible=!1},this.EndTS);
-		tw.onStart.add(function(){this.M.SE.play('Res',{volume:1})},this);
+		// tw.onStart.add(function(){this.M.SE.play('Res',{volume:1})},this);//TODO
 		tw.start();
 		this.HUD.visible=!1;
 
@@ -157,27 +194,27 @@ BasicGame.Play.prototype={
 		s.addChild(lbl);
 
 		txtstyl.fill=txtstyl.mStroke='#dc143c';
-		if(this.isTimeAttack){
-			s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.22,this.curWords.ResScore+this.formatScore(),txtstyl));
-		}else{
-			s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.22,
-				this.isClear?this.curWords.Clear:this.curWords.NotClear,txtstyl));
-		}
+		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.22,this.curWords.ResScore+this.M.H.formatComma(this.score),txtstyl));
 
+		/*
 		var charS=this.add.sprite(this.world.centerX,this.world.height*.42,'panel_'+this.curChar);
 		charS.anchor.setTo(.5);
 		s.addChild(charS);
 		s.addChild(this.M.S.genTxt(this.world.centerX,this.world.height*.6,this.curCharInfo.cName));
+		*/
 
 		var lX=this.world.width*.25,rX=this.world.width*.75;
-		if(this.isClear&&this.curLevel<6){
-			s.addChild(this.M.S.genLbl(lX,this.world.height*.7,this.nextLevel,this.curWords.NextLevel));
-		}else{
-			s.addChild(this.M.S.genLbl(lX,this.world.height*.7,this.again,this.curWords.Again));
-		}
-
 		txtstyl.fontSize=25;
-		s.addChild(this.M.S.genLbl(rX,this.world.height*.7,this.tweet,this.curWords.TwBtn));
+
+		//TODO color????
+		s.addChild(this.M.S.genLbl(lX,this.world.height*.7,this.again,this.curWords.Again));
+
+		txtstyl.fill=txtstyl.mStroke='#00a2f8';
+		lbl=this.M.S.genLbl(rX,this.world.height*.7,this.tweet,this.curWords.TwBtn,txtstyl);
+		lbl.tint=0x00a2f8;
+		s.addChild(lbl);
+
+		//TODO color????
 		s.addChild(this.M.S.genLbl(lX,this.world.height*.8,this.back,this.curWords.Back));
 
 		txtstyl.fill=txtstyl.mStroke='#ffa500';
@@ -185,22 +222,15 @@ BasicGame.Play.prototype={
 		lbl.tint=0xffa500;
 		s.addChild(lbl);
 
-		if(this.curCharInfo.tw){
-			txtstyl.fill=txtstyl.mStroke='#49c8f0';
-			lbl=this.M.S.genLbl(lX,this.world.height*.9,this.tw,'Twitter',txtstyl);
-			s.addChild(lbl);
-		}
+		txtstyl.fill=txtstyl.mStroke='#00a2f8';
+		lbl=this.M.S.genLbl(lX,this.world.height*.9,this.tw,'Twitter',txtstyl);
+		lbl.tint=0x00a2f8;
+		s.addChild(lbl);
 
-		if(this.curCharInfo.yt){
-			txtstyl.fill=txtstyl.mStroke='#ff0000';
-			lbl=this.M.S.genLbl(rX,this.world.height*.9,this.yt,'YouTube',txtstyl);
-			lbl.tint=0xff0000;
-			s.addChild(lbl);
-		}
-
-		if(this.itemCount>9){
-			this.CharInfo[5].open=!0;
-		}
+		txtstyl.fill=txtstyl.mStroke='#ff0000';
+		lbl=this.M.S.genLbl(rX,this.world.height*.9,this.yt,'YouTube',txtstyl);
+		lbl.tint=0xff0000;
+		s.addChild(lbl);
 	},
 	yt:function(){
 		if(this.inputEnabled){
@@ -257,18 +287,9 @@ BasicGame.Play.prototype={
 	tweet:function(){
 		if(this.inputEnabled){
 			this.M.SE.play('OnBtn',{volume:1});
-			var e=this.curCharInfo.emoji;
-			if(this.curLevel<7){
-				var res=
-					this.curWords.TwSelectChar+this.curCharInfo.cName+'\n'+
-					this.curWords.TwLevel+this.curLevel+'\n'+
-					this.curWords.TwRes+(this.isClear?this.curWords.Clear:this.curWords.NotClear)+'\n';
-			}else{
-				var res=
-					this.curWords.TwSelectChar+this.curCharInfo.cName+'\n'+
-					this.curWords.TwLevel+this.curWords.TimeAttack+this.curLevelInfo.leftTime+'\n'+
-					this.curWords.Score+this.formatScore()+'\n';
-			}
+			var e=333333;//TODO
+			var res=333333;//TODO
+			//this.M.H.formatComma(this.score)
 			var txt=e+'\n'+this.curWords.TwTtl+'\n'+res+e+'\n';
 			this.M.H.tweet(txt,this.curWords.TwHT,location.href);
 			myGa('tweet','Play','Char_'+this.curChar,this.M.gGlb('playCount'));

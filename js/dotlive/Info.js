@@ -1,6 +1,6 @@
 BasicGame.Boot.prototype.genCharInfo=function(){
 	//https://vrlive.party/member/
-	// touch range / jump power / item velocity
+	// touch range / jump power / item velocity / next time
 	return {
 		1:{},
 	};
@@ -10,37 +10,22 @@ BasicGame.Boot.prototype.genWords=function(){
 	////// var touchEN=this.M.gGlb('EN_TOUCH_OR_CLICK');
 	return {
 		jp:{
-			/*
 			Start:'スタート',
-			ToTitle:'タイトルへ',
-			Back:'もどる',
 			Score:'スコア: ',
-			LeftTime:'制限時間: ',
-			Clear:'クリア！',
-			NotClear:'残念！',
-			GameOver:'ゲームオーバー！',
-			HowTo:'遊び方\n\n画面を'+touchJP+'して\n選択したメンバーを\n飛ばそう！\nメンバーに当てると\nスコアアップ！\n目標達成でクリア！\nはずすとスコアが減るよ\nホロライブアイテムを\nうまく使って\n高得点を狙え！',
+			WaveTime:'リスポーンまで: ',
 			Result:'結果',
+			Back:'もどる',
 			ResScore:'スコア\n',
 			Again:'もう一度',
-			NextLevel:'次のレベルへ',
 			TwBtn:'結果をツイート',
 			OtherGames:'他のゲーム',
+			/*
+			GameOver:'ゲームオーバー！',
+			HowTo:'33333333',
 			TwTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
-			TwHT:'ホロライブゲーム',
-			TimeUp:'タイムアップ！',
-			TimeAttack:'タイムアタック',
+			TwHT:'aaaaaaaaa',
 			SelectChar:'メンバーを選択',
-			SelectLevel:'レベルを選択',
 			TwSelectChar:'選んだメンバー: ',
-			TwRes:'結果: ',
-			TwLevel:'挑戦したレベル: ',
-			Ability_0:'貫通',
-			Ability_1:'スコア＋',
-			Ability_2:'タイム＋',
-			Ability_3:'速',
-			Ability_4:'遅',
-			TargetScore:'目標: ',
 			*/
 		},
 		en:{
