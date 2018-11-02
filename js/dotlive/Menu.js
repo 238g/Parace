@@ -15,8 +15,7 @@ BasicGame.Title.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
-
-		//TODO pointer max 2
+		this.input.maxPointers=2;
 
 		// this.add.sprite(0,0,'Bg_1');
 
@@ -96,12 +95,10 @@ BasicGame.SelectChar=function(){};
 BasicGame.SelectChar.prototype={
 	init:function(){
 		this.CharInfo=this.M.gGlb('CharInfo');
+		this.charInfoLen=Object.keys(this.CharInfo).length;
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		this.curGroup=0;
-		// this.TileS=this.BackSlideL=null;
-
 		this.Tween={};
 	},
 	create:function(){
@@ -109,15 +106,26 @@ BasicGame.SelectChar.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
 		
-		// this.genCharPanel();
-
-		this.M.S.genTxt(this.world.centerX,this.world.height*.065,this.curWords.SelectChar,this.M.S.txtstyl(30));
-
-		this.M.S.genLbl(this.world.centerX,this.world.height*.85,this.back,this.curWords.Back);
+		this.M.S.genTxt(this.world.centerX,this.world.height*.065,this.curWords.SelectChar,this.M.S.txtstyl(35));
+		this.genCharPanel();
+		this.M.S.genLbl(this.world.centerX,this.world.height*.93,this.back,this.curWords.Back);
 
 		this.genHUD();
 	},
 	genCharPanel:function(){
+		var arr=[];
+		for(var i=1;i<=this.charInfoLen;i++)arr.push(i);
+		Phaser.ArrayUtils.shuffle(arr);
+		var sY=this.world.height*.15;
+		var row=0;
+		for(var k in arr){
+			var evenNum=k%3;
+			//TODO char btn
+			var b=this.add.button(evenNum*125+25,row*115+sY,'todo_1',this.select,this);
+			b.width=b.height=100;//TODO del
+			// this.M.S.genBmpSqrSp(evenNum*125+25,row*115+sY,100,100,'#ff0000');
+			if(evenNum==2)row++;
+		}
 	},
 	select:function(b){
 		if(!this.Tween.isRunning){

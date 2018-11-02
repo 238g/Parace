@@ -12,13 +12,15 @@ BasicGame.Play.prototype={
 		this.curCharInfo=this.CharInfo[this.curChar];
 		// Val
 		this.tickTimer=1E3;
-		this.waveTime=99;//TODO per char
+		this.waveTime=
+		this.waveInterval=30;//TODO per char
+		
 
 		this.jumpLineY=this.world.centerY;
 		this.score=0;
 
 		// Obj
-		this.Chars=this.Thorn=
+		this.Chars=this.Thorn=this.LineS=
 		this.HUD=this.ScoreTS=this.WaveTimeTS=this.HowToS=this.EndTS=
 		null;
 		this.Tween={};
@@ -41,10 +43,11 @@ BasicGame.Play.prototype={
 
 				this.waveTime--;
 				this.WaveTimeTS.changeText(this.curWords.WaveTime+this.waveTime);
-				// if(this.waveTime==0)this.respawn();
+				if(this.waveTime==0)this.wave();
 			}
 
 			this.physics.arcade.overlap(this.Thorn,this.Chars,this.collideThorn,null,this);
+			this.physics.arcade.overlap(this.LineS,this.Chars,this.crossLine,null,this);
 		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
@@ -72,7 +75,8 @@ BasicGame.Play.prototype={
 		// this.world.enableBody=!0;
 	},
 	genLine:function(){
-		this.M.S.genBmpSqrSp(0,this.jumpLineY,this.world.width,10,'#ff0000');
+		this.LineS=this.M.S.genBmpSqrSp(0,this.jumpLineY,this.world.width,10,'#ff0000');
+		this.physics.enable(this.LineS,Phaser.Physics.ARCADE);
 	},
 	genThorn:function(){
 		// TODO
@@ -102,11 +106,11 @@ BasicGame.Play.prototype={
 	},
 	jump:function(b,p){
 		if(b.y>this.jumpLineY){
+			b.inputEnabled=!1;//TODO check double click
 			console.log(b);
 			b.body.velocity.x=(b.x-p.x)*10;
 			b.body.velocity.y=-300;
 
-			//TODO double click, mash click...
 			this.score++;//TODO per char
 			this.ScoreTS.changeText(this.curWords.Score+this.M.H.formatComma(this.score));
 		}
@@ -114,6 +118,15 @@ BasicGame.Play.prototype={
 	collideThorn:function(thorn,char){
 		char.kill();
 		this.gameOver();
+	},
+	crossLine:function(line,char){
+		if(!char.inputEnabled){
+			char.inputEnabled=!0;//TODO check double click
+		}
+	},
+	wave:function(){
+		// TODO respawn
+		this.waveTime=this.waveInterval;
 	},
 	genHUD:function(){
 		this.HUD=this.add.group();
@@ -234,7 +247,7 @@ BasicGame.Play.prototype={
 	},
 	yt:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curCharInfo.yt;
 			this.game.device.desktop?window.open(url,'_blank'):location.href=url;
 			myGa('youtube','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
@@ -242,7 +255,7 @@ BasicGame.Play.prototype={
 	},
 	tw:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curCharInfo.tw;
 			this.game.device.desktop?window.open(url,'_blank'):location.href=url;
 			myGa('twitter','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
@@ -250,7 +263,7 @@ BasicGame.Play.prototype={
 	},
 	again:function(){
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			this.M.SE.play('OnStart',{volume:1});
+			// this.M.SE.play('OnStart',{volume:1});//TODO
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
@@ -261,23 +274,9 @@ BasicGame.Play.prototype={
 			myGa('again','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
 		}
 	},
-	nextLevel:function(){
-		if(this.inputEnabled&&!this.Tween.isRunning){
-			this.M.SE.play('OnStart',{volume:1});
-			this.M.sGlb('curLevel',Number(this.curLevel)+1);
-			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
-			var wp=this.add.sprite(0,0,'WP');
-			wp.tint=0x000000;
-			wp.alpha=0;
-			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
-			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
-			this.Tween.start();
-			myGa('nextLevel','Play','Char_'+this.curChar,this.M.gGlb('playCount'));
-		}
-	},
 	othergames:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=__VTUBER_GAMES;
 			if(this.curLang=='en')url+='?lang=en';
 			this.game.device.desktop?window.open(url,'_blank'):location.href=url;
@@ -286,7 +285,7 @@ BasicGame.Play.prototype={
 	},
 	tweet:function(){
 		if(this.inputEnabled){
-			this.M.SE.play('OnBtn',{volume:1});
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var e=333333;//TODO
 			var res=333333;//TODO
 			//this.M.H.formatComma(this.score)
@@ -297,7 +296,7 @@ BasicGame.Play.prototype={
 	},
 	back:function(){
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			this.M.SE.play('Back',{volume:1});
+			// this.M.SE.play('Back',{volume:1});//TODO
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
