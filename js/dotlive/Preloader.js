@@ -10,33 +10,40 @@ BasicGame.Preloader.prototype={
 	},
 	loadAssets:function(){
 		this.M.S.loadLoadingAssetsW();
+		this.load.atlasJSONHash('snowflakes','images/dotlive/snowflake/snowflake.png','images/dotlive/snowflake/snowflake.json');
 		var i,a={
 			'PubLogo':'images/public/logo/logo.png',
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
-			
-			'todo_1':'images/yuni/Otomemaru_1.png',
+			'SkyBg':'images/dotlive/SkyBg.jpg',
+			'Thorn':'images/dotlive/Thorn.png',
+			'CircleBlock':'images/dotlive/CircleBlock.png',
+			'Item_1':'images/dotlive/Item_1.png',
+			'Item_2':'images/dotlive/Item_2.png',
+			'Item_3':'images/dotlive/Item_3.png',
+			'Item_4':'images/dotlive/Item_4.png',
+			'Title':'images/dotlive/Title.png',
 		};
+		for(i=1;i<=12;i++)this.load.image('Char_'+i,'images/dotlive/chars/'+i+'.jpg');
 		for(var k in a)this.load.image(k,a[k]);
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
-			/*
-			TitleBGM:'sounds/BGM/Hololive/song17',
-			PlayBGM_1:'sounds/BGM/Hololive/hoshinonagare',
-			PlayBGM_2:'sounds/BGM/Hololive/technorhythm',
-			OnBtn:'sounds/SE/LabJP/Btn/decision8',
-			OnStart:'sounds/SE/LabJP/Btn/decision25',
+			TitleBGM:'sounds/BGM/dotlive/caramelkoubou',
+			PlayBGM_1:'sounds/BGM/dotlive/midnightmoon',
+			PlayBGM_2:'sounds/BGM/dotlive/moonspring',
+			OnBtn:'sounds/SE/LabJP/Btn/decision7',
+			OnStart:'sounds/SE/LabJP/Btn/decision5',
 			Back:'sounds/SE/LabJP/Btn/decision6',
-			Catch:'sounds/SE/LabJP/Performance/Anime/nyu2',
-			Shoot:'sounds/SE/LabJP/Battle/Other/knife-throw1',
-			Miss:'sounds/SE/LabJP/Battle/Fight/highspeed-movement1',
-			GenStart:'sounds/SE/LabJP/Btn/decision24',
-			GenEnd:'sounds/SE/LabJP/Btn/decision27',
 			Res:'sounds/SE/LabJP/Btn/decision26',
-			GetItem:'sounds/SE/LabJP/Performance/Anime/jump-anime1',
-			*/
+			GenStart:'sounds/SE/LabJP/Btn/decision24',
+			End:'sounds/SE/LabJP/Btn/decision18',
+			Jump_1:'sounds/SE/HoneyStrap/system45',
+			Jump_2:'sounds/SE/HoneyStrap/system42',
+			Jump_3:'sounds/SE/HoneyStrap/system43',
+			AppearItem:'sounds/SE/LabJP/Performance/Anime/jump-anime1',
+			GetItem:'sounds/SE/LabJP/Performance/Anime/shakin1',
 		};
 		for(var k in s){
 			var p=s[k];
