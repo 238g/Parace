@@ -216,6 +216,12 @@ function genGamesInfo(){
 				caption:'ホロライブメンバーの二次創作ゲームです！能力の違うメンバーを使って全レベルクリアを目指そう！タイムアタックもあるよ！',
 				release:'2018/10/28',
 			},
+			1037:{id:1037,title:'アイドル部ホッパー',url:GI2A('dotlive'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B('dotlive'),imgA:GI2C('dotlive'),imgB:GI2D('dotlive'),
+				caption:'アイドル部の二次創作ゲームです！各メンバーをジャンプさせてスコアを稼ごう！選んだメンバーでゲームの展開が変わる！？',
+				release:'2018/11/4',
+			},
 		},
 	};
 };

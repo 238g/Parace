@@ -40,3 +40,4 @@
 |#34|ユニノヨゾラ|https://238g.github.io/Parace/yuni.html|2018/10/14|
 |#35|GOTTA煮VTパラシューター|https://238g.github.io/Parace/vtuber_game_1.html|2018/10/21|
 |#36|タッチタッチ・ホロライブ|https://238g.github.io/Parace/Hololive.html|2018/10/28|
+|#37|アイドル部ホッパー|https://238g.github.io/Parace/dotlive.html|2018/11/4|
