@@ -203,31 +203,6 @@ BasicGame.Play.prototype={
 			}
 		}
 	},
-	genHUD:function(){
-		this.HUD=this.add.group();
-
-		var txtstyl=this.M.S.txtstyl(25);
-
-		txtstyl.fill=txtstyl.mStroke='#01DF3A';
-		this.ScoreTS=this.M.S.genTxt(this.world.width-10,10,this.curWords.Score+this.formatScore(),txtstyl);
-		this.ScoreTS.anchor.setTo(1,0);
-		this.ScoreTS.children[0].anchor.setTo(1,0);		
-		this.HUD.add(this.ScoreTS);
-
-		txtstyl.fill=txtstyl.mStroke='#DF0101';
-		this.HPTS=this.M.S.genTxt(10,10,'HP: '+this.hp,txtstyl);
-		this.HPTS.anchor.setTo(0);
-		this.HPTS.children[0].anchor.setTo(0);
-		this.HUD.add(this.HPTS);
-
-		txtstyl.fill=txtstyl.mStroke='#0080FF';
-		this.LevelTS=this.M.S.genTxt(10,10+this.HPTS.height,'Level: '+this.curLevel,txtstyl);
-		this.LevelTS.anchor.setTo(0);
-		this.LevelTS.children[0].anchor.setTo(0);
-		this.HUD.add(this.LevelTS);
-
-		this.HUD.visible=!1;
-	},
 	gameOver:function(){
 		this.end();
 		this.genEnd();
@@ -245,20 +220,46 @@ BasicGame.Play.prototype={
 		var s=this.add.sprite(0,0,'TWP');
 		s.tint=0x000000;
 
-		var txtstyl=this.M.S.txtstyl(40);
+		var lbl,txtstyl=this.M.S.txtstyl(40);
 
-		// txtstyl.fill=txtstyl.mStroke='#01DF3A';
+		txtstyl=this.M.S.txtstyl(25);
 
 		if(1){//TODO if 10
-			// TODO Close Btn ???
-			s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.15,this.closeDialog,this.curWords.Close));
+			txtstyl.fill=txtstyl.mStroke='#ffa500';
+			lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.15,this.closeDialog,this.curWords.Close);
+			lbl.tint=0xffa500;
+			s.addChild(lbl);
 		}
-		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.75,this.again,this.curWords.Again));
-		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.tweet,this.curWords.TwBtn));
-		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.85,this.back,this.curWords.Back));
-		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.gotoCollection,this.curWords.Collection));
-		s.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.95,this.tw,'Twitter'));
-		s.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.95,this.yt,'YouTube'));
+
+		txtstyl.fill=txtstyl.mStroke='#00fa9a';
+		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.75,this.again,this.curWords.Again,txtstyl);
+		lbl.tint=0x00fa9a;
+		s.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#00a2f8';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.tweet,this.curWords.TwBtn,txtstyl);
+		lbl.tint=0x00a2f8;
+		s.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#8a2be2';
+		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.85,this.back,this.curWords.Back,txtstyl);
+		lbl.tint=0x8a2be2;
+		s.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#ffa500';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.gotoCollection,this.curWords.Collection,txtstyl);
+		lbl.tint=0xffa500;
+		s.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#00a2f8';
+		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.95,this.tw,'Twitter',txtstyl);
+		lbl.tint=0x00a2f8;
+		s.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#ff0000';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.95,this.yt,'YouTube',txtstyl);
+		lbl.tint=0xff0000;
+		s.addChild(lbl);
 
 		s.visible=!1;
 		this.ResS=s;
@@ -269,7 +270,15 @@ BasicGame.Play.prototype={
 		this.ResS.visible=!1;
 	},
 	gotoCollection:function(){
-		//TODO
+		if(this.inputEnabled&&!this.Tween.isRunning){
+			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			var wp=this.add.sprite(0,0,'WP');
+			wp.tint=0x000000;
+			wp.alpha=0;
+			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
+			this.Tween.onComplete.add(function(){this.M.NextScene('CollectionPage')},this);
+			this.Tween.start();
+		}
 	},
 	yt:function(){
 		if(this.inputEnabled){
@@ -318,7 +327,7 @@ BasicGame.Play.prototype={
 			wp.tint=0x000000;
 			wp.alpha=0;
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
-			this.Tween.onComplete.add(function(){this.M.NextScene('SelectChar')},this);
+			this.Tween.onComplete.add(function(){this.M.NextScene('SelectGacha')},this);
 			this.Tween.start();
 		}
 	},

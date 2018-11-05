@@ -19,9 +19,6 @@ BasicGame.Preloader.prototype={
 			'todo_1':'images/vtuber_game_1/Parachute.png',
 			'todo_2':'images/yuni/obstacle.png',
 			'todo_3':'images/yuni/Otomemaru_1.png',
-			/*
-			'WB':'images/AniMare/WhiteBlock5x5.jpg',
-			*/
 		};
 		for(var k in a)this.load.image(k,a[k]);
 		// for(var i=1;i<=57;i++)this.load.image('intro_'+i,'images/vtuber_game_1/frame/'+i+'.png');

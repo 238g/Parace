@@ -188,6 +188,8 @@ BasicGame.SelectChar.prototype={
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
 			this.M.SE.play('OnStart',{volume:1});
+			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
+			myGa('play','SelectChar','Char_'+b.char,this.M.gGlb('playCount'));
 		}
 	},
 	back:function(){
