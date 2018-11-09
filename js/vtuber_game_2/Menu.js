@@ -12,6 +12,7 @@ BasicGame.Title.prototype={
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.stage.disableVisibilityChange=!1;
 
 		this.setInitUserInfo();
 		
@@ -21,9 +22,9 @@ BasicGame.Title.prototype={
 
 		//TODO pos adjust
 		var txtstyl=this.M.S.txtstyl(25);
-		this.M.S.genLbl(this.world.width*.25,this.world.height*.85,this.start,this.curWords.Start,txtstyl).tint=0x00ff00;
-		this.M.S.genLbl(this.world.width*.75,this.world.height*.85,this.credit,'Credit',txtstyl).tint=0xffd700;
-		this.M.S.genLbl(this.world.width*.75,this.world.height*.75,this.othergames,this.curWords.OtherGames,txtstyl).tint=0xffd700;
+		this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start,txtstyl).tint=0x00ff00;
+		this.M.S.genLbl(this.world.width*.25,this.world.height*.95,this.credit,'Credit',txtstyl).tint=0xffd700;
+		this.M.S.genLbl(this.world.width*.75,this.world.height*.95,this.othergames,this.curWords.OtherGames,txtstyl).tint=0xffd700;
 		
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
@@ -33,7 +34,17 @@ BasicGame.Title.prototype={
 		if(!UserInfo.setInit){
 			UserInfo.setInit=!0;
 			var GachaInfo=this.M.gGlb('GachaInfo');
-			for(var k in GachaInfo)UserInfo.play[k]=0;
+			for(var k in GachaInfo)UserInfo.playCount[k]=0;
+			var CharInfo=this.M.gGlb('CharInfo');
+			var count=0;
+			for(var k in CharInfo){
+				UserInfo.collection[k]={};
+				for(var l in CharInfo[k].rare){
+					UserInfo.collection[k][CharInfo[k].rare[l]]=0;
+					count++;
+				}
+			}
+			UserInfo.allCards=count;
 		}
 	},
 	start:function(){
@@ -56,18 +67,18 @@ BasicGame.Title.prototype={
 	credit:function(){
 		// this.M.SE.play('OnBtn',{volume:1});//TODO
 		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		window.open(url,"_blank");
 		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
 	},
 	othergames:function(){
 		// this.M.SE.play('OnBtn',{volume:1});//TODO
 		var url=__VTUBER_GAMES;
 		if(this.curLang=='en')url+='?lang=en';
-		this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+		window.open(url,"_blank");
 		myGa('othergames','Title','OtherGames',this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
-		var y=this.world.height*.95;
+		var y=this.world.height*.05;
 		this.M.S.genVolBtn(this.world.width*.1,y).tint=0x000000;
 		this.M.S.genFlScBtn(this.world.width*.9,y);
 	},
@@ -98,11 +109,20 @@ BasicGame.SelectGacha.prototype={
 		this.genHUD();
 	},
 	genGacha:function(){
-		var mY=this.world.height*.1,
-			sY=this.world.height*.3;
+		var lX=this.world.width*.25,
+			rX=this.world.width*.75,
+			sY=this.world.height*.25,
+			mY=this.world.height*.33,
+			row=0;
 		for(var k in this.GachaInfo){
-			var lbl=this.M.S.genLbl(this.world.centerX,mY*k+sY,this.play,k);
-			lbl.gacha=k;
+			var info=this.GachaInfo[k];
+			var even=k%2;
+			var b=this.add.button(even==0?rX:lX,sY+mY*row,'todo_1',this.play,this);
+			b.width=150;b.height=180;//TODO del
+			b.anchor.setTo(.5);
+			b.gacha=k;
+			this.M.S.genTxt(b.x,b.bottom,info.gName)
+			if(even==0)row++;
 		}
 	},
 	play:function(b){
@@ -158,7 +178,10 @@ BasicGame.CollectionPage.prototype={
 		this.CharInfo=this.M.gGlb('CharInfo');
 		//Val
 		this.charInfoLen=Object.keys(this.CharInfo).length;
-		this.maxPage=Math.ceil(this.charInfoLen/12);//TODO
+		// this.maxPage=Math.ceil(this.charInfoLen/12);//TODO del
+		this.colMax=3;
+		this.rowMax=3;
+		this.maxPage=Math.ceil(this.UserInfo.allCards/(this.colMax*this.rowMax));
 		this.curPage=1;
 		this.baseFrameSize=this.world.width/4-20;
 
@@ -188,28 +211,30 @@ BasicGame.CollectionPage.prototype={
 		for(var i=1;i<=this.charInfoLen;i++)arr.push(i);
 		Phaser.ArrayUtils.shuffle(arr);
 
-		var sX=10;
-		var sY=this.world.height*.3;
-		var mXY=this.world.width/4;
-		var col=0;
-		var rest;
-		var count=0;
+		var rest,charNum,b,
+			sX=10,
+			sY=this.world.height*.3,
+			mXY=this.world.width/3,
+			col=0,
+			count=0;
 		for(var k in arr){
-			var charNum=arr[k];
-			rest=count%4;
-			var b=this.add.button(mXY*rest+sX,mXY*col+sY,'todo_3',this.openDialog,this);
-			b.width=this.baseFrameSize;
-			b.height=this.baseFrameSize;
-			b.charNum=charNum;
-			b.panelNum=k;
-			this.TileS.addChild(b);
-			if(rest==3)col++;
-			if(col==3){
-				col=0;
-				sX+=this.world.width;
+			charNum=arr[k];
+			for(var l in this.CharInfo[charNum].rare){
+				rest=count%this.colMax;
+				b=this.add.button(mXY*rest+sX,mXY*col+sY,'todo_3',this.openDialog,this);
+				b.width=this.baseFrameSize;
+				b.height=this.baseFrameSize;
+				b.charNum=charNum;
+				b.panelNum=(count+1);
+				b.rare=l;
+				this.TileS.addChild(b);
+				if(rest==2)col++;
+				if(col==this.colMax){
+					col=0;
+					sX+=this.world.width;
+				}
+				count++;
 			}
-			count++;
-			//TODO for 3
 		}
 	},
 	genArrowBtn:function(){

@@ -12,18 +12,19 @@ BasicGame.Play.prototype={
 		this.curGachaInfo=this.GachaInfo[this.curGacha];
 		this.CharInfo=this.M.gGlb('CharInfo');
 		// Val
-		// this.twCount=0;
-		// this.gachaCount=1;
+		this.twCount=0;
+		this.gachaCount=1;
+		this.overallRate=0;
+		this.overallRateOneCard=0;
 
 		// Obj
-		// this.PlayB=this.BigCard=this.ResS=
-		this.SkipB=
-		//this.WPS=this.MoveCardS=this.ResPanel=
+		this.PlayB=this.PlayTenB=this.SkipB=this.LargeCardS=this.ResS=
+		this.WPS=this.MoveCardS=this.ResPanel=
 		null;
 		this.Tween={};
 	},
 	create:function(){
-		this.stage.disableVisibilityChange=!0;
+		this.stage.disableVisibilityChange=!1;
 		this.time.events.removeAll();
 		// this.stage.backgroundColor='#000';
 		this.genContents();
@@ -43,12 +44,15 @@ BasicGame.Play.prototype={
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
+		this.initGacha();
 		//TODO
 		this.add.sprite(0,0,'TWP').tint=0xf0f0f0;//TODO del
 
 		// TODO
-		var s=this.add.sprite(this.world.centerX,this.world.height,'todo_1');s.width=80;s.height=80;s.anchor.setTo(.5)//TODO del
-		this.MoveCardS=s;
+		this.MoveCardS=this.add.sprite(this.world.centerX,this.world.height,'todo_1');
+		this.MoveCardS.width=80;
+		this.MoveCardS.height=80;
+		this.MoveCardS.anchor.setTo(.5)//TODO del
 
 		this.PlayB=this.M.S.genLbl(this.world.width*.25,this.world.centerY,this.playGacha,'PlayGacha1');
 		this.PlayB.gachaCount=1;
@@ -60,13 +64,25 @@ BasicGame.Play.prototype={
 
 		this.genRes();
 
-		this.BigCard=this.add.sprite(this.world.centerX,this.world.centerY,'todo_1');
-		this.BigCard.anchor.setTo(.5);
-		this.BigCard.visible=!1;
+		this.LargeCardS=this.add.sprite(this.world.centerX,this.world.centerY,'todo_1');
+		this.LargeCardS.anchor.setTo(.5);
+		this.LargeCardS.visible=!1;
 
-		//TODO name WPS change???
 		this.WPS=this.add.sprite(this.world.width,0,'WP');
 
+		this.genResPanel();
+
+
+		// TODO res btn gen / visible!1
+
+		//TODO skip btn on off
+	},
+	initGacha:function(){
+		for(var k in this.curGachaInfo.rate)this.overallRate+=this.curGachaInfo.rate[k];
+		// for(var k in this.GachaInfo[3].oneCard)this.overallRateOneCard+=this.GachaInfo[3].oneCard[k];return;//TODO del -------
+		if(this.curGachaInfo.oneCard)for(var k in this.curGachaInfo.oneCard)this.overallRateOneCard+=this.curGachaInfo.oneCard[k];
+	},
+	genResPanel:function(){
 		this.ResPanel=this.add.group();
 		//TODO
 		var s,col=0,
@@ -95,30 +111,34 @@ BasicGame.Play.prototype={
 			col++;
 		}
 		this.ResPanel.visible=!1;
-
-
-		// TODO res btn gen / visible!1
-
-		//TODO skip btn on off
 	},
 	playGacha:function(b){
+		// for(i=0;i<500;i++)console.log('UR'==this.gachaSystem(this.curGachaInfo.rate,this.overallRate));return;/// TODO del -------------	
+		// for(i=0;i<500;i++)console.log(this.gachaSystem(this.GachaInfo[3].oneCard,this.overallRateOneCard));return;/// TODO del -------------	
 		this.PlayB.visible=!1;
 		this.PlayTenB.visible=!1;
 		this.SkipB.visible=!0;
 		this.gachaCount=b.gachaCount;
 
-		this.gachaSystem();
+		this.gachaSystem(this.curGachaInfo.rate);
+		// this.ResPanel.forEach(function(s){
+			//TODO change image
+		// },this);
 
 		this.twCount=0;
 		this.repeatCard();
 	},
-	gachaSystem:function(){
-		//TODO per mode
-
-
-		this.ResPanel.forEach(function(s){
-			//TODO change image
-		},this);
+	gachaSystem:function(items,overallRate){
+		var target=this.rnd.between(1,overallRate);
+		for(var k in items){
+			var checkRate=items[k];
+			if(target<=checkRate){
+				return k;
+			}else{
+				target-=checkRate;
+			}
+		}
+		return 'N';
 	},
 	repeatCard:function(){
 		// console.log(this.time.time);
@@ -166,42 +186,23 @@ BasicGame.Play.prototype={
 		this.Tween=twD;
 
 		if(this.gachaCount==1){
-			this.BigCard.visible=!0;
+			this.LargeCardS.visible=!0;
 		
-			twD.onComplete.add(this.showStar,this);
+			twD.onComplete.add(this.showRare,this);
 		}else{
 			this.ResPanel.visible=!0;
 		}
 	},
-	// TODO star??? Rare???
-	showStar:function(){
-		var arr=[];
-		//TODO 5->char info
-		for(var i=0;i<5;i++){
-			var s=this.add.sprite(this.world.width,300,'todo_2');
-			arr.push(s);
-		}
-
-		var sX=this.world.centerX,
-			mX=30,
-			iMax=5;
-		for(var i=0;i<iMax;i++){
-			var tw=this.M.T.moveA(arr[i],{xy:{x:sX+mX*i},delay:i*200});//TODO tw chng
-			tw.start();
-			if(i==iMax-1){
-				tw.onComplete.add(function(){
-					//TODO SE
-					console.log('BOMB');
-					//TODO next play OK
-					this.ResS.visible=!0;
-				},this);
-			}else{
-				tw.onComplete.add(function(){
-					//TODO SE
-					console.log('BAN');
-				},this);
-			}
-		}
+	showRare:function(){
+		var s=this.add.sprite(this.world.width,300,'todo_2');
+		var tw=this.M.T.moveA(s,{xy:{x:this.world.centerX},delay:200});//TODO tw chng
+		tw.start();
+		tw.onComplete.add(function(){
+			//TODO SE
+			console.log('BOMB');
+			//TODO next play OK
+			this.ResS.visible=!0;
+		},this);
 	},
 	gameOver:function(){
 		this.end();
@@ -210,8 +211,8 @@ BasicGame.Play.prototype={
 	zoomCard:function(b){
 		// console.log(b.panelNum);
 		var card=this.ResPanel.children[b.panelNum];
-		this.BigCard.loadTexture(card.key);
-		this.BigCard.visible=!0;
+		this.LargeCardS.loadTexture(card.key);
+		this.LargeCardS.visible=!0;
 		
 		this.ResS.visible=!0;
 	},
@@ -266,7 +267,7 @@ BasicGame.Play.prototype={
 	},
 	closeDialog:function(){
 		//TODO
-		this.BigCard.visible=!1;
+		this.LargeCardS.visible=!1;
 		this.ResS.visible=!1;
 	},
 	gotoCollection:function(){
@@ -284,7 +285,7 @@ BasicGame.Play.prototype={
 		if(this.inputEnabled){
 			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curFirstCharInfo.yt;
-			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+			window.open(url,"_blank");
 			myGa('youtube','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},
@@ -292,7 +293,7 @@ BasicGame.Play.prototype={
 		if(this.inputEnabled){
 			// this.M.SE.play('OnBtn',{volume:1});//TODO
 			var url=this.curFirstCharInfo.tw;
-			this.game.device.desktop?window.open(url,"_blank"):location.href=url;
+			window.open(url,"_blank");
 			myGa('twitter','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},

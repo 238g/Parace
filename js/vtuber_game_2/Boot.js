@@ -23,8 +23,9 @@ create:function(){
 		GachaInfo:this.genGachaInfo(),
 		UserInfo:{
 			setInit:!1,
-			play:{},
+			playCount:{},
 			collection:{},
+			allCards:0,
 		},
 	});
 	this.M.NextScene('Preloader');
