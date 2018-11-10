@@ -15,27 +15,32 @@ BasicGame.Preloader.prototype={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			'70TWP':'images/vtuber_game_1/70TranslucentWhitePaper.png',
+			'hide_card':'images/vtuber_game_2/hide_card.jpg',
+			'gacha_1':'images/vtuber_game_2/gacha_1.png',
+			'gacha_2':'images/vtuber_game_2/gacha_2.png',
+			'gacha_3':'images/vtuber_game_2/gacha_3.png',
+			'gacha_4':'images/vtuber_game_2/gacha_4.png',
+			'bg_1':'images/vtuber_game_2/bg_1.jpg',
 
 			'todo_1':'images/vtuber_game_1/Parachute.png',
 			'todo_2':'images/yuni/obstacle.png',
 			'todo_3':'images/yuni/Otomemaru_1.png',
 		};
 		for(var k in a)this.load.image(k,a[k]);
-		// for(var i=1;i<=57;i++)this.load.image('intro_'+i,'images/vtuber_game_1/frame/'+i+'.png');
 		this.loadAudio();
 	},
 	loadAudio:function(){
 		var s={
+			TitleBGM:'sounds/BGM/vtuber_game_2/buy_something',
+			OnBtn:'sounds/SE/LabJP/Btn/decision9',
+			OnStart:'sounds/SE/LabJP/Btn/decision24',
+			Slide:'sounds/SE/LabJP/Btn/decision22',
+			OnCollection:'sounds/SE/LabJP/Btn/decision7',
+			OnBack:'sounds/SE/LabJP/Btn/decision6',
 			/*
-			TitleBGM:'sounds/BGM/vtuber_game_1/store',
 			PlayBGM_1:'sounds/BGM/vtuber_game_1/zangyousenshi',
 			PlayBGM_2:'sounds/BGM/vtuber_game_1/brightening',
 			PlayBGM_3:'sounds/BGM/vtuber_game_1/wild-king',
-			OnBtn:'sounds/SE/LabJP/Btn/decision22',
-			OnStart:'sounds/SE/LabJP/Btn/decision5',
-			OnCancel:'sounds/SE/LabJP/Btn/decision6',
-			OnSelect:'sounds/SE/LabJP/Btn/decision26',
-			OnPlay:'sounds/SE/LabJP/Btn/decision24',
 			OnPanel:'sounds/SE/LabJP/Btn/decision9',
 			GenStart:'sounds/SE/LabJP/Life/Other/police-whistle1',
 			End:'sounds/SE/LabJP/Life/Other/police-whistle2',
@@ -51,12 +56,32 @@ BasicGame.Preloader.prototype={
 			this.load.audio(k,[p+'.mp3',p+'wav']);
 		}
 	},
+	setInitUserInfo:function(){
+		var UserInfo=this.M.gGlb('UserInfo');
+		if(!UserInfo.setInit){
+			UserInfo.setInit=!0;
+			var GachaInfo=this.M.gGlb('GachaInfo');
+			for(var k in GachaInfo)UserInfo.playCount[k]=0;
+			var CharInfo=this.M.gGlb('CharInfo');
+			var count=0;
+			for(var k in CharInfo){
+				UserInfo.collection[k]={};
+				for(var l in CharInfo[k].rare){
+					UserInfo.collection[k][CharInfo[k].rare[l]]=0;
+					count++;
+				}
+			}
+			UserInfo.allCards=count;
+		}
+	},
 	loadComplete:function(){
 		this.M.S.loadCmpl();
 		this.M.SE.setSounds(this.sounds);
 		this.sound.volume=.5;
 		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		this.game.input.onDown.addOnce((__ENV!='prod')?this.start:this.showLogo,this);
+		this.setInitUserInfo();
+		this.stage.disableVisibilityChange=!1;
 	},
 	showLogo:function(){
 		this.M.S.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');

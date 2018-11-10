@@ -26,6 +26,7 @@ create:function(){
 			playCount:{},
 			collection:{},
 			allCards:0,
+			haveCards:0,
 		},
 	});
 	this.M.NextScene('Preloader');

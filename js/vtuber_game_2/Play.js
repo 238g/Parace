@@ -19,21 +19,16 @@ BasicGame.Play.prototype={
 
 		// Obj
 		this.PlayB=this.PlayTenB=this.SkipB=this.LargeCardS=this.ResS=
-		this.WPS=this.MoveCardS=this.ResPanel=
+		this.WPS=this.MoveCardS=this.ResPanel=this.CloseB=
 		null;
 		this.Tween={};
 	},
 	create:function(){
-		this.stage.disableVisibilityChange=!1;
 		this.time.events.removeAll();
 		// this.stage.backgroundColor='#000';
 		this.genContents();
-		this.start();//TODO
+		this.start();
 		this.test();
-	},
-	updateT:function(){
-		if(this.isPlaying){
-		}
 	},
 	start:function(){this.isPlaying=this.inputEnabled=!0},
 	end:function(){this.isPlaying=this.inputEnabled=!1},
@@ -45,11 +40,9 @@ BasicGame.Play.prototype={
 	////////////////////////////////////// PlayContents
 	genContents:function(){
 		this.initGacha();
-		//TODO
-		this.add.sprite(0,0,'TWP').tint=0xf0f0f0;//TODO del
 
 		// TODO
-		this.MoveCardS=this.add.sprite(this.world.centerX,this.world.height,'todo_1');
+		this.MoveCardS=this.add.sprite(this.world.centerX,this.world.height*1.5,'todo_1');
 		this.MoveCardS.width=80;
 		this.MoveCardS.height=80;
 		this.MoveCardS.anchor.setTo(.5)//TODO del
@@ -62,6 +55,7 @@ BasicGame.Play.prototype={
 		this.SkipB=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.skip,'Skip');
 		this.SkipB.visible=!1;
 
+		this.genResPanel();
 		this.genRes();
 
 		this.LargeCardS=this.add.sprite(this.world.centerX,this.world.centerY,'todo_1');
@@ -69,9 +63,6 @@ BasicGame.Play.prototype={
 		this.LargeCardS.visible=!1;
 
 		this.WPS=this.add.sprite(this.world.width,0,'WP');
-
-		this.genResPanel();
-
 
 		// TODO res btn gen / visible!1
 
@@ -93,15 +84,12 @@ BasicGame.Play.prototype={
 			mY=this.world.height*.2;
 		for(var i=0;i<10;i++){
 			if(i<3){
-				// s=this.add.sprite(sX+mX*col,sY,'todo_1');
 				s=this.add.button(sX+mX*col,sY,'todo_1',this.zoomCard,this);
 			}else if(i<7){
 				if(i==3)col=0;
-				// s=this.add.sprite(smX+mX*col,sY+mY,'todo_1');
 				s=this.add.button(smX+mX*col,sY+mY,'todo_1',this.zoomCard,this);
 			}else{
 				if(i==7)col=0;
-				// s=this.add.sprite(sX+mX*col,sY+mY+mY,'todo_1');
 				s=this.add.button(sX+mX*col,sY+mY+mY,'todo_1',this.zoomCard,this);
 			}
 			s.panelNum=i;
@@ -187,7 +175,8 @@ BasicGame.Play.prototype={
 
 		if(this.gachaCount==1){
 			this.LargeCardS.visible=!0;
-		
+			this.CloseB.visible=!1;
+
 			twD.onComplete.add(this.showRare,this);
 		}else{
 			this.ResPanel.visible=!0;
@@ -204,10 +193,6 @@ BasicGame.Play.prototype={
 			this.ResS.visible=!0;
 		},this);
 	},
-	gameOver:function(){
-		this.end();
-		this.genEnd();
-	},
 	zoomCard:function(b){
 		// console.log(b.panelNum);
 		var card=this.ResPanel.children[b.panelNum];
@@ -221,16 +206,12 @@ BasicGame.Play.prototype={
 		var s=this.add.sprite(0,0,'TWP');
 		s.tint=0x000000;
 
-		var lbl,txtstyl=this.M.S.txtstyl(40);
+		var lbl,txtstyl=this.M.S.txtstyl(25);
 
-		txtstyl=this.M.S.txtstyl(25);
-
-		if(1){//TODO if 10
-			txtstyl.fill=txtstyl.mStroke='#ffa500';
-			lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.15,this.closeDialog,this.curWords.Close);
-			lbl.tint=0xffa500;
-			s.addChild(lbl);
-		}
+		txtstyl.fill=txtstyl.mStroke='#ffa500';
+		this.CloseB=this.M.S.genLbl(this.world.width*.75,this.world.height*.05,this.closeDialog,this.curWords.Close);
+		this.CloseB.tint=0xffa500;
+		s.addChild(this.CloseB);
 
 		txtstyl.fill=txtstyl.mStroke='#00fa9a';
 		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.75,this.again,this.curWords.Again,txtstyl);
@@ -272,7 +253,7 @@ BasicGame.Play.prototype={
 	},
 	gotoCollection:function(){
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			this.M.SE.play('OnBtn',{volume:1});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;
@@ -283,24 +264,23 @@ BasicGame.Play.prototype={
 	},
 	yt:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
-			var url=this.curFirstCharInfo.yt;
+			this.M.SE.play('OnBtn',{volume:1});
+			var url=this.curCharInfo.yt;
 			window.open(url,"_blank");
 			myGa('youtube','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},
 	tw:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
-			var url=this.curFirstCharInfo.tw;
+			this.M.SE.play('OnBtn',{volume:1});
+			var url=this.curCharInfo.yt;
 			window.open(url,"_blank");
 			myGa('twitter','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 		}
 	},
 	again:function(){
-		//TODO goto play or again function
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			// this.M.SE.play('OnPlay',{volume:1});//TODO
+			this.M.SE.play('OnStart',{volume:1});
 			this.M.sGlb('playCount',this.M.gGlb('playCount')+1);
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
@@ -313,7 +293,7 @@ BasicGame.Play.prototype={
 	},
 	tweet:function(){
 		if(this.inputEnabled){
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			this.M.SE.play('OnBtn',{volume:1});
 			var e='***********';//TODO
 			var res='********:';//TODO
 			var txt=e+'\n'+this.curWords.TwTtl+'\n'+res+e+'\n';
@@ -323,7 +303,7 @@ BasicGame.Play.prototype={
 	},
 	back:function(){
 		if(this.inputEnabled&&!this.Tween.isRunning){
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			this.M.SE.play('OnBtn',{volume:1});
 			var wp=this.add.sprite(0,0,'WP');
 			wp.tint=0x000000;
 			wp.alpha=0;

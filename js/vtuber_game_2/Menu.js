@@ -11,16 +11,14 @@ BasicGame.Title.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
-		this.stage.disableVisibilityChange=!1;
-
-		this.setInitUserInfo();
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 		
 		//TODO
 		// var title=this.add.sprite(this.world.centerX,this.world.height*.2,'Title');
 		// title.anchor.setTo(.5);
 
-		//TODO pos adjust
+		this.genEff();
+
 		var txtstyl=this.M.S.txtstyl(25);
 		this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.start,this.curWords.Start,txtstyl).tint=0x00ff00;
 		this.M.S.genLbl(this.world.width*.25,this.world.height*.95,this.credit,'Credit',txtstyl).tint=0xffd700;
@@ -29,29 +27,17 @@ BasicGame.Title.prototype={
 		this.genHUD();
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 	},
-	setInitUserInfo:function(){
-		var UserInfo=this.M.gGlb('UserInfo');
-		if(!UserInfo.setInit){
-			UserInfo.setInit=!0;
-			var GachaInfo=this.M.gGlb('GachaInfo');
-			for(var k in GachaInfo)UserInfo.playCount[k]=0;
-			var CharInfo=this.M.gGlb('CharInfo');
-			var count=0;
-			for(var k in CharInfo){
-				UserInfo.collection[k]={};
-				for(var l in CharInfo[k].rare){
-					UserInfo.collection[k][CharInfo[k].rare[l]]=0;
-					count++;
-				}
-			}
-			UserInfo.allCards=count;
-		}
+	genEff:function(){
+		var s=this.add.sprite(this.world.centerX,this.world.centerY,'gacha_3');
+		s.anchor.setTo(.5);
+		s.scale.setTo(1.2);
+		this.M.T.stressA(s,{durations:[400,200],delay:500}).start();
 	},
 	start:function(){
 		if (this.inputEnabled) {
 			if (!this.Tween.isRunning) {
 				this.inputEnabled=!1;
-				// this.M.SE.play('OnStart',{volume:1});//TODO
+				this.M.SE.play('OnBtn',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
@@ -60,18 +46,18 @@ BasicGame.Title.prototype={
 				this.Tween.start();
 			}
 		} else {
-			// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
+			this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},
 	credit:function(){
-		// this.M.SE.play('OnBtn',{volume:1});//TODO
+		this.M.SE.play('OnBtn',{volume:1});
 		var url='https://238g.github.io/Parace/238Games2.html?page=credit';
 		window.open(url,"_blank");
 		myGa('external_link','Title','Credit',this.M.gGlb('playCount'));
 	},
 	othergames:function(){
-		// this.M.SE.play('OnBtn',{volume:1});//TODO
+		this.M.SE.play('OnBtn',{volume:1});
 		var url=__VTUBER_GAMES;
 		if(this.curLang=='en')url+='?lang=en';
 		window.open(url,"_blank");
@@ -100,28 +86,33 @@ BasicGame.SelectGacha.prototype={
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});//TODO
+		this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.add.sprite(0,0,'bg_1');
 		this.genGacha();
 
-		this.M.S.genLbl(this.world.centerX,this.world.height*.85,this.showCollection,this.curWords.Collection);
+		this.M.S.genTxt(this.world.centerX,this.world.height*.07,this.curWords.SelectGacha,this.M.S.txtstyl(35));
 
-		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
+		this.M.S.genLbl(this.world.centerX,this.world.height*.85,this.showCollection,this.curWords.Collection).tint=0xffd700;
+
+		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back).tint=0xffd700;
 		this.genHUD();
 	},
 	genGacha:function(){
 		var lX=this.world.width*.25,
 			rX=this.world.width*.75,
-			sY=this.world.height*.25,
+			sY=this.world.height*.28,
 			mY=this.world.height*.33,
-			row=0;
+			row=0,
+			txtstyl=this.M.S.txtstyl(25);
+		var colors=['#ffa500','#008000','#ff1493','#9400d3'];
 		for(var k in this.GachaInfo){
 			var info=this.GachaInfo[k];
 			var even=k%2;
-			var b=this.add.button(even==0?rX:lX,sY+mY*row,'todo_1',this.play,this);
-			b.width=150;b.height=180;//TODO del
+			var b=this.add.button(even==0?rX:lX,sY+mY*row,'gacha_'+k,this.play,this);
 			b.anchor.setTo(.5);
 			b.gacha=k;
-			this.M.S.genTxt(b.x,b.bottom,info.gName)
+			txtstyl.fill=txtstyl.mStroke=colors[k-1];
+			this.M.S.genTxt(b.x,b.bottom,info.gName,txtstyl);
 			if(even==0)row++;
 		}
 	},
@@ -136,7 +127,7 @@ BasicGame.SelectGacha.prototype={
 			this.Tween.onComplete.add(function(){this.M.NextScene('Play')},this);
 			this.Tween.start();
 			myGa('play','SelectGacha','Gacha_'+b.gacha,this.M.gGlb('playCount'));
-			// this.M.SE.play('OnPlay',{volume:1});//TODO
+			this.M.SE.play('OnStart',{volume:1});
 		}
 	},
 	showCollection:function(){
@@ -147,7 +138,7 @@ BasicGame.SelectGacha.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('CollectionPage')},this);
 			this.Tween.start();
-			// this.M.SE.play('OnCancel',{volume:1});//TODO
+			this.M.SE.play('OnBtn',{volume:1});
 		}
 	},
 	back:function(){
@@ -158,7 +149,7 @@ BasicGame.SelectGacha.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('Title')},this);
 			this.Tween.start();
-			// this.M.SE.play('OnCancel',{volume:1});//TODO
+			this.M.SE.play('OnBack',{volume:1});
 		}
 	},
 	genHUD:function(){
@@ -178,31 +169,33 @@ BasicGame.CollectionPage.prototype={
 		this.CharInfo=this.M.gGlb('CharInfo');
 		//Val
 		this.charInfoLen=Object.keys(this.CharInfo).length;
-		// this.maxPage=Math.ceil(this.charInfoLen/12);//TODO del
 		this.colMax=3;
-		this.rowMax=3;
+		this.rowMax=4;
 		this.maxPage=Math.ceil(this.UserInfo.allCards/(this.colMax*this.rowMax));
 		this.curPage=1;
-		this.baseFrameSize=this.world.width/4-20;
-
+		this.baseFrameSize=this.world.width/3-20;
 		//Obj
 		this.TileS=this.LeftB=this.RightB=
 		this.WPS=this.CharS=this.CharNameTS=
+		this.PageTS=
 		null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
-		// this.M.SE.playBGM('TitleBGM',{volume:1});
+		this.M.SE.playBGM('TitleBGM',{volume:1});
 
-		this.TileS=this.add.tileSprite(0,0,this.world.width*this.maxPage,this.world.height,'WP');
+		this.TileS=this.add.tileSprite(0,0,this.world.width*this.maxPage,this.world.height,'bg_1');
 		this.TileS.tint=0xeeeeee;
 
 		this.genPanels();
 		this.genArrowBtn();
 
-		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
+		this.PageTS=this.M.S.genTxt(this.world.centerX,this.world.height*.82,this.genPageText(),this.M.S.txtstylS(20));
+		this.M.S.genTxt(this.world.centerX,this.world.height*.88,this.curWords.Card+':'+this.UserInfo.haveCards+'/'+this.UserInfo.allCards,this.M.S.txtstylS(20));
+
+		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back).tint=0xffd700;
 		this.genHUD();
 		this.genDialog();
 	},
@@ -213,24 +206,31 @@ BasicGame.CollectionPage.prototype={
 
 		var rest,charNum,b,
 			sX=10,
-			sY=this.world.height*.3,
-			mXY=this.world.width/3,
-			col=0,
+			sY=this.world.height*.05,
+			mX=this.world.width/3,
+			mY=this.world.width*.3,
+			row=0,
 			count=0;
 		for(var k in arr){
 			charNum=arr[k];
 			for(var l in this.CharInfo[charNum].rare){
 				rest=count%this.colMax;
-				b=this.add.button(mXY*rest+sX,mXY*col+sY,'todo_3',this.openDialog,this);
+				if(1){
+					// b=this.M.S.genBmpSqrSp(mX*rest+sX,mY*row+sY,this.baseFrameSize,this.baseFrameSize,'#ff0000');
+					b=this.add.button(mX*rest+sX,mY*row+sY,'hide_card',this.openDialog,this);
+					// b.inputEnabled=!1;//TODO OK
+				}else{
+
+				}
 				b.width=this.baseFrameSize;
 				b.height=this.baseFrameSize;
 				b.charNum=charNum;
 				b.panelNum=(count+1);
 				b.rare=l;
 				this.TileS.addChild(b);
-				if(rest==2)col++;
-				if(col==this.colMax){
-					col=0;
+				if(rest==this.colMax-1)row++;
+				if(row==this.rowMax){
+					row=0;
 					sX+=this.world.width;
 				}
 				count++;
@@ -239,12 +239,12 @@ BasicGame.CollectionPage.prototype={
 	},
 	genArrowBtn:function(){
 		this.LeftB=this.add.button(this.world.width*.1,this.world.height*.85,'GameIconsWhite',this.page,this,'arrowLeft','arrowLeft','arrowLeft','arrowLeft');
-		this.LeftB.tint=0x0000cd;
+		this.LeftB.tint=0x228b22;
 		this.LeftB.anchor.setTo(.5);
 		this.LeftB.fn='left';
 		this.LeftB.visible=!1;
 		this.RightB=this.add.button(this.world.width*.9,this.world.height*.85,'GameIconsWhite',this.page,this,'arrowRight','arrowRight','arrowRight','arrowRight');
-		this.RightB.tint=0x0000cd;
+		this.RightB.tint=0x228b22;
 		this.RightB.anchor.setTo(.5);
 		this.RightB.fn='right';
 	},
@@ -267,8 +267,12 @@ BasicGame.CollectionPage.prototype={
 					if(this.curPage==1)this.LeftB.visible=!1;
 				}
 			}
-			// this.M.SE.play('OnBtn',{volume:1});//TODO
+			this.M.SE.play('Slide',{volume:1});
+			this.PageTS.changeText(this.genPageText());
 		}
+	},
+	genPageText:function(){
+		return this.curWords.Page+':'+this.curPage+'/'+this.maxPage;
 	},
 	genDialog:function(){
 		this.WPS=this.add.sprite(0,0,'70TWP');
@@ -282,15 +286,33 @@ BasicGame.CollectionPage.prototype={
 		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.world.height*.18,'AAAAAA',this.M.S.txtstyl(40));
 		this.WPS.addChild(this.CharNameTS);
 
-		// var txtstyl=this.M.S.txtstyl(25);
-		// txtstyl.align='left';
+		var lbl,txtstyl=this.M.S.txtstyl(25);
 
-		// TODO Close Btn ???
-		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.closeDialog,this.curWords.Close));
+		txtstyl.fill=txtstyl.mStroke='#ffa500';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.05,this.closeDialog,this.curWords.Close,txtstyl);
+		lbl.tint=0xffa500;
+		this.WPS.addChild(lbl);
+		
 		//TODO tweet
-		// TODO download image
-		this.WPS.addChild(this.M.S.genLbl(this.world.width*.25,this.world.height*.9,this.tw,'Twitter'));
-		this.WPS.addChild(this.M.S.genLbl(this.world.width*.75,this.world.height*.9,this.yt,'YouTube'));
+
+		txtstyl.fill=txtstyl.mStroke='#008000';
+		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.download,this.curWords.Download,txtstyl);
+		lbl.tint=0x008000;
+		this.WPS.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#00a2f8';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.tweet,this.curWords.TwBtnB,txtstyl);
+		lbl.tint=0x00a2f8;
+		this.WPS.addChild(lbl);
+
+		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.9,this.tw,'Twitter',txtstyl);
+		lbl.tint=0x00a2f8;
+		this.WPS.addChild(lbl);
+
+		txtstyl.fill=txtstyl.mStroke='#ff0000';
+		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.9,this.yt,'YouTube',txtstyl);
+		lbl.tint=0xff0000;
+		this.WPS.addChild(lbl);
 	},
 	openDialog:function(b){
 		if(!this.WPS.visible){
@@ -307,7 +329,7 @@ BasicGame.CollectionPage.prototype={
 			// this.CharNameTS.changeText(this.curCharInfo.cName);
 
 			this.WPS.visible=!0;
-			// this.M.SE.play('OnPanel',{volume:1});//TODO
+			this.M.SE.play('OnCollection',{volume:1});
 		}
 	},
 	closeDialog:function(){
@@ -315,7 +337,7 @@ BasicGame.CollectionPage.prototype={
 			var panel=this.TileS.children[this.curPanel];
 			panel.tint=0xffffff;
 			panel.inputEnabled=!0;
-			// this.M.SE.play('OnCancel',{volume:1});//TODO
+			this.M.SE.play('OnBack',{volume:1});
 		}
 		this.WPS.visible=!1;
 	},
@@ -327,8 +349,26 @@ BasicGame.CollectionPage.prototype={
 			this.Tween=this.M.T.fadeInA(wp,{duration:600,alpha:1});
 			this.Tween.onComplete.add(function(){this.M.NextScene('SelectGacha')},this);
 			this.Tween.start();
-			// this.M.SE.play('OnCancel',{volume:1});//TODO
+			this.M.SE.play('OnBack',{volume:1});
 		}
+	},
+	download:function(){
+		//TODO
+	},
+	tweet:function(){
+		//TODO
+	},
+	yt:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var url=this.curCharInfo.yt;
+		window.open(url,"_blank");
+		myGa('youtube','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
+	},
+	tw:function(){
+		this.M.SE.play('OnBtn',{volume:1});
+		var url=this.curCharInfo.tw;
+		window.open(url,"_blank");
+		myGa('twitter','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;
