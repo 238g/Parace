@@ -26,8 +26,11 @@ create:function(){
 			playCount:{},
 			collection:{},
 			allCards:0,
-			haveCards:0,
+			haveAllCards:0,
+			haveKindCards:0,
+			haveRare:{N:0,R:0,SR:0,SSR:0,UR:0},
 		},
+		onSkip:!1,
 	});
 	this.M.NextScene('Preloader');
 },};

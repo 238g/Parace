@@ -1,5 +1,4 @@
 BasicGame.Boot.prototype.genCharInfo=function(){
-	// TODO movie ScreenShot // watch this movie btn // so,,, need each mv url
 	return {
 		1:{cName:'ベルモンド・バンデラス',
 			rare:['N','SSR','UR'],
@@ -25,9 +24,9 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		8:{cName:'nini宮',
 			rare:['N','SSR','UR'],
 			tw:'https://twitter.com/nini_0_0_0',yt:'https://www.youtube.com/channel/UC8eidI_CzKQ0-IvDCZ2nw0A',},
-		9:{cName:'ださお',
+		9:{cName:'兎鞠まり',
 			rare:['N','SSR','UR'],
-			tw:'https://twitter.com/makai_dasao',yt:'https://www.youtube.com/channel/UCBGgL8YXn-NFOCj_Cm6QSsA',},
+			tw:'https://twitter.com/tomari_mari',yt:'https://www.youtube.com/channel/UCkPIfBOLoO0hVPG-tI2YeGg',},
 		10:{cName:'白鳥天羽',
 			rare:['N','SSR','UR'],
 			tw:'https://twitter.com/shiratori_amaha',yt:'https://www.youtube.com/channel/UCGqL0gaVfP-j5IZX7-cE2lg',},
@@ -100,9 +99,6 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		33:{cName:'薬袋カルテ',
 			rare:['R','SR','UR'],
 			tw:'https://twitter.com/minai_karte',yt:'https://www.youtube.com/channel/UCDVXivWK9feX2iRBc3SFegw',},
-		34:{cName:'兎鞠まり',
-			rare:['R','SR','UR'],
-			tw:'https://twitter.com/tomari_mari',yt:'https://www.youtube.com/channel/UCkPIfBOLoO0hVPG-tI2YeGg',},
 	};
 };
 BasicGame.Boot.prototype.genGachaInfo=function(){
@@ -142,12 +138,13 @@ BasicGame.Boot.prototype.genWords=function(){
 			Page:'ページ',
 			Card:'カード',
 			Download:'ダウンロード',
-			/*
-			Result:'結果',
-			HowTo:'aaaaaaaaaaaaaaa',
+			PlayGacha1:'1回ガチャる',
+			PlayGacha10:'10連ガチャ',
+			Skip:'スキップ',
 			TwTtl:'『'+BasicGame.GAME_TITLE+'』で遊んだよ！',
 			TwHT:'Vtuberゲーム',
-			*/
+			Count:'回',
+			TwSelectChar:'引いたカード: ',
 		},
 		en:{
 		},

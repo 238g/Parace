@@ -21,13 +21,32 @@ BasicGame.Preloader.prototype={
 			'gacha_3':'images/vtuber_game_2/gacha_3.png',
 			'gacha_4':'images/vtuber_game_2/gacha_4.png',
 			'bg_1':'images/vtuber_game_2/bg_1.jpg',
-
-			'todo_1':'images/vtuber_game_1/Parachute.png',
-			'todo_2':'images/yuni/obstacle.png',
-			'todo_3':'images/yuni/Otomemaru_1.png',
+			'bg_2':'images/vtuber_game_2/bg_2.jpg',
+			'bg_3':'images/vtuber_game_2/bg_3.jpg',
+			'bg_4':'images/vtuber_game_2/bg_4.jpg',
+			'rare_N':'images/vtuber_game_2/rare_N.png',
+			'rare_R':'images/vtuber_game_2/rare_R.png',
+			'rare_SR':'images/vtuber_game_2/rare_SR.png',
+			'rare_SSR':'images/vtuber_game_2/rare_SSR.png',
+			'rare_UR':'images/vtuber_game_2/rare_UR.png',
+			'skip_on':'images/vtuber_game_2/skip_on.png',
+			'skip_off':'images/vtuber_game_2/skip_off.png',
+			'CircleBlock':'images/dotlive/CircleBlock.png',
+			'SlideWP':'images/vtuber_game_2/SlideWP.png',
 		};
 		for(var k in a)this.load.image(k,a[k]);
+		this.loadChars();
 		this.loadAudio();
+	},
+	loadChars:function(){
+		var charInfo=this.M.gGlb('CharInfo');
+		for(var k in charInfo){
+			var rare=charInfo[k].rare;
+			for(var l in rare){
+				var img=k+'_'+rare[l];
+				this.load.image(img,'images/vtuber_game_2/chars/'+img+'.jpg');
+			}
+		}
 	},
 	loadAudio:function(){
 		var s={
@@ -37,18 +56,10 @@ BasicGame.Preloader.prototype={
 			Slide:'sounds/SE/LabJP/Btn/decision22',
 			OnCollection:'sounds/SE/LabJP/Btn/decision7',
 			OnBack:'sounds/SE/LabJP/Btn/decision6',
-			/*
-			PlayBGM_1:'sounds/BGM/vtuber_game_1/zangyousenshi',
-			PlayBGM_2:'sounds/BGM/vtuber_game_1/brightening',
-			PlayBGM_3:'sounds/BGM/vtuber_game_1/wild-king',
-			OnPanel:'sounds/SE/LabJP/Btn/decision9',
-			GenStart:'sounds/SE/LabJP/Life/Other/police-whistle1',
-			End:'sounds/SE/LabJP/Life/Other/police-whistle2',
-			Miss:'sounds/SE/LabJP/Btn/decision19',
-			Shoot:'sounds/SE/LabJP/Btn/decision20',
-			HitFloor:'sounds/SE/LabJP/Btn/decision18',
-			Res:'sounds/SE/Cartoon/ApricotJumpBounce',
-			*/
+			StopRare:'sounds/SE/LabJP/Btn/decision16',
+			MoveCard:'sounds/SE/LabJP/Btn/decision10',
+			LastShow:'sounds/SE/LabJP/Btn/decision25',
+			GetUR:'sounds/SE/LabJP/Performance/Anime/eye-shine1',
 		};
 		for(var k in s){
 			var p=s[k];

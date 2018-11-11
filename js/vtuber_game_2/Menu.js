@@ -77,10 +77,6 @@ BasicGame.SelectGacha.prototype={
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
 		this.GachaInfo=this.M.gGlb('GachaInfo');
-		//Val
-
-		//Obj
-		null;
 		this.Tween={};
 	},
 	create:function(){
@@ -167,6 +163,7 @@ BasicGame.CollectionPage.prototype={
 		this.curWords=this.Words[this.curLang];
 		this.UserInfo=this.M.gGlb('UserInfo');
 		this.CharInfo=this.M.gGlb('CharInfo');
+		this.GachaInfo=this.M.gGlb('GachaInfo');
 		//Val
 		this.charInfoLen=Object.keys(this.CharInfo).length;
 		this.colMax=3;
@@ -174,10 +171,11 @@ BasicGame.CollectionPage.prototype={
 		this.maxPage=Math.ceil(this.UserInfo.allCards/(this.colMax*this.rowMax));
 		this.curPage=1;
 		this.baseFrameSize=this.world.width/3-20;
+		this.curRare=null;
 		//Obj
 		this.TileS=this.LeftB=this.RightB=
 		this.WPS=this.CharS=this.CharNameTS=
-		this.PageTS=
+		this.PageTS=this.RareS=
 		null;
 		this.Tween={};
 	},
@@ -193,7 +191,7 @@ BasicGame.CollectionPage.prototype={
 		this.genArrowBtn();
 
 		this.PageTS=this.M.S.genTxt(this.world.centerX,this.world.height*.82,this.genPageText(),this.M.S.txtstylS(20));
-		this.M.S.genTxt(this.world.centerX,this.world.height*.88,this.curWords.Card+':'+this.UserInfo.haveCards+'/'+this.UserInfo.allCards,this.M.S.txtstylS(20));
+		this.M.S.genTxt(this.world.centerX,this.world.height*.88,this.curWords.Card+':'+this.UserInfo.haveKindCards+'/'+this.UserInfo.allCards,this.M.S.txtstylS(20));
 
 		this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back).tint=0xffd700;
 		this.genHUD();
@@ -215,18 +213,18 @@ BasicGame.CollectionPage.prototype={
 			charNum=arr[k];
 			for(var l in this.CharInfo[charNum].rare){
 				rest=count%this.colMax;
-				if(1){
-					// b=this.M.S.genBmpSqrSp(mX*rest+sX,mY*row+sY,this.baseFrameSize,this.baseFrameSize,'#ff0000');
-					b=this.add.button(mX*rest+sX,mY*row+sY,'hide_card',this.openDialog,this);
-					// b.inputEnabled=!1;//TODO OK
+				var rare=this.CharInfo[charNum].rare[l];
+				if(this.UserInfo.collection[charNum][rare]>0){
+					b=this.add.button(mX*rest+sX,mY*row+sY,charNum+'_'+rare,this.openDialog,this);
 				}else{
-
+					b=this.add.button(mX*rest+sX,mY*row+sY,'hide_card',this.openDialog,this);
+					b.inputEnabled=!1;
 				}
 				b.width=this.baseFrameSize;
 				b.height=this.baseFrameSize;
 				b.charNum=charNum;
 				b.panelNum=(count+1);
-				b.rare=l;
+				b.rare=rare;
 				this.TileS.addChild(b);
 				if(rest==this.colMax-1)row++;
 				if(row==this.rowMax){
@@ -279,12 +277,15 @@ BasicGame.CollectionPage.prototype={
 		this.WPS.visible=!1;
 		this.WPS.tint=0x000000;
 
-		this.CharS=this.add.sprite(this.world.centerX,this.world.height*.4,'');
+		this.CharS=this.add.sprite(this.world.centerX,this.world.height*.4,'1_N');
 		this.CharS.anchor.setTo(.5);
 		this.WPS.addChild(this.CharS);
 
-		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.world.height*.18,'AAAAAA',this.M.S.txtstyl(40));
+		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.CharS.bottom,'',this.M.S.txtstyl(35));
 		this.WPS.addChild(this.CharNameTS);
+
+		this.RareS=this.add.sprite(this.CharS.left,this.CharS.top,'');
+		this.WPS.addChild(this.RareS);
 
 		var lbl,txtstyl=this.M.S.txtstyl(25);
 
@@ -293,8 +294,6 @@ BasicGame.CollectionPage.prototype={
 		lbl.tint=0xffa500;
 		this.WPS.addChild(lbl);
 		
-		//TODO tweet
-
 		txtstyl.fill=txtstyl.mStroke='#008000';
 		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.download,this.curWords.Download,txtstyl);
 		lbl.tint=0x008000;
@@ -317,16 +316,16 @@ BasicGame.CollectionPage.prototype={
 	openDialog:function(b){
 		if(!this.WPS.visible){
 			var charNum=b.charNum;
+			this.curRare=b.rare;
 			this.curChar=charNum;
 			this.curCharInfo=this.CharInfo[charNum];
 
 			this.curPanel=b.panelNum;
-			var panel=this.TileS.children[b.panelNum];
-			panel.tint=0x555555;
-			panel.inputEnabled=!1;
+			//// var panel=this.TileS.children[b.panelNum-1];
 			
 			this.CharS.loadTexture(b.key);
-			// this.CharNameTS.changeText(this.curCharInfo.cName);
+			this.CharNameTS.changeText(this.curCharInfo.cName);
+			this.RareS.loadTexture('rare_'+this.curRare);
 
 			this.WPS.visible=!0;
 			this.M.SE.play('OnCollection',{volume:1});
@@ -334,9 +333,7 @@ BasicGame.CollectionPage.prototype={
 	},
 	closeDialog:function(){
 		if(this.curPanel>-1){
-			var panel=this.TileS.children[this.curPanel];
-			panel.tint=0xffffff;
-			panel.inputEnabled=!0;
+			//// var panel=this.TileS.children[this.curPanel];
 			this.M.SE.play('OnBack',{volume:1});
 		}
 		this.WPS.visible=!1;
@@ -353,22 +350,42 @@ BasicGame.CollectionPage.prototype={
 		}
 	},
 	download:function(){
-		//TODO
+		var img=this.curChar+'_'+this.curRare;
+		var a=document.createElement('a');
+		a.href='images/vtuber_game_2/chars/'+img+'.jpg';
+		a.target='_blank';
+		a.download=this.curCharInfo.cName+this.curRare+'.jpg';
+		a.click();
+		this.M.SE.play('OnBtn',{volume:1});
+		myGa('download','Collection','Char_'+this.curChar,this.M.gGlb('playCount'));
 	},
 	tweet:function(){
-		//TODO
+		this.M.SE.play('OnBtn',{volume:1});
+		var e='💸💸💸💸💸💸';
+		var res=this.curWords.TwSelectChar+this.curRare+' '+this.curCharInfo.cName+'\n';
+
+		for(var k in this.UserInfo.playCount){
+			var playCount=this.UserInfo.playCount[k];
+			if(playCount>0){
+				res+=this.GachaInfo[k].gName+': '+playCount+this.curWords.Count+'\n';
+			}
+		}
+
+		var txt=e+'\n'+this.curWords.TwTtl+'\n'+res+e+'\n';
+		this.M.H.tweet(txt,this.curWords.TwHT,location.href);
+		myGa('tweet','Collection','Char_'+this.curChar,this.M.gGlb('playCount'));
 	},
 	yt:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		var url=this.curCharInfo.yt;
 		window.open(url,"_blank");
-		myGa('youtube','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
+		myGa('youtube','Collection','Char_'+this.curChar,this.M.gGlb('playCount'));
 	},
 	tw:function(){
 		this.M.SE.play('OnBtn',{volume:1});
 		var url=this.curCharInfo.tw;
 		window.open(url,"_blank");
-		myGa('twitter','Play','Gacha_'+this.curGacha,this.M.gGlb('playCount'));
+		myGa('twitter','Collection','Char_'+this.curChar,this.M.gGlb('playCount'));
 	},
 	genHUD:function(){
 		var y=this.world.height*.95;
