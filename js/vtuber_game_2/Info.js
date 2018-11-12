@@ -132,7 +132,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			Close:'とじる',
 			Again:'もう一度！',
 			TwBtn:'結果をツイート',
-			TwBtnB:'これをツイート',
+			TwBtnB:'これでツイート',
 			OtherGames:'他のゲーム',
 			SelectGacha:'ガチャを選択',
 			Page:'ページ',
@@ -145,6 +145,7 @@ BasicGame.Boot.prototype.genWords=function(){
 			TwHT:'Vtuberゲーム',
 			Count:'回',
 			TwSelectChar:'引いたカード: ',
+			Sheet:'枚',
 		},
 		en:{
 		},

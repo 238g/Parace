@@ -169,11 +169,11 @@ BasicGame.CollectionPage.prototype={
 		this.rowMax=4;
 		this.maxPage=Math.ceil(this.UserInfo.allCards/(this.colMax*this.rowMax));
 		this.curPage=1;
-		this.baseFrameSize=this.world.width/3-20;
+		this.baseFrameSize=this.world.width*.3-20;
 		this.curRare=null;
 		//Obj
 		this.TileS=this.LeftB=this.RightB=
-		this.WPS=this.CharS=this.CharNameTS=
+		this.WPS=this.CharS=this.CharNameTS=this.CharCardCountTS=
 		this.PageTS=this.RareS=
 		null;
 		this.Tween={};
@@ -213,18 +213,23 @@ BasicGame.CollectionPage.prototype={
 			for(var l in this.CharInfo[charNum].rare){
 				rest=count%this.colMax;
 				var rare=this.CharInfo[charNum].rare[l];
+				var s=this.add.sprite(0,0,'rare_'+rare);
 				if(this.UserInfo.collection[charNum][rare]>0){
 					b=this.add.button(mX*rest+sX,mY*row+sY,charNum+'_'+rare,this.openDialog,this);
 				}else{
 					b=this.add.button(mX*rest+sX,mY*row+sY,'hide_card',this.openDialog,this);
 					b.inputEnabled=!1;
+
+					s.scale.setTo(.3);
 				}
 				b.width=this.baseFrameSize;
 				b.height=this.baseFrameSize;
 				b.charNum=charNum;
 				b.panelNum=(count+1);
 				b.rare=rare;
+				b.addChild(s);
 				this.TileS.addChild(b);
+
 				if(rest==this.colMax-1)row++;
 				if(row==this.rowMax){
 					row=0;
@@ -280,13 +285,18 @@ BasicGame.CollectionPage.prototype={
 		this.CharS.anchor.setTo(.5);
 		this.WPS.addChild(this.CharS);
 
-		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.CharS.bottom,'',this.M.S.txtstyl(35));
+		var lbl,txtstyl=this.M.S.txtstyl(35);
+
+		this.CharNameTS=this.M.S.genTxt(this.world.centerX,this.CharS.bottom,'',txtstyl);
 		this.WPS.addChild(this.CharNameTS);
 
 		this.RareS=this.add.sprite(this.CharS.left,this.CharS.top,'');
 		this.WPS.addChild(this.RareS);
 
-		var lbl,txtstyl=this.M.S.txtstyl(25);
+		txtstyl.fontSize=25;
+
+		this.CharCardCountTS=this.M.S.genTxt(this.world.centerX,this.CharNameTS.bottom+this.CharNameTS.height*.3,'',txtstyl);
+		this.WPS.addChild(this.CharCardCountTS);
 
 		txtstyl.fill=txtstyl.mStroke='#ffa500';
 		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.05,this.closeDialog,this.curWords.Close,txtstyl);
@@ -325,6 +335,7 @@ BasicGame.CollectionPage.prototype={
 			this.CharS.loadTexture(b.key);
 			this.CharNameTS.changeText(this.curCharInfo.cName);
 			this.RareS.loadTexture('rare_'+this.curRare);
+			this.CharCardCountTS.changeText(this.UserInfo.collection[this.curChar][this.curRare]+this.curWords.Sheet);
 
 			this.WPS.visible=!0;
 			this.M.SE.play('OnCollection',{volume:1});

@@ -73,10 +73,13 @@ BasicGame.Play.prototype={
 		this.FirstHUD=this.add.group();
 
 		var colors=['#ffa500','#008000','#ff1493','#9400d3'];
-		var txtstyl=this.M.S.txtstyl(40);
+		var ts,txtstyl=this.M.S.txtstyl(40);
 		txtstyl.fill=txtstyl.mStroke=colors[this.curGacha-1];
-		var lbl=this.M.S.genTxt(this.world.centerX,this.world.height*.4,this.curGachaInfo.gName,txtstyl);
-		this.FirstHUD.add(lbl);
+		ts=this.M.S.genTxt(this.world.centerX,this.world.height*.4,this.curGachaInfo.gName,txtstyl);
+		this.FirstHUD.add(ts);
+
+		ts=this.M.S.genTxt(this.world.centerX,this.world.height*.5,this.UserInfo.playCount[this.curGacha]+this.curWords.Count,txtstyl);
+		this.FirstHUD.add(ts);
 
 		this.genPlayBtns();
 		this.genOnOffBtn();
@@ -88,7 +91,7 @@ BasicGame.Play.prototype={
 		this.SkipB.visible=!1;
 		this.SkipB.tint=0x3cb371;
 
-		lbl=this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
+		var lbl=this.M.S.genLbl(this.world.centerX,this.world.height*.95,this.back,this.curWords.Back);
 		lbl.tint=0xffd700;
 		this.FirstHUD.add(lbl);
 	},
@@ -139,7 +142,7 @@ BasicGame.Play.prototype={
 			s.width=s.height=size;
 			this.FirstHUD.add(s);
 
-			ts=this.M.S.genTxt(this.world.width*.6+mXY,10+i*mXY,this.UserInfo.haveRare[rares[i]]);
+			ts=this.M.S.genTxt(this.world.width*.6+mXY,10+i*mXY,this.M.H.formatComma(this.UserInfo.haveRare[rares[i]]));
 			ts.anchor.setTo(0);
 			ts.children[0].anchor.setTo(0);
 			this.FirstHUD.add(ts);
@@ -263,7 +266,7 @@ BasicGame.Play.prototype={
 			this.UserInfo.haveAllCards++;
 			this.UserInfo.haveRare[card.rare]++;
 		}
-		this.UserInfo.playCount[this.curGacha]++;
+		this.UserInfo.playCount[this.curGacha]+=this.gachaCount;
 	},
 	repeatCard:function(){
 		this.MoveCardS.y=this.world.height;
@@ -326,12 +329,16 @@ BasicGame.Play.prototype={
 		this.Tween=twD;
 
 		if(this.gachaCount==1){
+			var info=this.cards[0];
 			this.CloseB.visible=!1;
 			this.LargeCardS.visible=!0;
-			this.LargeCardS.loadTexture(this.cards[0].cNum+'_'+this.cards[0].rare);
+			this.LargeCardS.loadTexture(info.cNum+'_'+info.rare);
 			this.CharNameTS.visible=!0;
-			this.CharNameTS.changeText(this.cards[0].cInfo.cName);
-			this.curRare=this.cards[0].rare;
+			this.CharNameTS.changeText(info.cInfo.cName);
+
+			this.curChar=info.cNum;
+			this.curCharInfo=info.cInfo;
+			this.curRare=info.rare;
 
 			twD.onComplete.add(this.showRare,this);
 		}else{
