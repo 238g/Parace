@@ -33,6 +33,7 @@ BasicGame.Preloader.prototype={
 			'skip_off':'images/vtuber_game_2/skip_off.png',
 			'CircleBlock':'images/dotlive/CircleBlock.png',
 			'SlideWP':'images/vtuber_game_2/SlideWP.png',
+			'Title':'images/vtuber_game_2/Title.png',
 		};
 		for(var k in a)this.load.image(k,a[k]);
 		this.loadChars();

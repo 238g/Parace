@@ -13,9 +13,8 @@ BasicGame.Title.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.SE.playBGM('TitleBGM',{volume:1});
 		
-		//TODO
-		// var title=this.add.sprite(this.world.centerX,this.world.height*.2,'Title');
-		// title.anchor.setTo(.5);
+		var title=this.add.sprite(this.world.centerX,this.world.height*.22,'Title');
+		title.anchor.setTo(.5);
 
 		this.genEff();
 
@@ -28,7 +27,7 @@ BasicGame.Title.prototype={
 		this.time.events.add(500,function(){this.inputEnabled=!0},this);
 	},
 	genEff:function(){
-		var s=this.add.sprite(this.world.centerX,this.world.centerY,'gacha_3');
+		var s=this.add.sprite(this.world.centerX,this.world.height*.52,'gacha_3');
 		s.anchor.setTo(.5);
 		s.scale.setTo(1.2);
 		this.M.T.stressA(s,{durations:[400,200],delay:500}).start();
