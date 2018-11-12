@@ -222,6 +222,12 @@ function genGamesInfo(){
 				caption:'アイドル部の二次創作ゲームです！各メンバーをジャンプさせてスコアを稼ごう！選んだメンバーでゲームの展開が変わる！？',
 				release:'2018/11/4',
 			},
+			1038:{id:1038,title:'GOTTA煮VTガチャ',url:GI2A('vtuber_game_2'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B('vtuber_game_2'),imgA:GI2C('vtuber_game_2'),imgB:GI2D('vtuber_game_2'),
+				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！ガチャを回してURカードをゲットしよう！',
+				release:'2018/11/12',
+			},
 		},
 	};
 };
