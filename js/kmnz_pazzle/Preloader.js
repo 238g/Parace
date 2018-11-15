@@ -15,9 +15,15 @@ BasicGame.Preloader.prototype={
 			'WP':'images/TruckGoddess/WhitePaper.jpg',
 			'TWP':'images/FOckingGlasses/TranslucentWhitePaper.png',
 			// '70TWP':'images/vtuber_game_1/70TranslucentWhitePaper.png',
+
+			// 'todo_1':'images/vtuber_game_2/hide_card.jpg',
 		};
 		for(var k in a)this.load.image(k,a[k]);
+		this.loadPicture();
 		this.loadAudio();
+	},
+	loadPicture:function(){
+		this.load.spritesheet('todo_1','images/tiatia/Inu.png',BasicGame.PIECE_ONE,BasicGame.PIECE_ONE);
 	},
 	loadAudio:function(){
 		var s={

@@ -6,6 +6,7 @@ BasicGame={
 	MAIN_TEXT_COLOR:'#000000',
 	MAIN_STROKE_COLOR:'#000000',
 	WHITE_COLOR:'#ffffff',
+	PIECE_ONE:320/3,//TODO 320
 };
 BasicGame.Boot=function(){};
 BasicGame.Boot.prototype={

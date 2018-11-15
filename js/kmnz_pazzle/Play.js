@@ -7,26 +7,20 @@ BasicGame.Play.prototype={
 		this.curLang=this.M.gGlb('curLang');
 		this.Words=this.M.gGlb('Words');
 		this.curWords=this.Words[this.curLang];
-		this.curChar=this.M.gGlb('curChar');
-		this.CharInfo=this.M.gGlb('CharInfo');
-		this.curCharInfo=this.CharInfo[this.curChar];
-		this.charInfoLen=Object.keys(this.CharInfo).length;
 		// Val
 
 		// Obj
-		this.Chars=this.Thorn=this.LineS=
-		this.HUD=this.ScoreTS=this.WaveTimeTS=this.HowToS=this.EndTS=
-		this.BackSnow=this.MidSnow=this.FrontSnow=this.JumpEff=
+		this.PiecesGroup=
 		null;
 		this.Tween={};
 	},
 	create:function(){
 		this.time.events.removeAll();
-		this.stage.backgroundColor='#000';
-		this.playBgm();
+		// this.stage.backgroundColor='#000';
+		// this.playBgm();
 
 		this.genContents();
-		this.M.gGlb('endTut')?this.genStart():this.genTut();
+		// this.M.gGlb('endTut')?this.genStart():this.genTut();
 		this.test();
 	},
 	updateT:function(){
@@ -37,196 +31,114 @@ BasicGame.Play.prototype={
 	end:function(){this.isPlaying=this.inputEnabled=!1},
 	test:function(){
 		if(__ENV!='prod'){
-			this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
-			this.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(function(){this.waveTime=1},this);
-			this.input.keyboard.addKey(Phaser.Keyboard.I).onDown.add(this.appearItem,this);
+			// this.input.keyboard.addKey(Phaser.Keyboard.G).onDown.add(this.gameOver,this);
+			// this.input.keyboard.addKey(Phaser.Keyboard.W).onDown.add(function(){this.waveTime=1},this);
+			// this.input.keyboard.addKey(Phaser.Keyboard.I).onDown.add(this.appearItem,this);
 		}
 	},
 	////////////////////////////////////// PlayContents
 	genContents:function(){
-		this.genBg();
-		this.genEff();
-		this.physics.startSystem(Phaser.Physics.ARCADE);
-		this.genLine();
-		this.genThorn();
-		this.genChars();
-		this.genHUD();
-	},
-	genBg:function(){
-		this.add.sprite(0,0,'SkyBg');
-		
-		this.BackSnow=this.add.emitter(this.world.centerX,-50,600);
-		this.BackSnow.makeParticles('snowflakes',[0,1,2,3,4]);
-		this.BackSnow.maxParticleScale=.3;
-		this.BackSnow.minParticleScale=.1;
-		this.BackSnow.setYSpeed(20,100);
-		this.BackSnow.gravity=0;
-		this.BackSnow.width=this.world.width*1.5;
-		this.BackSnow.minRotation=0;
-		this.BackSnow.maxRotation=40;
 
-    	this.MidSnow=this.add.emitter(this.world.centerX,-50,250);
-		this.MidSnow.makeParticles('snowflakes',[0,1,2,3,4]);
-    	this.MidSnow.maxParticleScale=.3;
-    	this.MidSnow.minParticleScale=.24;
-    	this.MidSnow.setYSpeed(50,150);
-    	this.MidSnow.gravity=0;
-    	this.MidSnow.width=this.world.width*1.5;
-    	this.MidSnow.minRotation=0;
-    	this.MidSnow.maxRotation=40;
-
-    	this.FrontSnow=this.add.emitter(this.world.centerX,-50,50);
-		this.FrontSnow.makeParticles('snowflakes',[0,1,2,3,4]);
-    	this.FrontSnow.maxParticleScale=.5;
-    	this.FrontSnow.minParticleScale=.25;
-    	this.FrontSnow.setYSpeed(100,200);
-    	this.FrontSnow.gravity=0;
-    	this.FrontSnow.width=this.world.width*1.5;
-    	this.FrontSnow.minRotation=0;
-    	this.FrontSnow.maxRotation=40;
-
-    	this.changeWindDirection();
-
-    	this.BackSnow.start(!1,14E3,this.time.physicsElapsedMS*5);
-    	this.MidSnow.start(!1,12E3,this.time.physicsElapsedMS*10);
-    	this.FrontSnow.start(!1,6E3,this.time.physicsElapsedMS*100);
-	},
-	changeWindDirection:function(){
-		if(this.rnd.between(0,100)<50){
-			var min=0,max=this.rnd.between(0,150);
-		}else{
-			var min=this.rnd.between(-150,0),max=0;
-		}
-		this.BackSnow.setXSpeed(min,max);
-		this.MidSnow.setXSpeed(min,max);
-		this.FrontSnow.setXSpeed(min,max);
-	},
-	genEff:function(){
-		this.JumpEff=this.add.emitter(0,0,200);
-		this.JumpEff.makeParticles('CircleBlock');
-		this.JumpEff.setYSpeed(500,50);
-		this.JumpEff.setScale(3,.3,3,.3,800);
-		this.JumpEff.setAlpha(1,0,800);
-		this.JumpEff.lifespan=800;
-	},
-	genLine:function(){
-		this.LineS=this.M.S.genBmpSqrSp(0,this.jumpLineY,this.world.width,10,'#ff0000');
-		////// this.physics.enable(this.LineS,Phaser.Physics.ARCADE);
-	},
-	appearItem:function(){
-		var itemW=150;
-		var r=this.rnd.between(1,4);
-		if(this.rnd.between(0,100)<50){
-			var fromX=-itemW,toX=this.world.width+itemW,scaleX=-1;
-		}else{
-			var fromX=this.world.width+itemW,toX=-itemW,scaleX=1;
-		}
-		var itemB=this.add.button(fromX,this.rnd.between(this.world.height*.1,this.jumpLineY),'Item_'+r,this.getItem,this);
-		itemB.anchor.setTo(.5,1);
-		itemB.scale.setTo(scaleX,1);
-		itemB.num=r;
-		var tw=this.M.T.moveB(itemB,{xy:{x:toX},duration:this.curCharInfo.itemSpeed});
-		tw.onComplete.add(function(b){b.destroy()});
-		tw.start();
-		this.M.SE.play('AppearItem',{volume:1});
-	},
-	getItem:function(b){
-		b.destroy();
-		var txtstyl=this.M.S.txtstyl(30);
-
-		if(b.num==1||b.num==2){
-			this.scoreRate=this.scoreRate+.2;
-			var txt=this.curWords.ScoreTripleFront+this.scoreRate.toFixed(1)+this.curWords.ScoreUpBack;
-			txtstyl.fill=txtstyl.mStroke='#1e90ff';
-		}else{
-			this.scoreRate=this.scoreRate+.1;
-			var txt=this.curWords.ScoreDoubleFront+this.scoreRate.toFixed(1)+this.curWords.ScoreUpBack;
-			txtstyl.fill=txtstyl.mStroke='#800000';
-		}
-
-		var ts=this.M.S.genTxt(this.world.centerX,this.world.height,txt,txtstyl);
-		var tw=this.M.T.moveA(ts,{xy:{y:this.world.height*.8}});
-		tw.onComplete.add(function(s){
-			this.time.events.add(500,function(){
-				this.destroy();
-			},s);
-		},this);
-		tw.start();
-		this.M.SE.play('GetItem',{volume:1});
-	},
-	genThorn:function(){
-		this.Thorn=this.add.sprite(0,this.world.height,'Thorn');
-		this.Thorn.anchor.setTo(0,1);
-		this.physics.enable(this.Thorn,Phaser.Physics.ARCADE);
-		this.Thorn.body.setSize(this.world.width,this.Thorn.height,0,this.Thorn.height*.5);
-	},
-	genChars:function(){
-		this.Chars=this.add.group();
-		this.Chars.enableBody=!0;
-		this.Chars.physicsBodyType=Phaser.Physics.ARCADE;
-		var arr=[];
-		for(var i=1;i<=this.charInfoLen;i++){
-			var s=this.add.sprite(0,0,'Char_'+i);
-			this.Chars.add(s);
-			s.anchor.setTo(.5);
-			s.smoothed=!1;
-			s.inputEnabled=!0;
-			s.events.onInputDown.add(this.jump,this);
-			s.body.collideWorldBounds=!0;
-			s.body.bounce.set(.8);
-			s.body.gravity.set(0,180);
-			s.width=s.height=100;
-			s.kill();
-		}
-	},
-	jump:function(b,p){
-		if(b.y>this.jumpLineY){
-			////// b.inputEnabled=!1;
-			b.body.velocity.x=(b.x-p.x)*this.time.physicsElapsedMS*.5;
-			b.body.velocity.y=-this.curCharInfo.jumpPower*this.time.physicsElapsedMS;
-
-			this.M.SE.play('Jump_'+this.rnd.between(1,3),{volume:1});
-			this.JumpEff.x=b.x;
-			this.JumpEff.y=b.y;
-			this.JumpEff.explode(800,Math.floor(320/this.time.physicsElapsedMS));
-
-			if(this.isPlaying){
-				this.score+=Math.floor((this.waveCount+1)*this.curCharInfo.scoreRate*b.y*b.y*.01*this.scoreRate*this.deviceScoreRate);
-				this.ScoreTS.changeText(this.curWords.Score+this.M.H.formatComma(this.score));
+		var size=BasicGame.PIECE_ONE;
+		var piecesIndex=0;
+		var col=3;
+		var row=3;
+		var pieceAmount=col*row;
+		var shuffleArr=[];
+		for(var i=0;i<pieceAmount;i++)shuffleArr.push(i);
+		Phaser.ArrayUtils.shuffle(shuffleArr);
+		this.PiecesGroup=this.add.group();
+		for(var i=0;i<row;i++){
+			for(var j=0;j<col;j++){
+				if(shuffleArr[piecesIndex]){
+				// if(shuffleArr[piecesIndex]>0){
+					piece=this.PiecesGroup.create(j*size,i*size,'todo_1',shuffleArr[piecesIndex]);
+					piece.inputEnabled=!0;
+					piece.events.onInputDown.add(this.selectPiece,this);
+				}else{
+					// this.BlackPieceB
+					piece=this.PiecesGroup.create(j*size,i*size);
+					// piece=this.PiecesGroup.create(j*size,i*size,'todo_1',shuffleArr[piecesIndex]);
+					// piece.tint=0x000000;
+					piece.black=!0;
+				}
+				piece.name='piece'+i.toString()+'x'+j.toString();
+				piece.curIndex=piecesIndex;
+				piece.destIndex=shuffleArr[piecesIndex];
+				piece.posX=j;
+				piece.posY=i;
+				piecesIndex++;
 			}
 		}
+
+
+
+
+		// this.genHUD();
 	},
-	collideThorn:function(thorn,char){
-		char.kill();
-		this.gameOver();
-	},
-	crossLine:function(line,char){
-		if(!char.inputEnabled)char.inputEnabled=!0;
-	},
-	wave:function(){
-		this.waveCount++;
-		this.respawn();
-		var waveInterval=this.waveInterval+5;
-		this.waveTime=waveInterval>30?30:waveInterval;
-	},
-	respawn:function(charNum){
-		if(charNum){
-			var s=this.Chars.children[charNum-1];
-		}else{
-			var s=this.rnd.pick(this.Chars.children.filter(function(c){return!c.alive}));
-		}
-		if(s){
-			s.reset(this.world.randomX*.5+this.world.width*.25,this.world.height*.2);
-			if(this.waveCount<6){
-				s.width=s.height=100-this.waveCount*this.curCharInfo.miniHard;
-			}else{
-				s.width=s.height=100-5*this.curCharInfo.miniHard;
+	selectPiece:function(piece){
+		// if(this.isPlaying){
+			var blackPiece=this.canMove(piece);
+			if(blackPiece){
+				this.movePiece(piece,blackPiece);
 			}
-		}else{
-			this.isWaving=!1;
-			this.WaveTimeTS.changeText(this.curWords.Endless);
+		// }
+	},
+	canMove:function(piece){
+		var foundBlackElem=!1;
+		for(var k in this.PiecesGroup.children){
+			var element=this.PiecesGroup.children[k];
+			if(
+				element.posX===(piece.posX-1)&&element.posY===piece.posY&&element.black
+				||element.posX===(piece.posX+1)&&element.posY===piece.posY&&element.black
+				||element.posY===(piece.posY-1)&&element.posX===piece.posX&&element.black
+				||element.posY===(piece.posY+1)&&element.posX===piece.posX&&element.black
+			){
+				foundBlackElem=element;
+				break;
+			}
+		}
+		return foundBlackElem;
+	},
+	movePiece:function(piece,blackPiece){
+		var size=BasicGame.PIECE_ONE;
+		var tmpPiece={
+			posX:piece.posX,
+			posY:piece.posY,
+			curIndex:piece.curIndex,
+		};
+
+		// this.add.tween(piece).to({x:blackPiece.posX*size,y:blackPiece.posY*size},300,Phaser.Easing.Linear.None,!0);
+		this.add.tween(piece).to({x:blackPiece.posX*size,y:blackPiece.posY*size},100,Phaser.Easing.Linear.None,!0);
+
+		piece.posX=blackPiece.posX;
+		piece.posY=blackPiece.posY;
+		piece.curIndex=blackPiece.curIndex;
+		piece.name='piece'+piece.posX.toString()+'x'+piece.posY.toString();
+
+		blackPiece.posX=tmpPiece.posX;
+		blackPiece.posY=tmpPiece.posY;
+		blackPiece.curIndex=tmpPiece.curIndex;
+		blackPiece.name='piece'+blackPiece.posX.toString()+'x'+blackPiece.posY.toString();
+
+		this.checkIfFinished();
+	},
+	checkIfFinished:function(){
+		var isFinished=!0;
+		for(var k in this.PiecesGroup.children){
+			var element=this.PiecesGroup.children[k];
+			if(element.curIndex!==element.destIndex){
+				isFinished=!1;
+				break;
+			}
+		}
+		if(isFinished){
+			// this.genEnd();
+			console.log('genEnd');
 		}
 	},
+
+
 	genHUD:function(){
 		this.HUD=this.add.group();
 

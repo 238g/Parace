@@ -37,16 +37,16 @@ BasicGame.Title.prototype={
 		if (this.inputEnabled) {
 			if (!this.Tween.isRunning) {
 				this.inputEnabled=!1;
-				this.M.SE.play('OnBtn',{volume:1});
+				// this.M.SE.play('OnBtn',{volume:1});
 				var wp=this.add.sprite(0,0,'WP');
 				wp.tint=0x000000;
 				wp.alpha=0;
 				this.Tween=this.M.T.fadeInA(wp,{duration:800,alpha:1});
-				this.Tween.onComplete.add(function(){this.M.NextScene('SelectGacha')},this);
+				this.Tween.onComplete.add(function(){this.M.NextScene('SelectStage')},this);
 				this.Tween.start();
 			}
 		} else {
-			this.M.SE.playBGM('TitleBGM',{volume:1});
+			// this.M.SE.playBGM('TitleBGM',{volume:1});
 			this.inputEnabled=!0;
 		}
 	},
@@ -70,3 +70,9 @@ BasicGame.Title.prototype={
 	},
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////
+BasicGame.SelectStage=function(){};
+BasicGame.SelectStage.prototype={
+	create:function(){
+
+	},
+};
