@@ -96,9 +96,11 @@ BasicGame.Boot.prototype.genCharInfo=function(){
 		32:{cName:'夕陽リリ',
 			rare:['R','SR','UR'],
 			tw:'https://twitter.com/yuuhi_riri',yt:'https://www.youtube.com/channel/UC48jH1ul-6HOrcSSfoR02fQ',},
+		/*
 		33:{cName:'薬袋カルテ',
 			rare:['R','SR','UR'],
 			tw:'https://twitter.com/minai_karte',yt:'https://www.youtube.com/channel/UCDVXivWK9feX2iRBc3SFegw',},
+		*/
 	};
 };
 BasicGame.Boot.prototype.genGachaInfo=function(){

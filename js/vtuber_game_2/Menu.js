@@ -303,13 +303,16 @@ BasicGame.CollectionPage.prototype={
 		lbl.tint=0xffa500;
 		this.WPS.addChild(lbl);
 		
+		/*
 		txtstyl.fill=txtstyl.mStroke='#008000';
 		lbl=this.M.S.genLbl(this.world.width*.25,this.world.height*.8,this.download,this.curWords.Download,txtstyl);
 		lbl.tint=0x008000;
 		this.WPS.addChild(lbl);
+		*/
 
 		txtstyl.fill=txtstyl.mStroke='#00a2f8';
-		lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.tweet,this.curWords.TwBtnB,txtstyl);
+		lbl=this.M.S.genLbl(this.world.centerX,this.world.height*.8,this.tweet,this.curWords.TwBtnB,txtstyl);
+		// lbl=this.M.S.genLbl(this.world.width*.75,this.world.height*.8,this.tweet,this.curWords.TwBtnB,txtstyl);
 		lbl.tint=0x00a2f8;
 		this.WPS.addChild(lbl);
 
