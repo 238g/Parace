@@ -41,7 +41,6 @@ BasicGame.Preloader.prototype={
 	loadAudio: function () {
 		this.sounds = {
 			'TitleBGM': [
-				'./sounds/BGM/H/HappymelancholicWhole.ogg',
 				'./sounds/BGM/H/HappymelancholicWhole.mp3',
 				'./sounds/BGM/H/HappymelancholicWhole.wav',
 			],

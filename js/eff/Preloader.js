@@ -72,12 +72,10 @@ BasicGame.Preloader.prototype={
 		this.load.audio('MushroomDance', [
 			'./sounds/BGM/MushroomDance.mp3',
 			'./sounds/BGM/MushroomDance.wav',
-			'./sounds/BGM/MushroomDance.ogg',
 		]); 
 		this.load.audio('MushroomsForest', [
 			'./sounds/BGM/MushroomsForest.mp3',
 			'./sounds/BGM/MushroomsForest.wav',
-			'./sounds/BGM/MushroomsForest.ogg',
 		]);
 	},
 

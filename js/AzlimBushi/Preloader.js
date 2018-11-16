@@ -35,7 +35,6 @@ BasicGame.Preloader.prototype={
 	loadAudio: function () {
 		this.sounds = {
 			'PlayBGM': [
-				'./sounds/BGM/RainbowRush_loop.ogg',
 				'./sounds/BGM/RainbowRush_loop.mp3',
 				'./sounds/BGM/RainbowRush_loop.wav',
 			],

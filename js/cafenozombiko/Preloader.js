@@ -74,7 +74,6 @@ BasicGame.Preloader.prototype={
 		this.load.audio('HappyBGM_1', [
 			'./sounds/BGM/HappyBGM_1.mp3',
 			'./sounds/BGM/HappyBGM_1.wav',
-			'./sounds/BGM/HappyBGM_1.ogg',
 		]);
 		this.load.audio('HappyBGM_2', [
 			'./sounds/BGM/HappyBGM_2.mp3',

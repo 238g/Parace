@@ -11,27 +11,22 @@ BasicGame.Boot.prototype.defineConf = function () {
 			'Male_1': [
 				'./sounds/VOICE/Male/1.mp3',
 				'./sounds/VOICE/Male/1.wav',
-				'./sounds/VOICE/Male/1.ogg',
 			], 
 			'Male_2': [
 				'./sounds/VOICE/Male/2.mp3',
 				'./sounds/VOICE/Male/2.wav',
-				'./sounds/VOICE/Male/2.ogg',
 			], 
 			'Male_3': [
 				'./sounds/VOICE/Male/3.mp3',
 				'./sounds/VOICE/Male/3.wav',
-				'./sounds/VOICE/Male/3.ogg',
 			], 
 			'GameOver': [
 				'./sounds/VOICE/Male/game_over.mp3',
 				'./sounds/VOICE/Male/game_over.wav',
-				'./sounds/VOICE/Male/game_over.ogg',
 			], 
 			'Go': [
 				'./sounds/VOICE/Male/go.mp3',
 				'./sounds/VOICE/Male/go.wav',
-				'./sounds/VOICE/Male/go.ogg',
 			], 
 			'MenuClick': [
 				'./sounds/SE/Menu_Select_00.mp3',

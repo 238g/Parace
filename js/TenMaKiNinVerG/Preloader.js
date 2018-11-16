@@ -59,7 +59,6 @@ BasicGame.Preloader.prototype={
 			'TitleBGM': [
 				'./sounds/BGM/ChoroBavarioLoop.mp3',
 				'./sounds/BGM/ChoroBavarioLoop.wav',
-				'./sounds/BGM/ChoroBavarioLoop.ogg',
 			],
 			'ThemeBGM_T': [
 				'./sounds/BGM/BusyDayAtTheMarketLoop.mp3',
@@ -68,7 +67,6 @@ BasicGame.Preloader.prototype={
 			'ThemeBGM_M': [
 				'./sounds/BGM/GreatBoss.mp3',
 				'./sounds/BGM/GreatBoss.wav',
-				'./sounds/BGM/GreatBoss.ogg',
 			],
 			'ThemeBGM_K': [
 				'./sounds/BGM/SpeedWay.mp3',
@@ -77,11 +75,9 @@ BasicGame.Preloader.prototype={
 			'ThemeBGM_N': [
 				'./sounds/BGM/ThemeNinja.mp3',
 				'./sounds/BGM/ThemeNinja.wav',
-				'./sounds/BGM/ThemeNinja.ogg',
 			],
 			'ThemeBGM_G': [
 				'./sounds/BGM/ANewDay.mp3',
-				'./sounds/BGM/ANewDay.wav',
 				'./sounds/BGM/ANewDay.wav',
 			],
 			'PageOpen': [

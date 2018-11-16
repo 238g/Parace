@@ -54,12 +54,10 @@ BasicGame.Preloader.prototype={
 			'GameOver':        [
 				'./sounds/VOICE/Female/game_over.mp3',
 				'./sounds/VOICE/Female/game_over.wav',
-				'./sounds/VOICE/Female/game_over.ogg',
 			], 
 			'LevelUp':         [
 				'./sounds/VOICE/Female/level_up.mp3',
 				'./sounds/VOICE/Female/level_up.wav',
-				'./sounds/VOICE/Female/level_up.ogg',
 			], 
 			'HappyArcadeTune': [
 				'./sounds/BGM/HappyArcadeTune.mp3',
