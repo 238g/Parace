@@ -35,66 +35,55 @@ BasicGame.Title.prototype={
 
 	genTitleTextSprite: function () {
 		var textStyle = this.StaticBaseTextStyle();
-		textStyle.fontSize = 80;
+		textStyle.fontSize = 40;
 		var textSprite = this.M.S.genText(
-			this.world.centerX,130,
+			this.world.centerX,this.world.height*.1,
 			this.M.getConst('GAME_TITLE'),textStyle);
 		textSprite.addTween('beatA',{duration:508});
 		textSprite.startTween('beatA');
 	},
-
-	BtnContainer: function () {
-		var textStyle = this.StaticBaseTextStyle();
-		var x = this.world.width/4;
-		var y = this.world.centerY+400;
-		var margin = 150;
-		var tint = this.M.getConst('MAIN_TINT');
-		this.genStartBtnSprite(x,y,textStyle,tint);
+	BtnContainer:function(){
+		var textStyle=this.StaticBaseTextStyle();
+		var x=this.world.width/4;
+		var y=this.world.height*.7;
+		var mY=this.world.height*.1;
+		var tint=this.M.getConst('MAIN_TINT');
+		this.M.S.BasicGrayLabelM(x,y,function(){if(this.inputEnabled)this.M.NextScene('Play')},'スタート',textStyle,{tint:tint});
 		this.genMuteBtnSprite(x*3,y,textStyle,tint);
-		this.genFullScreenBtnSprite(x*3,y+margin,textStyle,tint);
-		this.genOtherGameBtnSprite(x,y+margin,textStyle,tint);
+		this.genFullScreenBtnSprite(x*3,y+mY,textStyle,tint);
+		this.genOtherGameBtnSprite(x,y+mY,textStyle,tint);
 		this.genLogoBtnSprite();
 	},
-
-	genStartBtnSprite: function (x,y,textStyle,tint) {
-		var text = 'スタート';
-		this.M.S.BasicGrayLabel(x,y,function () {
-			if (this.inputEnabled) this.M.NextScene('Play');
-		},text,textStyle,{tint:tint});
-	},
-
 	genMuteBtnSprite: function (x,y,textStyle,tint) {
-		var offText = 'ミュートOFF';
-		var onText = 'ミュートON';
-		var text = this.sound.mute ? offText : onText;
-		var label = this.M.S.BasicGrayLabel(x,y,function (pointer) {
-			if (this.sound.mute) {
-				pointer.textSprite.changeText(onText);
-				this.sound.mute = false;
+		var offText='ミュートOFF';
+		var onText='ミュートON';
+		var text=this.sound.mute?offText:onText;
+		this.M.S.BasicGrayLabelM(x,y,function(btn){
+			if(this.sound.mute){
+				btn.children[0].changeText(onText);
+				this.sound.mute=!1;
 			} else {
-				pointer.textSprite.changeText(offText);
-				this.sound.mute = true;
+				btn.children[0].changeText(offText);
+				this.sound.mute=!0;
 			}
 		},text,textStyle,{tint:tint});
 	},
-
-	genFullScreenBtnSprite: function (x,y,textStyle,tint) {
-		var offText = 'フルスクリーンOFF';
-		var onText = 'フルスクリーンON';
-		var text = this.scale.isFullScreen ? offText : onText;
-		var label = this.M.S.BasicGrayLabel(x,y,function (pointer) {
+	genFullScreenBtnSprite:function(x,y,textStyle,tint){
+		var offText='フルスクリーンOFF';
+		var onText='フルスクリーンON';
+		var text=this.scale.isFullScreen?offText:onText;
+		this.M.S.BasicGrayLabelM(x,y,function(btn) {
 			if (this.scale.isFullScreen) {
-				pointer.textSprite.changeText(onText);
-				this.scale.stopFullScreen(false);
+				btn.children[0].changeText(onText);
+				this.scale.stopFullScreen(!1);
 			} else {
-				pointer.textSprite.changeText(offText);
-				this.scale.startFullScreen(false);
+				btn.children[0].changeText(offText);
+				this.scale.startFullScreen(!1);
 			}
 		},text,textStyle,{tint:tint});
 	},
-
 	genOtherGameBtnSprite:function(x,y,textStyle,tint){
-		this.M.S.BasicGrayLabel(x,y,function(){
+		this.M.S.BasicGrayLabelM(x,y,function(){
 			var u='https://238g.github.io/Parace/238Games2.html';
 			if(this.game.device.desktop){
 				window.open(u,'_blank');
@@ -103,31 +92,29 @@ BasicGame.Title.prototype={
 			}
 		},'他のゲームを遊ぶ',textStyle,{tint:tint});
 	},
-
 	genLogoBtnSprite: function () {
-		var logoSprite = this.M.S.genButton(this.world.centerX,this.world.height-25,'Logo',function(){
+		var h=this.world.height*.92;
+		var s = this.M.S.genButton(this.world.centerX,h,'Logo',function(){
 			if (this.game.device.desktop) {
 				window.open(this.M.getConst('YOUTUBE_URL'),'_blank');
 			} else {
 				location.href = this.M.getConst('YOUTUBE_URL');
 			}
 		});
-		logoSprite.anchor.setTo(.5,1);
-		this.M.T.beatA(logoSprite,{duration:508}).start();
-		var logoBgSprite = this.M.S.genBmpSprite(
-			this.world.centerX,this.world.height-5,
-			logoSprite.width+80,logoSprite.height+50,this.M.getConst('MAIN_COLOR'));
-		logoBgSprite.anchor.setTo(.5,1);
-		this.world.bringToTop(logoSprite);
+		s.anchor.setTo(.5);
+		this.M.T.beatA(s,{duration:508}).start();
+		var logoBgSprite = this.M.S.genBmpSprite(this.world.centerX,h,s.width*1.2,s.height*1.3,this.M.getConst('MAIN_COLOR'));
+		logoBgSprite.anchor.setTo(.5);
+		this.world.bringToTop(s);
 	},
-
-	StaticBaseTextStyle: function () {
+	StaticBaseTextStyle:function(){
 		return {
 			fill: this.M.getConst('MAIN_TEXT_COLOR'),
 			stroke: this.M.getConst('WHITE_COLOR'),
-			strokeThickness: 15,
+			strokeThickness: 8,
 			multipleStroke: this.M.getConst('MAIN_TEXT_COLOR'),
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 5,
+			fontSize: 20,
 		};
 	},
 };

@@ -74,9 +74,10 @@ BasicGame.Preloader.prototype={
 	},
 	loadComplete:function(){
 		this.loadOnlyFirst();
+		this.M.H.getQuery('mute')&&(this.sound.mute=!0);
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
-			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:80});
-		this.game.input.onDown.addOnce(this.showLogo,this);
+			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:40});
+		this.game.input.onDown.addOnce((__ENV!='prod')?this.start:this.showLogo,this);
 	},
 	showLogo:function(){
 		this.M.S.genBmpSprite(0,0,this.world.width,this.world.height,'#000000');
