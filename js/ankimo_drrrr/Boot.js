@@ -14,12 +14,10 @@ BasicGame.Boot.prototype = {
         this.scale.parentIsWindow = true ;
 		this.scale.refresh();
 	},
-
 	preload: function () {
 		this.load.crossOrigin = 'Anonymous';
 		this.load.atlasJSONHash('loading', 'images/loading/loading.png', 'images/loading/loading.json');
 	},
-
 	create: function () {
 		this.defineConst(); // Const.js
 		this.defineGlobal();
@@ -27,15 +25,12 @@ BasicGame.Boot.prototype = {
 		this.game.global.nextSceen = (__ENV!='prod') ? getQuery('s') || 'Title' : 'Title';
 		this.state.start('Preloader');
 	},
-
 	defineGlobal: function () {
 		this.game.global = {
 			nextSceen: null,
             loadedOnlyFirst: false,
-            UserDatasController: null,
             SpriteManager: new SpriteManager(this),
             SoundManager: null,
 		};
 	}
-
 };

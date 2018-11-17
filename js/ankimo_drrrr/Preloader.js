@@ -41,18 +41,8 @@ BasicGame.Preloader.prototype={
 		if (!this.game.global.loadedOnlyFirst) {
 			if(this.game.device.desktop)document.body.style.cursor='pointer';
 			this.game.global.SoundManager=new SoundManager(this);
-			// this.userDatasController();
 			this.game.global.loadedOnlyFirst=!0;
 		}
-	},
-	userDatasController:function(){
-		var udc=new UserDatasController(this.game.const.STORAGE_NAME);
-		var datas=udc.get('0.0.0')||udc.init('0.0.0',{
-			total_score:0,
-			best_score:0,
-		}/*, '0.0.0'*/);
-		this.game.global.UserDatasController = udc;
-		// ENHANCE set totalscore,bestscore to global
 	},
 	showLogo:function(){
 		this.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');
