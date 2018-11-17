@@ -87,7 +87,7 @@ BasicGame.Preloader.prototype={
 			WinSE:'sounds/SE/LabJP/People/people_people-stadium-cheer1',
 			LoseSE:'sounds/SE/LabJP/People/people_people-performance-cheer2',
 		};
-		var playBgmList=['Greece_Alpha','Greece_Beta','Greece_Delta','Greece_Epsilon','Greece_Gamma','Greece_Omega'];
+		var playBgmList=['Greece_Alpha','Greece_Beta','Greece_Delta','Greece_Epsilon'];
 		var rndBgm=this.rnd.pick(playBgmList);
 		s[rndBgm]='sounds/BGM/OmesisCommanders/'+rndBgm;
 		this.M.setGlobal('rndBgm',rndBgm);
