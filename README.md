@@ -42,3 +42,4 @@
 |#36|タッチタッチ・ホロライブ|https://238g.github.io/Parace/Hololive.html|2018/10/28|
 |#37|アイドル部ホッパー|https://238g.github.io/Parace/dotlive.html|2018/11/4|
 |#38|GOTTA煮VTガチャ|https://238g.github.io/Parace/vtuber_game_2.html|2018/11/12|
+|000|#39~~|https://github.com/238g/Prace|2018/11/18|

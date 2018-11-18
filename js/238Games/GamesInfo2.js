@@ -228,6 +228,12 @@ function genGamesInfo(){
 				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！ガチャを回してURカードをゲットしよう！',
 				release:'2018/11/12',
 			},
+			1039:{id:1039,title:'ドン！明寺',url:GI2A2('odanoharukasu'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B2('odanoharukasu'),imgA:GI2C2('odanoharukasu'),imgB:GI2D2('odanoharukasu'),
+				caption:'ゲーム部、道明寺晴翔の二次創作ゲームです。織田信姫も友情出演。ハルカスを叩きつけろ！！！',
+				release:'2018/11/18',
+			},
 		},
 	};
 };
@@ -236,3 +242,8 @@ function GI2A(n){return __baseUrl+n+'.html'}
 function GI2B(n){return __baseUrl+'images/'+n+'/TwitterCard.jpg'}
 function GI2C(n){return __baseUrl+'images/'+n+'/favicons/ms-icon-310x310.png'}
 function GI2D(n){return __baseUrl+'images/'+n+'/favicons/favicon-32x32.png'}
+var __baseUrl2=__ENV=='prod'?'https://238g.github.io/Prace/':'../Prace/';
+function GI2A2(n){return __baseUrl2+n+'.html'}
+function GI2B2(n){return __baseUrl2+'images/'+n+'/TwitterCard.jpg'}
+function GI2C2(n){return __baseUrl2+'images/'+n+'/favicons/ms-icon-310x310.png'}
+function GI2D2(n){return __baseUrl2+'images/'+n+'/favicons/favicon-32x32.png'}
