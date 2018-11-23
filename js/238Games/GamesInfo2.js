@@ -234,6 +234,12 @@ function genGamesInfo(){
 				caption:'ゲーム部、道明寺晴翔の二次創作ゲームです。織田信姫も友情出演。ハルカスを叩きつけろ！！！',
 				release:'2018/11/18',
 			},
+			1040:{id:1040,title:'深層ゲームからごきげんよう',url:GI2A2('dwu'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B2('dwu'),imgA:GI2C2('dwu'),imgB:GI2D2('dwu'),
+				caption:'DWUの二次創作ゲームです。せまり来るオタクから逃れよ！そして、行くのです、数々ある目的地へ…',
+				release:'2018/11/24',
+			},
 		},
 	};
 };
