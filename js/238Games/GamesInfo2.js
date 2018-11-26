@@ -240,6 +240,12 @@ function genGamesInfo(){
 				caption:'DWUの二次創作ゲームです。せまり来るオタクから逃れよ！そして、行くのです、数々ある目的地へ…',
 				release:'2018/11/24',
 			},
+			1041:{id:1041,title:'火葬パーティー',url:GI2A2('icotsu'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B2('icotsu'),imgA:GI2C2('icotsu'),imgB:GI2D2('icotsu'),
+				caption:'Icotsuさんの二次創作ゲームです。法要通夜（生前）を火葬してIcotsuにしてください。火葬すればするほど香典を稼げます！あなたはいくら稼げるかな？',
+				release:'2018/11/26',
+			},
 		},
 	};
 };
