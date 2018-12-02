@@ -246,6 +246,12 @@ function genGamesInfo(){
 				caption:'Icotsuさんの二次創作ゲームです。法要通夜（生前）を火葬してIcotsuにしてください。火葬すればするほど香典を稼げます！あなたはいくら稼げるかな？',
 				release:'2018/11/26',
 			},
+			1042:{id:1042,title:'朝ノ姉妹の忍者修行',url:GI2A2('asano_sisters'),
+				tColor:'#806AAB',mColor:'#DFC2EE',
+				tc:GI2B2('asano_sisters'),imgA:GI2C2('asano_sisters'),imgB:GI2D2('asano_sisters'),
+				caption:'朝ノ姉妹の二次創作ゲームです！丸太を渡ってどこまで行けるかチャレンジだ！日頃の修行が大切なのです！',
+				release:'2018/12/2',
+			},
 		},
 	};
 };
