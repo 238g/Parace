@@ -252,6 +252,12 @@ function genGamesInfo(){
 				caption:'朝ノ姉妹の二次創作ゲームです！丸太を渡ってどこまで行けるかチャレンジだ！日頃の修行が大切なのです！',
 				release:'2018/12/2',
 			},
+			1043:{id:1043,title:'ヨメミのハイポーション作り',url:GI2A2('yomemi'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B2('yomemi'),imgA:GI2C2('yomemi'),imgB:GI2D2('yomemi'),
+				caption:'バーチャルYouTuberヨメミの二次創作ゲームです。ヨメミと一緒にハイポーションを作ろう！65536通りある組み合わせから８パターンあるエンドを全て見られるかな？',
+				release:'2018/12/9',
+			},
 		},
 	};
 };
