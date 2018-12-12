@@ -29,7 +29,6 @@ BasicGame.Preloader.prototype={
 			'PubLogo':'images/public/logo/logo.png',
 			'Elu_1':       './images/eff/elu_1.png',
 			'Tree':        './images/eff/Tree.png',
-			// 'TestTree':    './images/eff/TestTree.png',
 			'DeadTree':    './images/eff/DeadTree.png',
 			'Fire_1':      './images/eff/Fire_1.png',
 			'Fire_2':      './images/eff/Fire_2.png',
