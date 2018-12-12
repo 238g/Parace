@@ -9,20 +9,13 @@ BasicGame.Play.prototype = {
 
 	create: function () {
 		this.GOP = this.GameOption();
-		this.genBgSprite();
+		this.game.global.SpriteManager.genSprite(0,this.world.height,'Bg_1').anchor.setTo(0,1);
 		this.TC = this.genTargetContainer();
 		this.HUD = this.genHUDContainer();
 		this.inputController();
 		this.soundController();
 		this.ready();
 		this.test();
-	},
-
-	genBgSprite: function () {
-		var s = this.game.global.SpriteManager;
-		var bgSprite = s.genSprite(-300,this.world.height,'Bg_1');
-		bgSprite.anchor.setTo(0,1);
-		bgSprite.scale.setTo(2);
 	},
 
 	inputController: function () {
@@ -45,28 +38,20 @@ BasicGame.Play.prototype = {
 			s.play({key:'HappyBGM_2',isBGM:true,loop:true,volume:1.2,});
 		}, 1800);
 	},
-
 	update: function () {
 		if (this.GOP.isPlaying) {
-			this.timeManager();
+			this.GOP.timeCounter+=this.time.elapsed;
+			if (this.GOP.timeCounter>1000) {
+				this.GOP.timeCounter=0;
+				this.GOP.leftTime--;
+				this.HUD.changeTime(this.GOP.leftTime);
+			}
+			if (this.GOP.leftTime<=0)this.gameOver();
 		}
 	},
-
-	timeManager: function () {
-		this.GOP.timeCounter += this.time.elapsed;
-		if (this.GOP.timeCounter > 1000) {
-			this.GOP.timeCounter = 0;
-			this.GOP.leftTime--;
-			this.HUD.changeTime(this.GOP.leftTime);
-		}
-		if (this.GOP.leftTime <= 0) {
-			this.gameOver();
-		}
-	},
-
 	GameOption: function () {
 		return {
-			isPlaying: false,
+			isPlaying:!1,
 			score: 0,
 			SEC30: 30,
 			leftTime: 30,
@@ -221,6 +206,7 @@ BasicGame.Play.prototype = {
 	genHUDContainer: function () {
 		var c = {score:null,gameover:null,textStyle:null,};
 		c.textStyle = {
+			fontSize:25,
 			fill: '#a0522d',
 			stroke:'#FFFFFF',
 			strokeThickness: 10,
@@ -237,7 +223,7 @@ BasicGame.Play.prototype = {
 	genScoreTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
 		var baseText = this.GOP.SCORE_TEXT+': ';
-		var textSprite = s.genText(this.world.centerX,50,baseText+this.GOP.score,HUD.textStyle);
+		var textSprite = s.genText(this.world.width*.7,50,baseText+this.GOP.score,HUD.textStyle);
 		HUD.changeScore = function (val) {
 			textSprite.changeText(baseText+val);
 		};
@@ -247,7 +233,7 @@ BasicGame.Play.prototype = {
 	genTimeCounterTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
 		var baseText = 'タイむ: ';
-		var textSprite = s.genText(120,50,baseText+this.GOP.leftTime,HUD.textStyle);
+		var textSprite = s.genText(this.world.width*.2,50,baseText+this.GOP.leftTime,HUD.textStyle);
 		HUD.changeTime = function (val) {
 			textSprite.changeText(baseText+val);
 		};
@@ -255,9 +241,9 @@ BasicGame.Play.prototype = {
 
 	genGameOverTextSprite: function (HUD) {
 		var s = this.game.global.SpriteManager;
-		var textSprite = s.genText(this.world.centerX,400,'げぇむオーバぁ～',HUD.textStyle);
+		var textSprite = s.genText(this.world.centerX,this.world.height*.2,'げぇむオーバぁ～',HUD.textStyle);
 		textSprite.hide();
-		textSprite.setTextStyle({fontSize:'80px'})
+		textSprite.setTextStyle({fontSize:40})
 		HUD.gameover = textSprite;
 	},
 
@@ -272,9 +258,9 @@ BasicGame.Play.prototype = {
 		var restartBtnSprite = this.genRestartBtnSprite();
 		var tweetBtnSprite = this.genTweetBtnSprite();
 		var backToTopBtnSprite = this.genBackToTopBtnSprite();
-		var tween = t.popUpA(panelSprite, 500, {x:8,y:13});
+		var tween = t.popUpA(panelSprite, 500, {x:4,y:6.5});
 		t.onComplete(tween, function () {
-			HUD.score.move(HUD.gameover.x,HUD.gameover.y+200);
+			HUD.score.move(HUD.gameover.x,HUD.gameover.x+50);
 			HUD.score.show();
 			HUD.gameover.show();
 			restartBtnSprite.allShow();
@@ -302,7 +288,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genTweetBtnSprite: function () {
-		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.centerY+200,this.tweet,'結果をツいート');
+		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.height*.65,this.tweet,'結果をツいート');
 		btnSprite.hide();
 		btnSprite.textSprite.hide();
 		btnSprite.allShow = function () {
@@ -313,7 +299,7 @@ BasicGame.Play.prototype = {
 	},
 
 	genBackToTopBtnSprite: function () {
-		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.centerY+400,function () {
+		var btnSprite = this.genBtnTpl(this.world.centerX,this.world.height*.8,function () {
 			this.game.global.nextSceen = 'Title';
 			this.state.start(this.game.global.nextSceen);
 		}, 'とっプにモドる');
@@ -328,12 +314,12 @@ BasicGame.Play.prototype = {
 
 	genBtnTpl: function (x,y,func,text) {
 		var textStyle = {
-			fontSize:'45px',
+			fontSize:25,
 			fill: '#b8860b',
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness:5,
 			multipleStroke:'#b8860b',
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness:5,
 		};
 		var s = this.game.global.SpriteManager;
 		var btnSprite = s.genButton(x, y, 'greySheet',func,this);
@@ -341,7 +327,6 @@ BasicGame.Play.prototype = {
 			// overFrame, outFrame, downFrame, upFrame
 			'grey_button00', 'grey_button00', 'grey_button01', 'grey_button00');
 		btnSprite.anchor.setTo(.5);
-		btnSprite.scale.setTo(2.3);
 		btnSprite.tint = 0xf5deb3;
 		btnSprite.textSprite = s.genText(x,y,text,textStyle);
 		btnSprite.UonInputDown(function () {
@@ -351,7 +336,7 @@ BasicGame.Play.prototype = {
 	},
 
 	tweet: function () {
-		var text = 'あナタの'+this.GOP.SCORE_TEXT+'は '+this.GOP.score+' でス！\nﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）ﾍ（０Д０ﾍ）\n『'+this.game.global.GAME_TITLE+'』';
+		var text = '🧟🧟🧟🧟🧟🧟\nあナタの'+this.GOP.SCORE_TEXT+'は '+this.GOP.score+' でス！\n『'+this.game.global.GAME_TITLE+'』\n🧟🧟🧟🧟🧟🧟\n';
 		var tweetText = encodeURIComponent(text);
 		var tweetUrl = location.href;
 		var tweetHashtags = encodeURIComponent('ゾンビ子ゲーム'); // 'A,B,C'
@@ -367,7 +352,7 @@ BasicGame.Play.prototype = {
 		text = text+'';
 		var s = this.game.global.SpriteManager;
 		var t = this.game.global.TweenManager;
-		var textStyle = {stroke:'#00ff00'};
+		var textStyle = {fontSize:25,stroke:'#00ff00'};
 		var x = this.HUD.score.right;
 		if (text[0]=='-') {
 			textStyle.stroke = '#dd5a52';
@@ -386,12 +371,12 @@ BasicGame.Play.prototype = {
 
 	ready: function () {
 		var textStyle = {
-			fontSize:'100px',
+			fontSize:40,
 			fill: '#a0522d',
 			stroke:'#FFFFFF',
-			strokeThickness: 10,
+			strokeThickness: 5,
 			multipleStroke:'#a0522d',
-			multipleStrokeThickness: 10,
+			multipleStrokeThickness: 5,
 		};
 		var readyTextSprite = this.genReadyTextSprite(textStyle);
 		var startTextSprite = this.genStartTextSprite(textStyle);

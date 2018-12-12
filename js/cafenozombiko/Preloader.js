@@ -37,7 +37,7 @@ BasicGame.Preloader.prototype={
 			'MiniZombie_2': './images/cafenozombiko/MiniZombie_2.png',
 			'Human':        './images/cafenozombiko/Human.png',
 			'Takashi':      './images/cafenozombiko/Takashi.png',
-			'Particle':     './images/cafenozombiko/Shine.png',
+			'Particle':     './images/cafenozombiko/Shine_2.png',
 		};
 		for (var key in imageAssets) { this.load.image(key, imageAssets[key]); }
 		this.loadAudio();
@@ -90,11 +90,11 @@ BasicGame.Preloader.prototype={
 	},
 	loadComplete: function () {
 		this.loadOnlyFirst();
-		var textStyle = { font: '80px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
+		var textStyle = { font: '40px Arial', fill: '#FFFFFF', align: 'center', stroke: '#000000', strokeThickness: 10 };
 		var textSprite = this.add.text(this.world.centerX, this.world.centerY*1.7,
 			this.TOUCH_OR_CLICK+'してスタート\n'+this.EN_TOUCH_OR_CLICK+' TO PLAY', textStyle);
 		textSprite.anchor.setTo(.5);
-		this.game.input.onDown.addOnce(this.showLogo,this);
+		this.game.input.onDown.addOnce((__ENV!='prod')?this.start:this.showLogo,this);
 	},
 	showLogo:function(){
 		this.genBmpSqrSp(0,0,this.world.width,this.world.height,'#000000');

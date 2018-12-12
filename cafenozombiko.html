@@ -68,7 +68,7 @@
 
 	<script type="text/javascript">
 		window.onload = function() {
-			var game = new Phaser.Game(900, 1600, Phaser.AUTO);
+			var game = new Phaser.Game(450, 800, Phaser.AUTO);
 			for(var c in BasicGame)game.state.add(c,BasicGame[c]);
 			game.state.start('Boot');
 		};
