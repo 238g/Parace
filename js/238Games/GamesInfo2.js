@@ -258,6 +258,12 @@ function genGamesInfo(){
 				caption:'バーチャルYouTuberヨメミの二次創作ゲームです。ヨメミと一緒にハイポーションを作ろう！65536通りある組み合わせから８パターンあるエンドを全て見られるかな？',
 				release:'2018/12/9',
 			},
+			1044:{id:1044,title:'モーニングスターもちひよこ',url:GI2A2('mochi_hiyoko'),
+				tColor:'#734D80',mColor:'#FAE3C4',
+				tc:GI2B2('mochi_hiyoko'),imgA:GI2C2('mochi_hiyoko'),imgB:GI2D2('mochi_hiyoko'),
+				caption:'もちひよこちゃんの二次創作ゲームです。モーニングスターを使って、近づいてくるロリコンをホイホイしよう！かわいい壁紙に見とれてスコアを逃さぬように注意！',
+				release:'2018/12/16',
+			},
 		},
 	};
 };
