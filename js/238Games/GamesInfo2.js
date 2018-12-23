@@ -264,6 +264,12 @@ function genGamesInfo(){
 				caption:'もちひよこちゃんの二次創作ゲームです。モーニングスターを使って、近づいてくるロリコンをホイホイしよう！かわいい壁紙に見とれてスコアを逃さぬように注意！',
 				release:'2018/12/16',
 			},
+			1045:{id:1045,title:'さえきやひろを送るゲーム',url:GI2A2('saekiyahiro'),
+				tColor:'#33435C',mColor:'#A0D7C0',
+				tc:GI2B2('saekiyahiro'),imgA:GI2C2('saekiyahiro'),imgB:GI2D2('saekiyahiro'),
+				caption:'さえきやひろちゃんの二次創作ゲームです！頭をフル回転させてたくさんのやひろちゃんを送り出しましょう！目指せレベルMAX！',
+				release:'2018/12/23',
+			},
 		},
 	};
 };
