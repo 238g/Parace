@@ -59,7 +59,7 @@
 	crossorigin="anonymous">	
 
 	<script src="js/public/Env.js"></script>
-	<script src="js/238Games/GamesInfo2.js?180817"></script>
+	<script src="js/238Games/GamesInfo2.js?1812"></script>
 	<script type="text/javascript">
 		var GamesInfo=genGamesInfo().GamesInfo;
 		var GamesInfoLength=0;
@@ -167,33 +167,7 @@
 					<li data-target="#myCarousel" data-slide-to="4"></li>
 				</ol>
 		
-				<div class="carousel-inner" role="listbox">
-					<script type="text/javascript">
-						var arr=[];
-						for(var i=GamesInfoLength;i>(GamesInfoLength-12);i--)arr.push(10+('0'+i).slice(-2));
-						// arr.push(1014);
-						var a=arr.length;
-						while(a){
-							var j=Math.floor(Math.random()*a);
-							var t=arr[--a];
-							arr[a]=arr[j];
-							arr[j]=t;
-						}
-						var count=0;
-						for(var k in arr){
-							var number=arr[k];
-							var info=GamesInfo[number];
-							document.write(
-								'<div class="carousel-item'+(count==0?' active':'')+'">'
-									+'<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
-										+'<img src="'+info.tc+'" alt="ゲーム『'+info.title+'』のカルーセルイメージ">'
-									+'</a>'
-								+'</div>');
-							count++;
-							if(count==5)break;
-						}
-					</script>
-				</div>
+				<div class="carousel-inner" role="listbox"><!--$--></div>
 	
 				<a class="carousel-control-prev" href="#myCarousel" role="button" data-slide="prev">
 					<span class="carousel-control-prev-icon" aria-hidden="true"></span>
@@ -205,22 +179,7 @@
 
 			<div class="container text-center">
 				<br><h3>新着ゲーム</h3><br>
-				<div class="row">
-					<script type="text/javascript">
-						for(var i=GamesInfoLength;i>(GamesInfoLength-9);i--){
-							var number=10+('0'+i).slice(-2);
-							var info=GamesInfo[number];
-							var newBadge=i==GamesInfoLength?'<span class="badge badge-danger">New</span>':'';
-							document.write(
-								'<div class="col-4">'
-									+'<a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
-										+'<img src="'+info.imgA+'" class="img-responsive img-thumbnail" alt="ゲーム『'+info.title+'』のサムネイル">'
-									+'</a>'
-									+'<h3 style="word-wrap: break-word;">'+info.title+newBadge+'</h3>'
-								+'</div>');
-						}
-					</script>
-				</div>
+				<div class="row top_game"><!--$--></div>
 				<div class="row">
 					<div class="col">
 						<br><h1 class="text-center"><a href="#" class="goto_gamelist text-primary">もっと見る</a></h1><br>
@@ -275,24 +234,7 @@
 							<th scope="col">公開日</th>
 						</tr>
 					</thead>
-					<tbody>
-						<script type="text/javascript">
-							for(var i=GamesInfoLength;i>0;i--){
-								var number=10+('0'+i).slice(-2);
-								var info=GamesInfo[number];
-								var newBadge=i==GamesInfoLength?'<span class="badge badge-pill badge-danger">New</span> ':'';
-								document.write(
-									'<tr>'
-										+'<th scope="row">'+i+'</th>'
-										+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
-										+'<td>'+newBadge+info.title+'</td>'
-										// +'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
-										+'<td><a href="#" class="game_list_play" data-toggle="modal" data-target="#myModal" data-number="'+number+'">PLAY</a></td>'
-										+'<td>'+info.release+'</td>'
-									+'</tr>');
-							}
-						</script>
-					</tbody>
+					<tbody><!--$--></tbody>
 				</table>
 			</div>
 		</div>
@@ -304,56 +246,7 @@
 					<div class="col">
 						<h4>その他私が制作したサービスです</h4>
 						<br>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Cute/Fukutube.html" target="_blank" onclick="myGa('view_promotion','Service','複つべ');">
-										<button class="btn btn-danger">複つべ</button>
-									</a>
-								</p>
-								<p>YouTubeをひとつのブラウザで分割、つまり、複窓して視聴できるサービスです。</p>
-							</li>
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Cute/VtuberChronology.html" target="_blank" onclick="myGa('view_promotion','Service','VTuber年表');">
-										<button class="btn btn-success">VTuber年表</button>
-									</a>
-								</p>
-								<p>バーチャルYouTuberに関する出来事をまとめた年表カレンダーです。</p>
-							</li>
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Cute/VtuberBirthday.html" target="_blank" onclick="myGa('view_promotion','Service','Vtuberバースデー');">
-										<button class="btn btn-success">Vtuberバースデー</button>
-									</a>
-								</p>
-								<p>バーチャルYouTuberの誕生日を年表カレンダーで確認できるサービスです。</p>
-							</li>
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Cute/VtuberDebut.html" target="_blank" onclick="myGa('view_promotion','Service','Vtuberデビュー表');">
-										<button class="btn btn-success">Vtuberデビュー表</button>
-									</a>
-								</p>
-								<p>バーチャルYouTuberのデビュー日を年表カレンダーで確認できるサービスです。</p>
-							</li>
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Cute/Raditube.html" target="_blank" onclick="myGa('view_promotion','Service','ラジつべ');">
-										<button class="btn btn-danger">ラジつべ</button>
-									</a>
-								</p>
-								<p>YouTubeの動画を画面表示させずにラジオのように聴き流せるサービスです。</p>
-							</li>
-							<li class="list-group-item">
-								<p>
-									<a href="https://238g.github.io/Clock/paparazzi/index.html" target="_blank" onclick="myGa('view_promotion','Service','パパラッチャー');">
-										<button class="btn btn-warning">パパラッチャー</button>
-									</a>
-								</p>
-								<p>生放送などで記者会見や謝罪会見をしたい時に使えるフラッシュ機能です。</p>
-							</li>
-						</ul>
+						<ul class="list-group list-group-flush"><!--$--></ul>
 					</div>
 				</div>
 			</div>
@@ -366,63 +259,7 @@
 					<div class="col">
 						<h4>クレジット</h4>
 						<br>
-						<ul class="list-group list-group-flush">
-							<li class="list-group-item">
-								<p>フリー無料のBGM素材・音楽素材「甘茶の音楽工房」<br>
-									<a href="http://amachamusic.chagasi.com/" target="_blank">http://amachamusic.chagasi.com/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>フリーBGM（音楽素材）無料ダウンロード｜DOVA-SYNDROME<br>
-									<a href="https://dova-s.jp/" target="_blank">https://dova-s.jp/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>BGM素材｜著作権フリーの無料音楽素材ダウンロードサイト「ミュージックノート」<br>
-									<a href="http://www.music-note.jp/bgm/index.html" target="_blank">http://www.music-note.jp/bgm/index.html</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>全曲無料・フリー音楽素材/魔王魂<br>
-									<a href="https://maoudamashii.jokersounds.com/" target="_blank">https://maoudamashii.jokersounds.com/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>PeriTune - フリー音楽素材<br>
-									<a href="http://peritune.com/" target="_blank">http://peritune.com/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>近未来的音楽素材屋3104式 RSS Feed<br>
-									<a href="http://cyber-rainforce.net/" target="_blank">http://cyber-rainforce.net/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>効果音ラボ - フリー、商用無料、報告不用の効果音素材をダウンロード<br>
-									<a href="https://soundeffect-lab.info/" target="_blank">https://soundeffect-lab.info/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>Kenney &middot; Home<br>
-									<a href="http://www.kenney.nl/" target="_blank">http://www.kenney.nl/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>Nosoapradio.us<br>
-									<a href="https://www.facebook.com/freegamemusic/" target="_blank">https://www.facebook.com/freegamemusic/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>かわいいフリー素材集 いらすとや<br>
-									<a href="https://www.irasutoya.com/" target="_blank">https://www.irasutoya.com/</a>
-								</p>
-							</li>
-							<li class="list-group-item">
-								<p>Cleyton Kauffman<br>
-									<a href="http://opengameart.org/users/doppelganger" target="_blank">http://opengameart.org/users/doppelganger</a>
-								</p>
-							</li>
-						</ul>
+						<ul class="list-group list-group-flush"><!--$--></ul>
 					</div>
 				</div>
 			</div>
@@ -461,63 +298,13 @@
 		var __curGameInfo=null;
 
 		$(function(){
-			///// PageHandler
-			$('.navbar-nav a').click(function(){
-				var p=$(this).parent();
-				if(p.hasClass('active'))return;
-				p.addClass('active');
-				p.siblings().removeClass('active');
-				var page=$(this).data('page');
-				$('.pages').children().each(function(){
-					var t=$(this);
-					t.hasClass(page)?t.slideDown('slow'):t.slideUp('slow');
-				});
-				$('.navbar-toggler').is(':visible')&&$('.navbar-toggler').click();
-				__curPage=page;
-				myGa(page,'Navbar','nav-item');
-			});
-
-			$('.goto_gamelist').click(function(){
-				var h=$('.navbar-nav .navbar_gamelist');
-				if(h.hasClass('active'))return;
-				h.addClass('active');
-				h.siblings().removeClass('active');
-				$('.pages').children().each(function(){
-					var t=$(this);
-					t.hasClass('page_gamelist')?t.slideDown('slow'):t.slideUp('slow');
-				});
-				if($('.navbar-toggler').is(':visible')&&$('.navbar-collapse').is(':visible')){
-					$('.navbar-toggler').click();
-				}
-				myGa('more_info','page_home','toGamelist');
-			});
-			///// PageHandler
-
-			////// ModalHandler
-			$('.carousel-inner a').click(popupDetail);
-			$('.game_thumbnail').click(popupDetail);
-			$('.game_list_play').click(popupDetail);
-			function popupDetail () {
-				var info=GamesInfo[$(this).data('number')];
-				__curGameInfo=info;
-			}
-			$('#myModal').on('show.bs.modal',function(e){
-				var m = $(this);
-				// m.find('.modal-header').css('background-color',__curGameInfo.bgColor).css('color',__curGameInfo.textColor);
-				// m.find('.modal-footer').css('background-color',__curGameInfo.bgColor);
-				// m.find('.modal-content').css('color',__curGameInfo.textColor);
-				m.find('.modal-title').text(__curGameInfo.title);
-				m.find('.modal-body').html(
-					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
-					+'<p>'+__curGameInfo.caption+'</p>'
-				);
-				myGa('open_modal',__curPage,__curGameInfo.title);
-			});
-			$('#myModal .play_btn').click(function(){
-				window.open(__curGameInfo.url,'_blank');
-				myGa('play','Modal',__curGameInfo.title);
-			});
-			////// ModalHandler
+			genCarouselItems();
+			genTopGame();
+			genGameList();
+			genService();
+			genCredit();
+			PageHandler();
+			ModalHandler();
 
 			$('.tweet_btn').click(function(){
 				myGa('tweet',__curPage,'share');
@@ -562,6 +349,182 @@
 		function myGa(action,category,label,value){
 			if(__ENV!='prod')console.log(action,category,label,value);
 			gtag('event',action,{'event_category':category,'event_label':label,'value':value});
+		}
+
+		function genCarouselItems(){
+			var arr=[];
+			for(var i=GamesInfoLength;i>(GamesInfoLength-12);i--)arr.push(10+('0'+i).slice(-2));
+			// arr.push(1014);
+			var a=arr.length;
+			while(a){
+				var j=Math.floor(Math.random()*a);
+				var t=arr[--a];
+				arr[a]=arr[j];
+				arr[j]=t;
+			}
+			var elem='';
+			var count=0;
+			for(var k in arr){
+				var number=arr[k];
+				var info=GamesInfo[number];
+				elem+=
+					'<div class="carousel-item'+(count==0?' active':'')+'">'
+						+'<a style="cursor: pointer;" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
+							+'<img src="'+info.tc+'" alt="ゲーム『'+info.title+'』のカルーセルイメージ">'
+						+'</a>'
+					+'</div>';
+				count++;
+				if(count==5)break;
+			}
+			$('.carousel-inner').html(elem);
+		}
+
+		function genTopGame(){
+			var elem='';
+			for(var i=GamesInfoLength;i>(GamesInfoLength-9);i--){
+				var number=10+('0'+i).slice(-2);
+				var info=GamesInfo[number];
+				var newBadge=i==GamesInfoLength?'<span class="badge badge-danger">New</span>':'';
+				elem+=
+					'<div class="col-4">'
+						+'<a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'">'
+							+'<img src="'+info.imgA+'" class="img-responsive img-thumbnail" alt="ゲーム『'+info.title+'』のサムネイル">'
+						+'</a>'
+						+'<h3 style="word-wrap: break-word;">'+info.title+newBadge+'</h3>'
+					+'</div>';
+			}
+			$('.page_home .top_game').html(elem);
+		}
+
+		function genGameList(){
+			var elem='';
+			for(var i=GamesInfoLength;i>0;i--){
+				var number=10+('0'+i).slice(-2);
+				var info=GamesInfo[number];
+				var newBadge=i==GamesInfoLength?'<span class="badge badge-pill badge-danger">New</span> ':'';
+				elem+=
+					'<tr>'
+						+'<th scope="row">'+i+'</th>'
+						+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
+						+'<td>'+newBadge+info.title+'</td>'
+						// +'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
+						+'<td><a href="#" class="game_list_play" data-toggle="modal" data-target="#myModal" data-number="'+number+'">PLAY</a></td>'
+						+'<td>'+info.release+'</td>'
+					+'</tr>';
+			}
+			$('.page_gamelist tbody').html(elem);
+		}
+
+		function genService(){
+			var list=[
+				{n:'YouTubeスクリーンショット',c:'btn-warning',u:'https://chrome.google.com/webstore/detail/youtube%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88/iakmagcmcbgcohlpicboofpkeocpbolj',d:'YouTube動画の画面をスクリーンショットとしてかんたんにキャプチャする拡張機能です。※PCのみ'},
+				{n:'YouTubeスクリーンショット - 紹介ページ',c:'btn-warning',u:'https://238g.github.io/Cute/youtube_screenshot.html',d:''},
+				{n:'複つべ',c:'btn-danger',u:'https://238g.github.io/Cute/Fukutube.html',d:'YouTubeをひとつのブラウザで分割、つまり、複窓して視聴できるサービスです。'},
+				{n:'VTuber年表',c:'btn-success',u:'https://238g.github.io/Cute/VtuberChronology.html',d:'バーチャルYouTuberに関する出来事をまとめた年表カレンダーです。'},
+				{n:'Vtuberバースデー',c:'btn-success',u:'https://238g.github.io/Cute/VtuberBirthday.html',d:'バーチャルYouTuberの誕生日を年表カレンダーで確認できるサービスです。'},
+				{n:'Vtuberデビュー表',c:'btn-success',u:'https://238g.github.io/Cute/VtuberDebut.html',d:'バーチャルYouTuberのデビュー日を年表カレンダーで確認できるサービスです。'},
+				{n:'ラジつべ',c:'btn-danger',u:'https://238g.github.io/Cute/Raditube.html',d:'YouTubeの動画を画面表示させずにラジオのように聴き流せるサービスです。'},
+				{n:'パパラッチャー',c:'btn-warning',u:'https://238g.github.io/Clock/paparazzi/index.html',d:'生放送などで記者会見や謝罪会見をしたい時に使えるフラッシュ機能です。'},
+			];
+			var elem='';
+			for(var k in list){
+				var i=list[k];
+				elem+=
+					'<li class="list-group-item">'
+						+'<p>'
+							+'<a href="'+i.u+'" target="_blank" onclick="myGa(\'view_promotion\',\'Service\',\''+i.n+'\');">'
+								+'<button class="btn '+i.c+'">'+i.n+'</button>'
+							+'</a>'
+						+'</p>'
+						+'<p>'+i.d+'</p>'
+					+'</li>'
+			}
+			$('.page_service ul').html(elem);
+		}
+
+		function genCredit(){
+			var list=[
+				{n:'フリー無料のBGM素材・音楽素材「甘茶の音楽工房」',u:'http://amachamusic.chagasi.com/'},
+				{n:'フリーBGM（音楽素材）無料ダウンロード｜DOVA-SYNDROME',u:'https://dova-s.jp/'},
+				{n:'BGM素材｜著作権フリーの無料音楽素材ダウンロードサイト「ミュージックノート」',u:'http://www.music-note.jp/bgm/index.html'},
+				{n:'全曲無料・フリー音楽素材/魔王魂',u:'https://maoudamashii.jokersounds.com/'},
+				{n:'PeriTune - フリー音楽素材',u:'http://peritune.com/'},
+				{n:'近未来的音楽素材屋3104式 RSS Feed',u:'http://cyber-rainforce.net/'},
+				{n:'効果音ラボ - フリー、商用無料、報告不用の効果音素材をダウンロード',u:'https://soundeffect-lab.info/'},
+				{n:'Kenney &middot; Home',u:'http://www.kenney.nl/'},
+				{n:'Nosoapradio.us',u:'https://www.facebook.com/freegamemusic/'},
+				{n:'かわいいフリー素材集 いらすとや',u:'https://www.irasutoya.com/'},
+				{n:'Cleyton Kauffman',u:'http://opengameart.org/users/doppelganger'},
+			];
+			var elem='';
+			for(var k in list){
+				var i=list[k];
+				elem+=
+					'<li class="list-group-item">'
+						+'<p>'+i.n+'<br>'
+							+'<a href="'+i.u+'" target="_blank">'+i.u+'</a>'
+						+'</p>'
+					+'</li>';
+			}
+			$('.page_credit ul').html(elem);
+		}
+
+		function PageHandler(){
+			$('.navbar-nav a').click(function(){
+				var p=$(this).parent();
+				if(p.hasClass('active'))return;
+				p.addClass('active');
+				p.siblings().removeClass('active');
+				var page=$(this).data('page');
+				$('.pages').children().each(function(){
+					var t=$(this);
+					t.hasClass(page)?t.slideDown('slow'):t.slideUp('slow');
+				});
+				$('.navbar-toggler').is(':visible')&&$('.navbar-toggler').click();
+				__curPage=page;
+				myGa(page,'Navbar','nav-item');
+			});
+
+			$('.goto_gamelist').click(function(){
+				var h=$('.navbar-nav .navbar_gamelist');
+				if(h.hasClass('active'))return;
+				h.addClass('active');
+				h.siblings().removeClass('active');
+				$('.pages').children().each(function(){
+					var t=$(this);
+					t.hasClass('page_gamelist')?t.slideDown('slow'):t.slideUp('slow');
+				});
+				if($('.navbar-toggler').is(':visible')&&$('.navbar-collapse').is(':visible')){
+					$('.navbar-toggler').click();
+				}
+				myGa('more_info','page_home','toGamelist');
+			});
+		}
+
+		function ModalHandler(){
+			$('.carousel-inner a').click(popupDetail);
+			$('.game_thumbnail').click(popupDetail);
+			$('.game_list_play').click(popupDetail);
+			function popupDetail () {
+				var info=GamesInfo[$(this).data('number')];
+				__curGameInfo=info;
+			}
+			$('#myModal').on('show.bs.modal',function(e){
+				var m = $(this);
+				// m.find('.modal-header').css('background-color',__curGameInfo.bgColor).css('color',__curGameInfo.textColor);
+				// m.find('.modal-footer').css('background-color',__curGameInfo.bgColor);
+				// m.find('.modal-content').css('color',__curGameInfo.textColor);
+				m.find('.modal-title').text(__curGameInfo.title);
+				m.find('.modal-body').html(
+					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
+					+'<p>'+__curGameInfo.caption+'</p>'
+				);
+				myGa('open_modal',__curPage,__curGameInfo.title);
+			});
+			$('#myModal .play_btn').click(function(){
+				window.open(__curGameInfo.url,'_blank');
+				myGa('play','Modal',__curGameInfo.title);
+			});
 		}
 	</script>
 
