@@ -270,6 +270,12 @@ function genGamesInfo(){
 				caption:'さえきやひろちゃんの二次創作ゲームです！頭をフル回転させてたくさんのやひろちゃんを送り出しましょう！目指せレベルMAX！',
 				release:'2018/12/23',
 			},
+			1046:{id:1046,title:'GOTTA煮VTスライドパズル',url:GI2A2('vtuber_game_3'),
+				tColor:'#000000',mColor:'#ffffff',
+				tc:GI2B2('vtuber_game_3'),imgA:GI2C2('vtuber_game_3'),imgB:GI2D2('vtuber_game_3'),
+				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！VTuberをもとにしたスライドパズルを解いてみよう！',
+				release:'2018/12/30',
+			},
 		},
 	};
 };
