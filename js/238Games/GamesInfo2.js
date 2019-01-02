@@ -276,6 +276,12 @@ function genGamesInfo(){
 				caption:'視聴者の皆さんから募ったバーチャルYouTuberで構成された二次創作ゲームです！VTuberをもとにしたスライドパズルを解いてみよう！',
 				release:'2018/12/30',
 			},
+			1047:{id:1047,title:'信たまてぇてぇゲーム',url:GI2A2('tamaki'),
+				tColor:'#A7A4CD',mColor:'#EDF1FD',
+				tc:GI2B2('tamaki'),imgA:GI2C2('tamaki'),imgB:GI2D2('tamaki'),
+				caption:'犬山たまきの二次創作ゲームです。織田信姫とのてぇてぇを楽しんでください。',
+				release:'2018/1/2',
+			},
 		},
 	};
 };
