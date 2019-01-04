@@ -282,6 +282,12 @@ function genGamesInfo(){
 				caption:'犬山たまきの二次創作ゲームです。織田信姫とのてぇてぇを楽しんでください。',
 				release:'2018/1/2',
 			},
+			1048:{id:1048,title:'ノーヴィラリー',url:GI2A2('matsuri_kzmy'),
+				tColor:'#DA090E',mColor:'#E3E1EC',
+				tc:GI2B2('matsuri_kzmy'),imgA:GI2C2('matsuri_kzmy'),imgB:GI2D2('matsuri_kzmy'),
+				caption:'風宮まつりの二次創作ゲームです！ノーヴィで羽つきをしよう！アナタはノーヴィラリーを何回続けられるかな？',
+				release:'2018/1/4',
+			},
 		},
 	};
 };
