@@ -288,6 +288,12 @@ function genGamesInfo(){
 				caption:'風宮まつりの二次創作ゲームです！ノーヴィで羽つきをしよう！アナタはノーヴィラリーを何回続けられるかな？',
 				release:'2018/1/4',
 			},
+			1049:{id:1049,title:'名取さなの参勤交代',url:GI2A2('natori'),
+				tColor:'#ff69b4',mColor:'#FFCCE2',
+				tc:GI2B2('natori'),imgA:GI2C2('natori'),imgB:GI2D2('natori'),
+				caption:'名取さなの二次創作ゲームです！あの参勤交代をゲームで再現！名取さなを参勤交代に参加させろ！あなたは何人並べられるかな？',
+				release:'2018/1/12',
+			},
 		},
 	};
 };
