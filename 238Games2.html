@@ -2,10 +2,10 @@
 <html>
 <head>
 	<meta charset="utf-8">
-	<title>Vtuberゲームス - VTuberのミニゲームを集めたサイト！</title>
+	<title>VTuberゲームス - VTuberのミニゲームを集めたサイト！</title>
 	<meta name="apple-mobile-web-app-title" content="Vtuberゲームス">
 
-	<meta name="keywords" content="バーチャルYouTuber,Vtuber,バーチャルユーチューバー,VT,キズナアイ,輝夜月,電脳少女シロ,ミライアカリ,のじゃおじ,にじさんじ,YouTube,Vtuberゲーム,ミニゲーム" />
+	<meta name="keywords" content="バーチャルYouTuber,vtuber,VTuber,バーチャルユーチューバー,VT,キズナアイ,輝夜月,電脳少女シロ,ミライアカリ,のじゃおじ,にじさんじ,YouTube,VTuberゲーム,ミニゲーム" />
 	<meta name="description" content="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。" />
 
 	<link rel="alternate" href="https://238g.github.io/Parace/238Games2.html" hreflang="jp" />
@@ -23,8 +23,8 @@
 	<meta name="twitter:card" content="summary_large_image">
 	<meta name="twitter:site" content="@i10v35w33t" />
 	<meta property="og:url" content="https://238g.github.io/Parace/238Games2.html" />
-	<meta property="og:title" content="Vtuberゲームス">
-	<meta property="og:description" content="バーチャルYouTuberの二次創作ゲームを発信しているサイトです。">
+	<meta property="og:title" content="VTuberゲームス">
+	<meta property="og:description" content="バーチャルYouTuber(VTuber)の二次創作ゲームを発信しているサイトです。">
 	<meta property="og:image" content="https://238g.github.io/Parace/images/238Games/TwitterCard.jpg">
 
 	<!-- Icons -->
@@ -120,7 +120,7 @@
 			cursor: pointer;
 		}
 
-		.goto_gamelist {
+		.more_info {
 			cursor: pointer;
 		}
 
@@ -140,20 +140,15 @@
 <body>
 
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-		<a class="navbar-brand" href="238Games2.html" onclick="myGa('home','Navbar','navbar-brand');"><img src="images/238Games/favicons3/favicon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt=""> Vtuberゲームス</a>
+		<a class="navbar-brand" href="238Games2.html" onclick="myGa('home','Navbar','navbar-brand');">
+			<img src="images/238Games/favicons3/favicon-32x32.png" width="30" height="30" class="d-inline-block align-top" alt="ロゴ画像">
+			<span class="logo_title"><!--$--></span>
+		</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#myNavbar" aria-controls="myNavbar" aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
 
-		<div class="collapse navbar-collapse" id="myNavbar">
-			<ul class="navbar-nav">
-				<li class="nav-item navbar_home active"><a class="nav-link" data-page="page_home" href="#">ホーム</a></li>
-				<li class="nav-item navbar_about"><a class="nav-link" data-page="page_about" href="#">このサイトについて</a></li>
-				<li class="nav-item navbar_gamelist"><a class="nav-link" data-page="page_gamelist" href="#">ゲームリスト</a></li>
-				<li class="nav-item navbar_service"><a class="nav-link" data-page="page_service" href="#">その他サービス</a></li>
-				<li class="nav-item navbar_credit"><a class="nav-link" data-page="page_credit" href="#">クレジット</a></li>
-			</ul>
-		</div>
+		<div class="collapse navbar-collapse" id="myNavbar"><ul class="navbar-nav"><!--$--></ul></div>
 	</nav>
 
 	<div class="pages">
@@ -178,17 +173,16 @@
 			</div>
 
 			<div class="container text-center">
-				<br><h3>新着ゲーム</h3><br>
+				<br><h3 class="h3_new_game"><!--$--></h3><br>
 				<div class="row top_game"><!--$--></div>
 				<div class="row">
 					<div class="col">
-						<br><h1 class="text-center"><a href="#" class="goto_gamelist text-primary">もっと見る</a></h1><br>
+						<br><h1 class="text-center"><a href="#" class="more_info text-primary"><!--$--></a></h1><br>
 					</div>
 				</div>
 				<div class="row">
 					<div class="col">
-						<br><p>Twitterで友達に教える: 
-						<a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>
+						<br><p class="twitter_share"><!--$--></p>
 					</div>
 				</div>
 			</div>
@@ -199,21 +193,7 @@
 			<div class="container text-center">
 				<div class="row">
 					<div class="col">
-						<div class="well">
-							<p><img src="images/public/logo/logo.png"></p>
-							<br>
-							<h3>バーチャルYouTuberの<br>二次創作ゲームを<br>投稿しているサイトです。</h3>
-							<br>
-							<p>いつも遊んでくださり、本当にありがとうございます！</p>
-							<p>こちらは個人で制作しております。絵が描けないなりのファンアートです。</p>
-							<br>
-							<p>開発者: 抹茶。</p>
-							<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('twitter','About','link');">@i10v35w33t</a></p>
-							<p>ご意見・ご要望: <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa('marshmallow','About','link');">匿名投稿マシュマロ</a></p>
-							<p><a href="https://www.amazon.co.jp/registry/wishlist/3GT4PQDA36G/ref=cm_sw_r_tw" target="_blank" onclick="myGa('amazone','About','link');">ほしいものリスト</a></p>
-							<p>Twitterで友達に教える: 
-							<a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>
-						</div>
+						<div class="well about_contents"><!--$--></div>
 					</div>
 				</div>
 			</div>
@@ -223,15 +203,7 @@
 			<br><br>
 			<div class="container text-center table-responsive-sm">
 				<table class="table table-striped table-hover table-sm">
-					<thead>
-						<tr>
-							<th scope="col">No.</th>
-							<th scope="col"></th>
-							<th scope="col">ゲーム名</th>
-							<th scope="col"></th>
-							<th scope="col">公開日</th>
-						</tr>
-					</thead>
+					<thead><tr class="gamelist_columns"><!--$--></tr></thead>
 					<tbody><!--$--></tbody>
 				</table>
 			</div>
@@ -242,9 +214,8 @@
 			<div class="container text-center">
 				<div class="row">
 					<div class="col">
-						<h4>その他私が制作したサービスです</h4>
-						<br>
-						<ul class="list-group list-group-flush"><!--$--></ul>
+						<h4 class="service_title"><!--$--></h4>
+						<br><ul class="list-group list-group-flush"><!--$--></ul>
 					</div>
 				</div>
 			</div>
@@ -255,9 +226,8 @@
 			<div class="container text-center">
 				<div class="row">
 					<div class="col">
-						<h4>クレジット</h4>
-						<br>
-						<ul class="list-group list-group-flush"><!--$--></ul>
+						<h4 class="credit_title"><!--$--></h4>
+						<br><ul class="list-group list-group-flush"><!--$--></ul>
 					</div>
 				</div>
 			</div>
@@ -266,10 +236,7 @@
 
 	<div style="height: 150px;"></div>
 
-	<footer class="text-center fixed-bottom">
-		<p><a href="238Games2.html" onclick="myGa('home','Footer','home');">Vtuberゲームス</a> / <a href="https://www.amazon.co.jp/registry/wishlist/3GT4PQDA36G/ref=cm_sw_r_tw" target="_blank" onclick="myGa('amazone','About','link');">支援(ほしいものリスト)</a></p>
-		<p>Created by 抹茶。 <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa('twitter','Footer','link');">@i10v35w33t</a></p>
-	</footer>
+	<footer class="text-center fixed-bottom"><!--$--></footer>
 
 	<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalTitle" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered" role="document">
@@ -280,73 +247,154 @@
 						<span aria-hidden="true">&times;</span>
 					</button>
 				</div>
-				<div class="modal-body">
-					<p>Modal Body</p>
-				</div>
+				<div class="modal-body"><p>Modal Body</p></div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-warning play_btn">PLAY</button>
-					<button type="button" class="btn btn-default" data-dismiss="modal">閉じる</button>
+					<button type="button" class="btn btn-default close_btn" data-dismiss="modal"><!--$--></button>
 				</div>
 			</div>
 		</div>
 	</div>
 
 	<script type="text/javascript">
+		var __querys=window.location.search.slice(1).split('&');
+		var __curLang=getCurLang();
+		var __words={
+			jp:{
+				twitter_share:'Twitterで友達に教える',
+				tw_share_text:'バーチャルYouTuberの二次創作ゲームを発信しているサイトです！！',
+				tw_share_tag:'VTuberゲームス',
+				logo_title:'VTuberゲームス',
+				close_btn:'閉じる',
+				navbar_home:'ホーム',
+				navbar_about:'このサイトについて',
+				navbar_gamelist:'ゲームリスト',
+				navbar_service:'その他サービス',
+				navbar_credit:'クレジット',
+				h3_new_game:'新着ゲーム',
+				more_info:'もっと見る',
+				game_name:'ゲーム名',
+				release_date:'公開日',
+				about_h3:'バーチャルYouTuberの<br>二次創作ゲームを<br>投稿しているサイトです。',
+				about_msg_1:'いつも遊んでくださり、本当にありがとうございます！',
+				about_msg_2:'こちらは個人で制作しております。絵が描けないなりのファンアートです。',
+				dev_name:'開発者: 抹茶。',
+				request:'ご意見・ご要望',
+				marshmallow:'匿名投稿マシュマロ',
+				amazon_wish_list_1:'ほしいものリスト',
+				amazon_wish_list_2:'支援(ほしいものリスト)',
+				service_title:'その他私が制作したサービスです',
+				credit_title:'クレジット',
+			},
+			en:{
+				twitter_share:'Twitter Share',
+				tw_share_text:'This site is GameSite of Virtual YouTuber (VTuber)!! Please play them!!',
+				tw_share_tag:'VTuberGames',
+				logo_title:'VTuberGames',
+				close_btn:'Close',
+				navbar_home:'Home',
+				navbar_about:'About',
+				navbar_gamelist:'GameList',
+				navbar_service:'Service',
+				navbar_credit:'Credit',
+				h3_new_game:'NEW GAME',
+				more_info:'More...',
+				game_name:'GameName',
+				release_date:'Release',
+				about_h3:'Virtual YouTuber<br>(VTuber)<br>Game!!',
+				about_msg_1:'Thank you for playing!!',
+				about_msg_2:'This is my fan art!',
+				dev_name:'Developer: 抹茶。(Matcha)',
+				request:'Request',
+				marshmallow:'Post-Anonymously-Service',
+				amazon_wish_list_1:'Amazon-Wish-List',
+				amazon_wish_list_2:'Donate(Amazon-Wish-List)',
+				service_title:'Other Service',
+				credit_title:'Credit',
+			},
+		};
+		var __curWords=__words[__curLang];
 		var __curPage=null;
 		var __curGameInfo=null;
+		var __twitter_share_elem=__curWords.twitter_share+': <a class="tweet_btn"><img src="images/238Games/twitter_btn.png" alt="ツイート"></a>';
 
 		$(function(){
+			genNavbar();
 			genCarouselItems();
 			genTopGame();
 			genGameList();
+			genAboutContents();
 			genService();
 			genCredit();
+			genFooter();
+			$('.close_btn').html(__curWords.close_btn);
 			PageHandler();
 			ModalHandler();
-
-			$('.tweet_btn').click(function(){
-				myGa('tweet',__curPage,'share');
-				var t=encodeURIComponent('バーチャルYouTuberの二次創作ゲームを発信しているサイトです。約１週間に１度新しいゲームを更新！');
-				var h=encodeURIComponent('Vtuberゲームス');
-				var u='https://238g.github.io/Parace/238Games2.html';
-				window.open(
-					'https://twitter.com/intent/tweet?text='+t+'&hashtags='+h+'&url='+u,
-					'share window', 
-					'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
-				return false;
-			});
+			$('.tweet_btn').click(onClickTweet);
+			showPage();
+			if(__curLang=='en'){
+				document.title=__curWords.logo_title;
+			}
 		});
 
-		////// Router
-		var showPage=!1;
-		var q=window.location.search.slice(1).split('&');
-		for(var i in q){
-			var a=q[i].split('=');
-			if('page'==a[0]){
-				showPage=!0;
-				var b=$('.page_'+a[1]);
-				if(b.length==1){
-					__curPage='page_'+a[1];
-					b.show();
-					var h=$('.navbar-nav .navbar_'+a[1]);
-					h.addClass('active');
-					h.siblings().removeClass('active');
-				}else{
-					__curPage='page_home';
-					$('.page_home').show();
+		function getCurLang(){
+			for(var k in __querys){
+				var a=__querys[k].split('=');
+				if(a[0]=='lang'&&(a[1]=='en'||a[1]=='jp'))return a[1];
+			}
+			return 'jp';
+		}
+
+		function showPage(){
+			var showOtherPage=!1;
+			for(var k in __querys){
+				var a=__querys[k].split('=');
+				if('page'==a[0]){
+					showOtherPage=!0;
+					var b=$('.page_'+a[1]);
+					if(b.length==1){
+						__curPage='page_'+a[1];
+						b.show();
+						var h=$('.navbar-nav .navbar_'+a[1]);
+						h.addClass('active');
+						h.siblings().removeClass('active');
+					}else{
+						__curPage='page_home';
+						$('.page_home').show();
+					}
+					break;
 				}
-				break;
+			}
+			if(!showOtherPage){
+				__curPage='page_home';
+				$('.page_home').show();
 			}
 		}
-		if(!showPage){
-			__curPage='page_home';
-			$('.page_home').show();
-		}
-		////// Router
 
 		function myGa(action,category,label,value){
 			if(__ENV!='prod')console.log(action,category,label,value);
 			gtag('event',action,{'event_category':category,'event_label':label,'value':value});
+		}
+
+		function genNavbar(){
+			if(__curLang=='en')$('.navbar-brand').attr('href','238Games2.html?lang=en');
+			$('.logo_title').html(' '+__curWords.logo_title);
+			var list=[
+				{c:'navbar_home active',p:'page_home',v:__curWords.navbar_home},
+				{c:'navbar_about',p:'page_about',v:__curWords.navbar_about},
+				{c:'navbar_gamelist',p:'page_gamelist',v:__curWords.navbar_gamelist},
+				{c:'navbar_service',p:'page_service',v:__curWords.navbar_service},
+				{c:'navbar_credit',p:'page_credit',v:__curWords.navbar_credit},
+			];
+			var elem='';
+			for(var k in list){
+				var i=list[k];
+				elem+=
+					'<li class="nav-item '+i.c+'">'
+						+'<a class="nav-link" data-page="'+i.p+'" href="#">'+i.v+'</a>'
+					+'</li>';
+			}
+			$('.navbar-nav').html(elem);
 		}
 
 		function genCarouselItems(){
@@ -378,6 +426,9 @@
 		}
 
 		function genTopGame(){
+			$('.h3_new_game').html(__curWords.h3_new_game);
+			$('.more_info').html(__curWords.more_info);
+			$('.twitter_share').html(__twitter_share_elem);
 			var elem='';
 			for(var i=GamesInfoLength;i>(GamesInfoLength-9);i--){
 				var number=10+('0'+i).slice(-2);
@@ -396,15 +447,24 @@
 
 		function genGameList(){
 			var elem='';
+			var list=['No.','',__curWords.game_name,'',__curWords.release_date];
+			for(var k in list){
+				var v=list[k];
+				elem+='<th scope="col">'+v+'</th>';
+			}
+			$('.gamelist_columns').html(elem);
+			////////////////////
+			elem='';
 			for(var i=GamesInfoLength;i>0;i--){
 				var number=10+('0'+i).slice(-2);
 				var info=GamesInfo[number];
+				var title=info.title;//TODO en
 				var newBadge=i==GamesInfoLength?'<span class="badge badge-pill badge-danger">New</span> ':'';
 				elem+=
 					'<tr>'
 						+'<th scope="row">'+i+'</th>'
 						+'<td><a class="game_thumbnail" data-toggle="modal" data-target="#myModal" data-number="'+number+'"><img src="'+info.imgB+'" alt="ゲーム『'+info.title+'』のアイコン"></a></td>'
-						+'<td>'+newBadge+info.title+'</td>'
+						+'<td>'+newBadge+title+'</td>'
 						// +'<td><a href="'+info.url+'" target="_blank" onclick="myGa(\'play\',\'Gamelist\',\''+info.title+'\');">PLAY</a></td>'
 						+'<td><a href="#" class="game_list_play" data-toggle="modal" data-target="#myModal" data-number="'+number+'">PLAY</a></td>'
 						+'<td>'+info.release+'</td>'
@@ -413,14 +473,29 @@
 			$('.page_gamelist tbody').html(elem);
 		}
 
+		function genAboutContents(){
+			var elem=
+				'<p><img src="images/public/logo/logo.png"></p>'
+				+'<br><h3>'+__curWords.about_h3+'</h3><br>'
+				+'<p>'+__curWords.about_msg_1+'</p>'
+				+'<p>'+__curWords.about_msg_2+'</p><br>'
+				+'<p>'+__curWords.dev_name+'</p>'
+				+'<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa(\'twitter\',\'About\',\'link\');">@i10v35w33t</a></p>'
+				+'<p>'+__curWords.request+': <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa(\'marshmallow\',\'About\',\'link\');">'+__curWords.marshmallow+'</a></p>'
+				+'<p><a href="https://www.amazon.co.jp/registry/wishlist/3GT4PQDA36G/ref=cm_sw_r_tw" target="_blank" onclick="myGa(\'amazone\',\'About\',\'link\');">'+__curWords.amazon_wish_list_2+'</a></p>'
+				+'<p>'+__twitter_share_elem+'</p>';
+			$('.about_contents').html(elem);
+		}
+
 		function genService(){
+			$('.service_title').html(__curWords.service_title);
 			var list=[
 				{n:'YouTubeスクリーンショット',c:'btn-warning',u:'https://chrome.google.com/webstore/detail/youtube%E3%82%B9%E3%82%AF%E3%83%AA%E3%83%BC%E3%83%B3%E3%82%B7%E3%83%A7%E3%83%83%E3%83%88/iakmagcmcbgcohlpicboofpkeocpbolj',d:'YouTube動画の画面をスクリーンショットとしてかんたんにキャプチャする拡張機能です。※PCのみ'},
 				{n:'YouTubeスクリーンショット - 紹介ページ',c:'btn-warning',u:'https://238g.github.io/Cute/youtube_screenshot.html',d:''},
 				{n:'複つべ',c:'btn-danger',u:'https://238g.github.io/Cute/Fukutube.html',d:'YouTubeをひとつのブラウザで分割、つまり、複窓して視聴できるサービスです。'},
 				{n:'VTuber年表',c:'btn-success',u:'https://238g.github.io/Cute/VtuberChronology.html',d:'バーチャルYouTuberに関する出来事をまとめた年表カレンダーです。'},
-				{n:'Vtuberバースデー',c:'btn-success',u:'https://238g.github.io/Cute/VtuberBirthday.html',d:'バーチャルYouTuberの誕生日を年表カレンダーで確認できるサービスです。'},
-				{n:'Vtuberデビュー表',c:'btn-success',u:'https://238g.github.io/Cute/VtuberDebut.html',d:'バーチャルYouTuberのデビュー日を年表カレンダーで確認できるサービスです。'},
+				{n:'VTuberバースデー',c:'btn-success',u:'https://238g.github.io/Cute/VtuberBirthday.html',d:'バーチャルYouTuberの誕生日を年表カレンダーで確認できるサービスです。'},
+				{n:'VTuberデビュー表',c:'btn-success',u:'https://238g.github.io/Cute/VtuberDebut.html',d:'バーチャルYouTuberのデビュー日を年表カレンダーで確認できるサービスです。'},
 				{n:'ラジつべ',c:'btn-danger',u:'https://238g.github.io/Cute/Raditube.html',d:'YouTubeの動画を画面表示させずにラジオのように聴き流せるサービスです。'},
 				{n:'パパラッチャー',c:'btn-warning',u:'https://238g.github.io/Clock/paparazzi/index.html',d:'生放送などで記者会見や謝罪会見をしたい時に使えるフラッシュ機能です。'},
 			];
@@ -435,12 +510,13 @@
 							+'</a>'
 						+'</p>'
 						+'<p>'+i.d+'</p>'
-					+'</li>'
+					+'</li>';
 			}
 			$('.page_service ul').html(elem);
 		}
 
 		function genCredit(){
+			$('.credit_title').html(__curWords.credit_title);
 			var list=[
 				{n:'フリー無料のBGM素材・音楽素材「甘茶の音楽工房」',u:'http://amachamusic.chagasi.com/'},
 				{n:'フリーBGM（音楽素材）無料ダウンロード｜DOVA-SYNDROME',u:'https://dova-s.jp/'},
@@ -468,6 +544,14 @@
 			$('.page_credit ul').html(elem);
 		}
 
+		function genFooter(){
+			var u='238Games2.html'+getLangQuery();
+			var elem=
+				'<p><a href="'+u+'" onclick="myGa(\'home\',\'Footer\',\'home\');">'+__curWords.logo_title+'</a> / <a href="https://www.amazon.co.jp/registry/wishlist/3GT4PQDA36G/ref=cm_sw_r_tw" target="_blank" onclick="myGa(\'amazone\',\'About\',\'link\');">'+__curWords.amazon_wish_list_2+'</a></p>'
+				+'<p>Created by <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa(\'twitter\',\'Footer\',\'link\');">@i10v35w33t</a></p>';
+			$('footer').html(elem);
+		}
+
 		function PageHandler(){
 			$('.navbar-nav a').click(function(){
 				var p=$(this).parent();
@@ -484,7 +568,7 @@
 				myGa(page,'Navbar','nav-item');
 			});
 
-			$('.goto_gamelist').click(function(){
+			$('.more_info').click(function(){
 				var h=$('.navbar-nav .navbar_gamelist');
 				if(h.hasClass('active'))return;
 				h.addClass('active');
@@ -504,27 +588,42 @@
 			$('.carousel-inner a').click(popupDetail);
 			$('.game_thumbnail').click(popupDetail);
 			$('.game_list_play').click(popupDetail);
-			function popupDetail () {
+			function popupDetail(){
 				var info=GamesInfo[$(this).data('number')];
 				__curGameInfo=info;
 			}
 			$('#myModal').on('show.bs.modal',function(e){
-				var m = $(this);
+				var m=$(this);
 				// m.find('.modal-header').css('background-color',__curGameInfo.bgColor).css('color',__curGameInfo.textColor);
 				// m.find('.modal-footer').css('background-color',__curGameInfo.bgColor);
 				// m.find('.modal-content').css('color',__curGameInfo.textColor);
-				m.find('.modal-title').text(__curGameInfo.title);
+				var title=__curGameInfo.title;//TODO en
+				var caption=__curGameInfo.caption;//TODO en
+				m.find('.modal-title').text(title);
 				m.find('.modal-body').html(
 					'<img src="'+__curGameInfo.imgA+'" alt="ゲーム『'+__curGameInfo.title+'』のサムネイル">'
-					+'<p>'+__curGameInfo.caption+'</p>'
-				);
+					+'<p>'+caption+'</p>');
 				myGa('open_modal',__curPage,__curGameInfo.title);
 			});
 			$('#myModal .play_btn').click(function(){
-				window.open(__curGameInfo.url,'_blank');
+				var u=__curGameInfo.url+getLangQuery();
+				window.open(u,'_blank');
 				myGa('play','Modal',__curGameInfo.title);
 			});
 		}
+
+		function onClickTweet(){
+			myGa('tweet',__curPage,'share');
+			var t=encodeURIComponent(__curWords.tw_share_text);
+			var h=encodeURIComponent(__curWords.tw_share_tag);
+			var u='https://238g.github.io/Parace/238Games2.html'+(__curLang=='en'?'?lang=en':'');
+			window.open(
+				'https://twitter.com/intent/tweet?text='+t+'&hashtags='+h+'&url='+u,'share window', 
+				'menubar=no,toolbar=no,resizable=yes,scrollbars=yes,height=300,width=600');
+			return false;
+		}
+
+		function getLangQuery(){return __curLang=='en'?'?lang=en':'';}
 	</script>
 
 	<div style="display: none;">
