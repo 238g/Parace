@@ -294,6 +294,12 @@ function genGamesInfo(){
 				caption:'名取さなの二次創作ゲームです！あの参勤交代をゲームで再現！名取さなを参勤交代に参加させろ！あなたは何人並べられるかな？',
 				release:'2019/1/12',
 			},
+			1050:{id:1050,title:'ときのそらのザシュッとな！',url:GI2A2('tokino_sora'),
+				tColor:'#4F5FF0',mColor:'#4195E2',
+				tc:GI2B2('tokino_sora'),imgA:GI2C2('tokino_sora'),imgB:GI2D2('tokino_sora'),
+				caption:'ときのそらちゃんの二次創作ゲームです！好きな食べ物をザシュッと刺して得点を稼ごう！あの「あん肝」も刺せちゃう！？',
+				release:'2019/1/21',
+			},
 		},
 	};
 };
