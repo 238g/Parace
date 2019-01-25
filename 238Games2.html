@@ -232,6 +232,17 @@
 				</div>
 			</div>
 		</div>
+
+		<div class="page_retirement">
+			<br><br>
+			<div class="container text-center">
+				<div class="row">
+					<div class="col">
+						<div class="well retirement_contents"><!--$--></div>
+					</div>
+				</div>
+			</div>
+		</div>
 	</div>
 
 	<div style="height: 150px;"></div>
@@ -278,6 +289,7 @@
 				about_h3:'バーチャルYouTuberの<br>二次創作ゲームを<br>投稿しているサイトです。',
 				about_msg_1:'いつも遊んでくださり、本当にありがとうございます！',
 				about_msg_2:'こちらは個人で制作しております。絵が描けないなりのファンアートです。',
+				about_msg_3:'※現在は更新をしておりません。詳しくは引退の項目をご確認ください。',
 				dev_name:'開発者: 抹茶。',
 				request:'ご意見・ご要望',
 				marshmallow:'匿名投稿マシュマロ',
@@ -285,6 +297,11 @@
 				amazon_wish_list_2:'支援(ほしいものリスト)',
 				service_title:'その他私が制作したサービスです',
 				credit_title:'クレジット',
+				navbar_retirement:'引退',
+				retirement_msg_1:'大変申し訳ないです。すでにVTuberゲームの制作を引退しました。',
+				retirement_msg_2:'1年もの長い間、遊んでくださり誠にありがとうございます。',
+				retirement_msg_3:'この1年の振り返りや今後については下記サイトに記録しております。',
+				retirement_goto_page:'👉 1年間でVTuberのゲームを50個作った話',
 			},
 			en:{
 				twitter_share:'Twitter Share',
@@ -304,6 +321,7 @@
 				about_h3:'Virtual YouTuber<br>(VTuber)<br>Game!!',
 				about_msg_1:'Thank you for playing!!',
 				about_msg_2:'This is my fan art!',
+				about_msg_3:'※Now, this site isn\'t updated. Please see "Retired".',
 				dev_name:'Developer: 抹茶。(Matcha)',
 				request:'Request',
 				marshmallow:'Post-Anonymously-Service',
@@ -311,6 +329,11 @@
 				amazon_wish_list_2:'Donate(Amazon-Wish-List)',
 				service_title:'Other Service',
 				credit_title:'Credit',
+				navbar_retirement:'Retired',
+				retirement_msg_1:'I\'m sorry. I retired maker of vtuber game.',
+				retirement_msg_2:'Thank you for playing in a year.',
+				retirement_msg_3:'Regarding the review and future of this year, we record it in the following site.',
+				retirement_goto_page:'👉 A story that made 50 VTuber games in one year (Japanese Only)',
 			},
 		};
 		var __curWords=__words[__curLang];
@@ -326,6 +349,7 @@
 			genAboutContents();
 			genService();
 			genCredit();
+			genRetirement();
 			genFooter();
 			$('.close_btn').html(__curWords.close_btn);
 			PageHandler();
@@ -385,6 +409,7 @@
 				{c:'navbar_gamelist',p:'page_gamelist',v:__curWords.navbar_gamelist},
 				{c:'navbar_service',p:'page_service',v:__curWords.navbar_service},
 				{c:'navbar_credit',p:'page_credit',v:__curWords.navbar_credit},
+				{c:'navbar_retirement',p:'page_retirement',v:__curWords.navbar_retirement},
 			];
 			var elem='';
 			for(var k in list){
@@ -478,7 +503,8 @@
 				'<p><img src="images/public/logo/logo.png"></p>'
 				+'<br><h3>'+__curWords.about_h3+'</h3><br>'
 				+'<p>'+__curWords.about_msg_1+'</p>'
-				+'<p>'+__curWords.about_msg_2+'</p><br>'
+				+'<p>'+__curWords.about_msg_2+'</p>'
+				+'<p>'+__curWords.about_msg_3+'</p><br>'
 				+'<p>'+__curWords.dev_name+'</p>'
 				+'<p>Twitter: <a href="https://twitter.com/i10v35w33t" target="_blank" onclick="myGa(\'twitter\',\'About\',\'link\');">@i10v35w33t</a></p>'
 				+'<p>'+__curWords.request+': <a href="https://marshmallow-qa.com/i10v35w33t?utm_medium=url_text&utm_source=promotion" target="_blank" onclick="myGa(\'marshmallow\',\'About\',\'link\');">'+__curWords.marshmallow+'</a></p>'
@@ -542,6 +568,17 @@
 					+'</li>';
 			}
 			$('.page_credit ul').html(elem);
+		}
+
+		function genRetirement(){
+			var elem=
+				'<p><img src="https://238g.github.io/Cute/vtuber_games/assets/retirement.jpg" class="img-responsive img-thumbnail" alt="大事なお知らせ"></p>'
+				+'<p>'+__curWords.retirement_msg_1+'</p>'
+				+'<p>'+__curWords.retirement_msg_2+'</p>'
+				+'<p>'+__curWords.retirement_msg_3+'</p>'
+				+'<p><a href="https://238g.github.io/Cute/vtuber_games/" target="_blank">'+__curWords.retirement_goto_page+'</a></p>'
+				+'<p><a href="https://238g.github.io/Cute/vtuber_games/" target="_blank"><img src="https://238g.github.io/Cute/vtuber_games/assets/TwitterCard.jpg" class="img-responsive img-thumbnail" alt="'+__curWords.retirement_goto_page+'へのリンク"></a></p>';
+			$('.retirement_contents').html(elem);
 		}
 
 		function genFooter(){
