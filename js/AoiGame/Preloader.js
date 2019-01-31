@@ -113,6 +113,7 @@ BasicGame.Preloader.prototype={
 		this.M.H.setSPBrowserColor(BasicGame.MAIN_COLOR);
 		this.M.S.genText(this.world.centerX, this.world.centerY*1.7,
 			this.M.getConst('TOUCH_OR_CLICK')+'してスタート\n'+this.M.getConst('EN_TOUCH_OR_CLICK')+' TO PLAY',{fontSize:25});
+		this.sound.volume=.5;
 		this.stage.disableVisibilityChange=!1;
 		this.game.input.onDown.addOnce(this.showLogo,this);
 	},

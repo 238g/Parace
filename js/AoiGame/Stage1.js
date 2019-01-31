@@ -25,7 +25,7 @@ BasicGame.Stage1.prototype={
 		this.stage.backgroundColor=BasicGame.WHITE_COLOR;
 		this.M.setGlobal('curMode',0);
 		this.playBGM();
-		this.add.sprite(-800,-120,'Bg_0');
+		this.add.sprite(0,0,'Bg_0');
 		this.M.S.genText(this.world.centerX,50,'ルーレットを回して\nボーナスアイテムを選ぼう',this.M.S.BaseTextStyleSS(20));
 		this.Wheel=this.add.sprite(this.world.centerX,this.world.centerY-50,'Wheel');
 		this.Wheel.anchor.setTo(.5);
